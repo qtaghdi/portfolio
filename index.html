@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="사용자에게 시각적 편안함을 주는 1년차 프론트엔드 개발자 박상민의 포트폴리오입니다." />
+    <meta property="og:title" content="Park Sangmin | Frontend Developer" />
+    <meta property="og:description" content="Visual Comfort for Users. 성능 최적화와 UX 개선을 지향합니다." />
+    <meta property="og:type" content="website" />
+    <title>Park Sangmin | Frontend Developer</title>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400&family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+<div id="spotlight"></div>
+
+<nav id="navbar">
+    <div class="logo">P.SM<span>.</span></div>
+    <ul class="nav-links">
+        <li><a href="#about">About</a></li>
+        <li><a href="#skills">Skills</a></li>
+        <li><a href="#projects">Projects</a></li>
+        <li><a href="#contact">Contact</a></li>
+    </ul>
+</nav>
+
+<main>
+    <section id="hero">
+        <p class="intro">Hello, I am</p>
+        <h1 class="name">박상민.</h1>
+        <h2 class="subtitle"><span id="typing-text"></span><span class="cursor">|</span></h2>
+        <p class="desc">
+            "안되는 건 없다"는 마인드로 끝까지 파고드는 개발자입니다.<br>
+            단순 구현을 넘어 <strong>빌드 시간 43% 단축</strong>, <strong>LCP 93% 개선</strong> 등<br>
+            수치로 증명되는 성능 최적화 경험을 보유하고 있습니다.
+        </p>
+        <button id="cta-btn">View My Work</button>
+    </section>
+
+    <section id="about">
+        <h3 class="section-title"><span>01.</span> About Me</h3>
+        <div class="about-content">
+            <div class="text">
+                <p class="reveal-text">
+                    <strong>"결과뿐만 아니라 과정도 중요합니다."</strong><br>
+                    오늘의 코드가 내일은 레거시가 될 수 있음을 알기에, 끊임없이 리팩토링하고 더 나은 구조를 고민합니다.
+                </p>
+                <p class="reveal-text">
+                    최근에는 사내 디자인 시스템을 구축하여 <strong>NPM 패키지로 배포</strong>하고,<br>
+                    CCTV 관제 서비스의 데이터 통신 방식을 개선해 <strong>초기 로딩 속도(LCP)를 5.22초에서 0.36초로 단축</strong>하는 등<br>
+                    실질적인 사용자 경험 향상에 기여했습니다.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <section id="skills">
+        <h3 class="section-title"><span>02.</span> Tech Stack</h3>
+        <div id="skill-list" class="skill-container">
+        </div>
+    </section>
+
+    <section id="projects">
+        <h3 class="section-title"><span>03.</span> Featured Projects</h3>
+        <div id="project-list" class="project-container">
+        </div>
+    </section>
+
+    <section id="contact">
+        <h3 class="section-title"><span>04.</span> Contact</h3>
+        <h2 class="title reveal-text">Get In Touch</h2>
+        <p class="reveal-text">
+            새로운 기술적 도전과 협업의 기회를 항상 열어두고 있습니다.<br>
+            저와 함께 성장하고 싶다면 언제든 연락주세요.
+        </p>
+
+        <a href="mailto:qtaghdi@gmail.com" class="email-btn">qtaghdi@gmail.com</a>
+
+        <div class="social-links reveal-text">
+            <a href="https://github.com/qtaghdi" target="_blank" aria-label="GitHub">
+                <i class="fab fa-github"></i>
+            </a>
+            <a href="https://www.linkedin.com/in/sangminpp/" target="_blank" aria-label="LinkedIn">
+                <i class="fab fa-linkedin-in"></i>
+            </a>
+        </div>
+    </section>
+</main>
+
+<footer>
+    <p>Designed & Built by Park Sangmin</p>
+</footer>
+
+<script type="module" src="/src/main.js"></script>
+</body>
+</html>
