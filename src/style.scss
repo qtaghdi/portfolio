@@ -138,8 +138,8 @@ ul { list-style: none; }
     font-family: $font-display;
     font-size: clamp(56px, 10vw, 100px);
     font-weight: 800;
-    line-height: 0.95;
-    letter-spacing: -3px;
+    line-height: 1.05;
+    letter-spacing: -1px;
     color: $fg;
     margin-bottom: 24px;
   }
@@ -149,9 +149,9 @@ ul { list-style: none; }
     font-size: clamp(20px, 3.5vw, 36px);
     font-weight: 700;
     color: $muted;
-    line-height: 1.2;
+    line-height: 1.25;
     margin-bottom: 36px;
-    letter-spacing: -0.5px;
+    letter-spacing: -0.2px;
 
     .cursor {
       font-weight: 300;
@@ -375,7 +375,7 @@ ul { list-style: none; }
     font-family: $font-display;
     font-size: clamp(36px, 6vw, 64px);
     font-weight: 800;
-    letter-spacing: -2px;
+    letter-spacing: -1px;
     color: $fg;
     margin-bottom: 24px;
     line-height: 1.05;
