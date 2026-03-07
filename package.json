@@ -15,7 +15,8 @@
   "dependencies": {
     "@studio-freight/lenis": "^1.0.42",
     "gsap": "^3.14.2",
-    "jquery": "^3.7.0",
-    "vanilla-tilt": "^1.8.1"
+    "solid-js": "^1.9.11",
+    "vanilla-tilt": "^1.8.1",
+    "vite-plugin-solid": "^2.11.10"
   }
 }
