@@ -1,0 +1,96 @@
+---
+const year = new Date().getFullYear();
+---
+
+<footer>
+  <div class="container">
+    <div class="inner">
+      <!-- Logo -->
+      <a href="#home" class="logo" aria-label="맨 위로">
+        <span class="logo-text">SP</span>
+        <span class="logo-full">Engy Park Park</span>
+      </a>
+
+      <!-- Location + tagline -->
+      <p class="tagline">
+        <span class="loc-icon">📍</span> Seoul, Korea ·
+        Frontend Engineer who ships with purpose
+      </p>
+
+      <!-- Copy -->
+      <p class="copy">
+        © {year} Engy Park. Built with
+        <a href="https://astro.build" target="_blank" rel="noopener" class="built-link">Astro</a>
+        &amp; ☕ in Seoul.
+      </p>
+    </div>
+  </div>
+</footer>
+
+<style lang="scss">
+  @use '../styles/tokens' as *;
+
+  footer {
+    background: $bg-base;
+    border-top: 1px solid $border;
+    padding: 40px 0;
+  }
+
+  .container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 24px;
+  }
+
+  .inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    text-align: center;
+  }
+
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+  }
+
+  .logo-text {
+    font-family: $font-display;
+    font-size: 1.1rem;
+    font-weight: 800;
+    background: linear-gradient(135deg, $accent, $teal);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .logo-full {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: $text-secondary;
+    letter-spacing: 0.04em;
+  }
+
+  .tagline {
+    font-size: 0.82rem;
+    color: $text-muted;
+  }
+
+  .loc-icon { font-style: normal; }
+
+  .copy {
+    font-size: 0.78rem;
+    color: $text-muted;
+  }
+
+  .built-link {
+    color: $accent;
+    text-decoration: none;
+    font-weight: 600;
+
+    &:hover { text-decoration: underline; }
+  }
+</style>

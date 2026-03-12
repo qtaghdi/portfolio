@@ -1,0 +1,659 @@
+---
+import { getCollection } from 'astro:content';
+
+const allProjects = await getCollection('projects');
+const sorted = allProjects.sort((a, b) => a.data.order - b.data.order);
+const featured = sorted.filter(p => p.data.featured);
+const grid = sorted.filter(p => !p.data.featured);
+
+// 모노크롬 — 흰색 단일 계열, 명도 차이로만 구분
+const colorMap: Record<string, string> = {
+  accent:  '#ffffff',
+  teal:    '#d8d8d8',
+  amber:   '#b8b8b8',
+  rose:    '#949494',
+  emerald: '#e8e8e8',
+  sky:     '#c0c0c0',
+};
+---
+
+<section id="projects">
+  <div class="container">
+    <!-- Section Header -->
+    <div class="section-header reveal">
+      <span class="section-label">PROJECTS</span>
+      <h2 class="section-title">
+        실제 프로덕트에서<br />
+        <span class="grad-text">검증된 결과물</span>
+      </h2>
+      <p class="section-desc">
+        측정 가능한 임팩트와 함께, 문제를 정의하고 해결한 과정을 담았습니다.
+      </p>
+    </div>
+
+    <!-- Featured Projects -->
+    <div class="featured-list">
+      {featured.map((p, fi) => {
+        const accent = colorMap[p.data.accentColor] ?? colorMap.accent;
+        return (
+          <article
+            class={`featured-card reveal ${fi % 2 === 1 ? 'd1' : ''}`}
+            style={`--card-accent: ${accent};`}
+          >
+            <!-- Top Bar -->
+            <div class="card-top">
+              <div class="card-meta">
+                <span class="card-category">{p.data.category}</span>
+                <span class="card-year">{p.data.year}</span>
+                {p.data.badge && (
+                  <span class="card-badge" style={`background:${accent}22; color:${accent}; border-color:${accent}44;`}>
+                    {p.data.badge}
+                  </span>
+                )}
+              </div>
+              <div class="card-links">
+                {p.data.github && (
+                  <a href={p.data.github} target="_blank" rel="noopener" class="icon-link" aria-label="GitHub">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                    </svg>
+                  </a>
+                )}
+                {p.data.link && (
+                  <a href={p.data.link} target="_blank" rel="noopener" class="icon-link" aria-label="Live site">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+                      <polyline points="15 3 21 3 21 9"/>
+                      <line x1="10" y1="14" x2="21" y2="3"/>
+                    </svg>
+                  </a>
+                )}
+              </div>
+            </div>
+
+            <!-- Title Block -->
+            <div class="card-title-block">
+              <h3 class="card-title">{p.data.title}</h3>
+              {p.data.titleKo && <span class="card-title-ko">{p.data.titleKo}</span>}
+              <p class="card-role">{p.data.role}</p>
+            </div>
+
+            <!-- Metrics Grid -->
+            {p.data.metrics.length > 0 && (
+              <div class="metrics-grid" style={`--col-count: ${Math.min(p.data.metrics.length, 4)};`}>
+                {p.data.metrics.map(m => {
+                  const mc = colorMap[m.color] ?? colorMap.accent;
+                  return (
+                    <div class="metric-item">
+                      <span class="metric-val" style={`color:${mc};`}>{m.val}</span>
+                      <span class="metric-label">{m.label}</span>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+
+            <!-- Summary -->
+            <p class="card-summary">{p.data.summary}</p>
+
+            <!-- Callouts -->
+            {p.data.callouts.length > 0 && (
+              <div class="callouts">
+                {p.data.callouts.map(c => {
+                  const cc = colorMap[c.color] ?? colorMap.accent;
+                  return (
+                    <div class="callout" style={`--cl-accent:${cc};`}>
+                      <div class="callout-header">
+                        <span class="callout-icon">{c.icon}</span>
+                        <span class="callout-title">{c.title}</span>
+                      </div>
+                      <p class="callout-body">{c.body}</p>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+
+            <!-- Tech Pills -->
+            <div class="tech-row">
+              {p.data.tech.map(t => (
+                <span class="tech-pill">{t}</span>
+              ))}
+            </div>
+
+            <!-- Accent glow -->
+            <div class="card-glow" aria-hidden="true"></div>
+          </article>
+        );
+      })}
+    </div>
+
+    <!-- Grid Projects -->
+    <div class="grid-section reveal d1">
+      <h3 class="grid-heading">
+        <span class="grad-text">More Work</span>
+      </h3>
+      <div class="grid-list">
+        {grid.map((p, gi) => {
+          const accent = colorMap[p.data.accentColor] ?? colorMap.accent;
+          return (
+            <article
+              class="grid-card"
+              style={`--card-accent: ${accent};`}
+            >
+              <div class="gc-top">
+                <span class="gc-category">{p.data.category}</span>
+                <span class="gc-year">{p.data.year}</span>
+              </div>
+              <h4 class="gc-title">{p.data.title}</h4>
+              {p.data.titleKo && <span class="gc-title-ko">{p.data.titleKo}</span>}
+              <p class="gc-summary">{p.data.summary}</p>
+              <div class="gc-tech">
+                {p.data.tech.slice(0, 5).map(t => (
+                  <span class="tech-pill sm">{t}</span>
+                ))}
+                {p.data.tech.length > 5 && (
+                  <span class="tech-pill sm muted">+{p.data.tech.length - 5}</span>
+                )}
+              </div>
+              <div class="gc-links">
+                {p.data.github && (
+                  <a href={p.data.github} target="_blank" rel="noopener" class="gc-link" aria-label="GitHub">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                    </svg>
+                    GitHub
+                  </a>
+                )}
+                {p.data.link && (
+                  <a href={p.data.link} target="_blank" rel="noopener" class="gc-link">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+                      <polyline points="15 3 21 3 21 9"/>
+                      <line x1="10" y1="14" x2="21" y2="3"/>
+                    </svg>
+                    Live
+                  </a>
+                )}
+              </div>
+              <div class="gc-glow" aria-hidden="true"></div>
+            </article>
+          );
+        })}
+
+        <!-- Velog CTA Card -->
+        <a
+          href="https://velog.io/@qtaghdi"
+          target="_blank"
+          rel="noopener"
+          class="grid-card cta-card"
+          aria-label="Velog 블로그 보기"
+        >
+          <div class="cta-inner">
+            <span class="cta-icon">✍️</span>
+            <span class="cta-text">기술 블로그 보기</span>
+            <span class="cta-sub">velog.io/@qtaghdi</span>
+          </div>
+          <svg class="cta-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M5 12h14M12 5l7 7-7 7"/>
+          </svg>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style lang="scss">
+  @use '../styles/tokens' as *;
+
+  section {
+    padding: 120px 0;
+    background: $bg-base;
+  }
+
+  .container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 24px;
+  }
+
+  // ── Section header ──────────────────────────────────────────
+  .section-header {
+    text-align: center;
+    margin-bottom: 72px;
+  }
+
+  .section-title {
+    font-family: $font-display;
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 700;
+    line-height: 1.2;
+    color: $text-primary;
+    margin: 12px 0 16px;
+  }
+
+  .section-desc {
+    font-size: 1.05rem;
+    color: $text-secondary;
+    max-width: 480px;
+    margin: 0 auto;
+  }
+
+  // ── Featured cards ──────────────────────────────────────────
+  .featured-list {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+    margin-bottom: 80px;
+  }
+
+  .featured-card {
+    position: relative;
+    background: $bg-card;
+    border: 1px solid $border;
+    border-radius: $r-lg;
+    padding: 40px 44px;
+    overflow: hidden;
+    transition: border-color $mid, transform $mid;
+
+    &:hover {
+      border-color: rgba(255,255,255,0.16);
+      transform: translateY(-2px);
+
+      .card-glow { opacity: 0.04; }
+    }
+
+    @media (max-width: 640px) {
+      padding: 28px 20px;
+    }
+  }
+
+  .card-glow {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse 60% 40% at 80% 10%, rgba(255,255,255,1), transparent);
+    opacity: 0.015;
+    pointer-events: none;
+    transition: opacity $mid;
+  }
+
+  // Card top row
+  .card-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+  }
+
+  .card-meta {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  .card-category {
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: $text-muted;
+  }
+
+  .card-year {
+    font-size: 0.78rem;
+    color: $text-muted;
+    font-family: $font-mono;
+  }
+
+  .card-badge {
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 3px 10px;
+    border-radius: 100px;
+    border: 1px solid;
+  }
+
+  .card-links {
+    display: flex;
+    gap: 8px;
+  }
+
+  .icon-link {
+    display: grid;
+    place-items: center;
+    width: 36px;
+    height: 36px;
+    border-radius: $r-sm;
+    border: 1px solid $border;
+    color: $text-secondary;
+    transition: color $fast, border-color $fast, background $fast;
+    text-decoration: none;
+
+    &:hover {
+      color: $text-primary;
+      border-color: $border-hover;
+      background: $bg-elevated;
+    }
+  }
+
+  // Title block
+  .card-title-block {
+    margin-bottom: 28px;
+  }
+
+  .card-title {
+    font-family: $font-display;
+    font-size: clamp(1.4rem, 2.5vw, 1.9rem);
+    font-weight: 700;
+    color: $text-primary;
+    line-height: 1.2;
+    margin: 0 0 4px;
+  }
+
+  .card-title-ko {
+    font-size: 0.88rem;
+    color: $text-muted;
+    font-family: $font-sans;
+  }
+
+  .card-role {
+    margin-top: 6px;
+    font-size: 0.85rem;
+    color: $text-secondary;
+    font-weight: 500;
+  }
+
+  // Metrics grid
+  .metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(var(--col-count, 4), 1fr);
+    gap: 2px;
+    margin-bottom: 24px;
+    background: $bg-elevated;
+    border-radius: $r-md;
+    overflow: hidden;
+    border: 1px solid $border;
+
+    @media (max-width: 640px) {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  .metric-item {
+    padding: 16px 20px;
+    background: $bg-card;
+    border-right: 1px solid $border;
+
+    &:last-child { border-right: none; }
+
+    @media (max-width: 640px) {
+      &:nth-child(even) { border-right: none; }
+      &:nth-child(odd):not(:last-child) { border-right: 1px solid $border; }
+    }
+  }
+
+  .metric-val {
+    display: block;
+    font-family: $font-display;
+    font-size: 1.5rem;
+    font-weight: 800;
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+
+  .metric-label {
+    font-size: 0.72rem;
+    color: $text-muted;
+    line-height: 1.4;
+    white-space: pre-line;
+  }
+
+  // Summary
+  .card-summary {
+    font-size: 0.95rem;
+    color: $text-secondary;
+    margin-bottom: 24px;
+    line-height: 1.7;
+  }
+
+  // Callouts
+  .callouts {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 12px;
+    margin-bottom: 24px;
+  }
+
+  .callout {
+    background: rgba(255,255,255,0.025);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: $r-md;
+    padding: 16px 18px;
+  }
+
+  .callout-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+  }
+
+  .callout-icon {
+    font-size: 1rem;
+    line-height: 1;
+  }
+
+  .callout-title {
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: rgba(255,255,255,0.75);
+    letter-spacing: 0.02em;
+  }
+
+  .callout-body {
+    font-size: 0.82rem;
+    color: $text-secondary;
+    line-height: 1.65;
+    margin: 0;
+  }
+
+  // Tech row
+  .tech-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  // ── Grid cards ───────────────────────────────────────────────
+  .grid-section {
+    // nothing
+  }
+
+  .grid-heading {
+    font-family: $font-display;
+    font-size: 1.3rem;
+    font-weight: 700;
+    margin-bottom: 24px;
+  }
+
+  .grid-list {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+
+    @media (max-width: 900px) {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    @media (max-width: 580px) {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .grid-card {
+    position: relative;
+    background: $bg-card;
+    border: 1px solid $border;
+    border-radius: $r-lg;
+    padding: 24px;
+    overflow: hidden;
+    transition: border-color $mid, transform $mid;
+    display: flex;
+    flex-direction: column;
+
+    &:hover {
+      border-color: rgba(255,255,255,0.14);
+      transform: translateY(-3px);
+
+      .gc-glow { opacity: 0.06; }
+    }
+  }
+
+  .gc-glow {
+    position: absolute;
+    bottom: -20px;
+    right: -20px;
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    background: rgba(255,255,255,1);
+    opacity: 0.02;
+    filter: blur(40px);
+    transition: opacity $mid;
+    pointer-events: none;
+  }
+
+  .gc-top {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 12px;
+  }
+
+  .gc-category {
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    color: $text-muted;
+  }
+
+  .gc-year {
+    font-size: 0.7rem;
+    color: $text-muted;
+    font-family: $font-mono;
+  }
+
+  .gc-title {
+    font-family: $font-display;
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: $text-primary;
+    line-height: 1.25;
+    margin: 0 0 4px;
+  }
+
+  .gc-title-ko {
+    font-size: 0.78rem;
+    color: $text-muted;
+    display: block;
+    margin-bottom: 10px;
+  }
+
+  .gc-summary {
+    font-size: 0.82rem;
+    color: $text-secondary;
+    line-height: 1.6;
+    margin-bottom: 14px;
+    flex: 1;
+  }
+
+  .gc-tech {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    margin-bottom: 14px;
+  }
+
+  .tech-pill.sm {
+    font-size: 0.68rem;
+    padding: 3px 8px;
+
+    &.muted {
+      color: $text-muted;
+      border-color: $border;
+      background: transparent;
+    }
+  }
+
+  .gc-links {
+    display: flex;
+    gap: 10px;
+    margin-top: auto;
+  }
+
+  .gc-link {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: $text-secondary;
+    text-decoration: none;
+    transition: color $fast;
+
+    &:hover { color: $text-primary; }
+  }
+
+  // CTA Card
+  .cta-card {
+    --card-accent: #ffffff;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    text-decoration: none;
+    border-style: dashed;
+    border-color: rgba(255,255,255,0.1);
+    background: transparent;
+
+    &:hover {
+      border-color: rgba(255,255,255,0.25);
+      background: rgba(255,255,255,0.02);
+      transform: translateY(-3px);
+    }
+  }
+
+  .cta-inner {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .cta-icon { font-size: 1.5rem; }
+
+  .cta-text {
+    font-family: $font-display;
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: $text-primary;
+  }
+
+  .cta-sub {
+    font-size: 0.75rem;
+    color: $text-muted;
+    font-family: $font-mono;
+  }
+
+  .cta-arrow {
+    color: $accent;
+    flex-shrink: 0;
+    transition: transform $fast;
+
+    .cta-card:hover & { transform: translateX(4px); }
+  }
+</style>

@@ -1,0 +1,68 @@
+---
+order: 1
+title: "Bigtablet Insight Platform"
+titleKo: "Bigtablet Insight 플랫폼"
+group: company
+featured: true
+category: "Company · Production"
+badge: "Flagship"
+year: "2024–2025"
+role: "Frontend Developer"
+accentColor: accent
+summary: "BFF Security Architecture · FIDO2 WebAuthn · 100% Test Coverage"
+metrics:
+  - { val: "100%", label: "Test coverage\non BFF layer",   color: accent }
+  - { val: "FIDO2", label: "Passkey / hardware\nkey auth", color: teal }
+  - { val: "3",    label: "Production\nfrontend apps",     color: amber }
+  - { val: "FSD",  label: "Feature-Sliced\nDesign arch",   color: emerald }
+callouts:
+  - icon: "🔐"
+    title: "BFF Security Architecture"
+    color: accent
+    body: "모든 API 요청이 Next.js API Routes를 통해 프록시됩니다. 토큰은 HttpOnly 쿠키에만 저장되어 JS로 접근 불가능하고, 백엔드 서버 URL은 브라우저 네트워크 탭에 노출되지 않습니다. 서버사이드에서 401 발생 시 토큰 재발급 후 원래 요청을 재시도합니다."
+  - icon: "🔑"
+    title: "FIDO2 WebAuthn Passkey Auth"
+    color: teal
+    body: "어드민 대시보드에 Web Authentication API(FIDO2)를 이용한 하드웨어 키 / 패스키 등록 플로우를 구현했습니다. 패스워드를 완전히 대체하는 생체인증 또는 보안키 기반 인증으로, 1년 미만 경력에서는 매우 드문 구현입니다."
+tech:
+  - "Next.js 16"
+  - "React 19"
+  - "TypeScript"
+  - "TanStack Query v5"
+  - "Zod v4"
+  - "SCSS Modules"
+  - "Vitest"
+  - "Docker"
+  - "GitHub Actions"
+  - "Cosign"
+  - "Sentry"
+  - "WebAuthn (FIDO2)"
+  - "FSD"
+---
+
+## Problem
+
+일반적인 SPA는 토큰을 `localStorage`나 메모리에 저장해 브라우저 네트워크 탭에 백엔드 URL이 노출됩니다. 어드민 대시보드는 MFA 없이 패스워드만으로 민감한 작업이 가능했고, 테스트 인프라가 없어 리팩터링마다 회귀 위험이 있었습니다.
+
+## Approach
+
+**BFF(Backend for Frontend) Proxy 패턴**을 Next.js API Routes로 구현했습니다. 클라이언트의 모든 요청은 `/api/[...path]`를 경유하고, 토큰은 HttpOnly 쿠키에만 존재합니다. 401 응답 시 서버사이드에서 토큰을 재발급해 원래 요청을 재시도하므로 사용자는 세션 만료를 인지하지 못합니다.
+
+어드민에는 **FIDO2 WebAuthn**으로 패스키·하드웨어 키 등록 플로우를 구현했고, Vitest를 처음부터 세팅해 BFF 프록시·유틸·스키마 레이어에서 **100% 커버리지**를 달성했습니다.
+
+## Result
+
+클라이언트 사이드 토큰 노출 **완전 차단**. 백엔드 URL이 브라우저에 노출되지 않음. BFF 및 유틸 레이어 100% 테스트 커버리지. 어드민 대시보드에 FIDO2 패스키 인증 프로덕션 적용 완료.
+
+## Key Contributions
+
+- BFF Proxy: HttpOnly JWT, 백엔드 URL 브라우저 차단
+- 서버사이드 토큰 재발급 + 401 재시도 — 끊김 없는 UX
+- FIDO2 WebAuthn 패스키 등록 플로우
+- Vitest 처음부터 세팅 — BFF·유틸·스키마 100% 커버리지
+- Docker + GitHub Actions CI/CD + Cosign 이미지 서명 (공급망 보안)
+- Figma 플러그인: 디자인 토큰으로 앱 전체 21+ 화면 자동 생성
+- Markdown FAQ 에디터: 물리 키보드 단축키(Tab 들여쓰기, 볼드/이탤릭/리스트)
+- URL 상태 동기화: 필터·페이지네이션을 searchParams에 저장해 공유 가능한 뷰
+- 라우트 레벨 Error Boundary + 서버 에러 코드 → 사용자 메시지 매핑
+- 모든 로딩 상태에 Skeleton UI

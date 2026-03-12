@@ -1,0 +1,102 @@
+---
+// 컬러 닷 제거 — 모노크롬 전용
+const groups = [
+  { label: 'Languages',
+    items: ['TypeScript','JavaScript','Python','Rust'],
+  },
+  { label: 'Frameworks',
+    items: ['Next.js (App Router)','React 19','SvelteKit','Astro','React Native','Vue'],
+  },
+  { label: 'Styling',
+    items: ['SCSS Modules','Tailwind CSS','Design Tokens','Storybook','Figma Plugin Dev'],
+  },
+  { label: 'State & Data',
+    items: ['TanStack Query v5','Zustand','Zod v4','Axios'],
+  },
+  { label: 'Testing & Quality',
+    items: ['Vitest (100% BFF coverage)','Biome'],
+  },
+  { label: 'DevOps & Infra',
+    items: ['Docker','GitHub Actions','GCP','Cloudflare Workers','Sentry'],
+  },
+  { label: 'Security & Architecture',
+    items: ['WebAuthn (FIDO2)','BFF Proxy Pattern','Feature-Sliced Design','HttpOnly JWT','Cosign (Supply Chain)'],
+  },
+  { label: 'Animation & 3D',
+    items: ['GSAP + ScrollTrigger','Three.js / Threlte'],
+  },
+];
+---
+
+<section id="stack">
+  <div class="section-header reveal">
+    <div class="section-label">Tech Stack</div>
+    <h2>Tools of the trade.</h2>
+    <p class="sub">A pragmatic stack — chosen for correctness, not hype.</p>
+  </div>
+
+  <div class="grid">
+    {groups.map((g, i) => (
+      <div class={`row reveal${i % 2 === 1 ? ' d1' : ''}`}>
+        <span class="row-label">{g.label}</span>
+        <div class="tags">
+          {g.items.map(name => (
+            <span class="skill-tag">{name}</span>
+          ))}
+        </div>
+      </div>
+    ))}
+  </div>
+</section>
+
+<style lang="scss">
+  @use '../styles/tokens' as *;
+
+  #stack {
+    padding: clamp(5rem,10vw,9rem) clamp(1.5rem,5vw,4rem);
+    background: $bg-base;
+  }
+
+  .section-header {
+    max-width:1100px; margin:0 auto 3.5rem;
+    h2 { font-family:$font-display; font-size:clamp(2rem,4vw,3.2rem); font-weight:800; letter-spacing:-.03em; margin-bottom:.6rem; color:#fff; }
+    .sub { color:$text-secondary; font-size:.95rem; max-width:460px; }
+  }
+
+  .grid { max-width:1100px; margin:0 auto; display:grid; gap:0; }
+
+  .row {
+    display:grid;
+    grid-template-columns: 180px 1fr;
+    gap:1rem;
+    padding:1.1rem 0;
+    border-bottom:1px solid $border;
+    align-items:start;
+
+    &:first-child { border-top:1px solid $border; }
+
+    @media(max-width:640px) {
+      grid-template-columns:1fr;
+      gap:.5rem;
+    }
+  }
+
+  .row-label {
+    font-size:.67rem; font-weight:700; letter-spacing:.14em; text-transform:uppercase;
+    color:$text-muted; padding-top:.35rem; font-family:$font-mono;
+  }
+
+  .tags { display:flex; flex-wrap:wrap; gap:.4rem; }
+
+  .skill-tag {
+    display:inline-flex; align-items:center;
+    padding:.3rem .8rem;
+    background:transparent;
+    border:1px solid $border;
+    border-radius:2px;
+    font-size:.78rem; font-weight:500; color:$text-secondary;
+    font-family:$font-mono;
+    transition:all $mid; cursor:default;
+    &:hover { border-color:$border-hover; color:$text-primary; background:rgba(255,255,255,0.03); }
+  }
+</style>

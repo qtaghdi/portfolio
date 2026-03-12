@@ -1,0 +1,118 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Navbar from '../components/Navbar.astro';
+import Hero from '../components/Hero.astro';
+import About from '../components/About.astro';
+import Skills from '../components/Skills.astro';
+import Projects from '../components/Projects.astro';
+import Contact from '../components/Contact.astro';
+import Footer from '../components/Footer.astro';
+---
+
+<BaseLayout
+  title="Engy Park — Frontend Engineer"
+  description="박상민 포트폴리오 · BFF Security Architecture, FIDO2 WebAuthn, Design System, 93% LCP 개선을 경험한 프론트엔드 엔지니어"
+>
+  <Navbar />
+  <main id="home">
+    <Hero />
+    <About />
+    <Skills />
+    <Projects />
+    <Contact />
+  </main>
+  <Footer />
+</BaseLayout>
+
+<!-- Scroll-reveal + GSAP ScrollTrigger -->
+<script>
+  // Lightweight scroll reveal using IntersectionObserver
+  // (GSAP ScrollTrigger is available for more complex use if needed)
+  function initReveal() {
+    const els = document.querySelectorAll<HTMLElement>('.reveal');
+    if (!els.length) return;
+
+    const delays: Record<string, number> = {
+      d1: 150,
+      d2: 300,
+      d3: 450,
+    };
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            const el = entry.target as HTMLElement;
+            // Determine delay from class
+            let delay = 0;
+            for (const [cls, ms] of Object.entries(delays)) {
+              if (el.classList.contains(cls)) { delay = ms; break; }
+            }
+            setTimeout(() => {
+              el.classList.add('visible');
+            }, delay);
+            observer.unobserve(el);
+          }
+        });
+      },
+      { threshold: 0.12, rootMargin: '0px 0px -40px 0px' }
+    );
+
+    els.forEach((el) => observer.observe(el));
+  }
+
+  // Smooth scroll for anchor links
+  function initSmoothScroll() {
+    document.querySelectorAll<HTMLAnchorElement>('a[href^="#"]').forEach((a) => {
+      a.addEventListener('click', (e) => {
+        const href = a.getAttribute('href');
+        if (!href || href === '#') return;
+        const target = document.querySelector(href);
+        if (!target) return;
+        e.preventDefault();
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+    });
+  }
+
+  // Active nav section highlight
+  function initNavHighlight() {
+    const sections = document.querySelectorAll<HTMLElement>('section[id], main[id]');
+    const navLinks = document.querySelectorAll<HTMLAnchorElement>('.nav-link');
+
+    if (!navLinks.length || !sections.length) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            const id = entry.target.getAttribute('id');
+            navLinks.forEach((link) => {
+              const href = link.getAttribute('href');
+              link.classList.toggle('active', href === `#${id}`);
+            });
+          }
+        });
+      },
+      { threshold: 0.3, rootMargin: '-10% 0px -60% 0px' }
+    );
+
+    sections.forEach((s) => observer.observe(s));
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    initReveal();
+    initSmoothScroll();
+    initNavHighlight();
+  });
+</script>
+
+<style is:global>
+  /* Active nav link */
+  .nav-link.active {
+    color: #f0f0f8 !important;
+  }
+  .nav-link.active::after {
+    width: 100% !important;
+  }
+</style>

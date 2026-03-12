@@ -1,0 +1,105 @@
+---
+---
+<section id="about">
+  <div class="about-grid">
+    <div class="reveal">
+      <div class="section-label">About</div>
+      <h2>Perspective-first<br/><span class="grad-text">engineering.</span></h2>
+      <p>저는 <strong>Bigtablet, Inc.의 프론트엔드 개발자</strong>로, 1년 미만의 경력이지만
+         실제 프로덕션 경험은 그 숫자를 훨씬 뛰어넘습니다.</p>
+      <p>프로덕션에서 <strong>BFF 보안 아키텍처</strong>와 FIDO2 패스키 인증을 구현하고,
+         5개 프로덕트에서 사용 중인 디자인 시스템을 오픈소스로 배포하고,
+         서비스의 LCP를 <strong>5.22초에서 0.36초로</strong> 줄였습니다.</p>
+      <p>개인 시간에는 한국어/영어 양쪽으로 기술 글을 쓰고, Figma 플러그인을 만들고,
+         Rust 학습 가이드를 개발합니다. 포트폴리오용이 아니라 그 문제 자체가 흥미롭기 때문입니다.</p>
+      <blockquote class="philosophy">
+        <span>"사용자의 관점으로 바라보기"</span><br/>
+        모든 기술적 결정은 결국 UX 결정입니다.
+      </blockquote>
+    </div>
+
+    <div class="stats-grid reveal d2">
+      <div class="stat-card c1">
+        <div class="num">BFF</div>
+        <div class="lbl">Security Pattern</div>
+        <div class="sub">HttpOnly JWT · URL 차단</div>
+      </div>
+      <div class="stat-card c2">
+        <div class="num" data-count="100" data-suffix="%">100%</div>
+        <div class="lbl">Test Coverage</div>
+        <div class="sub">BFF + 유틸 레이어</div>
+      </div>
+      <div class="stat-card c3">
+        <div class="num" data-count="93" data-suffix="%">93%</div>
+        <div class="lbl">LCP 개선율</div>
+        <div class="sub">5.22s → 0.36s</div>
+      </div>
+      <div class="stat-card c4">
+        <div class="num" data-count="5" data-suffix="+">5+</div>
+        <div class="lbl">Products</div>
+        <div class="sub">디자인 시스템 사용 중</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style lang="scss">
+  @use '../styles/tokens' as *;
+
+  #about { padding: clamp(5rem,10vw,9rem) clamp(1.5rem,5vw,4rem); }
+
+  .about-grid {
+    max-width: 1100px; margin: 0 auto;
+    display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: start;
+  }
+
+  h2 { font-family:$font-display; font-size:clamp(2rem,4vw,3.2rem); font-weight:800; letter-spacing:-.03em; line-height:1.15; margin-bottom:1.5rem; }
+  p  { font-size:1rem; color:$text-secondary; line-height:1.8; margin-bottom:1.15rem; strong{color:$text-primary;font-weight:600;} }
+
+  .philosophy {
+    margin-top:1.5rem; padding:1.2rem 1.5rem; background:$bg-elevated;
+    border-left:1px solid rgba(255,255,255,0.15); border-radius:0 $r-md $r-md 0;
+    font-style:italic; color:$text-secondary; font-size:.9rem; line-height:1.65;
+    span{color:rgba(255,255,255,0.7);font-weight:500;font-style:normal;}
+  }
+
+  .stats-grid { display:grid; grid-template-columns:1fr 1fr; gap:1rem; }
+  .stat-card {
+    padding:1.4rem 1.5rem; background:$bg-elevated; border:1px solid $border;
+    border-radius:$r-lg; transition:all $mid; position:relative; overflow:hidden;
+    &::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,transparent 60%,rgba(255,255,255,.025));opacity:0;transition:opacity $mid;}
+    &:hover{border-color:$border-hover;transform:translateY(-3px);}
+    &:hover::before{opacity:1;}
+    .num{font-family:$font-display;font-size:2.1rem;font-weight:800;letter-spacing:-.04em;line-height:1;margin-bottom:.35rem;color:#ffffff;}
+    .lbl{font-size:.72rem;font-weight:700;color:$text-muted;text-transform:uppercase;letter-spacing:.06em;}
+    .sub{font-size:.72rem;color:$text-muted;margin-top:.2rem;}
+    &.c1 .num{opacity:1;} &.c2 .num{opacity:.85;} &.c3 .num{opacity:.7;} &.c4 .num{opacity:.6;}
+  }
+
+  @media(max-width:900px){.about-grid{grid-template-columns:1fr;gap:3rem;}.stats-grid{grid-template-columns:repeat(4,1fr);}}
+  @media(max-width:640px){.stats-grid{grid-template-columns:1fr 1fr;}}
+</style>
+
+<script>
+  // 카운터 애니메이션
+  const counters = document.querySelectorAll<HTMLElement>('.num[data-count]');
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (!entry.isIntersecting) return;
+      const el     = entry.target as HTMLElement;
+      const target = +el.dataset.count!;
+      const suffix = el.dataset.suffix ?? '';
+      const start  = performance.now();
+      const dur    = 1200;
+      const tick   = (now: number) => {
+        const t = Math.min((now - start) / dur, 1);
+        const v = Math.round((1 - Math.pow(1 - t, 3)) * target);
+        el.textContent = v + suffix;
+        if (t < 1) requestAnimationFrame(tick);
+      };
+      requestAnimationFrame(tick);
+      obs.unobserve(el);
+    });
+  }, { threshold: 0.5 });
+  counters.forEach(el => obs.observe(el));
+</script>

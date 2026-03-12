@@ -1,0 +1,108 @@
+---
+---
+<nav id="navbar">
+  <a href="#hero" class="logo">SP</a>
+
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#stack">Stack</a></li>
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#contact" class="nav-cta">Contact</a></li>
+  </ul>
+
+  <button class="hamburger" id="hamburger" aria-label="메뉴 열기">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<div class="mobile-nav" id="mobile-nav">
+  <a href="#about">About</a>
+  <a href="#stack">Stack</a>
+  <a href="#projects">Projects</a>
+  <a href="#contact">Contact</a>
+</div>
+
+<style lang="scss">
+  @use '../styles/tokens' as *;
+
+  #navbar {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    padding: 0 clamp(1.5rem, 5vw, 4rem); height: 64px;
+    display: flex; align-items: center; justify-content: space-between;
+    background: rgba(0,0,0,0.75); backdrop-filter: blur(20px);
+    border-bottom: 1px solid $border; transition: border-color $mid;
+    &.scrolled { border-bottom-color: rgba(255,255,255,0.1); }
+
+    .logo {
+      font-family: $font-display; font-weight: 800; font-size: 1.1rem;
+      letter-spacing: -0.02em; cursor: pointer;
+      color: #ffffff;
+    }
+
+    .nav-links {
+      display: flex; align-items: center; gap: 2rem; list-style: none;
+      a {
+        font-size: 0.85rem; font-weight: 500; color: $text-secondary; transition: color $fast;
+        &:hover { color: $text-primary; }
+        &.nav-cta {
+          padding: 0.45rem 1.2rem; border: 1px solid $border-hover; border-radius: 50px;
+          background: rgba(255,255,255,0.04); color: $text-primary; font-weight: 600;
+          &:hover { background: #fff; border-color: #fff; color: #000; }
+        }
+      }
+    }
+
+    .hamburger {
+      display: none; flex-direction: column; gap: 5px;
+      cursor: pointer; padding: 4px; background: none; border: none;
+      span { width: 22px; height: 2px; background: $text-secondary; border-radius: 2px; display: block; transition: $mid; }
+    }
+  }
+
+  .mobile-nav {
+    position: fixed; top: 64px; left: 0; right: 0; z-index: 99;
+    background: rgba(0,0,0,0.97); backdrop-filter: blur(20px);
+    border-bottom: 1px solid $border;
+    padding: 1.5rem clamp(1.5rem,5vw,4rem) 2rem;
+    display: flex; flex-direction: column; gap: 1.25rem;
+    transform: translateY(-10px); opacity: 0; pointer-events: none; transition: all $mid;
+    &.open { transform: translateY(0); opacity: 1; pointer-events: all; }
+    a { font-size: 1rem; font-weight: 500; color: $text-secondary; padding: 0.5rem 0; transition: color $fast;
+      &:hover { color: $text-primary; } }
+  }
+
+  @media (max-width: 900px) {
+    #navbar .nav-links { display: none; }
+    #navbar .hamburger { display: flex; }
+  }
+</style>
+
+<script>
+  const navbar   = document.getElementById('navbar')!;
+  const hamburger = document.getElementById('hamburger')!;
+  const mobileNav = document.getElementById('mobile-nav')!;
+
+  // 스크롤 감지
+  window.addEventListener('scroll', () => {
+    navbar.classList.toggle('scrolled', window.scrollY > 60);
+  }, { passive: true });
+
+  // 햄버거 토글
+  hamburger.addEventListener('click', () => {
+    const open = mobileNav.classList.toggle('open');
+    const spans = hamburger.querySelectorAll('span');
+    spans[0].style.transform = open ? 'rotate(45deg) translate(5px,5px)' : '';
+    spans[1].style.opacity   = open ? '0' : '1';
+    spans[2].style.transform = open ? 'rotate(-45deg) translate(5px,-5px)' : '';
+  });
+
+  // 모바일 링크 클릭 시 닫기
+  mobileNav.querySelectorAll('a').forEach(a =>
+    a.addEventListener('click', () => {
+      mobileNav.classList.remove('open');
+      hamburger.querySelectorAll('span').forEach((s: HTMLElement) => {
+        s.style.transform = ''; s.style.opacity = '';
+      });
+    })
+  );
+</script>

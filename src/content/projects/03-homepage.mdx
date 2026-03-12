@@ -1,0 +1,40 @@
+---
+order: 3
+title: "Bigtablet Homepage Renewal"
+titleKo: "공식 홈페이지 리뉴얼"
+group: company
+featured: false
+category: "Company"
+year: "2024"
+role: "Frontend Lead"
+accentColor: teal
+summary: "빌드 43% 단축 · JS→TS · GSAP · KO/EN i18n"
+metrics:
+  - { val: "43%", label: "빌드 타임 단축\n(4m38s → 2m28s)", color: teal }
+callouts: []
+tech:
+  - "Next.js 16 (App Router)"
+  - "TypeScript"
+  - "GSAP + ScrollTrigger"
+  - "next-intl"
+  - "Turbopack"
+  - "SCSS Modules"
+  - "FSD"
+  - "Docker"
+  - "GitHub Actions"
+  - "Cosign"
+link: "https://bigtablet.com"
+github: "https://github.com/Bigtablet/bigtablet-homepage-web"
+---
+
+## Problem
+
+JS 기반 코드베이스에 Atomic Design 패턴을 사용하고 있었는데, 프로젝트 규모가 커지면서 컴포넌트 간 의존성이 복잡해졌습니다. 타입 안정성이 없어 런타임 오류가 잦았고, 빌드 시간이 4분 38초로 개발 생산성을 저하시키고 있었습니다.
+
+## Approach
+
+전체 코드베이스를 **TypeScript로 마이그레이션**하고 아키텍처를 Atomic Design에서 **FSD(Feature-Sliced Design)** 로 전환했습니다. **GSAP + ScrollTrigger**로 마케팅 섹션 스크롤 애니메이션을 구현하고, **next-intl**로 한국어/영어 다국어 지원을 추가했습니다. 번들 분석 후 불필요한 의존성을 제거했고, Docker + GitHub Actions + Cosign 기반 CI/CD 파이프라인을 구축했습니다.
+
+## Result
+
+빌드 타임 **43% 단축** (4분 38초 → 2분 28초). 타입 안정성 확보. 한국어/영어 다국어 지원 라이브 적용. Cosign 서명된 Docker 이미지가 프로덕션에 자동 배포됩니다.

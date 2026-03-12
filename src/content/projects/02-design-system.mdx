@@ -1,0 +1,51 @@
+---
+order: 2
+title: "Bigtablet Design System"
+titleKo: "사내 디자인 시스템"
+group: company
+featured: true
+category: "Company · Open Source · NPM"
+badge: "NPM Published"
+year: "2024"
+role: "Author"
+accentColor: amber
+summary: "NPM 패키지 · 86% 커버리지 · 듀얼 번들 · Vanilla JS CDN"
+metrics:
+  - { val: "86%",  label: "Vitest 커버리지\n전 컴포넌트",      color: accent }
+  - { val: "16+",  label: "접근성 보장\n컴포넌트 수",           color: teal }
+  - { val: "5+",   label: "사용 중인\n프로덕트 수",             color: amber }
+  - { val: "0",    label: "런타임\n의존성",                     color: emerald }
+callouts:
+  - icon: "📦"
+    title: "듀얼 번들 아키텍처"
+    color: amber
+    body: "Rollup으로 Pure React 빌드와 Next.js 빌드를 각각 최적화해 분리 출력합니다. Thymeleaf·JSP·PHP 같은 레거시 서버사이드 환경을 위한 CSS 클래스 기반 컴포넌트는 CDN으로 제공해 React를 쓰지 않는 스택에서도 동일한 디자인 시스템을 사용할 수 있습니다. 런타임 의존성은 0개."
+tech:
+  - "React 19"
+  - "TypeScript"
+  - "Vitest"
+  - "Storybook"
+  - "SCSS"
+  - "Rollup"
+  - "Design Tokens"
+  - "ARIA / A11y"
+  - "NPM"
+github: "https://github.com/Bigtablet/bigtablet-design-system"
+link: "https://www.npmjs.com/package/@bigtablet/design-system"
+---
+
+## Problem
+
+5개 이상의 사내 프로덕트가 Button·Modal·Input 같은 공통 UI 컴포넌트를 각자 구현하고 있었습니다. 접근성 기준이 제각각이었고, 한 프로덕트에서 버그를 고쳐도 나머지에 반영되지 않아 유지보수 비용이 계속 누적되었습니다.
+
+## Approach
+
+공통 컴포넌트를 독립 NPM 패키지로 추출했습니다. Rollup으로 **Pure React용과 Next.js용 번들을 분리** 출력하고, React를 쓰지 않는 레거시 환경(Thymeleaf·JSP·PHP)을 위해 CSS 클래스 기반 컴포넌트를 CDN으로도 제공합니다. SCSS + CSS Custom Properties로 디자인 토큰 시스템을 구축하고, Storybook으로 문서화, Vitest로 86% 커버리지를 확보했습니다.
+
+## Result
+
+`@bigtablet/design-system`으로 NPM 퍼블리시. 현재 홈페이지·insight-web·admin·support 등 5개 이상 프로덕트에서 사용 중. 런타임 의존성 0. 키보드 내비게이션·스크린리더·ARIA 속성 전 컴포넌트 적용 완료.
+
+## 포함 컴포넌트
+
+Button, TextField, Checkbox, Radio, Switch, DatePicker, FileInput, Alert, Toast, Spinner, TopLoading, Pagination, Sidebar, Modal, Card, Select

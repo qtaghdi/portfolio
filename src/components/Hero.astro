@@ -1,0 +1,196 @@
+---
+---
+<section id="hero">
+  <!-- 배경 필름 스트립 장식 -->
+  <div class="film-strips" aria-hidden="true">
+    <div class="strip strip-1"></div>
+    <div class="strip strip-2"></div>
+    <div class="strip strip-3"></div>
+  </div>
+
+  <!-- 앰비언트 화이트 블롭 -->
+  <div class="blob blob-1" id="b1"></div>
+  <div class="blob blob-2" id="b2"></div>
+
+  <div class="hero-inner">
+    <div class="hero-badge" id="hbadge">
+      <span class="dot"></span>
+      Frontend Developer · Bigtablet, Inc.
+    </div>
+
+    <h1 class="hero-name" id="hname">
+      <span class="name-en">Sangmin Park</span>
+      <span class="name-ko">박상민</span>
+    </h1>
+
+    <p class="hero-tagline" id="htagline">
+      Building products where <em>security, performance,<br/>
+      and visual precision</em> aren't trade-offs.
+    </p>
+
+    <div class="hero-metrics" id="hmetrics">
+      <div class="mpill"><span class="mnum">BFF</span><span class="mlabel">Security<br/>Architecture</span></div>
+      <div class="mpill"><span class="mnum">100%</span><span class="mlabel">Test Coverage<br/>on BFF Layer</span></div>
+      <div class="mpill mpill--bright"><span class="mnum">93%</span><span class="mlabel">LCP<br/>Improvement</span></div>
+      <div class="mpill"><span class="mnum">FIDO2</span><span class="mlabel">WebAuthn<br/>Passkey Auth</span></div>
+      <div class="mpill"><span class="mnum">NPM</span><span class="mlabel">Published<br/>Design System</span></div>
+    </div>
+
+    <div class="hero-actions" id="hactions">
+      <a href="#projects" class="btn-primary">
+        View Projects
+        <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </a>
+      <a href="#contact" class="btn-secondary">Get in Touch</a>
+      <a href="https://github.com/qtaghdi" target="_blank" rel="noopener" class="btn-secondary">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg>
+        GitHub
+      </a>
+    </div>
+  </div>
+
+  <div class="scroll-hint">
+    <div class="arrow"></div>
+    <span>Scroll</span>
+  </div>
+</section>
+
+<style lang="scss">
+  @use '../styles/tokens' as *;
+
+  #hero {
+    position: relative;
+    min-height: 100dvh;
+    display: flex;
+    align-items: center;
+    padding: 80px clamp(1.5rem, 5vw, 5rem) 80px;
+    overflow: hidden;
+    background: #000;
+  }
+
+  // ── 필름 스트립 배경 장식 ──
+  .film-strips {
+    position: absolute; inset: 0; pointer-events: none;
+  }
+
+  .strip {
+    position: absolute; left: 0; right: 0;
+    background: rgba(255,255,255,0.016);
+    border-top: 1px solid rgba(255,255,255,0.04);
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+  }
+  .strip-1 { top: 18%;  height: 88px; }
+  .strip-2 { top: 47%;  height: 64px; opacity: 0.65; }
+  .strip-3 { top: 75%;  height: 48px; opacity: 0.35; }
+
+  // ── 블롭 ──
+  .blob {
+    position: absolute; border-radius: 50%;
+    filter: blur(140px); pointer-events: none;
+    background: rgba(255,255,255,1);
+  }
+  .blob-1 {
+    width: clamp(300px,45vw,580px); height: clamp(300px,45vw,580px);
+    opacity: 0.022; top: -180px; left: -120px;
+    transition: transform 1.2s $ease;
+  }
+  .blob-2 {
+    width: clamp(200px,35vw,440px); height: clamp(200px,35vw,440px);
+    opacity: 0.016; bottom: -100px; right: -60px;
+    transition: transform 1.2s $ease;
+  }
+
+  // ── 콘텐츠 ──
+  .hero-inner { max-width:1100px; margin:0 auto; width:100%; position:relative; z-index:1; }
+
+  .hero-badge {
+    display:inline-flex; align-items:center; gap:.6rem;
+    padding:.4rem 1rem; background:transparent;
+    border:1px solid rgba(255,255,255,0.1); border-radius:2px;
+    font-size:.7rem; font-weight:500; font-family:$font-mono;
+    color:$text-secondary; letter-spacing:.06em; margin-bottom:2.5rem;
+    opacity:0; transform:translateY(16px);
+    .dot { width:6px;height:6px;background:#fff;border-radius:50%;opacity:.5;animation:pulse 2.4s ease-in-out infinite; }
+  }
+
+  .hero-name {
+    display:flex; align-items:baseline; gap:1.2rem; flex-wrap:wrap;
+    margin-bottom:1.5rem; opacity:0; transform:translateY(28px);
+  }
+  .name-en {
+    font-family:$font-display;
+    font-size:clamp(3.2rem,9vw,8.5rem);
+    font-weight:800; letter-spacing:-.04em; line-height:1; color:#ffffff;
+  }
+  .name-ko {
+    font-size:clamp(1rem,2.5vw,1.7rem); font-weight:300;
+    color:$text-muted; letter-spacing:.1em;
+    align-self:flex-end; padding-bottom:.3em;
+  }
+
+  .hero-tagline {
+    font-size:clamp(.95rem,1.8vw,1.15rem); color:$text-secondary;
+    max-width:480px; line-height:1.8; margin-bottom:3rem; font-weight:400;
+    opacity:0; transform:translateY(16px);
+    em { font-style:normal; color:rgba(255,255,255,0.55); }
+  }
+
+  .hero-metrics { display:flex; flex-wrap:wrap; gap:.55rem; margin-bottom:3rem; opacity:0; transform:translateY(16px); }
+
+  .mpill {
+    display:flex; align-items:center; gap:.65rem;
+    padding:.55rem 1rem;
+    background:rgba(255,255,255,0.03);
+    border:1px solid rgba(255,255,255,0.07);
+    border-radius:3px; transition:all $mid; cursor:default;
+    &:hover { background:rgba(255,255,255,0.05); border-color:rgba(255,255,255,0.14); }
+    &--bright { border-color:rgba(255,255,255,0.13); background:rgba(255,255,255,0.055); }
+    .mnum { font-size:1.05rem; font-weight:800; letter-spacing:-.02em; line-height:1; color:#ffffff; }
+    .mlabel { font-size:.67rem; font-weight:400; color:$text-secondary; line-height:1.35; font-family:$font-mono; }
+  }
+
+  .hero-actions { display:flex; flex-wrap:wrap; gap:.75rem; opacity:0; transform:translateY(16px); }
+
+  .scroll-hint {
+    position:absolute; bottom:2.5rem; left:50%; transform:translateX(-50%);
+    display:flex; flex-direction:column; align-items:center; gap:.5rem;
+    font-family:$font-mono; font-size:.6rem; letter-spacing:.2em; text-transform:uppercase; color:$text-muted;
+    .arrow {
+      width:14px; height:22px; border:1px solid rgba(255,255,255,0.1); border-radius:7px; position:relative;
+      &::after { content:''; position:absolute; top:4px; left:50%; transform:translateX(-50%);
+        width:2px; height:5px; background:rgba(255,255,255,0.2); border-radius:2px; animation:scrollDot 1.8s ease-in-out infinite; }
+    }
+  }
+
+  @media(max-width:640px) { .name-ko{display:none;} .mpill .mnum{font-size:.95rem;} }
+</style>
+
+<script>
+  const seq = [
+    { id:'hbadge',   delay:200  },
+    { id:'hname',    delay:420  },
+    { id:'htagline', delay:600  },
+    { id:'hmetrics', delay:760  },
+    { id:'hactions', delay:900  },
+  ];
+  seq.forEach(({id, delay}) => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    setTimeout(() => {
+      el.style.transition = 'opacity .9s cubic-bezier(.4,0,.2,1), transform .9s cubic-bezier(.4,0,.2,1)';
+      el.style.opacity = '1';
+      el.style.transform = 'translateY(0)';
+    }, delay);
+  });
+
+  const b1 = document.getElementById('b1');
+  const b2 = document.getElementById('b2');
+  if (b1 && b2) {
+    window.addEventListener('mousemove', (e: MouseEvent) => {
+      const x = (e.clientX / window.innerWidth  - 0.5) * 22;
+      const y = (e.clientY / window.innerHeight - 0.5) * 22;
+      b1.style.transform = `translate(${x*.35}px,${y*.35}px)`;
+      b2.style.transform = `translate(${x*.6}px,${y*.6}px)`;
+    }, {passive:true});
+  }
+</script>

@@ -1,0 +1,38 @@
+// ── 배경 ──────────────────────────────────────────────────────
+$bg-base:      #000000;
+$bg-surface:   #050505;
+$bg-elevated:  #0c0c0c;
+$bg-card:      #111111;
+$border:       rgba(255,255,255,0.07);
+$border-hover: rgba(255,255,255,0.20);
+
+// ── 텍스트 ────────────────────────────────────────────────────
+$text-primary:   #f5f5f5;
+$text-secondary: #707070;
+$text-muted:     #383838;
+
+// ── 모노크롬 액센트 ──────────────────────────────────────────
+$accent:   #ffffff;
+$accent-l: rgba(255,255,255,0.85);
+$teal:     #e0e0e0;
+$amber:    #bebebe;
+$rose:     #9c9c9c;
+$emerald:  #d4d4d4;
+$sky:      #b0b0b0;
+
+// ── 타이포그래피 ──────────────────────────────────────────────
+$font-display: 'Syne', sans-serif;
+$font-sans:    'Inter', -apple-system, sans-serif;
+$font-mono:    'DM Mono', monospace;
+
+// ── 반경 ──────────────────────────────────────────────────────
+$r-sm:  4px;
+$r-md:  8px;
+$r-lg:  14px;
+$r-xl:  20px;
+$r-2xl: 32px;
+
+// ── 이징 ──────────────────────────────────────────────────────
+$ease: cubic-bezier(0.4, 0, 0.2, 1);
+$fast: 0.2s #{$ease};
+$mid:  0.35s #{$ease};
