@@ -1,0 +1,78 @@
+---
+order: 1
+title: "Bigtablet Insight Platform"
+titleKo: "Bigtablet Insight 플랫폼"
+group: company
+featured: true
+category: "Company · Production"
+badge: "Flagship"
+year: "2025-2026"
+role: "프론트엔드 개발자"
+accentColor: accent
+summary: "BFF 보안 구조, WebAuthn 인증, 운영 도구 UX, 공유/모바일 웹뷰 흐름까지 개선한 프로덕션 프론트엔드 플랫폼"
+metrics:
+  - { val: "100%", label: "Test coverage\non BFF layer",   color: accent }
+  - { val: "FIDO2", label: "Passkey / hardware\nkey auth", color: teal }
+  - { val: "3",    label: "Production\nfrontend apps",     color: amber }
+  - { val: "FSD",  label: "Feature-Sliced\nDesign arch",   color: emerald }
+callouts:
+  - icon: "🔐"
+    title: "BFF Security Architecture"
+    color: accent
+    body: "모든 API 요청이 Next.js API Routes를 통해 프록시됩니다. 토큰은 HttpOnly 쿠키에만 저장되어 JS로 접근 불가능하고, 백엔드 서버 URL은 브라우저 네트워크 탭에 노출되지 않습니다. 서버사이드에서 401 발생 시 토큰 재발급 후 원래 요청을 재시도합니다."
+  - icon: "🔑"
+    title: "FIDO2 WebAuthn Passkey Auth"
+    color: teal
+    body: "어드민 대시보드에 Web Authentication API(FIDO2)를 이용한 하드웨어 키 / 패스키 등록 플로우를 구현했습니다. 패스워드를 완전히 대체하는 생체인증 또는 보안키 기반 인증으로, 1년 미만 경력에서는 매우 드문 구현입니다."
+tech:
+  - "Next.js"
+  - "React"
+  - "TypeScript"
+  - "TanStack Query"
+  - "Zod"
+  - "React Hook Form"
+  - "Vitest"
+  - "WebAuthn"
+  - "BFF Proxy"
+  - "i18n"
+  - "react-spring"
+link: "https://notiiv.ai/"
+---
+
+## Problem
+
+운영 환경의 프론트엔드 앱은 관리자, 고객 지원, 오너 대시보드, 공유 페이지처럼 서로 다른 목적의 화면을 동시에 다뤄야 했습니다. 인증/세션 처리, BFF 프록시, 고객 등록, FAQ 편집, 결제, 공유 링크, PDF 뷰어처럼 기능 범위가 넓어지면서 앱마다 비슷한 로직이 반복되고 있었습니다.
+
+특히 admin/support 앱에는 유사한 QueryClient 설정과 BFF catch-all proxy 로직이 중복되어 있었습니다. 서버 URL 조합, path validation, auth cookie 주입, SSR/브라우저 환경 차이 같은 세부 로직이 흩어져 있어 작은 예외가 런타임 오류나 잘못된 사용자 메시지로 이어질 수 있었습니다.
+
+운영 도구의 UX도 개선 여지가 있었습니다. FAQ 답변 작성 화면은 마크다운 에디터의 미리보기와 실제 사용자 화면 렌더링이 다르게 보일 수 있었고, 필수 입력값 검증이 일부 필드에서만 드러났습니다. 고객 대량 등록은 Excel 업로드 중심이라 사용자가 간단한 고객 정보를 직접 입력하기에는 흐름이 무거웠습니다.
+
+모바일 웹뷰와 공유 기능도 안정성이 중요했습니다. 카카오톡 같은 인앱 브라우저에서는 OAuth, deep link, blob 다운로드, crypto.randomUUID 같은 브라우저 API가 예상과 다르게 동작할 수 있었습니다. 공유 미팅 페이지는 날짜 정보만 있는 상태에서 캘린더 등록을 지원해야 했고, 서비스 소개 PDF 뷰어는 pinch zoom 상태에서 swipe navigation이 페이지 이동으로 오작동하는 문제가 있었습니다.
+
+## Approach
+
+공통 프론트엔드 인프라부터 정리했습니다. owner/admin provider에 중복되어 있던 QueryClient 설정을 createDefaultQueryClient factory로 추출하고, 앱별 override를 병합할 수 있게 만들었습니다. admin/support의 BFF route에서 반복되던 proxy 로직은 createSimpleBffProxy로 분리해 path segment validation, backend URL 조합, auth cookie injection 옵션을 명시했습니다.
+
+인증과 API 안정성도 보강했습니다. WebAuthn 관련 API는 raw axios 호출에서 Zod 기반 postParsed 흐름으로 옮겨 런타임 응답 검증을 강화했습니다. 인증 수립 단계에서 4xx 응답을 화면 안에서 직접 처리해야 하는 흐름은 전역 401 redirect를 우회하도록 설계했습니다. shared BFF proxy에서는 catch-all path 기본값, trailing slash가 있는 SERVER_URL, null-safe amount rendering 같은 경계 조건을 함께 방어했습니다.
+
+FAQ 작성 경험은 실제 렌더링과 편집 경험을 맞추는 방향으로 개선했습니다. support FAQ 렌더링과 admin MarkdownEditor preview가 동일하게 동작하도록 remark-breaks를 적용했고, 전역 white-space: pre-line reset 때문에 block 간격이 커지는 문제를 preview 영역에서 override했습니다. editor/preview 영역은 labelled section으로 만들고 toolbar role, aria-invalid, aria-required, supporting text, focus-visible 상태를 추가했습니다.
+
+사용자가 작성 중인 FAQ를 실수로 잃지 않도록 useUnsavedChangesWarning을 create/edit 페이지에 적용했습니다. React Hook Form의 dirty/submission 상태를 기준으로 저장 완료 후 redirect에서는 경고가 뜨지 않게 제어했습니다. FAQ accordion은 answer panel을 항상 렌더링하고 grid-template-rows로 열림/닫힘을 애니메이션 처리해 arbitrary height 답변도 자연스럽게 열리도록 했으며, collapsed 상태에서는 focus/AT order에서 빠지게 했습니다.
+
+고객 등록 흐름은 Excel import 중심에서 직접 카드 입력 방식으로 재작업했습니다. 빈 row는 아직 입력하지 않은 상태로 보고 validation을 skip하도록 바꾸고, 전화번호/유선전화/팩스 입력은 숫자만 남긴 뒤 모바일/지역번호 규칙에 맞춰 자동 포맷했습니다. 고객 상세 모달에서는 명함 이미지를 read view에서 바로 삭제할 수 있게 하고, mutation cache를 optimistic update로 갱신했습니다.
+
+공유 기능에서는 business card/meeting share path를 shared entity package에서 단일 source of truth로 관리했습니다. owner에서 생성한 share link를 support의 receive page가 받아 렌더링하고, 만료/잘못된 링크는 별도 error view로 처리했습니다. meeting 공유에는 .ics 캘린더 다운로드를 추가했습니다. VEVENT 문자열은 RFC 5545에 맞춰 UTC timestamp, CRLF, 75-octet folding, TEXT escaping을 처리했고, all-day event 모드와 날짜 파싱 유틸을 테스트했습니다.
+
+모바일/웹뷰 경계도 방어했습니다. 카카오톡 인앱 브라우저에서는 외부 브라우저 열기 가이드를 제공하고, 지원 페이지 특성에 맞춰 KakaoTalk 전용 bypass로 scope를 줄였습니다. blob download 실패 가능성을 toast로 안내하고, crypto.randomUUID가 없는 환경에서는 RFC 4122 v4 fallback을 사용했습니다.
+
+서비스 PDF viewer는 static PDF serving과 inline viewer를 정리하고, keyboard/swipe/fullscreen navigation을 지원했습니다. pinch zoom 중에는 visualViewport.scale을 기준으로 page flip을 막고 브라우저 기본 pan이 가능하도록 touch-action을 조정했습니다. 한국어 IME 환경에서 F shortcut이 Process로 잡히는 문제는 e.code === "KeyF" 기준으로 처리했습니다.
+
+## Result
+
+앱별로 흩어져 있던 공통 프론트엔드 인프라가 재사용 가능한 유틸로 정리되어 유지보수성이 개선되었습니다. QueryClient, BFF proxy, share path, API response parsing 같은 기반 로직이 명확해지면서 여러 앱에서 같은 문제를 반복해서 수정할 필요가 줄었습니다.
+
+운영 도구의 사용성도 더 실제 업무 흐름에 가까워졌습니다. FAQ 작성자는 실제 사용자 화면과 유사한 preview를 보면서 답변을 작성할 수 있고, 필수 답변 누락이나 저장 전 이탈 같은 실수를 화면에서 더 명확하게 인지할 수 있습니다. 고객 등록/명함 이미지 관리/필터 초기화/상세 모달 액션은 더 적은 단계로 처리할 수 있게 됐습니다.
+
+모바일과 공유 페이지의 안정성도 강화되었습니다. 카카오톡 인앱 브라우저, blob download 제한, 브라우저 API 부재, SSR URL 조합 실패, pinch zoom 중 swipe 충돌 같은 실제 사용자 환경의 경계 조건을 방어했습니다.
+
+이 프로젝트에서는 단순 화면 구현보다 운영 환경에서 깨질 수 있는 지점을 찾아 구조화하고, 사용자에게 직접 보이는 오류/마찰을 줄이는 데 집중했습니다.
