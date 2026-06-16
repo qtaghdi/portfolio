@@ -15,6 +15,33 @@ const colorMap: Record<string, string> = {
   emerald: '#e8e8e8',
   sky:     '#c0c0c0',
 };
+
+const getProjectKey = (p: typeof sorted[number]) => p.data.titleKo || p.data.title;
+
+const cardSummaryMap: Record<string, string> = {
+  'Bigtablet Insight 플랫폼': 'BFF, WebAuthn, 공유/웹뷰 경계 조건을 정리한 프로덕션 프론트엔드 플랫폼',
+  '사내 디자인 시스템': '테마, 모바일 내비게이션, 모션, 배포까지 포함한 사내 UI 기반 패키지',
+  '공식 홈페이지 리뉴얼': '브랜드 사이트의 다국어 콘텐츠, 반응형 UI, SEO/배포 품질 개선',
+  '점주로': 'consumer/admin 모노레포, 관리자 콘솔, 알림, 이미지 개선 플로우 구축',
+  'Marker': '감정과 장소를 지도에 기록하는 Kakao Map 웹앱, 하이톤 12회 대상',
+  'Echo': '실시간 음성 기반 욕설 감지 모바일 앱, 하이톤 11회 우수상',
+  'rust-with-typescript': 'TypeScript 개발자를 위한 Rust 비교 학습 가이드',
+  '코러스': 'iTunes 검색 결과를 3D 바이닐 공유 이미지로 만드는 음악 카드 생성기',
+};
+
+const responsibilityMap: Record<string, string> = {
+  'Bigtablet Insight 플랫폼': '공통 프론트엔드 인프라, 운영 도구 UX, 웹뷰/공유 안정화 담당',
+  '사내 디자인 시스템': '컴포넌트 API, 토큰/테마, Storybook, npm 배포 흐름 담당',
+  '공식 홈페이지 리뉴얼': '다국어 콘텐츠, 반응형 화면, SEO/배포 유지보수 담당',
+  '점주로': '앱 구조 재정비, admin/consumer 화면, CI/Storybook 정리 담당',
+  'Marker': '지도 UI, 장소 기록 플로우, 필터/바텀시트 UX 구현 담당',
+  'Echo': '모바일 UI, WebSocket 상태 처리, 그룹/통계 화면 구현 담당',
+  'rust-with-typescript': '콘텐츠 구조, 예제 실행 흐름, KO/EN 문서 구성 담당',
+  '코러스': '3D 렌더링, 음악 검색, 공유 이미지 export 흐름 구현 담당',
+};
+
+const getCardSummary = (p: typeof sorted[number]) => cardSummaryMap[getProjectKey(p)] || p.data.summary;
+const getResponsibility = (p: typeof sorted[number]) => responsibilityMap[getProjectKey(p)] || p.data.role;
 ---
 
 <section id="projects">
@@ -76,6 +103,7 @@ const colorMap: Record<string, string> = {
               <h3 class="card-title">{p.data.title}</h3>
               {p.data.titleKo && <span class="card-title-ko">{p.data.titleKo}</span>}
               <p class="card-role">{p.data.role}</p>
+              <p class="card-responsibility">{getResponsibility(p)}</p>
             </div>
 
             <!-- Metrics Grid -->
@@ -94,7 +122,7 @@ const colorMap: Record<string, string> = {
             )}
 
             <!-- Summary -->
-            <p class="card-summary">{p.data.summary}</p>
+            <p class="card-summary">{getCardSummary(p)}</p>
 
             <!-- Callouts -->
             {p.data.callouts.length > 0 && (
@@ -142,12 +170,17 @@ const colorMap: Record<string, string> = {
               style={`--card-accent: ${accent};`}
             >
               <div class="gc-top">
-                <span class="gc-category">{p.data.category}</span>
+                {p.data.badge ? (
+                  <span class="gc-badge">{p.data.badge}</span>
+                ) : (
+                  <span class="gc-category">{p.data.category}</span>
+                )}
                 <span class="gc-year">{p.data.year}</span>
               </div>
               <h4 class="gc-title">{p.data.title}</h4>
               {p.data.titleKo && <span class="gc-title-ko">{p.data.titleKo}</span>}
-              <p class="gc-summary">{p.data.summary}</p>
+              <p class="gc-role">{getResponsibility(p)}</p>
+              <p class="gc-summary">{getCardSummary(p)}</p>
               <div class="gc-tech">
                 {p.data.tech.slice(0, 5).map(t => (
                   <span class="tech-pill sm">{t}</span>
@@ -368,6 +401,18 @@ const colorMap: Record<string, string> = {
     font-weight: 500;
   }
 
+  .card-responsibility {
+    display: inline-flex;
+    margin: 10px 0 0;
+    padding: 6px 10px;
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 999px;
+    background: rgba(255,255,255,0.025);
+    color: rgba(255,255,255,0.72);
+    font-size: 0.78rem;
+    line-height: 1.45;
+  }
+
   // Metrics grid
   .metrics-grid {
     display: grid;
@@ -415,10 +460,11 @@ const colorMap: Record<string, string> = {
 
   // Summary
   .card-summary {
-    font-size: 0.95rem;
+    font-size: 1rem;
     color: $text-secondary;
     margin-bottom: 24px;
-    line-height: 1.7;
+    line-height: 1.65;
+    max-width: 760px;
   }
 
   // Callouts
@@ -543,6 +589,17 @@ const colorMap: Record<string, string> = {
     color: $text-muted;
   }
 
+  .gc-badge {
+    font-size: 0.68rem;
+    font-weight: 800;
+    letter-spacing: 0.04em;
+    color: $text-primary;
+    border: 1px solid rgba(255,255,255,0.14);
+    background: rgba(255,255,255,0.055);
+    border-radius: 999px;
+    padding: 3px 8px;
+  }
+
   .gc-year {
     font-size: 0.7rem;
     color: $text-muted;
@@ -562,11 +619,18 @@ const colorMap: Record<string, string> = {
     font-size: 0.78rem;
     color: $text-muted;
     display: block;
-    margin-bottom: 10px;
+    margin-bottom: 8px;
+  }
+
+  .gc-role {
+    font-size: 0.74rem;
+    color: rgba(255,255,255,0.68);
+    line-height: 1.55;
+    margin: 0 0 10px;
   }
 
   .gc-summary {
-    font-size: 0.82rem;
+    font-size: 0.84rem;
     color: $text-secondary;
     line-height: 1.6;
     margin-bottom: 14px;
