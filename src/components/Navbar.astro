@@ -1,25 +1,31 @@
 ---
+import BrandMark from './BrandMark.astro';
+
+const homePrefix = Astro.url.pathname === '/' ? '' : '/';
+const sectionHref = (id: string) => `${homePrefix}#${id}`;
 ---
 <nav id="navbar">
-  <a href="#hero" class="logo">SP</a>
+  <a href={sectionHref('hero')} class="logo" aria-label="박상민 포트폴리오 홈으로 이동">
+    <BrandMark showName />
+  </a>
 
   <ul class="nav-links">
-    <li><a href="#about">About</a></li>
-    <li><a href="#stack">Stack</a></li>
-    <li><a href="#projects">Projects</a></li>
-    <li><a href="#contact" class="nav-cta">Contact</a></li>
+    <li><a href={sectionHref('about')}>About</a></li>
+    <li><a href={sectionHref('stack')}>Stack</a></li>
+    <li><a href={sectionHref('projects')}>Projects</a></li>
+    <li><a href={sectionHref('contact')} class="nav-cta">Contact</a></li>
   </ul>
 
-  <button class="hamburger" id="hamburger" aria-label="메뉴 열기">
+  <button class="hamburger" id="hamburger" aria-label="메뉴 열기" aria-controls="mobile-nav" aria-expanded="false">
     <span></span><span></span><span></span>
   </button>
 </nav>
 
 <div class="mobile-nav" id="mobile-nav">
-  <a href="#about">About</a>
-  <a href="#stack">Stack</a>
-  <a href="#projects">Projects</a>
-  <a href="#contact">Contact</a>
+  <a href={sectionHref('about')}>About</a>
+  <a href={sectionHref('stack')}>Stack</a>
+  <a href={sectionHref('projects')}>Projects</a>
+  <a href={sectionHref('contact')}>Contact</a>
 </div>
 
 <style lang="scss">
@@ -34,9 +40,12 @@
     &.scrolled { border-bottom-color: rgba(255,255,255,0.1); }
 
     .logo {
-      font-family: $font-display; font-weight: 800; font-size: 1.1rem;
-      letter-spacing: -0.02em; cursor: pointer;
-      color: #ffffff;
+      display: inline-flex;
+      align-items: center;
+      cursor: pointer;
+      transition: opacity $fast;
+
+      &:hover { opacity: .78; }
     }
 
     .nav-links {
@@ -65,7 +74,8 @@
     border-bottom: 1px solid $border;
     padding: 1.5rem clamp(1.5rem,5vw,4rem) 2rem;
     display: flex; flex-direction: column; gap: 1.25rem;
-    transform: translateY(-10px); opacity: 0; pointer-events: none; transition: all $mid;
+    transform: translateY(-10px); opacity: 0; pointer-events: none;
+    transition: transform $mid, opacity $mid;
     &.open { transform: translateY(0); opacity: 1; pointer-events: all; }
     a { font-size: 1rem; font-weight: 500; color: $text-secondary; padding: 0.5rem 0; transition: color $fast;
       &:hover { color: $text-primary; } }
@@ -74,6 +84,7 @@
   @media (max-width: 900px) {
     #navbar .nav-links { display: none; }
     #navbar .hamburger { display: flex; }
+    #navbar .logo :global(.wordmark) { display: none; }
   }
 </style>
 
@@ -90,6 +101,8 @@
   // 햄버거 토글
   hamburger.addEventListener('click', () => {
     const open = mobileNav.classList.toggle('open');
+    hamburger.setAttribute('aria-expanded', String(open));
+    hamburger.setAttribute('aria-label', open ? '메뉴 닫기' : '메뉴 열기');
     const spans = hamburger.querySelectorAll('span');
     spans[0].style.transform = open ? 'rotate(45deg) translate(5px,5px)' : '';
     spans[1].style.opacity   = open ? '0' : '1';
@@ -100,6 +113,8 @@
   mobileNav.querySelectorAll('a').forEach(a =>
     a.addEventListener('click', () => {
       mobileNav.classList.remove('open');
+      hamburger.setAttribute('aria-expanded', 'false');
+      hamburger.setAttribute('aria-label', '메뉴 열기');
       hamburger.querySelectorAll('span').forEach((s: HTMLElement) => {
         s.style.transform = ''; s.style.opacity = '';
       });
