@@ -7,8 +7,8 @@ const knownProjectMeta = [
   {
     aliases: ['notiiv', '노티브', 'insight', '인사이트', 'bigtablet insight 플랫폼'],
     fileName: '01-notiiv.mdx',
-    title: 'Bigtablet Insight Platform',
-    titleKo: 'Bigtablet Insight 플랫폼',
+    title: 'Notiiv',
+    titleKo: 'Notiiv',
     category: 'Company · Production',
     accentColor: 'accent',
     order: 1,
@@ -168,6 +168,10 @@ function richTextToPlain(richText = []) {
   return richText.map((part) => part.plain_text ?? '').join('');
 }
 
+function escapeMdxText(text) {
+  return text.replaceAll('{', '&#123;').replaceAll('}', '&#125;');
+}
+
 async function notionGet(url) {
   const response = await fetch(url, { headers });
   if (!response.ok) {
@@ -199,7 +203,7 @@ async function fetchPageMarkdown(pageId) {
   const lines = [];
 
   for (const block of blocks) {
-    const text = richTextToPlain(block[block.type]?.rich_text || []).trim();
+    const text = escapeMdxText(richTextToPlain(block[block.type]?.rich_text || []).trim());
     if (block.type === 'heading_2') lines.push(`## ${text}`, '');
     else if (block.type === 'heading_1') lines.push(`# ${text}`, '');
     else if (block.type === 'heading_3') lines.push(`### ${text}`, '');

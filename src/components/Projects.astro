@@ -17,9 +17,10 @@ const colorMap: Record<string, string> = {
 };
 
 const getProjectKey = (p: typeof sorted[number]) => p.data.titleKo || p.data.title;
+const getProjectHref = (p: typeof sorted[number]) => `/projects/${p.slug.replace(/^\d+-/, '')}`;
 
 const cardSummaryMap: Record<string, string> = {
-  'Bigtablet Insight 플랫폼': 'BFF, WebAuthn, 공유/웹뷰 경계 조건을 정리한 프로덕션 프론트엔드 플랫폼',
+  'Notiiv': 'BFF, WebAuthn, 공유/웹뷰 경계 조건을 정리한 프로덕션 프론트엔드 플랫폼',
   '사내 디자인 시스템': '테마, 모바일 내비게이션, 모션, 배포까지 포함한 사내 UI 기반 패키지',
   '공식 홈페이지 리뉴얼': '브랜드 사이트의 다국어 콘텐츠, 반응형 UI, SEO/배포 품질 개선',
   '점주로': 'consumer/admin 모노레포, 관리자 콘솔, 알림, 이미지 개선 플로우 구축',
@@ -30,7 +31,7 @@ const cardSummaryMap: Record<string, string> = {
 };
 
 const responsibilityMap: Record<string, string> = {
-  'Bigtablet Insight 플랫폼': '공통 프론트엔드 인프라, 운영 도구 UX, 웹뷰/공유 안정화 담당',
+  'Notiiv': '공통 프론트엔드 인프라, 운영 도구 UX, 웹뷰/공유 안정화 담당',
   '사내 디자인 시스템': '컴포넌트 API, 토큰/테마, Storybook, npm 배포 흐름 담당',
   '공식 홈페이지 리뉴얼': '다국어 콘텐츠, 반응형 화면, SEO/배포 유지보수 담당',
   '점주로': '앱 구조 재정비, admin/consumer 화면, CI/Storybook 정리 담당',
@@ -100,7 +101,7 @@ const getResponsibility = (p: typeof sorted[number]) => responsibilityMap[getPro
 
             <!-- Title Block -->
             <div class="card-title-block">
-              <h3 class="card-title">{p.data.title}</h3>
+              <h3 class="card-title"><a href={getProjectHref(p)}>{p.data.title}</a></h3>
               {p.data.titleKo && <span class="card-title-ko">{p.data.titleKo}</span>}
               <p class="card-role">{p.data.role}</p>
               <p class="card-responsibility">{getResponsibility(p)}</p>
@@ -149,6 +150,10 @@ const getResponsibility = (p: typeof sorted[number]) => responsibilityMap[getPro
               ))}
             </div>
 
+            <a class="case-study-link" href={getProjectHref(p)}>
+              자세히 보기 <span aria-hidden="true">→</span>
+            </a>
+
             <!-- Accent glow -->
             <div class="card-glow" aria-hidden="true"></div>
           </article>
@@ -177,7 +182,7 @@ const getResponsibility = (p: typeof sorted[number]) => responsibilityMap[getPro
                 )}
                 <span class="gc-year">{p.data.year}</span>
               </div>
-              <h4 class="gc-title">{p.data.title}</h4>
+              <h4 class="gc-title"><a href={getProjectHref(p)}>{p.data.title}</a></h4>
               {p.data.titleKo && <span class="gc-title-ko">{p.data.titleKo}</span>}
               <p class="gc-role">{getResponsibility(p)}</p>
               <p class="gc-summary">{getCardSummary(p)}</p>
@@ -190,6 +195,9 @@ const getResponsibility = (p: typeof sorted[number]) => responsibilityMap[getPro
                 )}
               </div>
               <div class="gc-links">
+                <a href={getProjectHref(p)} class="gc-link gc-detail-link">
+                  자세히 보기 <span aria-hidden="true">→</span>
+                </a>
                 {p.data.github && (
                   <a href={p.data.github} target="_blank" rel="noopener" class="gc-link" aria-label="GitHub">
                     <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
@@ -515,6 +523,19 @@ const getResponsibility = (p: typeof sorted[number]) => responsibilityMap[getPro
     gap: 6px;
   }
 
+  .case-study-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 22px;
+    color: $text-primary;
+    font-size: 0.84rem;
+    font-weight: 700;
+    transition: gap $fast, color $fast;
+
+    &:hover { gap: 12px; }
+  }
+
   // ── Grid cards ───────────────────────────────────────────────
   .grid-section {
     // nothing
@@ -672,6 +693,11 @@ const getResponsibility = (p: typeof sorted[number]) => responsibilityMap[getPro
     transition: color $fast;
 
     &:hover { color: $text-primary; }
+  }
+
+  .gc-detail-link {
+    margin-right: auto;
+    color: $text-primary;
   }
 
   // CTA Card
