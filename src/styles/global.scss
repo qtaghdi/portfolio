@@ -2,7 +2,13 @@
 
 // ── 리셋 ──────────────────────────────────────────────────────
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html { scroll-behavior: smooth; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 80px;
+  color-scheme: dark;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
 body {
   font-family: $font-sans;
   background: $bg-base;
@@ -13,21 +19,32 @@ body {
 a { text-decoration: none; color: inherit; }
 ul { list-style: none; }
 ::selection { background: rgba(255,255,255,0.15); color: #ffffff; }
-::-webkit-scrollbar { width: 2px; }
-::-webkit-scrollbar-thumb { background: #222; border-radius: 2px; }
+::-webkit-scrollbar { width: 10px; }
+::-webkit-scrollbar-track { background: $bg-base; }
+::-webkit-scrollbar-thumb { background: #3b3b3b; border: 3px solid $bg-base; border-radius: 999px; }
+::-webkit-scrollbar-thumb:hover { background: #595959; }
 
-// ── 필름 그레인 오버레이 ──────────────────────────────────────
-// SVG feTurbulence 노이즈를 CSS로 렌더링
-body::after {
-  content: '';
-  position: fixed; inset: 0;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23g)' opacity='1'/%3E%3C/svg%3E");
-  background-repeat: repeat;
-  background-size: 200px 200px;
-  pointer-events: none;
-  z-index: 9999;
-  opacity: 0.045;
-  mix-blend-mode: overlay;
+section[id], main[id], h2[id], h3[id] { scroll-margin-top: 80px; }
+
+:focus-visible {
+  outline: 2px solid #ffffff;
+  outline-offset: 4px;
+}
+
+.skip-link {
+  position: fixed;
+  top: 12px;
+  left: 12px;
+  z-index: 10000;
+  padding: 10px 14px;
+  border-radius: $r-sm;
+  background: #ffffff;
+  color: #000000;
+  font-weight: 700;
+  transform: translateY(-160%);
+  transition: transform $fast;
+
+  &:focus-visible { transform: translateY(0); }
 }
 
 // ── 유틸리티 ──────────────────────────────────────────────────
@@ -86,7 +103,7 @@ body::after {
   background: #ffffff; color: #000000;
   font-weight: 700; font-size: 0.88rem;
   border-radius: 3px; border: 1px solid #ffffff; cursor: pointer;
-  transition: all $mid;
+  transition: background-color $mid, color $mid, border-color $mid, transform $mid;
   letter-spacing: 0.02em;
   &:hover {
     background: transparent;
@@ -101,7 +118,7 @@ body::after {
   background: transparent; color: $text-secondary;
   font-weight: 600; font-size: 0.88rem;
   border-radius: 3px; border: 1px solid $border; cursor: pointer;
-  transition: all $mid;
+  transition: color $mid, border-color $mid, transform $mid;
   letter-spacing: 0.02em;
   &:hover {
     border-color: $border-hover;
@@ -110,14 +127,16 @@ body::after {
   }
 }
 
-// ── 스크롤 reveal ──────────────────────────────────────────────
-.reveal {
-  opacity: 0; transform: translateY(20px);
-  transition: opacity 0.8s $ease, transform 0.8s $ease;
-  &.visible { opacity: 1; transform: translateY(0); }
-  &.d1 { transition-delay: 0.12s; }
-  &.d2 { transition-delay: 0.24s; }
-  &.d3 { transition-delay: 0.36s; }
+// 스크롤 중 콘텐츠 위치가 바뀌지 않도록 정적으로 유지합니다.
+.reveal { opacity: 1; transform: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }
 
 // ── 키프레임 ──────────────────────────────────────────────────

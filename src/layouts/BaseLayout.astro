@@ -4,12 +4,12 @@ interface Props {
   description?: string;
 }
 const {
-  title = 'Engy Park — Frontend Developer',
+  title = 'Sangmin Park — Frontend Developer',
   description = 'Frontend Developer building secure, high-performance web products. BFF Security · FIDO2 WebAuthn · 100% Test Coverage · Design Systems.',
 } = Astro.props;
 ---
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -22,8 +22,10 @@ const {
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Inter:wght@400;500;600;700&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet" />
   <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  <script is:inline>document.documentElement.classList.add('js');</script>
 </head>
 <body>
+  <a class="skip-link" href="#main-content">본문으로 건너뛰기</a>
   <slot />
 </body>
 </html>

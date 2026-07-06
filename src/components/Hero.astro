@@ -109,13 +109,13 @@
     border:1px solid rgba(255,255,255,0.1); border-radius:2px;
     font-size:.7rem; font-weight:500; font-family:$font-mono;
     color:$text-secondary; letter-spacing:.06em; margin-bottom:2.5rem;
-    opacity:0; transform:translateY(16px);
+    opacity:1; transform:none;
     .dot { width:6px;height:6px;background:#fff;border-radius:50%;opacity:.5;animation:pulse 2.4s ease-in-out infinite; }
   }
 
   .hero-name {
     display:flex; align-items:baseline; gap:1.2rem; flex-wrap:wrap;
-    margin-bottom:1.5rem; opacity:0; transform:translateY(28px);
+    margin-bottom:1.5rem; opacity:1; transform:none;
   }
   .name-en {
     font-family:$font-display;
@@ -131,25 +131,35 @@
   .hero-tagline {
     font-size:clamp(.95rem,1.8vw,1.15rem); color:$text-secondary;
     max-width:480px; line-height:1.8; margin-bottom:3rem; font-weight:400;
-    opacity:0; transform:translateY(16px);
+    opacity:1; transform:none;
     em { font-style:normal; color:rgba(255,255,255,0.55); }
   }
 
-  .hero-metrics { display:flex; flex-wrap:wrap; gap:.55rem; margin-bottom:3rem; opacity:0; transform:translateY(16px); }
+  .hero-metrics { display:flex; flex-wrap:wrap; gap:.55rem; margin-bottom:3rem; opacity:1; transform:none; }
 
   .mpill {
     display:flex; align-items:center; gap:.65rem;
     padding:.55rem 1rem;
     background:rgba(255,255,255,0.03);
     border:1px solid rgba(255,255,255,0.07);
-    border-radius:3px; transition:all $mid; cursor:default;
+    border-radius:3px; transition:background-color $mid, border-color $mid; cursor:default;
     &:hover { background:rgba(255,255,255,0.05); border-color:rgba(255,255,255,0.14); }
     &--bright { border-color:rgba(255,255,255,0.13); background:rgba(255,255,255,0.055); }
     .mnum { font-size:1.05rem; font-weight:800; letter-spacing:-.02em; line-height:1; color:#ffffff; }
     .mlabel { font-size:.67rem; font-weight:400; color:$text-secondary; line-height:1.35; font-family:$font-mono; }
   }
 
-  .hero-actions { display:flex; flex-wrap:wrap; gap:.75rem; opacity:0; transform:translateY(16px); }
+  .hero-actions { display:flex; flex-wrap:wrap; gap:.75rem; opacity:1; transform:none; }
+
+  :global(html.js) :is(.hero-badge, .hero-tagline, .hero-metrics, .hero-actions) {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+
+  :global(html.js) .hero-name {
+    opacity: 0;
+    transform: translateY(18px);
+  }
 
   .scroll-hint {
     position:absolute; bottom:2.5rem; left:50%; transform:translateX(-50%);
@@ -167,17 +177,17 @@
 
 <script>
   const seq = [
-    { id:'hbadge',   delay:200  },
-    { id:'hname',    delay:420  },
-    { id:'htagline', delay:600  },
-    { id:'hmetrics', delay:760  },
-    { id:'hactions', delay:900  },
+    { id:'hbadge',   delay:60  },
+    { id:'hname',    delay:140 },
+    { id:'htagline', delay:220 },
+    { id:'hmetrics', delay:300 },
+    { id:'hactions', delay:380 },
   ];
   seq.forEach(({id, delay}) => {
     const el = document.getElementById(id);
     if (!el) return;
     setTimeout(() => {
-      el.style.transition = 'opacity .9s cubic-bezier(.4,0,.2,1), transform .9s cubic-bezier(.4,0,.2,1)';
+      el.style.transition = 'opacity .6s cubic-bezier(.4,0,.2,1), transform .6s cubic-bezier(.4,0,.2,1)';
       el.style.opacity = '1';
       el.style.transform = 'translateY(0)';
     }, delay);
@@ -185,7 +195,7 @@
 
   const b1 = document.getElementById('b1');
   const b2 = document.getElementById('b2');
-  if (b1 && b2) {
+  if (b1 && b2 && window.matchMedia('(pointer: fine)').matches && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
     window.addEventListener('mousemove', (e: MouseEvent) => {
       const x = (e.clientX / window.innerWidth  - 0.5) * 22;
       const y = (e.clientY / window.innerHeight - 0.5) * 22;

@@ -5,13 +5,12 @@
     <div class="reveal">
       <div class="section-label">About</div>
       <h2>Perspective-first<br/><span class="grad-text">engineering.</span></h2>
-      <p>저는 <strong>Bigtablet, Inc.의 프론트엔드 개발자</strong>로, 1년 미만의 경력이지만
-         실제 프로덕션 경험은 그 숫자를 훨씬 뛰어넘습니다.</p>
-      <p>프로덕션에서 <strong>BFF 보안 아키텍처</strong>와 FIDO2 패스키 인증을 구현하고,
-         5개 프로덕트에서 사용 중인 디자인 시스템을 오픈소스로 배포하고,
-         서비스의 LCP를 <strong>5.22초에서 0.36초로</strong> 줄였습니다.</p>
-      <p>개인 시간에는 한국어/영어 양쪽으로 기술 글을 쓰고, Figma 플러그인을 만들고,
-         Rust 학습 가이드를 개발합니다. 포트폴리오용이 아니라 그 문제 자체가 흥미롭기 때문입니다.</p>
+      <p>저는 <strong>Bigtablet, Inc.의 프론트엔드 개발자</strong>로,
+         여러 운영 환경에서 마주치는 문제를 하나씩 해결하며 경험을 쌓고 있습니다.</p>
+      <p>프로덕션에서는 <strong>BFF 보안 아키텍처</strong>와 FIDO2 패스키 인증을 구현하고,
+         여러 프로덕트에서 사용하는 디자인 시스템과 웹 성능 개선 작업에 참여했습니다.</p>
+      <p>업무 밖에서는 Rust 학습 가이드와 작은 도구를 만들며,
+         관심 있는 기술을 직접 구현하고 이해하는 과정을 즐깁니다.</p>
       <blockquote class="philosophy">
         <span>"사용자의 관점으로 바라보기"</span><br/>
         모든 기술적 결정은 결국 UX 결정입니다.
@@ -66,7 +65,7 @@
   .stats-grid { display:grid; grid-template-columns:1fr 1fr; gap:1rem; }
   .stat-card {
     padding:1.4rem 1.5rem; background:$bg-elevated; border:1px solid $border;
-    border-radius:$r-lg; transition:all $mid; position:relative; overflow:hidden;
+    border-radius:$r-lg; transition:border-color $mid, transform $mid; position:relative; overflow:hidden;
     &::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,transparent 60%,rgba(255,255,255,.025));opacity:0;transition:opacity $mid;}
     &:hover{border-color:$border-hover;transform:translateY(-3px);}
     &:hover::before{opacity:1;}
@@ -79,27 +78,3 @@
   @media(max-width:900px){.about-grid{grid-template-columns:1fr;gap:3rem;}.stats-grid{grid-template-columns:repeat(4,1fr);}}
   @media(max-width:640px){.stats-grid{grid-template-columns:1fr 1fr;}}
 </style>
-
-<script>
-  // 카운터 애니메이션
-  const counters = document.querySelectorAll<HTMLElement>('.num[data-count]');
-  const obs = new IntersectionObserver(entries => {
-    entries.forEach(entry => {
-      if (!entry.isIntersecting) return;
-      const el     = entry.target as HTMLElement;
-      const target = +el.dataset.count!;
-      const suffix = el.dataset.suffix ?? '';
-      const start  = performance.now();
-      const dur    = 1200;
-      const tick   = (now: number) => {
-        const t = Math.min((now - start) / dur, 1);
-        const v = Math.round((1 - Math.pow(1 - t, 3)) * target);
-        el.textContent = v + suffix;
-        if (t < 1) requestAnimationFrame(tick);
-      };
-      requestAnimationFrame(tick);
-      obs.unobserve(el);
-    });
-  }, { threshold: 0.5 });
-  counters.forEach(el => obs.observe(el));
-</script>
