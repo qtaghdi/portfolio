@@ -1,0 +1,66 @@
+---
+order: 4
+title: "Jeomjuro"
+titleKo: "점주로"
+group: personal
+featured: false
+category: "Personal · Awarded"
+year: "2026"
+role: "프론트엔드 개발자"
+accentColor: sky
+summary: "점주/브랜드 커뮤니티 서비스를 consumer/admin 모노레포 구조로 재정비하고, 관리자 콘솔·커뮤니티·알림·이미지 개선 플로우·Storybook/CI를 구축한 프론트엔드 프로젝트"
+metrics: []
+callouts: []
+tech:
+  - "Next.js"
+  - "React"
+  - "TypeScript"
+  - "TanStack Query"
+  - "pnpm workspace"
+  - "Turborepo"
+  - "Storybook"
+  - "Biome"
+  - "Vitest"
+  - "GitHub Actions"
+  - "Vercel"
+  - "Cloudflare OpenNext"
+github: "https://github.com/winwin1010/winwin_front04"
+---
+
+## Problem
+
+초기 프론트엔드 구조는 consumer 앱 중심으로 기능이 쌓이고 있었고, 관리자 화면, 공통 UI, API 클라이언트, 테스트 유틸, Storybook, CI 설정이 한 저장소 안에서 명확히 분리되어 있지 않았습니다. 커뮤니티/브랜드/마이페이지/관리자 기능이 동시에 커지면서 앱 구조와 작업 규칙을 먼저 정리하지 않으면 유지보수 비용이 빠르게 늘어날 수 있는 상태였습니다.
+
+서비스 화면도 여러 층의 개선이 필요했습니다. consumer 쪽은 커뮤니티 홈, 브랜드 상세, 공지, 댓글, 마이페이지, 알림 화면의 색상/타이포/상태 표현이 일관되지 않았고, 일부 UI는 하드코딩된 색상에 의존하고 있었습니다. 관리자 쪽은 사용자/게시글/댓글/브랜드/게시판 관리 기능이 필요했지만, admin 전용 인증, 권한 가드, 검색/필터, 삭제/복구 액션, 스켈레톤/에러/빈 상태 같은 운영 도구 UX가 아직 충분히 정리되지 않았습니다.
+
+알림 기능은 기존 마이페이지 하위 경로에 묶여 있어 최신 기획의 /alarm 구조와 맞지 않았고, 읽음 처리의 체감 속도도 부족했습니다. 인증 복구 실패 시에는 reissue 401 상황에서 토큰 정리와 사용자 안내가 반복적으로 흔들릴 수 있었습니다.
+
+운영 관점에서는 PR마다 검증 기준이 달라질 위험이 있었습니다. 모노레포 전환, Storybook, 품질 검사, 배포 워크플로우, package manager 기준이 섞이면 CI가 불안정해지고 리뷰/배포 속도가 떨어질 수 있었습니다.
+
+## Approach
+
+먼저 저장소 구조를 모노레포로 재정비했습니다. 기존 앱 코드를 apps/consumer로 이동하고, 공통 모듈을 packages로 분리했습니다. Storybook 앱, design-system, api, test-utils 패키지를 추가하고, pnpm workspace와 Turborepo 기반 루트 스크립트를 정리했습니다. PR 기준 CI 리포트, 커버리지 요약, CI concurrency, commit check workflow를 추가해 변경마다 검증 흐름이 자동으로 남도록 만들었습니다.
+
+이후 admin과 consumer를 분리했습니다. admin 전용 로그인 페이지, 권한 가드, 토큰 주입 흐름을 구현하고, admin 앱의 브랜드/게시판/게시글/댓글/사용자 관리 화면을 정리했습니다. 데이터 테이블에는 스켈레톤, 고정 페이지네이션, 에러 재시도, 필터 칩을 적용했고, 댓글 삭제/복구 같은 위험 액션은 공통 모달 패턴으로 통일했습니다.
+
+관리자 검색/모더레이션 기능도 백엔드 API 스펙에 맞춰 확장했습니다. posts/users/comments 검색과 댓글 삭제/복구 API를 연동하고, 검색 조건 변경 시 입력값, 적용 키워드, 페이지 상태가 어긋나지 않도록 초기화 로직을 보강했습니다. 댓글 postId 검색에서는 비정상 입력을 방어하고, query union typing과 effect 의존성 관련 리뷰 피드백도 반영했습니다.
+
+consumer 화면은 디자인 토큰 중심으로 정리했습니다. 커뮤니티, 공지, 브랜드 상세 UI에 남아 있던 하드코딩 색상을 brand-*, foreground, muted, destructive 같은 토큰 클래스로 치환했습니다. 커뮤니티 헤더, 홈 카드, 공지 상세 액션 버튼, 댓글 작성자/날짜 표시 등 주요 컴포넌트의 시각 톤을 맞추고, Storybook guide 문서에도 token-first 사용 원칙을 반영했습니다.
+
+알림 기능은 /alarm 독립 페이지로 재구성했습니다. 기존 /mypage/notifications는 /alarm으로 리다이렉트하고, 헤더 알림 아이콘도 새 경로로 연결했습니다. 알림 목록은 행 단위 border, 읽지 않음 배경 강조, 알림 타입별 SVG 아이콘, 리스트형 스켈레톤을 적용했습니다. 알림 클릭 시에는 optimistic update로 읽음 상태를 즉시 반영하고, 실패 시 자동 롤백되도록 구성했습니다.
+
+인증 복구 흐름도 안정화했습니다. reissue 401 실패 상황에서 토큰 정리와 모달 처리 흐름을 보강해 반복 노이즈를 줄였고, 인증 상태 복구가 실패했을 때 사용자가 애매한 상태에 머물지 않도록 했습니다.
+
+이미지 개선 기능은 dashboard 흐름으로 추가했습니다. /dashboard에서 이미지 업로드와 개선 옵션 선택을 할 수 있도록 옵션 패널 UI를 만들고, /api/image-improve 프록시 라우트를 추가해 이미지 개선 요청을 처리했습니다. 이미지 업로드 도메인 처리와 커뮤니티/유저 관련 표시 품질도 함께 보정했습니다.
+
+Storybook과 CI/CD도 지속적으로 정리했습니다. Storybook 문서/가이드와 컴포넌트 예제를 보강하고, Storybook quality/deploy workflow를 pnpm 기준으로 정리했습니다. CI 실행 기준도 aube/pnpm 혼재 상태에서 pnpm 중심으로 재정렬해 실행 실패 가능성을 줄였습니다. 이후 Vercel preview, Cloudflare OpenNext worker deploy, develop -> main 배포 PR 흐름을 반복적으로 운영했습니다.
+
+## Result
+
+점주로 프론트엔드는 단일 consumer 앱에서 consumer/admin/packages/storybook을 갖춘 모노레포 구조로 확장되었습니다. 기능 개발뿐 아니라 작업 규칙, 공통 패키지, 품질 검사, 배포 흐름까지 함께 정리해 팀이 계속 기능을 추가할 수 있는 기반을 만들었습니다.
+
+관리자 콘솔은 로그인/권한/검색/필터/삭제/복구/에러/스켈레톤을 갖춘 운영 도구 형태로 정리되었습니다. 사용자, 게시글, 댓글, 브랜드, 게시판 관리 기능을 API와 연결하면서 단순 목록 화면이 아니라 실제 운영자가 사용할 수 있는 콘솔 경험에 가까워졌습니다.
+
+consumer 화면은 디자인 토큰 기반으로 정돈되어 커뮤니티, 브랜드, 공지, 댓글, 마이페이지 전반의 시각 일관성이 개선되었습니다. 알림 화면은 /alarm 독립 경로와 optimistic read update를 통해 사용자의 체감 반응성을 높였고, 인증 복구 실패 상황도 더 안정적으로 처리할 수 있게 됐습니다.
+
+이미지 개선 플로우는 dashboard 안에서 업로드, 옵션 선택, 개선 요청을 이어갈 수 있는 구조로 추가되었습니다. API proxy route를 통해 프론트엔드와 백엔드 이미지 개선 기능 사이의 연결 지점도 정리했습니다.

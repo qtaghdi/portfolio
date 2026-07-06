@@ -6,10 +6,10 @@ group: company
 featured: true
 category: "Company · Open Source · NPM"
 badge: "NPM Published"
-year: "2024"
-role: "Author"
+year: "2025-2026"
+role: "디자인 시스템 제작 및 유지보수"
 accentColor: amber
-summary: "NPM 패키지 · 86% 커버리지 · 듀얼 번들 · Vanilla JS CDN"
+summary: "다크 모드, 모바일 내비게이션, 레이아웃 프리미티브, 모션 시스템, NPM 배포 안정화까지 포함한 사내 디자인 시스템 고도화"
 metrics:
   - { val: "86%",  label: "Vitest 커버리지\n전 컴포넌트",      color: accent }
   - { val: "16+",  label: "접근성 보장\n컴포넌트 수",           color: teal }
@@ -21,31 +21,51 @@ callouts:
     color: amber
     body: "Rollup으로 Pure React 빌드와 Next.js 빌드를 각각 최적화해 분리 출력합니다. Thymeleaf·JSP·PHP 같은 레거시 서버사이드 환경을 위한 CSS 클래스 기반 컴포넌트는 CDN으로 제공해 React를 쓰지 않는 스택에서도 동일한 디자인 시스템을 사용할 수 있습니다. 런타임 의존성은 0개."
 tech:
-  - "React 19"
+  - "React"
   - "TypeScript"
-  - "Vitest"
-  - "Storybook"
   - "SCSS"
+  - "CSS Custom Properties"
+  - "Storybook"
+  - "Vitest"
   - "Rollup"
-  - "Design Tokens"
-  - "ARIA / A11y"
-  - "NPM"
+  - "react-spring"
+  - "NPM Trusted Publisher"
 github: "https://github.com/Bigtablet/bigtablet-design-system"
 link: "https://www.npmjs.com/package/@bigtablet/design-system"
 ---
 
 ## Problem
 
-5개 이상의 사내 프로덕트가 Button·Modal·Input 같은 공통 UI 컴포넌트를 각자 구현하고 있었습니다. 접근성 기준이 제각각이었고, 한 프로덕트에서 버그를 고쳐도 나머지에 반영되지 않아 유지보수 비용이 계속 누적되었습니다.
+사내 여러 제품이 같은 UI 기준을 사용해야 했지만, 컴포넌트 API, 접근성, 테마, 모바일 레이아웃, Storybook 렌더링 환경까지 일관되게 보장해야 했습니다. Button, TextField, Dropdown, Sidebar, Modal 같은 기본 컴포넌트뿐 아니라 실제 제품 화면을 구성하는 레이아웃 프리미티브와 모바일 내비게이션도 필요했습니다.
+
+기존 모션은 CSS keyframe과 shouldRender/isExiting/onAnimationEnd 패턴이 섞여 있어 컴포넌트별 구현이 달랐고, exit animation 후 unmount 처리가 복잡했습니다. 테스트 환경에서는 animation callback이 기대한 타이밍에 실행되지 않아 unmount 검증이 불안정해질 수 있었습니다.
+
+다크 모드와 Storybook 환경에서도 세부 문제가 있었습니다. 하드코딩된 색상 때문에 일부 문서/예제 화면에서 dark mode 대비가 깨졌고, fixed-position 컴포넌트는 Storybook iframe의 기본 body margin/padding 때문에 실제 viewport edge에 정확히 붙지 않았습니다.
+
+릴리즈 파이프라인 역시 개선이 필요했습니다. NPM publish 과정에서 semantic-release/npm의 OIDC 처리 문제가 있었고, 장기적으로 토큰 기반 publish보다 Trusted Publisher 기반으로 전환하는 편이 안전했습니다.
 
 ## Approach
 
-공통 컴포넌트를 독립 NPM 패키지로 추출했습니다. Rollup으로 **Pure React용과 Next.js용 번들을 분리** 출력하고, React를 쓰지 않는 레거시 환경(Thymeleaf·JSP·PHP)을 위해 CSS 클래스 기반 컴포넌트를 CDN으로도 제공합니다. SCSS + CSS Custom Properties로 디자인 토큰 시스템을 구축하고, Storybook으로 문서화, Vitest로 86% 커버리지를 확보했습니다.
+디자인 시스템 v3에서는 CSS custom property 기반 토큰을 light/dark/system 구조로 정리했습니다. ThemeProvider와 useTheme hook을 제공하고, Storybook toolbar에서도 light/dark/system을 전환할 수 있게 구성했습니다. 기존 컴포넌트에는 navy accent와 dark mode 대응을 적용하고, Tabs, Sidebar, NavBar, Avatar, Badge, Breadcrumb, Tooltip, Menu, EmptyState, Accordion 같은 컴포넌트를 확장했습니다.
+
+화면 조립을 위해 Container, Section, Stack, Grid 같은 레이아웃 프리미티브를 추가했습니다. 이 프리미티브들은 max-width, spacing, background variant, responsive grid, flex direction 같은 반복 패턴을 제품 코드에서 매번 직접 작성하지 않도록 만들었습니다.
+
+모바일 내비게이션은 BottomNav, BottomNavItem, BottomNavSpacer를 새로 추가했습니다. Sidebar에는 mode="auto"를 도입해 600px 미만 viewport에서 CSS media query만으로 bottom bar로 변환되게 했고, desktop-only 앱을 위한 mode="static"도 제공했습니다. 이후 PR review를 반영해 anchor disabled는 aria-disabled, tabIndex=-1, preventDefault로 처리하고, button disabled는 native disabled attribute를 사용했습니다.
+
+SidebarItem과 BottomNavItem은 as="a"와 as="button"을 기준으로 discriminated union 타입을 적용했습니다. 링크에서는 target, rel, download를 자연스럽게 받을 수 있고, 버튼에서는 type, form을 받을 수 있게 해 polymorphic API의 타입 안전성을 높였습니다.
+
+모션 시스템은 react-spring 기반으로 재구성했습니다. useSpringPresence에 onExitComplete를 추가해 exit animation 후 unmount 패턴을 지원했고, Modal과 Alert는 overlay spring과 panel spring을 분리했습니다. Toast도 exiting state와 setTimeout 기반 cleanup을 제거하고 spring 기반 unmount로 옮겼습니다. Dropdown은 선택/ESC 후 즉시 닫혀야 하는 UX와 테스트 요구를 고려해 Menu/Tooltip과 같은 enter-only pattern을 유지했습니다.
+
+Storybook과 테스트 환경도 정리했습니다. iframe body margin/padding reset을 명시해 fixed-position 컴포넌트가 정확히 viewport edge에 붙도록 했고, test setup에서는 react-spring animation을 skip하도록 설정해 unmount-after-exit 테스트가 안정적으로 끝나게 했습니다.
+
+릴리즈는 npm v11+의 auto-OIDC Trusted Publisher 흐름으로 전환했습니다. Node 기본 npm 버전이 auto-OIDC를 지원하지 않는 문제를 피하기 위해 workflow에서 npm을 최신 버전으로 올리고, registry-url, NODE_AUTH_TOKEN 의존성을 제거했습니다.
 
 ## Result
 
-`@bigtablet/design-system`으로 NPM 퍼블리시. 현재 홈페이지·insight-web·admin·support 등 5개 이상 프로덕트에서 사용 중. 런타임 의존성 0. 키보드 내비게이션·스크린리더·ARIA 속성 전 컴포넌트 적용 완료.
+디자인 시스템은 단순한 UI 컴포넌트 모음에서 제품 레이아웃, 테마, 모바일 대응, 접근성, 모션, 배포까지 포괄하는 기반 패키지로 확장되었습니다. 여러 앱이 같은 컴포넌트와 레이아웃 패턴을 공유할 수 있게 되었고, dark mode와 Storybook 환경에서도 더 안정적으로 검증할 수 있게 됐습니다.
 
-## 포함 컴포넌트
+모바일 내비게이션과 Sidebar responsive transform을 통해 desktop/sidebar 중심의 구조를 모바일 bottom navigation으로 자연스럽게 전환할 수 있게 되었습니다. Polymorphic item 타입과 disabled 처리도 정리되어 소비 앱에서 실수할 여지가 줄었습니다.
 
-Button, TextField, Checkbox, Radio, Switch, DatePicker, FileInput, Alert, Toast, Spinner, TopLoading, Pagination, Sidebar, Modal, Card, Select
+모션 시스템은 컴포넌트마다 흩어진 CSS keyframe 패턴에서 일관된 spring 기반 패턴으로 정리되었습니다. 사용자에게는 더 자연스러운 entrance/exit motion을 제공하고, 개발자에게는 테스트 가능한 unmount 흐름을 제공했습니다.
+
+NPM Trusted Publisher 기반 배포 전환으로 publish token 관리 부담을 줄이고, 패키지 공급망 보안 관점에서도 더 안전한 릴리즈 구조를 갖추었습니다.

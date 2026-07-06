@@ -1,4 +1,6 @@
 ---
+import BrandMark from './BrandMark.astro';
+
 const year = new Date().getFullYear();
 ---
 
@@ -6,22 +8,21 @@ const year = new Date().getFullYear();
   <div class="container">
     <div class="inner">
       <!-- Logo -->
-      <a href="#home" class="logo" aria-label="맨 위로">
-        <span class="logo-text">SP</span>
-        <span class="logo-full">Engy Park Park</span>
+      <a href="/#hero" class="logo" aria-label="맨 위로">
+        <BrandMark />
       </a>
 
       <!-- Location + tagline -->
       <p class="tagline">
-        <span class="loc-icon">📍</span> Seoul, Korea ·
+        <span class="loc-icon">📍</span> Daegu, Korea ·
         Frontend Engineer who ships with purpose
       </p>
 
       <!-- Copy -->
       <p class="copy">
-        © {year} Engy Park. Built with
+        © {year} Sangmin Park. Built with
         <a href="https://astro.build" target="_blank" rel="noopener" class="built-link">Astro</a>
-        &amp; ☕ in Seoul.
+        &amp; ☕ in Daegu.
       </p>
     </div>
   </div>
@@ -55,23 +56,6 @@ const year = new Date().getFullYear();
     align-items: center;
     gap: 10px;
     text-decoration: none;
-  }
-
-  .logo-text {
-    font-family: $font-display;
-    font-size: 1.1rem;
-    font-weight: 800;
-    background: linear-gradient(135deg, $accent, $teal);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-  }
-
-  .logo-full {
-    font-size: 0.85rem;
-    font-weight: 600;
-    color: $text-secondary;
-    letter-spacing: 0.04em;
   }
 
   .tagline {
