@@ -1,84 +1,25 @@
----
-interface Props {
-  showName?: boolean;
-}
-
-const { showName = false } = Astro.props;
----
-
-<span class="brand" aria-hidden="true">
-  <span class="monogram">
-    <span>S</span>
-    <i></i>
-    <span>P</span>
-  </span>
-  {showName && (
-    <span class="wordmark">
-      <strong>Sangmin</strong>
-      <span>Park</span>
-    </span>
-  )}
+<span class="symbol" aria-hidden="true">
+  <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+    <path
+      d="M24 8H11.5C8.7 8 7 9.6 7 12C7 14.4 8.8 16 11.5 16H20.5C23.2 16 25 17.6 25 20C25 22.4 23.3 24 20.5 24H8"
+      stroke="currentColor"
+      stroke-width="3"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    />
+  </svg>
 </span>
 
 <style lang="scss">
   @use '../styles/tokens' as *;
 
-  .brand {
-    display: inline-flex;
-    align-items: center;
-    gap: 10px;
-    color: $text-primary;
-  }
-
-  .monogram {
-    position: relative;
-    display: inline-grid;
-    grid-template-columns: 1fr 1fr;
+  .symbol {
+    display: grid;
     place-items: center;
-    width: 50px;
-    height: 30px;
-    overflow: hidden;
-    border: 1px solid rgba(255, 255, 255, 0.28);
-    border-radius: 3px;
-    background: linear-gradient(145deg, rgba(255,255,255,.09), rgba(255,255,255,.015));
-    box-shadow: inset 0 0 0 1px rgba(255,255,255,.025);
-    font: 800 13px/1 $font-display;
-    letter-spacing: -0.05em;
+    width: 32px;
+    height: 32px;
+    color: $text-primary;
 
-    &::before,
-    &::after {
-      content: '';
-      position: absolute;
-      width: 9px;
-      height: 1px;
-      background: #fff;
-    }
-
-    &::before { top: 0; left: 0; }
-    &::after { right: 0; bottom: 0; }
-
-    span { position: relative; z-index: 1; }
-
-    i {
-      position: absolute;
-      left: 50%;
-      width: 1px;
-      height: 42px;
-      background: rgba(255,255,255,.22);
-      transform: translateX(-50%) rotate(18deg);
-      transform-origin: center;
-    }
-  }
-
-  .wordmark {
-    display: flex;
-    gap: 4px;
-    align-items: baseline;
-    white-space: nowrap;
-    font-size: .78rem;
-    letter-spacing: .025em;
-
-    strong { font-weight: 700; color: $text-primary; }
-    > span { font-weight: 500; color: $text-muted; }
+    svg { display: block; }
   }
 </style>

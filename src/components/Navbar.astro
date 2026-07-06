@@ -6,7 +6,7 @@ const sectionHref = (id: string) => `${homePrefix}#${id}`;
 ---
 <nav id="navbar">
   <a href={sectionHref('hero')} class="logo" aria-label="박상민 포트폴리오 홈으로 이동">
-    <BrandMark showName />
+    <BrandMark />
   </a>
 
   <ul class="nav-links">
@@ -84,7 +84,6 @@ const sectionHref = (id: string) => `${homePrefix}#${id}`;
   @media (max-width: 900px) {
     #navbar .nav-links { display: none; }
     #navbar .hamburger { display: flex; }
-    #navbar .logo :global(.wordmark) { display: none; }
   }
 </style>
 
