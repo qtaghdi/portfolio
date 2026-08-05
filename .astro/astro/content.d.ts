@@ -152,9 +152,9 @@ declare module 'astro:content' {
 
 	type ContentEntryMap = {
 		"projects": {
-"01-insight-platform.mdx": {
-	id: "01-insight-platform.mdx";
-  slug: "01-insight-platform";
+"01-notiiv.mdx": {
+	id: "01-notiiv.mdx";
+  slug: "01-notiiv";
   body: string;
   collection: "projects";
   data: InferEntrySchema<"projects">
@@ -173,23 +173,65 @@ declare module 'astro:content' {
   collection: "projects";
   data: InferEntrySchema<"projects">
 } & { render(): Render[".mdx"] };
-"04-cctv.mdx": {
-	id: "04-cctv.mdx";
-  slug: "04-cctv";
+"03-intranet.mdx": {
+	id: "03-intranet.mdx";
+  slug: "03-intranet";
   body: string;
   collection: "projects";
   data: InferEntrySchema<"projects">
 } & { render(): Render[".mdx"] };
-"05-rust-with-typescript.mdx": {
-	id: "05-rust-with-typescript.mdx";
-  slug: "05-rust-with-typescript";
+"04-boundra.mdx": {
+	id: "04-boundra.mdx";
+  slug: "04-boundra";
   body: string;
   collection: "projects";
   data: InferEntrySchema<"projects">
 } & { render(): Render[".mdx"] };
-"06-chorus.mdx": {
-	id: "06-chorus.mdx";
-  slug: "06-chorus";
+"04-jeomjuro.mdx": {
+	id: "04-jeomjuro.mdx";
+  slug: "04-jeomjuro";
+  body: string;
+  collection: "projects";
+  data: InferEntrySchema<"projects">
+} & { render(): Render[".mdx"] };
+"05-marker.mdx": {
+	id: "05-marker.mdx";
+  slug: "05-marker";
+  body: string;
+  collection: "projects";
+  data: InferEntrySchema<"projects">
+} & { render(): Render[".mdx"] };
+"06-echo.mdx": {
+	id: "06-echo.mdx";
+  slug: "06-echo";
+  body: string;
+  collection: "projects";
+  data: InferEntrySchema<"projects">
+} & { render(): Render[".mdx"] };
+"07-rust-with-typescript.mdx": {
+	id: "07-rust-with-typescript.mdx";
+  slug: "07-rust-with-typescript";
+  body: string;
+  collection: "projects";
+  data: InferEntrySchema<"projects">
+} & { render(): Render[".mdx"] };
+"08-chorus.mdx": {
+	id: "08-chorus.mdx";
+  slug: "08-chorus";
+  body: string;
+  collection: "projects";
+  data: InferEntrySchema<"projects">
+} & { render(): Render[".mdx"] };
+"09-owkr.mdx": {
+	id: "09-owkr.mdx";
+  slug: "09-owkr";
+  body: string;
+  collection: "projects";
+  data: InferEntrySchema<"projects">
+} & { render(): Render[".mdx"] };
+"10-kivra.mdx": {
+	id: "10-kivra.mdx";
+  slug: "10-kivra";
   body: string;
   collection: "projects";
   data: InferEntrySchema<"projects">

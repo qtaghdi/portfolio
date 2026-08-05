@@ -1,0 +1,719 @@
+---
+import type { Locale } from '../i18n';
+
+interface Props {
+  projectKey: string;
+  locale: Locale;
+  variant?: 'compact' | 'detail';
+}
+
+const { projectKey, locale, variant = 'compact' } = Astro.props;
+const ko = locale === 'ko';
+const waveform = [32, 58, 44, 76, 52, 88, 62, 40, 72, 48, 82, 56, 34, 68, 46, 78, 54, 38, 64, 42];
+const owkrRoster = [
+  { name: 'Alpha#1001', ranks: '다3★ · 플2? · 플3' },
+  { name: 'Bravo#1002', ranks: '플1 · 다4★ · 플2' },
+  { name: 'Charlie#1003', ranks: '플3 · 다2? · 골1' },
+  { name: 'Delta#1004', ranks: '다5★ · 플1? · 플2' },
+  { name: 'Echo#1005', ranks: '플2 · 다3? · 다4' },
+];
+const owkrRows = [
+  { role: 'TANK', left: 'Delta#1004', leftRank: '다5', right: 'Hotel#1008', rightRank: '다4' },
+  { role: 'DPS', left: 'Bravo#1002', leftRank: '다4', right: 'Echo#1005', rightRank: '다3' },
+  { role: 'DPS', left: 'Golf#1007', leftRank: '플3', right: 'Juliet#1010', rightRank: '플4' },
+  { role: 'SUPPORT', left: 'Alpha#1001', leftRank: '플3', right: 'Foxtrot#1006', rightRank: '다3' },
+  { role: 'SUPPORT', left: 'Charlie#1003', leftRank: '골1', right: 'India#1009', rightRank: '미배치' },
+];
+---
+
+<div class:list={['project-visual', variant]} data-visual={projectKey}>
+  {projectKey === 'notiiv' && (
+    <div class="mock mock-notiiv">
+      <aside class="notiiv-rail">
+        <div class="notiiv-brand"><b>N</b><span>Notiiv</span></div>
+        <small class="repo-label">PRODUCT MONOREPO</small>
+        <div class="notiiv-apps">
+          <span>apps/admin</span>
+          <span>apps/owner</span>
+          <span>apps/status</span>
+          <span class="active">apps/support</span>
+        </div>
+        <div class="notiiv-packages">
+          <small>12 SHARED PACKAGES</small>
+          <strong>api · query · schema<br />ui · theme · layouts</strong>
+        </div>
+      </aside>
+      <section class="notiiv-phone">
+        <div class="phone-status"><span>9:30</span><i></i></div>
+        <div class="phone-title">{ko ? '녹음중' : 'Recording'}</div>
+        <div class="meeting-info">
+          <strong>{ko ? '제품 전략 회의' : 'Product strategy meeting'}</strong>
+          <span>2026.08.05 09:30</span>
+          <small>BIGTABLET · Meeting Room A</small>
+        </div>
+        <div class="waveform">
+          {waveform.map((height, index) => <i style={`--bar-height:${height}%; --bar-index:${index}`}></i>)}
+        </div>
+        <div class="record-button"><span></span></div>
+        <strong class="record-time">00:38</strong>
+        <div class="memo-mode"><i></i>{ko ? '메모 화면 모드' : 'Memo mode'}</div>
+      </section>
+      <div class="transcript-panel">
+        <small>LIVE TRANSCRIPT</small>
+        <p><b>00:31</b>{ko ? '반복되는 제품 로직을 공통 구조로 옮기는 방향을 검토합니다.' : 'We are reviewing how to move repeated product logic into a shared structure.'}</p>
+        <p class="current"><b>00:38</b>{ko ? '운영 화면의 실패 지점도 함께 정리하겠습니다.' : 'We will also resolve failure points in operator tools.'}</p>
+      </div>
+    </div>
+  )}
+
+  {projectKey === 'design-system' && (
+    <div class="mock mock-ds">
+      <header><strong>@bigtablet/design-system</strong><span>Storybook · v3.1</span></header>
+      <aside>
+        <b>FOUNDATION</b><span>Colors</span><span>Typography</span><span>Spacing</span>
+        <b>COMPONENTS</b><span class="active">Button</span><span>TextField</span><span>Sidebar</span><span>Modal</span>
+      </aside>
+      <main>
+        <div class="ds-heading"><small>GENERAL / BUTTON</small><strong>Button</strong><p>{ko ? '행동의 중요도와 상태를 일관된 API로 표현합니다.' : 'Express action hierarchy and state through one consistent API.'}</p></div>
+        <div class="ds-canvas">
+          <div class="ds-row"><small>Filled</small><button>Continue</button><button disabled>Disabled</button></div>
+          <div class="ds-row"><small>Outlined</small><button class="outline">Cancel</button><button class="outline">Preview</button></div>
+          <div class="ds-field"><label>Email</label><div>name@company.com</div><small>Supporting text</small></div>
+        </div>
+      </main>
+    </div>
+  )}
+
+  {projectKey === 'intranet' && (
+    <div class="mock mock-intranet">
+      <aside class="intranet-context">
+        <small>FLUTTER MOBILE APP</small>
+        <strong>{ko ? '업무의 시작과 이동을 하나의 앱 셸로' : 'One app shell for daily work'}</strong>
+        <dl>
+          <div><dt>Flutter</dt><dd>iOS · Android</dd></div>
+          <div><dt>BLoC</dt><dd>{ko ? '상태 관리' : 'State'}</dd></div>
+          <div><dt>SQLite</dt><dd>{ko ? '오프라인 캐시' : 'Offline cache'}</dd></div>
+        </dl>
+      </aside>
+      <section class="intranet-phone">
+        <div class="intranet-status"><span>9:41</span><i></i></div>
+        <header><strong>{ko ? '홈' : 'Home'}</strong><span>●</span></header>
+        <main>
+          <div class="intranet-stats">
+            <article><i>○</i><strong>4</strong><small>{ko ? '알림' : 'Alerts'}</small></article>
+            <article><i>□</i><strong>2</strong><small>{ko ? '대기 결재' : 'Approvals'}</small></article>
+            <article><i>◇</i><strong>7</strong><small>{ko ? '메일' : 'Mail'}</small></article>
+          </div>
+          <section class="intranet-calendar">
+            <header><strong>{ko ? '일정' : 'Calendar'}</strong><span>{ko ? '전체' : 'View all'}</span></header>
+            <div class="week"><span>월<small>3</small></span><span>화<small>4</small></span><span class="today">수<small>5</small></span><span>목<small>6</small></span><span>금<small>7</small></span></div>
+            <p><i></i><strong>{ko ? '제품 주간 회의' : 'Weekly product meeting'}</strong><small>10:00 · Meeting Room A</small></p>
+          </section>
+          <section class="intranet-notice"><header><strong>{ko ? '최근 공지' : 'Recent notices'}</strong><span>SSE · LIVE</span></header><p>{ko ? '8월 전사 일정 안내' : 'August company schedule'}<small>{ko ? '오늘' : 'Today'}</small></p></section>
+        </main>
+        <footer><span class="active"><i>⌂</i>{ko ? '홈' : 'Home'}</span><span><i>◇</i>{ko ? '메신저' : 'Messenger'}<b></b></span><span><i>▦</i>{ko ? '전체' : 'Apps'}</span></footer>
+      </section>
+      <section class="intranet-sync">
+        <small>APP FLOW</small>
+        <div><span class="active">HOME</span><span>MESSENGER</span><span>WORK APPS</span></div>
+        <article><i></i><p><strong>{ko ? '캐시부터 즉시 표시' : 'Cache appears first'}</strong><small>SQLite · cache-then-network</small></p></article>
+        <article><i></i><p><strong>{ko ? '실시간 상태 병합' : 'Merge live state'}</strong><small>SSE · FCM · deep link</small></p></article>
+        <article><i></i><p><strong>{ko ? '부분 실패를 명시' : 'Expose partial failure'}</strong><small>BLoC · recovery state</small></p></article>
+      </section>
+    </div>
+  )}
+
+  {projectKey === 'boundra' && (
+    <div class="mock mock-boundra">
+      <section class="boundra-intro">
+        <small>OPEN SOURCE · RUST CLI</small>
+        <strong>BOUNDRA</strong>
+        <p>{ko ? '아키텍처가 흐려지기 전에 실패하는 도메인 경계' : 'Domain boundaries that fail before architecture drifts.'}</p>
+        <div><span>BR-001</span><span>BR-002</span><span>BR-003</span><span>BR-004</span><span>BR-005</span></div>
+      </section>
+      <section class="boundra-terminal">
+        <header><div><span></span><span></span><span></span></div><strong>boundra · check-boundaries</strong><small>Rust CLI</small></header>
+        <main>
+          <p><i>$</i> pnpm exec boundra check-boundaries</p>
+          <p class="muted">Scanning TypeScript domain graph...</p>
+          <section class="diagnostic">
+            <div><b>BR-004</b><span>DOMAIN INTERNAL IMPORT</span><em>ERROR</em></div>
+            <strong>domains/order/client/view.ts:18:7</strong>
+            <code>import {'{ createOrder }'} from '../payment/internal/create-order';</code>
+            <p>{ko ? '다른 도메인의 내부 구현을 직접 참조할 수 없습니다.' : 'A domain cannot import another domain internal module.'}</p>
+            <small>SUGGESTION · import from domains/payment/public</small>
+          </section>
+          <footer><span>10,000 files</span><span>5 stable rules</span><strong>164.20 ms</strong></footer>
+        </main>
+      </section>
+    </div>
+  )}
+
+  {projectKey === 'owkr' && (
+    <div class="mock mock-owkr">
+      <header class="owkr-app-header">
+        <strong>OWKR Balance</strong>
+        <nav><span class="scrim">▦ 내전 관리</span><span class="sheet">▤ 유저 시트</span><span>▱ 매칭 가이드</span></nav>
+        <small>운영자</small>
+      </header>
+      <main class="owkr-dashboard">
+        <aside class="owkr-sidebar">
+          <section class="owkr-card owkr-roster-summary">
+            <header><div><i>♙</i><strong>참가 명단</strong></div><b>10/10</b></header>
+            <p>입력과 대조는 넓은 참가자 작업실에서 관리합니다.</p>
+            <div class="owkr-progress"><i></i></div>
+            <dl><div><dt>◷ 대기열</dt><dd>0명</dd></div><div><dt>◉ 정보 보완</dt><dd>0명</dd></div></dl>
+            <button>참가자 추가·관리 <span>→</span></button>
+          </section>
+          <section class="owkr-card owkr-player-list">
+            <header><strong>♙ 참가자 관리 <small>총 10명</small></strong><span>전체 삭제</span></header>
+            <div class="owkr-tabs"><b>♙ 참가자 <em>10/10</em></b><span>◷ 대기열 <em>0</em></span></div>
+            <ul>{owkrRoster.map((player) => <li><strong>{player.name}</strong><small>{player.ranks}</small></li>)}</ul>
+          </section>
+        </aside>
+        <section class="owkr-result">
+          <header class="owkr-result-head"><strong>팀 배정 결과</strong><div><span>☆ 선호 무시</span><span>↻ 결과 지우기</span><b>⌘ 팀 자동 배정</b></div></header>
+          <section class="owkr-card owkr-balance-summary">
+            <header><strong>▥ 밸런스 요약</strong><small>1팀 11,300 · 2팀 10,760</small></header>
+            <dl>
+              <div class="total"><dt>총점 차이</dt><dd>540</dd></div>
+              <div><dt>탱커</dt><dd>2팀 +200점</dd></div>
+              <div><dt>딜러</dt><dd>2팀 +20점</dd></div>
+              <div><dt>힐러</dt><dd class="blue">1팀 +390점</dd></div>
+            </dl>
+            <div class="owkr-exceptions"><span>선호 역할 이탈 <b>1명</b></span><span>비선호 배정 <b>1명</b></span><span>미배치 역할 <b>1명</b></span></div>
+          </section>
+          <div class="owkr-swap-guide">↔ 결과표에서 플레이어 두 명을 차례로 선택하면 자리를 바꿀 수 있습니다</div>
+          <div class="owkr-rank-toggle">탱·딜·힐 티어 표시 <i><b></b></i></div>
+          <section class="owkr-matchup">
+            <header><div><strong>1팀</strong><span>선공격</span></div><div><span>선수비</span><strong>2팀</strong></div></header>
+            {owkrRows.map((row, index) => (
+              <div class="owkr-match-row">
+                <span class="player left">{index < 2 && <i>★</i>}<strong>{row.left}</strong><small>◇ {row.leftRank}</small></span>
+                <span class:list={['owkr-role', row.role.toLowerCase()]}>
+                  {row.role === 'TANK' && <svg viewBox="0 0 32 32"><path d="M16 2.5 3.5 6.5S2 20 16 29.5C30 20 28.5 6.5 28.5 6.5Z" /></svg>}
+                  {row.role === 'DPS' && <svg viewBox="0 0 32 32"><path d="m6 26 5-20h4.5l-5 20Zm7.5 0 5-20H23l-5 20Zm7.5 0 5-20h4.5l-5 20Z" /></svg>}
+                  {row.role === 'SUPPORT' && <svg viewBox="0 0 32 32"><path d="M13 5h6v8h8v6h-8v8h-6v-8H5v-6h8Z" /></svg>}
+                </span>
+                <span class="player right"><small>{row.rightRank} ◇</small><strong>{row.right}</strong>{index === 4 && <i>★</i>}</span>
+              </div>
+            ))}
+          </section>
+        </section>
+      </main>
+    </div>
+  )}
+
+  {projectKey === 'jeomjuro' && (
+    <div class="mock mock-jeomjuro">
+      <header><strong>점주로</strong><small>PNPM · TURBOREPO</small><nav><span class="active">CONSUMER</span><span>ADMIN</span><span>STORYBOOK</span></nav><button>{ko ? '글쓰기' : 'Write'}</button></header>
+      <aside><small>WORKSPACE</small><strong>apps</strong><span class="active">consumer</span><span>admin</span><span>storybook</span><strong>packages</strong><span>api</span><span>design-system</span><span>test-utils</span></aside>
+      <main>
+        <div class="community-head"><div><small>apps/consumer · COMMUNITY</small><strong>{ko ? '매장 운영 이야기' : 'Store operations'}</strong></div><label>{ko ? '게시글 검색' : 'Search posts'}</label></div>
+        {[0, 1].map((index) => <article><div><strong>{ko ? ['재고 관리 다들 어떻게 하고 계신가요?', '이번 달 배달 플랫폼 수수료 정리'][index] : ['How do you manage inventory?', 'Delivery platform fees this month'][index]}</strong><p>{ko ? '점주들이 직접 나눈 운영 경험과 정보를 확인해보세요.' : 'Practical operations knowledge shared by store owners.'}</p><small>♡ {12 + index * 7} · ◇ {4 + index}</small></div><i></i></article>)}
+        <section class="jeomjuro-admin"><div><small>apps/admin</small><strong>{ko ? '게시글 모더레이션' : 'Post moderation'}</strong></div><span>{ko ? '검색·필터·삭제·복구' : 'Search · Filter · Delete · Restore'}</span><b>{ko ? '운영 중' : 'ACTIVE'}</b></section>
+      </main>
+    </div>
+  )}
+
+  {projectKey === 'marker' && (
+    <div class="mock mock-marker">
+      <div class="map-grid"></div>
+      <header><strong>Marker</strong><div><span class="active">{ko ? '전체' : 'All'}</span><span>{ko ? '설렘' : 'Excitement'}</span><span>{ko ? '편안함' : 'Comfort'}</span></div><button>{ko ? '기록하기' : 'Write'}</button></header>
+      <div class="map-search">{ko ? '장소를 검색하세요' : 'Search a place'}</div>
+      <div class="pin pin-a"><span>♥</span></div><div class="pin pin-b"><span>☁</span></div><div class="pin pin-c"><span>★</span></div>
+      <section class="place-sheet"><i></i><div class="emotion">♥ {ko ? '설렘' : 'Excitement'}</div><strong>{ko ? '한강에서 본 오늘의 노을' : 'Today’s sunset by the river'}</strong><p>{ko ? '좋아하는 사람들과 함께 걷던 순간을 기록했어요.' : 'A quiet walk with people I care about.'}</p><footer><span>{ko ? '서울 영등포구 여의동로' : 'Yeouido, Seoul'}</span><b>♥ 24</b></footer></section>
+    </div>
+  )}
+
+  {projectKey === 'rust-with-typescript' && (
+    <div class="mock mock-rust">
+      <header><strong>Rust with TypeScript</strong><span>KO / EN</span></header>
+      <aside><small>LEARN RUST</small><span>01 Introduction</span><span class="active">02 Ownership</span><span>03 Borrowing</span><span>04 Enums</span><span>05 Traits</span></aside>
+      <main><div class="doc-title"><small>02 · OWNERSHIP</small><strong>{ko ? '소유권을 익숙한 모델로 이해하기' : 'Understand ownership through a familiar model'}</strong><p>{ko ? '같은 데이터를 TypeScript와 Rust가 어떻게 다르게 다루는지 비교합니다.' : 'Compare how TypeScript and Rust handle the same data.'}</p></div>
+        <div class="code-compare"><section><header>TypeScript</header><code><i>const</i> user = {'{'} name: <b>'Sangmin'</b> {'}'};<br/><i>const</i> next = user;<br/>console.log(user.name);</code></section><section><header>Rust</header><code><i>let</i> user = User {'{'} name: <b>String::from("Sangmin")</b> {'}'};<br/><i>let</i> next = user;<br/>println!("{'{}'}", user.name);</code></section></div>
+      </main>
+    </div>
+  )}
+
+  {projectKey === 'kivra' && (
+    <div class="mock mock-kivra">
+      <header><strong>Kivra</strong><div><span>pnpm build</span><span class="success">Memory updated</span></div></header>
+      <main><section class="terminal-log"><small>TERMINAL CAPTURE</small><p><b>$</b> pnpm build</p><p>vite v5.4.21 building for production...</p><p>✓ 142 modules transformed.</p><p class="error">Type error: selected node is not reachable</p><p>src/features/project/code-node-viewer.tsx:122</p></section>
+        <aside><small>DETECTED ERROR</small><article><b>code-node-viewer.tsx</b><span>line 122 · Type error</span></article><small>PROJECT MEMORY</small><article class="memory"><b>Resolution attached</b><p>Preserve selected node id only after the graph has rebuilt.</p></article></aside></main>
+      <footer><span></span>{ko ? '실행, 오류, 파일 경로와 해결 기록을 함께 저장했습니다.' : 'Run, error, file path, and resolution are stored together.'}</footer>
+    </div>
+  )}
+
+  {projectKey === 'homepage' && (
+    <div class="mock mock-homepage">
+      <div class="camera-grid"><i></i><i></i><i></i><i></i><i></i><i></i></div>
+      <header><strong>BIGTABLET</strong><nav><span>TECHNOLOGY</span><span>ABOUT</span><span>NEWS</span></nav><small>KO / EN</small></header>
+      <main><small>VIDEO UNDERSTANDING AI</small><strong>Vision<br/>Beyond Pixels</strong><p>{ko ? '매장, 공장, 현장의 영상을 실시간으로 이해합니다.' : 'Understand video from stores, factories, and worksites in real time.'}</p><button>{ko ? '도입 상담' : 'Contact us'}</button></main>
+      <footer><span>{ko ? '리테일 분석' : 'Retail analytics'}</span><span>{ko ? '현장 안전' : 'Site safety'}</span><span>{ko ? '지능형 관제' : 'Video intelligence'}</span></footer>
+    </div>
+  )}
+
+  {projectKey === 'echo' && (
+    <div class="mock mock-echo">
+      <section class="echo-phone"><header><div><strong>Echo</strong><small>{ko ? '실시간 음성 감지' : 'Live voice detection'}</small></div><span class="connected">LIVE</span></header>
+        <main><small>{ko ? '오늘의 상태' : 'TODAY'}</small><div class="echo-toggle"><i></i><span>{ko ? '듣고 있어요' : 'Listening'}</span></div><p>{ko ? '음성을 분석하고 있습니다.' : 'Analyzing voice input.'}</p>
+          <div class="echo-metrics"><article><small>{ko ? '활성화 시간' : 'ACTIVE TIME'}</small><div class="ring"><b>42m</b></div></article><article><small>{ko ? '진동 횟수' : 'VIBRATIONS'}</small><strong>7</strong><span>{ko ? '회' : 'times'}</span></article></div>
+        </main><footer><span class="active">HOME</span><span>GROUP</span><span>STATS</span></footer></section>
+    </div>
+  )}
+
+  {projectKey === 'chorus' && (
+    <div class="mock mock-chorus">
+      <div class="aurora a"></div><div class="aurora b"></div>
+      <header><strong>CHORUS</strong><span>{ko ? '목록' : 'BACK'}</span><i></i></header>
+      <section class="story-card"><small><i></i> CHORUS REC.</small><div class="vinyl"><div class="vinyl-label">C</div></div><input value="Midnight Drive · Sangmin" readonly /><div class="track"><span>0:42</span><i><b></b></i><span>3:18</span></div><button aria-label={ko ? '일시정지' : 'Pause'}><i></i><i></i></button></section>
+      <footer>{ko ? '이미지로 저장하기' : 'Save as image'}</footer>
+    </div>
+  )}
+</div>
+
+<style lang="scss">
+  @use '../styles/tokens' as *;
+  .project-visual { width: 100%; height: 100%; overflow: hidden; color: #f4f4f5; font-family: 'Pretendard', sans-serif; }
+  .mock { position: relative; width: 100%; height: 100%; overflow: hidden; }
+  .mock small { font-size: 10px; }
+
+  /* Notiiv, based on the live recording mockup in the support app */
+  .mock-notiiv { display: grid; grid-template-columns: 23% 38% 39%; background: #111; }
+  .notiiv-rail { display: flex; flex-direction: column; padding: 28px 22px; border-right: 1px solid #2a2a2a; background: #171717; }
+  .notiiv-brand { display: flex; align-items: center; gap: 8px; }
+  .notiiv-brand b { display: grid; width: 28px; height: 28px; place-items: center; border-radius: 8px; background: white; color: #171717; }
+  .notiiv-brand span { font-weight: 600; }
+  .repo-label { margin-top: 34px; color: #666; font: 500 7px/1 $font-mono; letter-spacing: .08em; }
+  .notiiv-apps { display: grid; gap: 4px; margin-top: 10px; }
+  .notiiv-apps span { padding: 7px 9px; border-left: 2px solid transparent; color: #777; font: 500 8px/1 $font-mono; }
+  .notiiv-apps span.active { border-left-color: #c2272f; background: #211415; color: #f4f4f5; }
+  .notiiv-packages { display: grid; gap: 8px; margin-top: auto; }
+  .notiiv-packages small { color: #666; font: 500 7px/1 $font-mono; }
+  .notiiv-packages strong { color: #aaa; font: 500 8px/1.7 $font-mono; }
+  .notiiv-phone { display: flex; flex-direction: column; align-items: center; margin: 20px auto; width: min(86%, 245px); overflow: hidden; border: 4px solid #e5e5e5; border-radius: 22px; background: #fff; color: #1d1b20; }
+  .phone-status { width: 100%; display: flex; align-items: center; justify-content: space-between; padding: 11px 17px 4px; font-size: 9px; }
+  .phone-status i { width: 20px; height: 5px; border-radius: 3px; background: #1d1b20; }
+  .phone-title { width: 100%; padding: 8px; text-align: center; font-size: 13px; }
+  .meeting-info { display: grid; gap: 4px; margin-top: 12px; text-align: center; }
+  .meeting-info strong { font-size: 12px; }
+  .meeting-info span, .meeting-info small { color: #999; font-size: 8px; }
+  .waveform { width: 78%; height: 36px; display: flex; align-items: center; justify-content: center; gap: 3px; margin-top: 16px; }
+  .waveform i { width: 3px; height: var(--bar-height); border-radius: 3px; background: #c2272f; animation: wave 1.8s calc(var(--bar-index) * -60ms) ease-in-out infinite alternate; }
+  .record-button { display: grid; width: 52px; height: 52px; margin-top: 10px; place-items: center; border-radius: 50%; background: #c2272f; box-shadow: 0 0 18px rgba(194,39,47,.35); }
+  .record-button span { width: 15px; height: 15px; border-radius: 4px; background: white; }
+  .record-time { margin-top: 7px; font-size: 15px; }
+  .memo-mode { display: flex; align-items: center; gap: 5px; margin-top: 10px; padding: 5px 8px; border: 1px solid #e5e5e5; border-radius: 6px; color: #666; font-size: 8px; font-weight: 600; }
+  .memo-mode i { width: 8px; height: 8px; border: 1px solid #999; }
+  .transcript-panel { padding: 36px 30px; background: #0c0c0c; }
+  .transcript-panel > small { color: #777; font: 500 9px/1 $font-mono; }
+  .transcript-panel p { display: grid; grid-template-columns: 38px 1fr; gap: 10px; margin-top: 35px; color: #8b8b8b; font-size: 10px; line-height: 1.7; }
+  .transcript-panel p b { color: #555; font: 500 9px/1.5 $font-mono; }
+  .transcript-panel p.current { padding: 13px; border-left: 2px solid #c2272f; background: #1b1213; color: #e4e4e4; }
+
+  /* Bigtablet design system, based on Storybook page composition and theme tokens */
+  .mock-ds { display: grid; grid-template: 48px 1fr / 180px 1fr; background: #fafafa; color: #18181b; }
+  .mock-ds > header { grid-column: 1 / 3; display: flex; align-items: center; justify-content: space-between; padding: 0 18px; border-bottom: 1px solid #e4e4e7; }
+  .mock-ds > header strong { font-size: 12px; }
+  .mock-ds > header span { color: #71717a; font: 500 9px/1 $font-mono; }
+  .mock-ds > aside { display: flex; flex-direction: column; padding: 18px 12px; border-right: 1px solid #e4e4e7; background: white; }
+  .mock-ds > aside b { margin: 10px 8px 6px; color: #a1a1aa; font: 500 8px/1 $font-mono; }
+  .mock-ds > aside span { padding: 7px 8px; border-radius: 5px; font-size: 10px; }
+  .mock-ds > aside span.active { background: #18181b; color: white; }
+  .mock-ds > main { display: grid; grid-template-columns: .8fr 1.2fr; gap: 24px; padding: 28px; }
+  .ds-heading { align-self: start; }
+  .ds-heading small { color: #71717a; font: 500 8px/1 $font-mono; }
+  .ds-heading strong { display: block; margin-top: 11px; font-size: 28px; }
+  .ds-heading p { margin-top: 10px; color: #52525b; font-size: 10px; line-height: 1.55; }
+  .ds-canvas { display: grid; align-content: center; gap: 15px; padding: 22px; border: 1px solid #e4e4e7; background: white; }
+  .ds-row { display: grid; grid-template-columns: 58px 1fr 1fr; gap: 8px; align-items: center; }
+  .ds-row small { color: #71717a; }
+  .ds-row button { min-height: 30px; border: 1px solid #18181b; border-radius: 5px; background: #18181b; color: white; font-size: 9px; }
+  .ds-row button:disabled { border-color: #e4e4e7; background: #f4f4f5; color: #a1a1aa; }
+  .ds-row button.outline { background: white; color: #18181b; }
+  .ds-field { display: grid; gap: 4px; margin-top: 4px; }
+  .ds-field label { font-size: 9px; font-weight: 600; }
+  .ds-field div { padding: 8px 10px; border: 1px solid #d4d4d8; border-radius: 5px; color: #52525b; font-size: 9px; }
+  .ds-field small { color: #71717a; font-size: 8px; }
+
+  /* Intranet, based on the Flutter home dashboard, app shell and zinc tokens */
+  .mock-intranet { display: grid; grid-template-columns: minmax(150px, .75fr) minmax(220px, 290px) minmax(170px, .9fr); gap: clamp(18px, 4vw, 52px); place-content: center; padding: 22px clamp(20px, 4vw, 48px); background: #050506; }
+  .intranet-context { display: flex; flex-direction: column; justify-content: center; }
+  .intranet-context > small, .intranet-sync > small { color: #71717a; font: 500 7px/1 $font-mono; letter-spacing: .1em; }
+  .intranet-context > strong { max-width: 210px; margin-top: 14px; font-size: clamp(18px, 2.4vw, 30px); line-height: 1.15; letter-spacing: -.04em; }
+  .intranet-context dl { display: grid; gap: 10px; margin-top: 28px; }
+  .intranet-context dl div { display: flex; align-items: end; justify-content: space-between; gap: 12px; padding-top: 9px; border-top: 1px solid #27272a; }
+  .intranet-context dt { font: 500 9px/1 $font-mono; }
+  .intranet-context dd { color: #71717a; font-size: 8px; }
+  .intranet-phone { width: 100%; height: 100%; min-height: 286px; display: grid; grid-template-rows: 22px 38px 1fr 42px; overflow: hidden; border: 3px solid #27272a; border-radius: 25px; background: #09090b; box-shadow: 0 26px 70px rgba(0,0,0,.55); }
+  .intranet-status { display: flex; align-items: center; justify-content: space-between; padding: 5px 14px 0; font-size: 7px; }
+  .intranet-status i { width: 18px; height: 5px; border-radius: 4px; background: #fafafa; }
+  .intranet-phone > header { display: flex; align-items: center; justify-content: space-between; padding: 0 14px; border-bottom: 1px solid #27272a; }
+  .intranet-phone > header strong { font-size: 13px; }
+  .intranet-phone > header span { color: #71717a; font-size: 8px; }
+  .intranet-phone > main { min-height: 0; padding: 12px; overflow: hidden; }
+  .intranet-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
+  .intranet-stats article { display: grid; gap: 3px; padding: 9px 7px; border: 1px solid #27272a; border-radius: 8px; background: #111114; }
+  .intranet-stats article i { color: #a1a1aa; font-size: 9px; font-style: normal; }
+  .intranet-stats article strong { font-size: 15px; }
+  .intranet-stats article small { color: #71717a; font-size: 7px; }
+  .intranet-calendar, .intranet-notice { margin-top: 10px; }
+  .intranet-calendar > header, .intranet-notice > header { display: flex; align-items: center; justify-content: space-between; }
+  .intranet-calendar > header strong, .intranet-notice > header strong { font-size: 9px; }
+  .intranet-calendar > header span, .intranet-notice > header span { color: #71717a; font-size: 7px; }
+  .intranet-notice > header span { color: #4ade80; font-family: $font-mono; }
+  .week { display: grid; grid-template-columns: repeat(5, 1fr); margin-top: 7px; border: 1px solid #27272a; border-radius: 7px; }
+  .week span { display: grid; gap: 4px; place-items: center; padding: 6px 2px; color: #71717a; font-size: 6px; }
+  .week span small { display: grid; width: 16px; height: 16px; place-items: center; border-radius: 50%; color: #a1a1aa; font-size: 7px; }
+  .week span.today small { background: #fafafa; color: #09090b; }
+  .intranet-calendar > p { display: grid; grid-template-columns: 4px 1fr; margin-top: 7px; padding: 7px 8px; border-radius: 7px; background: #18181b; }
+  .intranet-calendar > p i { grid-row: 1 / 3; border-radius: 3px; background: #fafafa; }
+  .intranet-calendar > p strong, .intranet-calendar > p small { margin-left: 7px; }
+  .intranet-calendar > p strong { font-size: 8px; }
+  .intranet-calendar > p small { margin-top: 3px; color: #71717a; font-size: 6px; }
+  .intranet-notice > p { display: flex; justify-content: space-between; margin-top: 7px; padding: 8px; border: 1px solid #27272a; border-radius: 7px; font-size: 8px; }
+  .intranet-notice > p small { color: #71717a; font-size: 6px; }
+  .intranet-phone > footer { display: grid; grid-template-columns: repeat(3, 1fr); border-top: 1px solid #27272a; background: #111114; }
+  .intranet-phone > footer span { position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; color: #71717a; font-size: 6px; }
+  .intranet-phone > footer span.active { color: #fafafa; }
+  .intranet-phone > footer i { font-size: 10px; font-style: normal; }
+  .intranet-phone > footer b { position: absolute; top: 6px; left: 54%; width: 5px; height: 5px; border-radius: 50%; background: #ef4444; }
+  .intranet-sync { display: flex; flex-direction: column; justify-content: center; }
+  .intranet-sync > div { display: grid; gap: 5px; margin-top: 14px; }
+  .intranet-sync > div span { padding: 7px 9px; border-left: 1px solid #27272a; color: #52525b; font: 500 7px/1 $font-mono; }
+  .intranet-sync > div span.active { border-left-color: #fafafa; color: #fafafa; }
+  .intranet-sync article { display: grid; grid-template-columns: 7px 1fr; gap: 10px; margin-top: 14px; }
+  .intranet-sync article > i { width: 7px; height: 7px; margin-top: 2px; border: 1px solid #71717a; border-radius: 50%; }
+  .intranet-sync article p { display: grid; gap: 4px; }
+  .intranet-sync article strong { font-size: 9px; }
+  .intranet-sync article small { color: #71717a; font: 500 7px/1.4 $font-mono; }
+
+  /* Boundra, based on the public brand, CLI diagnostics and Vite overlay */
+  .mock-boundra { display: grid; grid-template-columns: minmax(225px, .72fr) minmax(0, 1.28fr); background: #07100c; font-family: $font-mono; }
+  .boundra-intro { display: flex; flex-direction: column; justify-content: center; padding: clamp(22px, 4vw, 48px); border-right: 1px solid #264737; background: radial-gradient(circle at 10% 10%, rgba(200,237,107,.11), transparent 43%), #0b1711; }
+  .boundra-intro > small { color: #83a992; font: 500 7px/1 $font-mono; letter-spacing: .1em; }
+  .boundra-intro > strong { margin-top: 13px; color: #edf7f0; font-size: clamp(34px, 5vw, 70px); line-height: .88; letter-spacing: -.075em; }
+  .boundra-intro > p { max-width: 300px; margin-top: 18px; color: #9fb0a5; font-size: 10px; line-height: 1.55; }
+  .boundra-intro > div { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 24px; }
+  .boundra-intro > div span { padding: 5px 6px; border: 1px solid #315c45; color: #c8ed6b; font-size: 7px; }
+  .boundra-terminal { min-width: 0; display: grid; grid-template-rows: 44px 1fr; }
+  .boundra-terminal > header { display: flex; align-items: center; justify-content: space-between; padding: 0 16px; border-bottom: 1px solid #264737; background: #0b1711; }
+  .boundra-terminal > header div { display: flex; gap: 6px; }
+  .boundra-terminal > header div span { width: 7px; height: 7px; border-radius: 50%; background: #315c45; }
+  .boundra-terminal > header strong { font-size: 10px; }
+  .boundra-terminal > header small { color: #83a992; font-size: 8px; }
+  .boundra-terminal > main { display: flex; flex-direction: column; min-width: 0; padding: 22px; }
+  .boundra-terminal > main > p { color: #d7e3db; font-size: 10px; }
+  .boundra-terminal > main > p i { color: #c8ed6b; font-style: normal; }
+  .boundra-terminal > main > p.muted { margin-top: 10px; color: #668374; font-size: 8px; }
+  .diagnostic { margin-top: 20px; padding: 15px; border: 1px solid #315c45; background: #0b1711; }
+  .diagnostic > div { display: flex; align-items: center; gap: 10px; }
+  .diagnostic > div b { padding: 4px 6px; background: #c8ed6b; color: #07100c; font-size: 8px; }
+  .diagnostic > div span { color: #c8ed6b; font-size: 8px; }
+  .diagnostic > div em { margin-left: auto; color: #f87171; font-size: 8px; font-style: normal; }
+  .diagnostic > strong { display: block; margin-top: 12px; color: #a8b8ad; font-size: 8px; }
+  .diagnostic code { display: block; margin-top: 10px; padding: 8px; overflow: hidden; background: #07100c; color: #e6ece8; font-size: 8px; white-space: nowrap; }
+  .diagnostic p { margin-top: 10px; color: #a8b8ad; font-size: 8px; }
+  .diagnostic > small { display: block; margin-top: 10px; color: #c8ed6b; font-size: 7px; }
+  .boundra-terminal main footer { display: flex; gap: 18px; margin-top: auto; padding-top: 12px; border-top: 1px solid #264737; color: #668374; font-size: 8px; }
+  .boundra-terminal main footer strong { margin-left: auto; color: #c8ed6b; }
+
+  /* OWKR Balance, reduced from the live operator dashboard and matchup table */
+  .mock-owkr { display: grid; grid-template-rows: 42px 1fr; background: #0d0e12; color: #e2e8f0; }
+  .owkr-app-header { display: flex; align-items: center; padding: 0 16px; border-bottom: 1px solid rgba(30,41,59,.55); background: rgba(13,14,18,.94); }
+  .owkr-app-header > strong { background: linear-gradient(90deg, #60a5fa, #67e8f9); background-clip: text; color: transparent; font-size: 11px; }
+  .owkr-app-header nav { display: flex; gap: 14px; margin-left: auto; }
+  .owkr-app-header nav span { color: #64748b; font-size: 7px; font-weight: 600; }
+  .owkr-app-header nav .scrim { color: #c4b5fd; }
+  .owkr-app-header nav .sheet { color: #6ee7b7; }
+  .owkr-app-header > small { margin-left: 14px; padding-left: 14px; border-left: 1px solid #1e293b; color: #475569; font-size: 7px; }
+  .owkr-dashboard { display: grid; grid-template-columns: minmax(150px, 29%) minmax(0, 1fr); gap: 12px; min-height: 0; padding: 12px 14px; }
+  .owkr-card { border: 1px solid rgba(30,41,59,.58); border-radius: 12px; background: #14161c; box-shadow: 0 8px 24px rgba(0,0,0,.16); }
+  .owkr-sidebar { display: grid; grid-template-rows: auto 1fr; gap: 10px; min-height: 0; }
+  .owkr-roster-summary { padding: 10px 11px; }
+  .owkr-roster-summary > header, .owkr-player-list > header, .owkr-balance-summary > header, .owkr-result-head { display: flex; align-items: center; justify-content: space-between; }
+  .owkr-roster-summary > header > div { display: flex; align-items: center; gap: 6px; }
+  .owkr-roster-summary > header i { color: #67e8f9; font-size: 8px; font-style: normal; }
+  .owkr-roster-summary > header strong { font-size: 8px; }
+  .owkr-roster-summary > header b { padding: 4px 6px; border-radius: 999px; background: rgba(16,185,129,.12); color: #6ee7b7; font-size: 7px; }
+  .owkr-roster-summary > p { margin-top: 7px; color: #475569; font-size: 6.5px; }
+  .owkr-progress { height: 4px; margin-top: 10px; overflow: hidden; border-radius: 999px; background: #1e293b; }
+  .owkr-progress i { display: block; width: 100%; height: 100%; border-radius: inherit; background: linear-gradient(90deg, #10b981, #22d3ee); }
+  .owkr-roster-summary dl { display: grid; grid-template-columns: 1fr 1fr; gap: 5px; margin-top: 8px; }
+  .owkr-roster-summary dl > div { padding: 7px; border: 1px solid rgba(30,41,59,.5); border-radius: 8px; background: rgba(13,14,18,.55); }
+  .owkr-roster-summary dt { color: #64748b; font-size: 6px; }
+  .owkr-roster-summary dd { margin-top: 4px; font-size: 9px; font-weight: 700; }
+  .owkr-roster-summary button { width: 100%; margin-top: 8px; padding: 7px; border: 0; border-radius: 7px; background: #4f73ed; color: white; font-size: 7px; font-weight: 700; box-shadow: 0 5px 14px rgba(59,130,246,.2); }
+  .owkr-roster-summary button span { margin-left: 4px; }
+  .owkr-player-list { display: flex; min-height: 0; flex-direction: column; padding: 9px; overflow: hidden; }
+  .owkr-player-list > header strong { font-size: 7px; }
+  .owkr-player-list > header small, .owkr-player-list > header span { color: #475569; font-size: 6px; font-weight: 500; }
+  .owkr-tabs { display: grid; grid-template-columns: 1fr 1fr; gap: 3px; margin-top: 8px; padding: 3px; border-radius: 8px; background: #0d0e12; }
+  .owkr-tabs > * { padding: 6px; border-radius: 6px; color: #64748b; font-size: 6px; font-style: normal; text-align: center; }
+  .owkr-tabs > b { background: #263043; color: #cbd5e1; }
+  .owkr-tabs em { margin-left: 3px; color: #6ee7b7; font-size: 5px; font-style: normal; }
+  .owkr-player-list ul { display: grid; min-height: 0; flex: 1; grid-template-rows: repeat(5,minmax(0,1fr)); gap: 4px; margin-top: 7px; list-style: none; }
+  .owkr-player-list li { display: grid; gap: 3px; padding: 6px 7px; border: 1px solid rgba(30,41,59,.45); border-radius: 7px; background: #0f1116; }
+  .owkr-player-list li strong { font-size: 6.5px; }
+  .owkr-player-list li small { color: #64748b; font-size: 5.5px; }
+  .owkr-result { display: grid; grid-template-rows: 26px auto 24px 17px 1fr; gap: 6px; min-width: 0; min-height: 0; }
+  .owkr-result-head > strong { font-size: 9px; }
+  .owkr-result-head > div { display: flex; gap: 4px; }
+  .owkr-result-head span, .owkr-result-head b { padding: 5px 7px; border: 1px solid #293244; border-radius: 6px; color: #64748b; font-size: 6px; font-weight: 600; }
+  .owkr-result-head b { border-color: #4f73ed; background: #4f73ed; color: white; box-shadow: 0 4px 12px rgba(59,130,246,.18); }
+  .owkr-balance-summary { padding: 8px 10px; }
+  .owkr-balance-summary > header strong { font-size: 7px; }
+  .owkr-balance-summary > header small { color: #64748b; font-size: 5.5px; }
+  .owkr-balance-summary dl { display: grid; grid-template-columns: repeat(4,1fr); gap: 5px; margin-top: 7px; }
+  .owkr-balance-summary dl > div { padding: 6px 7px; border-radius: 7px; background: #0f1116; }
+  .owkr-balance-summary dl > div.total { border: 1px solid rgba(34,211,238,.14); background: rgba(34,211,238,.04); }
+  .owkr-balance-summary dt { color: #64748b; font-size: 5px; }
+  .owkr-balance-summary dd { margin-top: 3px; color: #fda4af; font: 700 7px/1 $font-mono; }
+  .owkr-balance-summary .total dd, .owkr-balance-summary dd.blue { color: #93c5fd; }
+  .owkr-exceptions { display: flex; gap: 4px; margin-top: 6px; }
+  .owkr-exceptions span { padding: 3px 5px; border: 1px solid rgba(245,158,11,.2); border-radius: 999px; background: rgba(245,158,11,.07); color: #fbbf24; font-size: 5px; }
+  .owkr-exceptions b { font-weight: 700; }
+  .owkr-swap-guide { display: flex; align-items: center; padding: 0 8px; border: 1px solid rgba(30,41,59,.55); border-radius: 7px; background: rgba(20,22,28,.7); color: #64748b; font-size: 5.5px; }
+  .owkr-rank-toggle { display: flex; align-items: center; justify-content: flex-end; gap: 5px; color: #64748b; font-size: 5.5px; }
+  .owkr-rank-toggle > i { width: 18px; height: 9px; padding: 1px; border-radius: 999px; background: #334155; }
+  .owkr-rank-toggle b { display: block; width: 7px; height: 7px; border-radius: 50%; background: #64748b; }
+  .owkr-matchup { display: grid; min-height: 0; grid-template-rows: auto repeat(5,minmax(26px,1fr)); overflow: hidden; }
+  .owkr-matchup > header { display: grid; grid-template-columns: 1fr 1fr; padding: 0 7px 5px; }
+  .owkr-matchup > header > div { display: flex; align-items: center; gap: 5px; }
+  .owkr-matchup > header > div:last-child { justify-content: flex-end; }
+  .owkr-matchup > header strong { font-size: 9px; }
+  .owkr-matchup > header > div:first-child strong { color: #60a5fa; }
+  .owkr-matchup > header > div:last-child strong { color: #fb7185; }
+  .owkr-matchup > header span { padding: 3px 4px; border-radius: 4px; background: rgba(249,115,22,.15); color: #fdba74; font-size: 5px; }
+  .owkr-matchup > header > div:last-child span { background: rgba(16,185,129,.14); color: #6ee7b7; }
+  .owkr-match-row { display: grid; grid-template-columns: minmax(0,1fr) 22px minmax(0,1fr); min-height: 26px; align-items: center; margin-top: 4px; border: 1px solid rgba(51,65,85,.7); border-radius: 7px; background: rgba(2,6,23,.18); }
+  .owkr-match-row .player { display: flex; min-width: 0; align-items: center; gap: 4px; padding: 0 7px; }
+  .owkr-match-row .player.left { justify-content: flex-end; }
+  .owkr-match-row .player.right { justify-content: flex-start; }
+  .owkr-match-row .player strong { overflow: hidden; font-size: 6.5px; text-overflow: ellipsis; white-space: nowrap; }
+  .owkr-match-row .player small { color: #94a3b8; font: 500 5.5px/1 $font-mono; white-space: nowrap; }
+  .owkr-match-row .player i { color: #facc15; font-size: 6px; font-style: normal; }
+  .owkr-role { display: grid; width: 22px; height: 100%; place-items: center; color: #64748b; }
+  .owkr-role svg { width: 10px; height: 10px; fill: currentColor; }
+
+  /* Jeomjuro, based on the community post list and cyan design-system token */
+  .mock-jeomjuro { display: grid; grid-template: 48px 1fr / 170px 1fr; background: #f8fafc; color: #172033; }
+  .mock-jeomjuro > header { grid-column: 1 / 3; display: flex; align-items: center; gap: 28px; padding: 0 18px; border-bottom: 1px solid #e2e8f0; background: white; }
+  .mock-jeomjuro > header strong { color: #05aff2; font-size: 16px; }
+  .mock-jeomjuro > header > small { color: #94a3b8; font: 500 7px/1 $font-mono; }
+  .mock-jeomjuro > header nav { display: flex; gap: 18px; }
+  .mock-jeomjuro > header nav span { color: #94a3b8; font-size: 9px; }
+  .mock-jeomjuro > header nav span.active { color: #172033; font-weight: 600; }
+  .mock-jeomjuro > header button { margin-left: auto; padding: 7px 12px; border: 0; border-radius: 6px; background: #05aff2; color: white; font-size: 8px; }
+  .mock-jeomjuro > aside { display: flex; flex-direction: column; gap: 3px; padding: 14px 12px; border-right: 1px solid #e2e8f0; background: white; }
+  .mock-jeomjuro > aside > small { margin: 0 8px 7px; color: #94a3b8; font: 500 7px/1 $font-mono; }
+  .mock-jeomjuro > aside strong { margin: 7px 8px 3px; color: #475569; font: 600 8px/1 $font-mono; }
+  .mock-jeomjuro > aside span { padding: 8px; border-radius: 5px; color: #64748b; font-size: 9px; }
+  .mock-jeomjuro > aside span.active { background: #e8f8fe; color: #0389bf; font-weight: 600; }
+  .mock-jeomjuro > main { padding: 17px 20px; overflow: hidden; }
+  .community-head { display: flex; align-items: center; justify-content: space-between; }
+  .community-head div { display: grid; gap: 5px; }
+  .community-head small { color: #05aff2; font: 500 7px/1 $font-mono; }
+  .community-head strong { font-size: 15px; }
+  .community-head label { padding: 7px 10px; border: 1px solid #e2e8f0; border-radius: 6px; color: #94a3b8; font-size: 8px; }
+  .mock-jeomjuro article { display: grid; grid-template-columns: 1fr 55px; gap: 12px; margin-top: 10px; padding: 11px; border: 1px solid #e2e8f0; border-radius: 7px; background: white; }
+  .mock-jeomjuro article strong { font-size: 9px; }
+  .mock-jeomjuro article p { margin-top: 5px; color: #64748b; font-size: 8px; }
+  .mock-jeomjuro article small { display: block; margin-top: 8px; color: #94a3b8; font-size: 7px; }
+  .mock-jeomjuro article i { border-radius: 5px; background: linear-gradient(135deg, #dff6ff, #bfeaff); }
+  .jeomjuro-admin { display: grid; grid-template-columns: 1fr auto auto; gap: 12px; align-items: center; margin-top: 10px; padding: 10px 12px; border: 1px solid #bae6fd; border-radius: 7px; background: #f0f9ff; }
+  .jeomjuro-admin > div { display: grid; gap: 4px; }
+  .jeomjuro-admin small { color: #0284c7; font: 500 7px/1 $font-mono; }
+  .jeomjuro-admin strong { font-size: 9px; }
+  .jeomjuro-admin > span { color: #64748b; font-size: 8px; }
+  .jeomjuro-admin > b { padding: 4px 6px; border-radius: 999px; background: #dcfce7; color: #15803d; font-size: 7px; }
+
+  /* Marker, based on the Kakao map flow, emotion tokens and bottom sheet */
+  .mock-marker { background: #e9eef1; color: #292d32; }
+  .map-grid { position: absolute; inset: 0; opacity: .55; background-image: linear-gradient(28deg, transparent 46%, #c6ced2 47%, #c6ced2 49%, transparent 50%), linear-gradient(108deg, transparent 46%, #d0d7da 47%, #d0d7da 49%, transparent 50%); background-size: 90px 70px, 120px 80px; }
+  .mock-marker > header { position: relative; z-index: 2; height: 48px; display: flex; align-items: center; gap: 20px; padding: 0 16px; background: rgba(255,255,255,.94); box-shadow: 0 2px 12px rgba(37,55,62,.08); }
+  .mock-marker > header strong { color: #ff6b91; }
+  .mock-marker > header div { display: flex; gap: 7px; }
+  .mock-marker > header div span { padding: 5px 9px; border-radius: 999px; background: #f3f4f6; color: #6b7280; font-size: 8px; }
+  .mock-marker > header div span.active { background: #ffebf0; color: #e84d75; }
+  .mock-marker > header button { margin-left: auto; padding: 7px 11px; border: 0; border-radius: 999px; background: #ff6b91; color: white; font-size: 8px; font-weight: 600; }
+  .map-search { position: absolute; z-index: 2; top: 64px; left: 16px; width: 170px; padding: 8px 12px; border-radius: 999px; background: white; color: #9ca3af; font-size: 8px; box-shadow: 0 4px 16px rgba(37,55,62,.1); }
+  .pin { position: absolute; z-index: 1; display: grid; width: 28px; height: 36px; place-items: center; border: 3px solid white; border-radius: 50% 50% 50% 6px; transform: rotate(-45deg); box-shadow: 0 4px 12px rgba(0,0,0,.18); }
+  .pin span { transform: rotate(45deg); color: white; font-size: 9px; }
+  .pin-a { top: 105px; left: 35%; background: #ff6b6b; }
+  .pin-b { top: 160px; left: 65%; background: #4ecdc4; }
+  .pin-c { top: 85px; left: 76%; background: #6c5ce7; }
+  .place-sheet { position: absolute; z-index: 3; right: 18px; bottom: 16px; width: min(52%, 360px); padding: 15px 18px; border-radius: 18px; background: white; box-shadow: 0 16px 50px rgba(20,35,45,.18); }
+  .place-sheet > i { display: block; width: 34px; height: 3px; margin: -6px auto 10px; border-radius: 3px; background: #d1d5db; }
+  .emotion { width: fit-content; padding: 4px 8px; border-radius: 999px; background: #ff6b6b; color: white; font-size: 8px; font-weight: 600; }
+  .place-sheet > strong { display: block; margin-top: 9px; font-size: 12px; }
+  .place-sheet > p { margin-top: 6px; color: #6b7280; font-size: 8px; line-height: 1.5; }
+  .place-sheet footer { display: flex; justify-content: space-between; margin-top: 10px; padding-top: 8px; border-top: 1px solid #f1f5f9; color: #9ca3af; font-size: 7px; }
+  .place-sheet footer b { color: #ff6b6b; }
+
+  /* Rust with TypeScript, based on the Starlight theme variables */
+  .mock-rust { display: grid; grid-template: 45px 1fr / 170px 1fr; background: #13100e; color: #f5f0ed; }
+  .mock-rust > header { grid-column: 1 / 3; display: flex; align-items: center; justify-content: space-between; padding: 0 16px; border-bottom: 1px solid #2c2218; background: #1b1612; }
+  .mock-rust > header strong { font-size: 11px; }
+  .mock-rust > header span { color: #b8afa9; font: 500 8px/1 $font-mono; }
+  .mock-rust > aside { display: flex; flex-direction: column; gap: 4px; padding: 18px 10px; border-right: 1px solid #2c2218; background: #181310; }
+  .mock-rust > aside small { margin: 0 8px 8px; color: #e05a3a; font: 500 7px/1 $font-mono; }
+  .mock-rust > aside span { padding: 7px 8px; color: #8f8580; font-size: 8px; }
+  .mock-rust > aside span.active { border-left: 2px solid #e05a3a; background: #1e1713; color: #ff8262; }
+  .mock-rust > main { min-width: 0; padding: 20px 24px; }
+  .doc-title small { color: #e05a3a; font: 500 7px/1 $font-mono; }
+  .doc-title strong { display: block; margin-top: 8px; font-size: 17px; }
+  .doc-title p { margin-top: 7px; color: #b8afa9; font-size: 8px; }
+  .code-compare { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 18px; }
+  .code-compare section { min-width: 0; border: 1px solid #2e2018; background: #1e1713; }
+  .code-compare header { padding: 8px 10px; border-bottom: 1px solid #2e2018; color: #ddd5d0; font: 500 8px/1 $font-mono; }
+  .code-compare code { display: block; padding: 11px; overflow: hidden; color: #b8afa9; font: 400 8px/1.65 $font-mono; white-space: nowrap; }
+  .code-compare code i { color: #ff8262; font-style: normal; }
+  .code-compare code b { color: #e8b4a4; font-weight: 400; }
+
+  /* Kivra, based on the live landing hero demo */
+  .mock-kivra { display: grid; grid-template-rows: 46px 1fr 38px; background: hsl(220 18% 7%); color: hsl(210 20% 96%); }
+  .mock-kivra > header { display: flex; align-items: center; justify-content: space-between; padding: 0 15px; border-bottom: 1px solid hsl(220 12% 18%); background: hsl(220 16% 10%); }
+  .mock-kivra > header strong { font-size: 11px; }
+  .mock-kivra > header div { display: flex; gap: 7px; }
+  .mock-kivra > header div span { padding: 5px 7px; border: 1px solid hsl(220 12% 18%); border-radius: 5px; color: hsl(220 10% 67%); font: 500 7px/1 $font-mono; }
+  .mock-kivra > header div span.success { border-color: rgba(89,214,194,.35); background: #121d1c; color: #9beadf; }
+  .mock-kivra > main { display: grid; grid-template-columns: 1fr 230px; min-height: 0; }
+  .terminal-log { padding: 18px; font-family: $font-mono; }
+  .terminal-log small, .mock-kivra main aside > small { color: hsl(220 10% 67%); font: 500 7px/1 $font-mono; }
+  .terminal-log p { margin-top: 10px; color: #9ca3af; font-size: 8px; }
+  .terminal-log p b { color: #59d6c2; }
+  .terminal-log p.error { color: #fb7185; }
+  .mock-kivra main aside { display: grid; align-content: start; gap: 10px; padding: 16px; border-left: 1px solid hsl(220 12% 18%); background: rgba(255,255,255,.015); }
+  .mock-kivra main aside article { display: grid; gap: 5px; padding: 10px; border: 1px solid hsl(220 12% 18%); background: hsl(220 16% 10%); }
+  .mock-kivra main aside article b { font-size: 8px; }
+  .mock-kivra main aside article span, .mock-kivra main aside article p { color: hsl(220 10% 67%); font-size: 7px; line-height: 1.45; }
+  .mock-kivra main aside article.memory { border-color: rgba(89,214,194,.28); }
+  .mock-kivra > footer { display: flex; align-items: center; gap: 8px; padding: 0 15px; border-top: 1px solid hsl(220 12% 18%); color: hsl(220 10% 67%); font-size: 8px; }
+  .mock-kivra > footer span { width: 7px; height: 7px; border-radius: 50%; background: #59d6c2; }
+
+  /* Bigtablet homepage, based on the video hero and solution rail */
+  .mock-homepage { background: #101722; }
+  .camera-grid { position: absolute; inset: 0; display: grid; grid-template-columns: repeat(3, 1fr); opacity: .46; }
+  .camera-grid i { border: 1px solid rgba(255,255,255,.08); background: linear-gradient(145deg, transparent 42%, rgba(115,135,153,.34) 43%, transparent 44%), radial-gradient(circle at 55% 45%, rgba(255,255,255,.12), transparent 34%); }
+  .mock-homepage::after { content: ''; position: absolute; inset: 0; background: rgba(10,15,24,.62); }
+  .mock-homepage > header, .mock-homepage > main, .mock-homepage > footer { position: relative; z-index: 1; }
+  .mock-homepage > header { height: 50px; display: flex; align-items: center; padding: 0 18px; border-bottom: 1px solid rgba(255,255,255,.12); }
+  .mock-homepage > header strong { font-size: 11px; letter-spacing: .12em; }
+  .mock-homepage > header nav { display: flex; gap: 18px; margin-left: auto; }
+  .mock-homepage > header nav span, .mock-homepage > header small { color: rgba(255,255,255,.58); font: 500 7px/1 $font-mono; }
+  .mock-homepage > header small { margin-left: 22px; }
+  .mock-homepage > main { display: flex; height: calc(100% - 90px); flex-direction: column; align-items: center; justify-content: center; text-align: center; }
+  .mock-homepage > main small { color: rgba(255,255,255,.55); font: 500 7px/1 $font-mono; letter-spacing: .12em; }
+  .mock-homepage > main strong { margin-top: 10px; font-size: clamp(28px, 5vw, 50px); line-height: .9; }
+  .mock-homepage > main p { margin-top: 12px; color: rgba(255,255,255,.72); font-size: 9px; }
+  .mock-homepage > main button { margin-top: 15px; padding: 8px 14px; border: 0; background: white; color: #101722; font-size: 8px; font-weight: 600; }
+  .mock-homepage > footer { height: 40px; display: grid; grid-template-columns: repeat(3, 1fr); border-top: 1px solid rgba(255,255,255,.12); }
+  .mock-homepage > footer span { display: grid; place-items: center; border-right: 1px solid rgba(255,255,255,.1); color: rgba(255,255,255,.64); font-size: 8px; }
+
+  /* Echo, based on the Expo home screen, orange progress and metrics */
+  .mock-echo { display: grid; place-items: center; background: #050505; }
+  .echo-phone { width: min(66%, 290px); height: 92%; display: grid; grid-template-rows: 50px 1fr 42px; overflow: hidden; border: 1px solid #2a2a2a; border-radius: 24px; background: #111; }
+  .echo-phone > header { display: flex; align-items: center; justify-content: space-between; padding: 0 16px; }
+  .echo-phone > header div { display: grid; gap: 3px; }
+  .echo-phone > header strong { font-size: 13px; }
+  .echo-phone > header small { color: #777; font-size: 7px; }
+  .connected { padding: 4px 7px; border: 1px solid rgba(255,127,17,.32); border-radius: 999px; color: #ff7f11; font: 500 7px/1 $font-mono; }
+  .echo-phone > main { display: flex; flex-direction: column; align-items: center; padding: 8px 20px; }
+  .echo-phone > main > small { color: #777; font: 500 7px/1 $font-mono; }
+  .echo-toggle { position: relative; display: grid; width: 94px; height: 94px; margin-top: 16px; place-items: center; border: 1px solid rgba(255,127,17,.45); border-radius: 50%; box-shadow: 0 0 0 13px rgba(255,127,17,.06), 0 0 0 27px rgba(255,127,17,.025); }
+  .echo-toggle i { width: 30px; height: 30px; border-radius: 50%; background: #ff7f11; }
+  .echo-toggle span { position: absolute; bottom: -20px; font-size: 8px; font-weight: 600; }
+  .echo-phone > main > p { margin-top: 32px; color: #777; font-size: 8px; }
+  .echo-metrics { width: 100%; display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 14px; }
+  .echo-metrics article { display: flex; min-height: 82px; flex-direction: column; align-items: center; justify-content: center; border: 1px solid #252525; border-radius: 12px; }
+  .echo-metrics article > small { color: #777; font-size: 7px; }
+  .ring { display: grid; width: 42px; height: 42px; margin-top: 8px; place-items: center; border: 4px solid #2a2a2a; border-top-color: #ff7f11; border-right-color: #ff7f11; border-radius: 50%; }
+  .ring b { font-size: 8px; }
+  .echo-metrics article > strong { margin-top: 6px; color: #ff7f11; font-size: 25px; }
+  .echo-metrics article > span { font-size: 7px; }
+  .echo-phone > footer { display: grid; grid-template-columns: repeat(3, 1fr); border-top: 1px solid #252525; }
+  .echo-phone > footer span { display: grid; place-items: center; color: #555; font: 500 6px/1 $font-mono; }
+  .echo-phone > footer span.active { color: #ff7f11; }
+
+  /* Chorus, based on the Svelte Studio vertical export card and vinyl scene */
+  .mock-chorus { display: grid; grid-template-rows: 44px 1fr 38px; place-items: center; background: #000; font-family: 'Pretendard', sans-serif; }
+  .aurora { position: absolute; width: 320px; height: 320px; border-radius: 50%; filter: blur(90px); opacity: .3; }
+  .aurora.a { top: -180px; left: -100px; background: #22c55e; }
+  .aurora.b { right: -120px; bottom: -180px; background: #9333ea; }
+  .mock-chorus > header { position: relative; z-index: 2; width: 100%; display: flex; align-items: center; padding: 0 16px; }
+  .mock-chorus > header strong { font-size: 11px; letter-spacing: .08em; }
+  .mock-chorus > header span { margin-left: auto; color: rgba(255,255,255,.55); font-size: 8px; }
+  .mock-chorus > header > i { width: 19px; height: 19px; margin-left: 12px; border: 1px solid rgba(255,255,255,.2); border-radius: 50%; }
+  .story-card { position: relative; z-index: 2; width: min(43%, 230px); height: 92%; display: flex; flex-direction: column; align-items: center; padding: 14px; overflow: hidden; border: 1px solid rgba(255,255,255,.12); border-radius: 24px; background: rgba(10,10,10,.86); box-shadow: 0 20px 50px rgba(0,0,0,.8); }
+  .story-card > small { display: flex; align-items: center; gap: 5px; color: rgba(255,255,255,.75); font: 600 6px/1 $font-mono; letter-spacing: .1em; }
+  .story-card > small i { width: 5px; height: 5px; border-radius: 50%; background: #ef4444; }
+  .vinyl { position: relative; display: grid; width: 115px; height: 115px; margin-top: 12px; place-items: center; border-radius: 50%; background: repeating-radial-gradient(circle, #080808 0 3px, #191919 4px 5px); box-shadow: 16px 18px 28px rgba(0,0,0,.68); animation: spin 10s linear infinite; }
+  .vinyl::before { content: ''; position: absolute; inset: 13px; border-radius: 50%; background: radial-gradient(circle at 35% 30%, #4ade80, #1d4ed8 42%, #111 43%); }
+  .vinyl-label { position: relative; z-index: 1; display: grid; width: 28px; height: 28px; place-items: center; border-radius: 50%; background: #111; font-size: 10px; font-weight: 600; }
+  .story-card input { width: 100%; margin-top: auto; padding: 7px; border: 1px solid rgba(255,255,255,.18); border-radius: 9px; outline: 0; background: rgba(255,255,255,.07); color: white; font-size: 7px; text-align: center; }
+  .track { width: 100%; display: grid; grid-template-columns: 22px 1fr 22px; gap: 6px; align-items: center; margin-top: 10px; color: rgba(255,255,255,.55); font: 500 6px/1 $font-mono; }
+  .track > i { height: 2px; overflow: hidden; border-radius: 2px; background: rgba(255,255,255,.2); }
+  .track > i b { display: block; width: 42%; height: 100%; background: #4ade80; }
+  .story-card > button { display: flex; width: 31px; height: 31px; align-items: center; justify-content: center; gap: 3px; margin-top: 8px; border: 1px solid rgba(255,255,255,.2); border-radius: 50%; background: rgba(255,255,255,.08); }
+  .story-card > button i { width: 3px; height: 11px; background: white; }
+  .mock-chorus > footer { position: relative; z-index: 2; padding: 8px 15px; border: 1px solid rgba(255,255,255,.12); border-radius: 999px; background: rgba(0,0,0,.45); font-size: 8px; font-weight: 600; }
+
+  @keyframes wave { to { height: calc(var(--bar-height) * .45); } }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  @media (prefers-reduced-motion: reduce) { .waveform i, .vinyl { animation: none; } }
+
+  /* Compact home rows keep product anatomy while reducing secondary density */
+  .compact .mock { font-size: .9em; }
+  .compact .notiiv-rail { padding: 20px 16px; }
+  .compact .transcript-panel { padding: 26px 22px; }
+  .compact .mock-ds { grid-template-columns: 145px 1fr; }
+  .compact .mock-ds > main { padding: 20px; }
+  .compact .mock-intranet { grid-template-columns: minmax(120px, .7fr) minmax(190px, 225px) minmax(135px, .8fr); gap: 20px; padding: 16px 22px; }
+  .compact .mock-boundra { grid-template-columns: minmax(205px, .7fr) minmax(0, 1.3fr); }
+  .compact .boundra-intro { padding: 24px; }
+  .compact .boundra-intro > strong { font-size: 42px; }
+
+  @media (max-width: 720px) {
+    .notiiv-rail, .transcript-panel, .mock-ds > aside, .intranet-context, .intranet-sync, .mock-jeomjuro > aside, .mock-rust > aside { display: none; }
+    .mock-notiiv { grid-template-columns: 1fr; }
+    .notiiv-phone { width: min(68%, 230px); }
+    .mock-ds { grid-template: 42px 1fr / 1fr; }
+    .mock-ds > header { grid-column: 1; }
+    .mock-ds > main { grid-template-columns: 1fr; padding: 16px; }
+    .ds-heading p { display: none; }
+    .mock-intranet, .compact .mock-intranet { grid-template-columns: 1fr; gap: 0; padding: 10px; }
+    .intranet-phone { width: min(78%, 230px); height: 100%; min-height: 0; margin: auto; }
+    .mock-boundra, .compact .mock-boundra { grid-template: 82px 1fr / 1fr; }
+    .boundra-intro, .compact .boundra-intro { padding: 11px 14px; border-right: 0; border-bottom: 1px solid #264737; }
+    .boundra-intro > strong, .compact .boundra-intro > strong { margin-top: 6px; font-size: 28px; }
+    .boundra-intro > p, .boundra-intro > div { display: none; }
+    .boundra-terminal { grid-template-rows: 34px 1fr; }
+    .boundra-terminal > header { padding: 0 10px; }
+    .boundra-terminal > main { padding: 10px; }
+    .boundra-terminal > main > p.muted { display: none; }
+    .diagnostic { margin-top: 8px; padding: 9px; }
+    .diagnostic code, .diagnostic p { display: none; }
+    .owkr-app-header nav span:first-child, .owkr-app-header nav span:last-child, .owkr-app-header > small { display: none; }
+    .owkr-app-header nav { gap: 6px; }
+    .owkr-dashboard { grid-template-columns: 1fr; padding: 9px; }
+    .owkr-sidebar { display: none; }
+    .owkr-result { grid-template-rows: 26px auto 22px 16px 1fr; }
+    .owkr-balance-summary dl { grid-template-columns: 1fr 1fr; }
+    .owkr-balance-summary dl > div:nth-child(n+3) { display: none; }
+    .owkr-exceptions span:nth-child(n+3), .owkr-result-head span { display: none; }
+    .mock-jeomjuro { grid-template: 42px 1fr / 1fr; }
+    .mock-jeomjuro > header { grid-column: 1; }
+    .mock-jeomjuro > header nav { display: none; }
+    .mock-marker > header div { display: none; }
+    .place-sheet { width: 72%; }
+    .mock-rust { grid-template: 42px 1fr / 1fr; }
+    .mock-rust > header { grid-column: 1; }
+    .mock-kivra > main { grid-template-columns: 1fr; }
+    .mock-kivra main aside { display: none; }
+    .mock-homepage > header nav { display: none; }
+    .echo-phone { width: min(86%, 285px); }
+    .story-card { width: min(68%, 235px); }
+  }
+</style>

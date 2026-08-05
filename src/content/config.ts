@@ -13,6 +13,12 @@ const CalloutSchema = z.object({
   body:  z.string(),
 });
 
+const EvidenceSchema = z.object({
+  val: z.string(),
+  label: z.string(),
+  detail: z.string().optional(),
+});
+
 const projects = defineCollection({
   type: 'content',
   schema: z.object({
@@ -26,6 +32,11 @@ const projects = defineCollection({
     year:       z.string(),
     role:       z.string(),
     summary:    z.string(),          // hero card 한 줄 요약
+    thesis:     z.string().optional(),
+    responsibility: z.string().optional(),
+    focus:      z.array(z.string()).default([]),
+    visibility: z.string().optional(),
+    evidence:   z.array(EvidenceSchema).default([]),
     accentColor: z.string().default('accent'),
     metrics:    z.array(MetricSchema).default([]),
     callouts:   z.array(CalloutSchema).default([]),

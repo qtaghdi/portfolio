@@ -1,80 +1,23 @@
 ---
-import BrandMark from './BrandMark.astro';
-
+import type { Locale } from '../i18n';
+interface Props { locale: Locale; }
+const { locale } = Astro.props;
 const year = new Date().getFullYear();
 ---
 
 <footer>
-  <div class="container">
-    <div class="inner">
-      <!-- Logo -->
-      <a href="/#hero" class="logo" aria-label="맨 위로">
-        <BrandMark />
-      </a>
-
-      <!-- Location + tagline -->
-      <p class="tagline">
-        <span class="loc-icon">📍</span> Daegu, Korea ·
-        Frontend Engineer who ships with purpose
-      </p>
-
-      <!-- Copy -->
-      <p class="copy">
-        © {year} Sangmin Park. Built with
-        <a href="https://astro.build" target="_blank" rel="noopener" class="built-link">Astro</a>
-        &amp; ☕ in Daegu.
-      </p>
-    </div>
+  <div class="shell footer-inner">
+    <p>© {year} PARK SANGMIN</p>
+    <p>DAEGU, KOREA</p>
+    <a href="#hero">{locale === 'ko' ? '맨 위로' : 'Back to top'}</a>
   </div>
 </footer>
 
 <style lang="scss">
   @use '../styles/tokens' as *;
-
-  footer {
-    background: $bg-base;
-    border-top: 1px solid $border;
-    padding: 40px 0;
-  }
-
-  .container {
-    max-width: 1100px;
-    margin: 0 auto;
-    padding: 0 24px;
-  }
-
-  .inner {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 12px;
-    text-align: center;
-  }
-
-  .logo {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    text-decoration: none;
-  }
-
-  .tagline {
-    font-size: 0.82rem;
-    color: $text-muted;
-  }
-
-  .loc-icon { font-style: normal; }
-
-  .copy {
-    font-size: 0.78rem;
-    color: $text-muted;
-  }
-
-  .built-link {
-    color: $accent;
-    text-decoration: none;
-    font-weight: 600;
-
-    &:hover { text-decoration: underline; }
-  }
+  footer { padding: 28px 0; }
+  .footer-inner { display: grid; grid-template-columns: 1fr 1fr auto; gap: 24px; padding-top: 24px; border-top: 1px solid $line; }
+  p, a { color: $gunmetal; font: 500 .59rem/1.4 $font-mono; letter-spacing: .08em; }
+  a:hover { color: $silver; }
+  @media (max-width: 620px) { .footer-inner { grid-template-columns: 1fr; } }
 </style>

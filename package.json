@@ -4,9 +4,7 @@
   "version": "0.1.0",
   "scripts": {
     "notion:sync": "node scripts/sync-notion-projects.mjs",
-    "predev": "pnpm notion:sync",
     "dev": "astro dev",
-    "prebuild": "pnpm notion:sync",
     "build": "astro build",
     "preview": "astro preview"
   },

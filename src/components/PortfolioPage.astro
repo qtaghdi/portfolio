@@ -1,0 +1,25 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Navbar from './Navbar.astro';
+import Hero from './Hero.astro';
+import Projects from './Projects.astro';
+import About from './About.astro';
+import Contact from './Contact.astro';
+import Footer from './Footer.astro';
+import { copy, type Locale } from '../i18n';
+
+interface Props { locale: Locale; }
+const { locale } = Astro.props;
+const meta = copy[locale].meta;
+---
+
+<BaseLayout locale={locale} title={meta.title} description={meta.description}>
+  <Navbar locale={locale} />
+  <main id="main-content">
+    <Hero locale={locale} />
+    <Projects locale={locale} />
+    <About locale={locale} />
+    <Contact locale={locale} />
+  </main>
+  <Footer locale={locale} />
+</BaseLayout>

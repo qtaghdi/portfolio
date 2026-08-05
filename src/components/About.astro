@@ -1,80 +1,57 @@
 ---
+import { copy, type Locale } from '../i18n';
+interface Props { locale: Locale; }
+const { locale } = Astro.props;
+const dictionary = copy[locale].about;
 ---
-<section id="about">
-  <div class="about-grid">
-    <div class="reveal">
-      <div class="section-label">About</div>
-      <h2>Perspective-first<br/><span class="grad-text">engineering.</span></h2>
-      <p>저는 <strong>Bigtablet, Inc.의 프론트엔드 개발자</strong>로,
-         여러 운영 환경에서 마주치는 문제를 하나씩 해결하며 경험을 쌓고 있습니다.</p>
-      <p>프로덕션에서는 <strong>BFF 보안 아키텍처</strong>와 FIDO2 패스키 인증을 구현하고,
-         여러 프로덕트에서 사용하는 디자인 시스템과 웹 성능 개선 작업에 참여했습니다.</p>
-      <p>업무 밖에서는 Rust 학습 가이드와 작은 도구를 만들며,
-         관심 있는 기술을 직접 구현하고 이해하는 과정을 즐깁니다.</p>
-      <blockquote class="philosophy">
-        <span>"사용자의 관점으로 바라보기"</span><br/>
-        모든 기술적 결정은 결국 UX 결정입니다.
-      </blockquote>
+
+<section id="about" class="about-section">
+  <div class="shell">
+    <header class="about-head reveal">
+      <p class="eyebrow">{dictionary.kicker}</p>
+      <h2>{dictionary.statement.split('\n').map((line) => <span>{line}</span>)}</h2>
+      <p class="about-description">{dictionary.description}</p>
+    </header>
+
+    <div class="principles reveal">
+      {dictionary.principles.map(([index, title, description]) => (
+        <article>
+          <span>{index}</span>
+          <h3>{title}</h3>
+          <p>{description}</p>
+        </article>
+      ))}
     </div>
 
-    <div class="stats-grid reveal d2">
-      <div class="stat-card c1">
-        <div class="num">BFF</div>
-        <div class="lbl">Security Pattern</div>
-        <div class="sub">HttpOnly JWT · URL 차단</div>
-      </div>
-      <div class="stat-card c2">
-        <div class="num" data-count="100" data-suffix="%">100%</div>
-        <div class="lbl">Test Coverage</div>
-        <div class="sub">BFF + 유틸 레이어</div>
-      </div>
-      <div class="stat-card c3">
-        <div class="num" data-count="93" data-suffix="%">93%</div>
-        <div class="lbl">LCP 개선율</div>
-        <div class="sub">5.22s → 0.36s</div>
-      </div>
-      <div class="stat-card c4">
-        <div class="num" data-count="5" data-suffix="+">5+</div>
-        <div class="lbl">Products</div>
-        <div class="sub">디자인 시스템 사용 중</div>
-      </div>
+    <div class="profile reveal">
+      <span>{dictionary.profile[0]}</span>
+      <span>{dictionary.profile[1]}</span>
+      <span>{dictionary.profile[2]}</span>
     </div>
   </div>
 </section>
 
 <style lang="scss">
   @use '../styles/tokens' as *;
-
-  #about { padding: clamp(5rem,10vw,9rem) clamp(1.5rem,5vw,4rem); }
-
-  .about-grid {
-    max-width: 1100px; margin: 0 auto;
-    display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: start;
+  .about-section { padding: clamp(120px, 16vw, 240px) 0 clamp(100px, 13vw, 190px); border-top: 1px solid $line; }
+  .about-head { display: grid; grid-template-columns: .55fr 1.35fr .65fr; gap: 48px; align-items: start; }
+  .about-head h2 { font-size: clamp(2.6rem, 5.4vw, 5.9rem); font-weight: 500; line-height: 1.04; letter-spacing: -.065em; }
+  .about-head h2 span { display: block; word-break: keep-all; }
+  .about-description { max-width: 410px; color: $silver; font-size: 1rem; line-height: 1.9; word-break: keep-all; }
+  .principles { display: grid; grid-template-columns: repeat(3, 1fr); margin-top: clamp(92px, 11vw, 150px); border-top: 1px solid $line-bright; }
+  .principles article { min-height: 230px; padding: 24px 30px 32px 0; border-right: 1px solid $line; }
+  .principles article + article { padding-left: 30px; }
+  .principles article:last-child { border-right: 0; }
+  .principles article > span { color: $gunmetal; font: 500 .66rem/1 $font-mono; }
+  .principles h3 { margin-top: 74px; font-size: 1.2rem; font-weight: 500; }
+  .principles p { margin-top: 13px; color: $silver; font-size: .94rem; line-height: 1.75; }
+  .profile { display: grid; grid-template-columns: .55fr 1.35fr .65fr; gap: 48px; margin-top: 100px; padding-top: 20px; border-top: 1px solid $line; color: $gunmetal; font: 500 .66rem/1.45 $font-mono; letter-spacing: .07em; }
+  @media (max-width: 840px) {
+    .about-head { grid-template-columns: 1fr; gap: 24px; }
+    .about-description { max-width: 580px; }
+    .principles { grid-template-columns: 1fr; }
+    .principles article, .principles article + article { min-height: 0; padding: 24px 0 32px; border-right: 0; border-bottom: 1px solid $line; }
+    .principles h3 { margin-top: 42px; }
+    .profile { grid-template-columns: 1fr; gap: 10px; }
   }
-
-  h2 { font-family:$font-display; font-size:clamp(2rem,4vw,3.2rem); font-weight:800; letter-spacing:-.03em; line-height:1.15; margin-bottom:1.5rem; }
-  p  { font-size:1rem; color:$text-secondary; line-height:1.8; margin-bottom:1.15rem; strong{color:$text-primary;font-weight:600;} }
-
-  .philosophy {
-    margin-top:1.5rem; padding:1.2rem 1.5rem; background:$bg-elevated;
-    border-left:1px solid rgba(255,255,255,0.15); border-radius:0 $r-md $r-md 0;
-    font-style:italic; color:$text-secondary; font-size:.9rem; line-height:1.65;
-    span{color:rgba(255,255,255,0.7);font-weight:500;font-style:normal;}
-  }
-
-  .stats-grid { display:grid; grid-template-columns:1fr 1fr; gap:1rem; }
-  .stat-card {
-    padding:1.4rem 1.5rem; background:$bg-elevated; border:1px solid $border;
-    border-radius:$r-lg; transition:border-color $mid, transform $mid; position:relative; overflow:hidden;
-    &::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,transparent 60%,rgba(255,255,255,.025));opacity:0;transition:opacity $mid;}
-    &:hover{border-color:$border-hover;transform:translateY(-3px);}
-    &:hover::before{opacity:1;}
-    .num{font-family:$font-display;font-size:2.1rem;font-weight:800;letter-spacing:-.04em;line-height:1;margin-bottom:.35rem;color:#ffffff;}
-    .lbl{font-size:.72rem;font-weight:700;color:$text-muted;text-transform:uppercase;letter-spacing:.06em;}
-    .sub{font-size:.72rem;color:$text-muted;margin-top:.2rem;}
-    &.c1 .num{opacity:1;} &.c2 .num{opacity:.85;} &.c3 .num{opacity:.7;} &.c4 .num{opacity:.6;}
-  }
-
-  @media(max-width:900px){.about-grid{grid-template-columns:1fr;gap:3rem;}.stats-grid{grid-template-columns:repeat(4,1fr);}}
-  @media(max-width:640px){.stats-grid{grid-template-columns:1fr 1fr;}}
 </style>

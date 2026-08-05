@@ -1,33 +1,65 @@
 ---
+import { copy, type Locale } from '../i18n';
+
 interface Props {
+  locale?: Locale;
   title?: string;
   description?: string;
+  image?: string;
 }
-const {
-  title = 'Sangmin Park — Frontend Developer',
-  description = 'Frontend Developer building secure, high-performance web products. BFF Security · FIDO2 WebAuthn · 100% Test Coverage · Design Systems.',
-} = Astro.props;
+
+const locale = Astro.props.locale ?? 'ko';
+const dictionary = copy[locale];
+const title = Astro.props.title ?? dictionary.meta.title;
+const description = Astro.props.description ?? dictionary.meta.description;
+const currentPath = Astro.url.pathname;
+const koPath = currentPath.startsWith('/en/') ? currentPath.slice(3) || '/' : currentPath;
+const enPath = currentPath.startsWith('/en/') ? currentPath : `/en${currentPath === '/' ? '/' : currentPath}`;
+const canonical = new URL(currentPath, Astro.site ?? Astro.url.origin);
+const koUrl = new URL(koPath, Astro.site ?? Astro.url.origin);
+const enUrl = new URL(enPath, Astro.site ?? Astro.url.origin);
+const socialImage = new URL(Astro.props.image ?? '/og.png', Astro.site ?? Astro.url.origin);
 ---
 <!DOCTYPE html>
-<html lang="ko">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>{title}</title>
-  <meta name="description" content={description} />
-  <meta property="og:title" content={title} />
-  <meta property="og:description" content={description} />
-  <meta property="og:type" content="website" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Inter:wght@400;500;600;700&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet" />
-  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-  <script is:inline>document.documentElement.classList.add('js');</script>
-</head>
-<body>
-  <a class="skip-link" href="#main-content">본문으로 건너뛰기</a>
-  <slot />
-</body>
+<html lang={locale}>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta name="theme-color" content="#000000" />
+    <link rel="canonical" href={canonical} />
+    <link rel="alternate" hreflang="ko" href={koUrl} />
+    <link rel="alternate" hreflang="en" href={enUrl} />
+    <link rel="alternate" hreflang="x-default" href={koUrl} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content={locale === 'ko' ? 'ko_KR' : 'en_US'} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={socialImage} />
+    <meta property="og:image:alt" content={title} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image" content={socialImage} />
+    <link rel="preload" href="/fonts/Pretendard-Regular.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/fonts/Pretendard-Medium.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <script is:inline>document.documentElement.classList.add('js');</script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main-content">{dictionary.skip}</a>
+    <slot />
+    <script is:inline>
+      const revealObserver = new IntersectionObserver((entries, observer) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        });
+      }, { threshold: 0.08 });
+      document.querySelectorAll('.reveal').forEach((element) => revealObserver.observe(element));
+    </script>
+  </body>
 </html>
 
 <style lang="scss" is:global>

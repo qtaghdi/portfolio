@@ -1,147 +1,97 @@
 @use './tokens' as *;
 
-// ── 리셋 ──────────────────────────────────────────────────────
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html {
-  scroll-behavior: smooth;
-  scroll-padding-top: 80px;
-  color-scheme: dark;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+@font-face {
+  font-family: 'Pretendard';
+  src: url('/fonts/Pretendard-Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
 }
+
+@font-face {
+  font-family: 'Pretendard';
+  src: url('/fonts/Pretendard-Medium.woff2') format('woff2');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Pretendard';
+  src: url('/fonts/Pretendard-SemiBold.woff2') format('woff2');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html { scroll-behavior: smooth; background: $black; }
 body {
-  font-family: $font-sans;
-  background: $bg-base;
-  color: $text-primary;
-  line-height: 1.6;
+  margin: 0;
   overflow-x: hidden;
+  background: $black;
+  color: $silver-bright;
+  font-family: $font-body;
+  line-height: 1.6;
+  font-feature-settings: 'ss01' on, 'ss02' on;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
 }
-a { text-decoration: none; color: inherit; }
-ul { list-style: none; }
-::selection { background: rgba(255,255,255,0.15); color: #ffffff; }
-::-webkit-scrollbar { width: 10px; }
-::-webkit-scrollbar-track { background: $bg-base; }
-::-webkit-scrollbar-thumb { background: #3b3b3b; border: 3px solid $bg-base; border-radius: 999px; }
-::-webkit-scrollbar-thumb:hover { background: #595959; }
+a { color: inherit; text-decoration: none; }
+button, input, textarea, select { font: inherit; }
+button, a { -webkit-tap-highlight-color: transparent; }
+img, svg { display: block; max-width: 100%; }
+h1, h2, h3, p, ul, ol, dl, dd, blockquote { margin: 0; }
+ul, ol { padding: 0; }
+::selection { background: $silver-bright; color: $black; }
 
-section[id], main[id], h2[id], h3[id] { scroll-margin-top: 80px; }
-
-:focus-visible {
-  outline: 2px solid #ffffff;
-  outline-offset: 4px;
-}
+:focus-visible { outline: 1px solid $silver-bright; outline-offset: 5px; }
 
 .skip-link {
   position: fixed;
+  z-index: 1000;
   top: 12px;
   left: 12px;
-  z-index: 10000;
   padding: 10px 14px;
-  border-radius: $r-sm;
-  background: #ffffff;
-  color: #000000;
-  font-weight: 700;
+  background: $silver-bright;
+  color: $black;
   transform: translateY(-160%);
   transition: transform $fast;
+}
+.skip-link:focus { transform: translateY(0); }
 
-  &:focus-visible { transform: translateY(0); }
+.shell {
+  width: min(1440px, calc(100% - 96px));
+  margin-inline: auto;
 }
 
-// ── 유틸리티 ──────────────────────────────────────────────────
-.grad-text {
-  background: linear-gradient(135deg, #ffffff 0%, #888888 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+.eyebrow {
+  color: $gunmetal;
+  font: 500 .7rem/1.3 $font-mono;
+  letter-spacing: .13em;
+  text-transform: uppercase;
 }
 
-.section-label {
-  display: inline-flex; align-items: center; gap: 0.75rem;
-  font-size: 0.68rem; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase;
-  color: $text-muted; margin-bottom: 1rem;
-  &::before {
-    content: '';
-    width: 28px; height: 1px;
-    background: $text-muted;
-    flex-shrink: 0;
+.section-rule { height: 1px; background: $line; }
+
+@media (prefers-reduced-motion: no-preference) {
+  .js .reveal {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 650ms ease, transform 650ms cubic-bezier(.2, .75, .2, 1);
   }
+  .js .reveal.visible { opacity: 1; transform: none; }
 }
 
-.divider {
-  height: 1px;
-  background: linear-gradient(90deg, transparent, $border 30%, $border 70%, transparent);
-  margin: 0 clamp(1.5rem, 5vw, 4rem);
+@media (max-width: 760px) {
+  .shell { width: calc(100% - 40px); }
 }
-
-.tech-pill {
-  font-size: 0.67rem; font-weight: 500; padding: 0.22rem 0.65rem;
-  background: transparent;
-  border: 1px solid $border;
-  border-radius: 3px;
-  color: $text-muted;
-  font-family: $font-mono;
-  letter-spacing: 0.02em;
-  transition: border-color $fast, color $fast;
-
-  &:hover {
-    border-color: $border-hover;
-    color: $text-secondary;
-  }
-}
-
-.project-tag {
-  display: inline-flex; align-items: center; padding: 0.2rem 0.6rem;
-  border-radius: 2px; font-size: 0.66rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase;
-  background: rgba(255,255,255,0.06);
-  color: $text-secondary;
-  border: 1px solid $border;
-}
-
-.btn-primary {
-  display: inline-flex; align-items: center; gap: 0.5rem;
-  padding: 0.85rem 2rem;
-  background: #ffffff; color: #000000;
-  font-weight: 700; font-size: 0.88rem;
-  border-radius: 3px; border: 1px solid #ffffff; cursor: pointer;
-  transition: background-color $mid, color $mid, border-color $mid, transform $mid;
-  letter-spacing: 0.02em;
-  &:hover {
-    background: transparent;
-    color: #ffffff;
-    transform: translateY(-2px);
-  }
-}
-
-.btn-secondary {
-  display: inline-flex; align-items: center; gap: 0.5rem;
-  padding: 0.85rem 2rem;
-  background: transparent; color: $text-secondary;
-  font-weight: 600; font-size: 0.88rem;
-  border-radius: 3px; border: 1px solid $border; cursor: pointer;
-  transition: color $mid, border-color $mid, transform $mid;
-  letter-spacing: 0.02em;
-  &:hover {
-    border-color: $border-hover;
-    color: $text-primary;
-    transform: translateY(-2px);
-  }
-}
-
-// 스크롤 중 콘텐츠 위치가 바뀌지 않도록 정적으로 유지합니다.
-.reveal { opacity: 1; transform: none; }
 
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   *, *::before, *::after {
-    animation-duration: 0.01ms !important;
+    animation-duration: .01ms !important;
     animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
+    transition-duration: .01ms !important;
   }
 }
-
-// ── 키프레임 ──────────────────────────────────────────────────
-@keyframes pulse    { 0%,100%{opacity:1;transform:scale(1);} 50%{opacity:.4;transform:scale(.75);} }
-@keyframes scrollDot { 0%{opacity:1;transform:translateX(-50%) translateY(0);} 100%{opacity:0;transform:translateX(-50%) translateY(10px);} }
-@keyframes fadeIn   { from{opacity:0;} to{opacity:1;} }
-@keyframes slideUp  { from{transform:translateY(20px);opacity:0;} to{transform:translateY(0);opacity:1;} }
-@keyframes flicker  { 0%,100%{opacity:.045;} 50%{opacity:.065;} }
