@@ -119,10 +119,10 @@ export const projectEn: Record<string, ProjectTranslation> = {
   },
   jeomjuro: {
     title: 'Jeomjuro', category: 'Team Product · Monorepo', badge: 'pnpm Monorepo', role: 'Frontend Engineer',
-    thesis: 'Operating the consumer app and admin tools as one product monorepo',
+    thesis: 'Keeping the consumer experience at the center while sharing admin and UI foundations',
     responsibility: 'pnpm and Turborepo migration, consumer, admin and Storybook apps, shared API, design-system and test packages, notifications, and CI',
     focus: ['Monorepo', 'Admin tools', 'Optimistic UI', 'Delivery'],
-    summary: 'Reorganized the store-owner community into a pnpm and Turborepo monorepo with consumer, admin, and Storybook apps plus shared API, configuration, design-system, and test packages.',
+    summary: 'Built the store-owner consumer community as the primary product surface, with admin operations and a shared design system maintained in the same pnpm and Turborepo monorepo.',
     evidence: [
       { val: '3 apps', label: 'consumer · admin · storybook' },
       { val: '4 packages', label: 'api · config · design-system · test-utils' },
