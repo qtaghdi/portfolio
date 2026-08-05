@@ -1,0 +1,15 @@
+<svg width="900" height="180" viewBox="0 0 900 180" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="g4" x1="0" y1="0" x2="900" y2="180" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#F0F2FF"/>
+      <stop offset="1" stop-color="#E0E4FF"/>
+    </linearGradient>
+  </defs>
+  <rect width="900" height="180" rx="16" fill="url(#g4)"/>
+  <circle cx="780" cy="60" r="50" fill="#C7CEFF"/>
+  <circle cx="750" cy="118" r="42" fill="#AEB9FF"/>
+  <circle cx="828" cy="122" r="30" fill="#95A4FF"/>
+  <text x="52" y="66" fill="#2D3E8F" font-size="24" font-family="Pretendard, sans-serif" font-weight="700">점주로 TODAY DEAL</text>
+  <text x="52" y="110" fill="#1F2D75" font-size="42" font-family="Pretendard, sans-serif" font-weight="800">Top Brand Discovery</text>
+  <text x="52" y="146" fill="#4A57A0" font-size="22" font-family="Pretendard, sans-serif" font-weight="600">지금 뜨는 브랜드와 커뮤니티를 함께 만나보세요</text>
+</svg>

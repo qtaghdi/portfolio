@@ -206,13 +206,46 @@ const owkrRows = [
 
   {projectKey === 'jeomjuro' && (
     <div class="mock mock-jeomjuro">
-      <header><strong>점주로</strong><small>PNPM · TURBOREPO</small><nav><span class="active">CONSUMER</span><span>ADMIN</span><span>STORYBOOK</span></nav><button>{ko ? '글쓰기' : 'Write'}</button></header>
-      <aside><small>WORKSPACE</small><strong>apps</strong><span class="active">consumer</span><span>admin</span><span>storybook</span><strong>packages</strong><span>api</span><span>design-system</span><span>test-utils</span></aside>
-      <main>
-        <div class="community-head"><div><small>apps/consumer · COMMUNITY</small><strong>{ko ? '매장 운영 이야기' : 'Store operations'}</strong></div><label>{ko ? '게시글 검색' : 'Search posts'}</label></div>
-        {[0, 1].map((index) => <article><div><strong>{ko ? ['재고 관리 다들 어떻게 하고 계신가요?', '이번 달 배달 플랫폼 수수료 정리'][index] : ['How do you manage inventory?', 'Delivery platform fees this month'][index]}</strong><p>{ko ? '점주들이 직접 나눈 운영 경험과 정보를 확인해보세요.' : 'Practical operations knowledge shared by store owners.'}</p><small>♡ {12 + index * 7} · ◇ {4 + index}</small></div><i></i></article>)}
-        <section class="jeomjuro-admin"><div><small>apps/admin</small><strong>{ko ? '게시글 모더레이션' : 'Post moderation'}</strong></div><span>{ko ? '검색·필터·삭제·복구' : 'Search · Filter · Delete · Restore'}</span><b>{ko ? '운영 중' : 'ACTIVE'}</b></section>
-      </main>
+      <section class="jeomjuro-consumer-surface">
+        <header class="jeomjuro-consumer-header">
+          <div class="jeomjuro-logo">
+            <img src="/projects/jeomjuro/non-favicon.svg" alt="" aria-hidden="true" />
+            <img src="/projects/jeomjuro/non-logo.svg" alt="점주로" />
+          </div>
+          <div class="jeomjuro-search"><span>{ko ? '자영업의 시작, 점주로!' : 'Start your business with Jeomjuro'}</span><svg viewBox="0 0 20 20"><circle cx="8.5" cy="8.5" r="5.5"/><path d="m13 13 4 4"/></svg></div>
+          <div class="jeomjuro-bell"><svg viewBox="0 0 20 20"><path d="M4.5 14.5h11l-1.2-1.8V8a4.3 4.3 0 0 0-8.6 0v4.7Z"/><path d="M8 16.5h4"/></svg></div>
+        </header>
+        <nav class="jeomjuro-nav"><span class="active"><svg viewBox="0 0 16 16"><path d="M2 4h12M2 8h12M2 12h12"/></svg>{ko ? '커뮤니티' : 'Community'}</span><span>{ko ? '브랜드' : 'Brands'}</span><span>{ko ? '대시보드' : 'Dashboard'}</span><span>{ko ? '서비스 소개' : 'About'}</span></nav>
+
+        <main class="jeomjuro-consumer-main">
+          <section class="jeomjuro-top">
+            <img class="jeomjuro-banner" src="/projects/jeomjuro/top4.svg" alt={ko ? '점주로 브랜드 배너' : 'Jeomjuro brand banner'} />
+            <div class="jeomjuro-profile"><div><i></i><span><strong>{ko ? '게스트' : 'Guest'}</strong><small>{ko ? '로그인 후 이용 가능' : 'Sign in to continue'}</small></span></div><button>{ko ? '로그인' : 'Sign in'}</button></div>
+          </section>
+
+          <section class="jeomjuro-interest">
+            <h2>{ko ? '관심 게시판' : 'Favorite boards'}</h2>
+            <div><span><i></i><small>{ko ? '자유 게시판' : 'General'}</small></span><span><i></i><small>{ko ? '창업 질문' : 'Starting up'}</small></span><span><i></i><small>{ko ? '점주 노하우' : 'Owner tips'}</small></span><span><i></i><small>{ko ? '브랜드 소식' : 'Brand news'}</small></span></div>
+          </section>
+
+          <section class="jeomjuro-feed">
+            <div class="jeomjuro-hot">
+              <header><strong>{ko ? '관심 게시판 인기글' : 'Popular posts'}</strong></header>
+              <div>
+                <article><b>HOT</b><strong>{ko ? '재고 관리, 다들 어떻게 하고 계신가요?' : 'How do you manage inventory?'}</strong><p>{ko ? '점주들이 직접 나눈 운영 경험과 정보를 확인해보세요.' : 'Practical knowledge shared by store owners.'}</p><small>조회 128 · 좋아요 12 · 댓글 4</small></article>
+                <article><b>HOT</b><strong>{ko ? '배달 플랫폼 수수료 비교해 봤습니다' : 'Comparing delivery platform fees'}</strong><p>{ko ? '이번 달 정산 내용을 기준으로 항목별 차이를 정리했습니다.' : 'A breakdown based on this month’s settlement.'}</p><small>조회 96 · 좋아요 19 · 댓글 5</small></article>
+              </div>
+            </div>
+            <aside class="jeomjuro-best"><header><strong>{ko ? '실시간 점주로 BEST' : 'Jeomjuro Best'}</strong></header><nav><b>{ko ? '커뮤니티' : 'Community'}</b><span>{ko ? '브랜드' : 'Brands'}</span></nav><div><b>01</b><span>{ko ? '요즘 손님 반응 좋은 메뉴' : 'Popular menu ideas'}</span></div><div><b>02</b><span>{ko ? '오픈 준비 체크리스트' : 'Opening checklist'}</span></div><div><b>03</b><span>{ko ? '매장 운영비 절약 팁' : 'Saving operating costs'}</span></div></aside>
+          </section>
+        </main>
+      </section>
+
+      <aside class="jeomjuro-subsystems">
+        <section class="jeomjuro-admin"><header><span>apps/admin</span><b>{ko ? '관리자 로그인과 운영 도구' : 'Admin access and operations'}</b></header><div><img src="/projects/jeomjuro/non-logo.svg" alt="" /><i></i><i></i><button>{ko ? '로그인' : 'Sign in'}</button></div></section>
+        <section class="jeomjuro-ds"><header><span>packages/design-system</span><b>{ko ? '공통 UI 기반' : 'Shared UI foundation'}</b></header><div><button>Primary</button><button class="outline">Secondary</button><label><span>Text field</span></label></div></section>
+        <footer><small>MONOREPO</small><b>pnpm · Turborepo</b><span>consumer · admin · storybook</span></footer>
+      </aside>
     </div>
   )}
 
@@ -497,37 +530,73 @@ const owkrRows = [
   .owkr-role { display: grid; width: 22px; height: 100%; place-items: center; color: #64748b; }
   .owkr-role svg { width: 10px; height: 10px; fill: currentColor; }
 
-  /* Jeomjuro, based on the community post list and cyan design-system token */
-  .mock-jeomjuro { display: grid; grid-template: 48px 1fr / 170px 1fr; background: #f8fafc; color: #172033; }
-  .mock-jeomjuro > header { grid-column: 1 / 3; display: flex; align-items: center; gap: 28px; padding: 0 18px; border-bottom: 1px solid #e2e8f0; background: white; }
-  .mock-jeomjuro > header strong { color: #05aff2; font-size: 16px; }
-  .mock-jeomjuro > header > small { color: #94a3b8; font: 500 7px/1 $font-mono; }
-  .mock-jeomjuro > header nav { display: flex; gap: 18px; }
-  .mock-jeomjuro > header nav span { color: #94a3b8; font-size: 9px; }
-  .mock-jeomjuro > header nav span.active { color: #172033; font-weight: 600; }
-  .mock-jeomjuro > header button { margin-left: auto; padding: 7px 12px; border: 0; border-radius: 6px; background: #05aff2; color: white; font-size: 8px; }
-  .mock-jeomjuro > aside { display: flex; flex-direction: column; gap: 3px; padding: 14px 12px; border-right: 1px solid #e2e8f0; background: white; }
-  .mock-jeomjuro > aside > small { margin: 0 8px 7px; color: #94a3b8; font: 500 7px/1 $font-mono; }
-  .mock-jeomjuro > aside strong { margin: 7px 8px 3px; color: #475569; font: 600 8px/1 $font-mono; }
-  .mock-jeomjuro > aside span { padding: 8px; border-radius: 5px; color: #64748b; font-size: 9px; }
-  .mock-jeomjuro > aside span.active { background: #e8f8fe; color: #0389bf; font-weight: 600; }
-  .mock-jeomjuro > main { padding: 17px 20px; overflow: hidden; }
-  .community-head { display: flex; align-items: center; justify-content: space-between; }
-  .community-head div { display: grid; gap: 5px; }
-  .community-head small { color: #05aff2; font: 500 7px/1 $font-mono; }
-  .community-head strong { font-size: 15px; }
-  .community-head label { padding: 7px 10px; border: 1px solid #e2e8f0; border-radius: 6px; color: #94a3b8; font-size: 8px; }
-  .mock-jeomjuro article { display: grid; grid-template-columns: 1fr 55px; gap: 12px; margin-top: 10px; padding: 11px; border: 1px solid #e2e8f0; border-radius: 7px; background: white; }
-  .mock-jeomjuro article strong { font-size: 9px; }
-  .mock-jeomjuro article p { margin-top: 5px; color: #64748b; font-size: 8px; }
-  .mock-jeomjuro article small { display: block; margin-top: 8px; color: #94a3b8; font-size: 7px; }
-  .mock-jeomjuro article i { border-radius: 5px; background: linear-gradient(135deg, #dff6ff, #bfeaff); }
-  .jeomjuro-admin { display: grid; grid-template-columns: 1fr auto auto; gap: 12px; align-items: center; margin-top: 10px; padding: 10px 12px; border: 1px solid #bae6fd; border-radius: 7px; background: #f0f9ff; }
-  .jeomjuro-admin > div { display: grid; gap: 4px; }
-  .jeomjuro-admin small { color: #0284c7; font: 500 7px/1 $font-mono; }
-  .jeomjuro-admin strong { font-size: 9px; }
-  .jeomjuro-admin > span { color: #64748b; font-size: 8px; }
-  .jeomjuro-admin > b { padding: 4px 6px; border-radius: 999px; background: #dcfce7; color: #15803d; font-size: 7px; }
+  /* Jeomjuro consumer home using the original product assets and proportions */
+  .mock-jeomjuro { display: grid; grid-template-rows: minmax(0,1fr) 86px; background: #fff; color: #13243a; font-family: 'Pretendard', sans-serif; }
+  .jeomjuro-consumer-surface { min-height: 0; display: grid; grid-template-rows: 54px 38px 1fr; overflow: hidden; background: #fff; }
+  .jeomjuro-consumer-header { display: flex; min-width: 0; align-items: center; gap: 30px; padding: 0 28px; background: #fff; }
+  .jeomjuro-logo { display: flex; flex: 0 0 auto; align-items: center; gap: 6px; }
+  .jeomjuro-logo img:first-child { width: 28px; height: 28px; object-fit: contain; }
+  .jeomjuro-logo img:last-child { width: 64px; height: auto; object-fit: contain; }
+  .jeomjuro-search { height: 30px; display: flex; min-width: 0; flex: 1; align-items: center; justify-content: space-between; padding: 0 10px; border: 1px solid #9dd8fb; border-radius: 5px; background: #fff; color: #a0a7af; font-size: 7.5px; }
+  .jeomjuro-search svg, .jeomjuro-bell svg, .jeomjuro-nav svg { fill: none; stroke: currentColor; stroke-linecap: round; stroke-width: 1.7; }
+  .jeomjuro-search svg { width: 14px; color: #67bdf1; }
+  .jeomjuro-bell { display: grid; width: 26px; height: 26px; flex: 0 0 auto; margin-left: 38px; place-items: center; color: #111827; }
+  .jeomjuro-bell svg { width: 14px; }
+  .jeomjuro-nav { display: flex; align-items: center; gap: 42px; padding: 0 28px; border-bottom: 1px solid #e4e7eb; background: #fff; }
+  .jeomjuro-nav span { display: inline-flex; align-items: center; gap: 6px; color: #111827; font-size: 8px; font-weight: 700; }
+  .jeomjuro-nav span.active { color: #1d99eb; }
+  .jeomjuro-nav svg { width: 10px; }
+  .jeomjuro-consumer-main { min-width: 0; overflow: hidden; padding: 12px 28px 16px; background: #fff; }
+  .jeomjuro-top { height: 96px; display: grid; grid-template-columns: minmax(0,2.07fr) minmax(150px,1fr); gap: 10px; }
+  .jeomjuro-banner { width: 100%; height: 96px; display: block; border: 1px solid #d3d9e0; border-radius: 7px; object-fit: cover; }
+  .jeomjuro-profile { display: flex; height: 96px; align-items: center; justify-content: space-between; padding: 14px; border: 1px solid #d3d9e0; border-radius: 7px; background: #fff; }
+  .jeomjuro-profile > div { display: flex; align-items: center; gap: 9px; }
+  .jeomjuro-profile > div > i { width: 31px; height: 31px; flex: 0 0 auto; border-radius: 50%; background: #eef0f2; }
+  .jeomjuro-profile span { display: grid; gap: 4px; }
+  .jeomjuro-profile strong { font-size: 8px; }
+  .jeomjuro-profile small { color: #4ec3ff; font-size: 6px; font-weight: 600; }
+  .jeomjuro-profile button { padding: 4px 8px; border: 1px solid #9dd8fb; border-radius: 4px; background: #f2fbff; color: #1d99eb; font-size: 5.5px; font-weight: 700; }
+  .jeomjuro-interest { margin-top: 13px; }
+  .jeomjuro-interest h2, .jeomjuro-hot > header strong { margin: 0 0 7px; color: #111827; font-size: 8px; font-weight: 700; }
+  .jeomjuro-interest > div { height: 58px; display: flex; align-items: center; gap: 24px; padding: 7px 12px; border: 1px solid #d3d9e0; border-radius: 6px; background: #fff; }
+  .jeomjuro-interest > div > span { display: grid; justify-items: center; gap: 3px; }
+  .jeomjuro-interest i { width: 30px; height: 30px; border: 1px solid #d9e1e8; border-radius: 50%; background: #f1f3f5; }
+  .jeomjuro-interest span:nth-child(2) i { background: #eff8fe; }
+  .jeomjuro-interest span:nth-child(3) i { background: #f1f8ed; }
+  .jeomjuro-interest span:nth-child(4) i { background: #fff5e9; }
+  .jeomjuro-interest small { color: #13243a; font-size: 5.5px; font-weight: 600; }
+  .jeomjuro-feed { display: grid; grid-template-columns: minmax(0,2.07fr) minmax(150px,1fr); gap: 10px; margin-top: 13px; }
+  .jeomjuro-hot { min-width: 0; }
+  .jeomjuro-hot > div { display: grid; grid-template-columns: 1fr 1fr; gap: 7px; }
+  .jeomjuro-hot article { min-width: 0; height: 74px; display: flex; flex-direction: column; padding: 8px; border: 1px solid #d3d9e0; border-radius: 6px; background: #fff; }
+  .jeomjuro-hot article > b { width: fit-content; padding: 2px 6px; border-radius: 999px; background: #e50624; color: #fff; font-size: 4.5px; }
+  .jeomjuro-hot article > strong { margin-top: 5px; overflow: hidden; font-size: 6px; text-overflow: ellipsis; white-space: nowrap; }
+  .jeomjuro-hot article p { margin-top: 4px; overflow: hidden; color: #526274; font-size: 5px; text-overflow: ellipsis; white-space: nowrap; }
+  .jeomjuro-hot article small { margin-top: auto; color: #7f8b98; font-size: 4px; }
+  .jeomjuro-best { height: 101px; overflow: hidden; border: 1px solid #d3d9e0; border-radius: 6px; background: #fff; }
+  .jeomjuro-best header { padding: 9px 12px 7px; }
+  .jeomjuro-best header strong { font-size: 8px; }
+  .jeomjuro-best nav { height: 22px; display: grid; grid-template-columns: 1fr 1fr; border-block: 1px solid #d3d9e0; }
+  .jeomjuro-best nav > * { display: grid; place-items: center; font-size: 5.5px; }
+  .jeomjuro-best nav b { border-right: 1px solid #d3d9e0; color: #1d99eb; }
+  .jeomjuro-best nav span { color: #7f8b98; font-weight: 700; }
+  .jeomjuro-best > div { display: grid; grid-template-columns: 18px 1fr; gap: 4px; padding: 4px 10px 1px; }
+  .jeomjuro-best > div b, .jeomjuro-best > div span { overflow: hidden; font-size: 5px; text-overflow: ellipsis; white-space: nowrap; }
+  .jeomjuro-best > div b { font-family: $font-mono; }
+  .jeomjuro-subsystems { min-height: 0; display: grid; grid-template-columns: 1.15fr 1.15fr .7fr; border-top: 1px solid #d9e1e8; background: #f8fafc; }
+  .jeomjuro-subsystems > section, .jeomjuro-subsystems > footer { min-width: 0; padding: 11px 14px; border-right: 1px solid #d9e1e8; }
+  .jeomjuro-subsystems header { display: flex; align-items: baseline; gap: 9px; }
+  .jeomjuro-subsystems header span, .jeomjuro-subsystems > footer small { color: #1d99eb; font: 600 5px/1 $font-mono; }
+  .jeomjuro-subsystems header b { font-size: 7px; }
+  .jeomjuro-admin > div, .jeomjuro-ds > div { height: 34px; display: flex; align-items: center; gap: 7px; margin-top: 7px; padding: 5px 7px; border: 1px solid #d9e1e8; border-radius: 5px; background: #fff; }
+  .jeomjuro-admin img { width: 31px; height: auto; }
+  .jeomjuro-admin i { width: 48px; height: 10px; border: 1px solid #d3d9e0; border-radius: 3px; background: #f5f7f9; }
+  .jeomjuro-admin button, .jeomjuro-ds button { height: 15px; padding: 0 7px; border: 1px solid #1d99eb; border-radius: 3px; background: #1d99eb; color: #fff; font-size: 4.5px; }
+  .jeomjuro-ds button.outline { background: #fff; color: #1d99eb; }
+  .jeomjuro-ds label { width: 64px; height: 15px; display: flex; align-items: center; padding: 0 5px; border: 1px solid #d3d9e0; border-radius: 3px; color: #7f8b98; font-size: 4.5px; }
+  .jeomjuro-subsystems > footer { display: flex; flex-direction: column; justify-content: center; gap: 6px; border-right: 0; }
+  .jeomjuro-subsystems > footer b { color: #13243a; font: 600 7px/1 $font-mono; }
+  .jeomjuro-subsystems > footer span { color: #7f8b98; font-size: 5px; }
 
   /* Marker, based on the Kakao map flow, emotion tokens and bottom sheet */
   .mock-marker { background: #e9eef1; color: #292d32; }
@@ -676,7 +745,7 @@ const owkrRows = [
   .compact .boundra-intro > strong { font-size: 42px; }
 
   @media (max-width: 720px) {
-    .notiiv-rail, .transcript-panel, .mock-ds > aside, .intranet-context, .intranet-sync, .mock-jeomjuro > aside, .mock-rust > aside { display: none; }
+    .notiiv-rail, .transcript-panel, .mock-ds > aside, .intranet-context, .intranet-sync, .mock-rust > aside { display: none; }
     .mock-notiiv { grid-template-columns: 1fr; }
     .notiiv-phone { width: min(68%, 230px); }
     .mock-ds { grid-template: 42px 1fr / 1fr; }
@@ -703,9 +772,29 @@ const owkrRows = [
     .owkr-balance-summary dl { grid-template-columns: 1fr 1fr; }
     .owkr-balance-summary dl > div:nth-child(n+3) { display: none; }
     .owkr-exceptions span:nth-child(n+3), .owkr-result-head span { display: none; }
-    .mock-jeomjuro { grid-template: 42px 1fr / 1fr; }
-    .mock-jeomjuro > header { grid-column: 1; }
-    .mock-jeomjuro > header nav { display: none; }
+    .mock-jeomjuro { grid-template-rows: minmax(0,1fr) 70px; }
+    .jeomjuro-consumer-surface { grid-template-rows: 44px 30px 1fr; }
+    .jeomjuro-consumer-header { gap: 10px; padding: 0 10px; }
+    .jeomjuro-logo { gap: 4px; }
+    .jeomjuro-logo img:first-child { width: 21px; height: 21px; }
+    .jeomjuro-logo img:last-child { width: 47px; }
+    .jeomjuro-search { height: 25px; font-size: 6px; }
+    .jeomjuro-bell { margin-left: 0; }
+    .jeomjuro-nav { gap: 16px; padding: 0 10px; }
+    .jeomjuro-nav span { font-size: 6px; }
+    .jeomjuro-consumer-main { padding: 8px 10px; }
+    .jeomjuro-top { height: 70px; grid-template-columns: 1fr; }
+    .jeomjuro-banner { height: 70px; }
+    .jeomjuro-profile, .jeomjuro-best { display: none; }
+    .jeomjuro-interest { margin-top: 8px; }
+    .jeomjuro-interest > div { height: 52px; gap: 13px; }
+    .jeomjuro-interest i { width: 25px; height: 25px; }
+    .jeomjuro-feed { grid-template-columns: 1fr; margin-top: 8px; }
+    .jeomjuro-subsystems { grid-template-columns: 1fr 1fr; }
+    .jeomjuro-subsystems > section { padding: 8px; }
+    .jeomjuro-subsystems > footer { display: none; }
+    .jeomjuro-subsystems header b { font-size: 6px; }
+    .jeomjuro-admin > div, .jeomjuro-ds > div { height: 29px; margin-top: 5px; }
     .mock-marker > header div { display: none; }
     .place-sheet { width: 72%; }
     .mock-rust { grid-template: 42px 1fr / 1fr; }
