@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 288 288" width="288" height="288" role="img" aria-label="Notiiv">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="288" y2="288" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#4a3ab5" />
+      <stop offset="0.5" stop-color="#6c5ce7" />
+      <stop offset="1" stop-color="#8b7cf7" />
+    </linearGradient>
+    <radialGradient id="glow" cx="144" cy="144" r="201.6" fx="100.8" fy="100.8" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#ffffff" stop-opacity="0.12" />
+      <stop offset="0.5" stop-color="#ffffff" stop-opacity="0" />
+      <stop offset="1" stop-color="#000000" stop-opacity="0.15" />
+    </radialGradient>
+    <linearGradient id="gloss" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ffffff" stop-opacity="0.35" />
+      <stop offset="1" stop-color="#ffffff" stop-opacity="0" />
+    </linearGradient>
+  </defs>
+  <rect width="288" height="288" rx="63.36" fill="url(#bg)" />
+  <rect width="288" height="288" rx="63.36" fill="url(#glow)" />
+  <rect x="80.208" y="104.256" width="30.24" height="74.88" rx="15.12" fill="#281464" fill-opacity="0.3" />
+  <rect x="130.608" y="81.216" width="30.24" height="120.96" rx="15.12" fill="#281464" fill-opacity="0.3" />
+  <rect x="181.008" y="112.896" width="30.24" height="57.6" rx="15.12" fill="#281464" fill-opacity="0.3" />
+  <rect x="78.48" y="100.8" width="30.24" height="74.88" rx="15.12" fill="#ffffff" />
+  <rect x="128.88" y="77.76" width="30.24" height="120.96" rx="15.12" fill="#ffffff" />
+  <rect x="179.28" y="109.44" width="30.24" height="57.6" rx="15.12" fill="#ffffff" />
+  <rect x="83.016" y="100.8" width="21.168" height="37.44" rx="9.072" fill="url(#gloss)" />
+  <rect x="133.416" y="77.76" width="21.168" height="60.48" rx="9.072" fill="url(#gloss)" />
+  <rect x="183.816" y="109.44" width="21.168" height="28.8" rx="9.072" fill="url(#gloss)" />
+</svg>

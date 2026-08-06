@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none" role="img" aria-label="Notiiv">
+  <defs>
+    <linearGradient id="notiiv-mark-gradient" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#6c5ce7" />
+      <stop offset="1" stop-color="#a29bfe" />
+    </linearGradient>
+  </defs>
+  <rect x="27.25" y="37" width="10.5" height="26" rx="5.25" fill="url(#notiiv-mark-gradient)" />
+  <rect x="44.75" y="29" width="10.5" height="42" rx="5.25" fill="url(#notiiv-mark-gradient)" />
+  <rect x="62.25" y="40" width="10.5" height="20" rx="5.25" fill="url(#notiiv-mark-gradient)" />
+</svg>

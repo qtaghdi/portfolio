@@ -1,5 +1,6 @@
 ---
 import type { Locale } from '../i18n';
+import NotiivLogo from './project-visuals/NotiivLogo.astro';
 
 interface Props {
   projectKey: string;
@@ -28,58 +29,98 @@ const owkrRows = [
 
 <div class:list={['project-visual', variant]} data-visual={projectKey}>
   {projectKey === 'notiiv' && (
-    <div class="mock mock-notiiv">
+    <div class="mock mock-notiiv" data-notiiv-switcher data-active-app="support">
       <aside class="notiiv-rail">
-        <div class="notiiv-brand"><b>N</b><span>Notiiv</span></div>
-        <small class="repo-label">PRODUCT MONOREPO</small>
-        <div class="notiiv-apps">
-          <span>apps/admin</span>
-          <span>apps/owner</span>
-          <span>apps/status</span>
-          <span class="active">apps/support</span>
+        <div class="notiiv-brand"><img src="/projects/notiiv/favicon.svg" alt="" aria-hidden="true" /><NotiivLogo size={15} /></div>
+        <small class="repo-label">{ko ? '제품 모노레포' : 'Product monorepo'}</small>
+        <div class="notiiv-apps" role="tablist" aria-label={ko ? '노티브 앱 화면' : 'Notiiv app screens'}>
+          <button id={`notiiv-admin-tab-${variant}`} type="button" role="tab" data-notiiv-tab="admin" aria-controls={`notiiv-admin-panel-${variant}`} aria-selected="false"><i aria-hidden="true">▦</i><span><b>{ko ? '어드민' : 'Admin'}</b><small>{ko ? '운영 관리' : 'Operations'}</small></span></button>
+          <button id={`notiiv-owner-tab-${variant}`} type="button" role="tab" data-notiiv-tab="owner" aria-controls={`notiiv-owner-panel-${variant}`} aria-selected="false"><i aria-hidden="true">◉</i><span><b>{ko ? '오너 대시보드' : 'Owner dashboard'}</b><small>{ko ? '조직과 고객 관리' : 'Organization and clients'}</small></span></button>
+          <button id={`notiiv-status-tab-${variant}`} type="button" role="tab" data-notiiv-tab="status" aria-controls={`notiiv-status-panel-${variant}`} aria-selected="false"><i aria-hidden="true">●</i><span><b>{ko ? '서비스 상태' : 'Service status'}</b><small>{ko ? '가동 상태 확인' : 'Uptime status'}</small></span></button>
+          <button id={`notiiv-support-tab-${variant}`} class="active" type="button" role="tab" data-notiiv-tab="support" aria-controls={`notiiv-support-panel-${variant}`} aria-selected="true"><i aria-hidden="true"><img src="/projects/notiiv/mark.svg" alt="" /></i><span><b>{ko ? '고객지원' : 'Support'}</b><small>{ko ? '서비스 소개' : 'Product introduction'}</small></span></button>
         </div>
         <div class="notiiv-packages">
-          <small>12 SHARED PACKAGES</small>
+          <small>{ko ? '12개 공통 패키지' : '12 shared packages'}</small>
           <strong>api · query · schema<br />ui · theme · layouts</strong>
         </div>
       </aside>
-      <section class="notiiv-phone">
-        <div class="phone-status"><span>9:30</span><i></i></div>
-        <div class="phone-title">{ko ? '녹음중' : 'Recording'}</div>
-        <div class="meeting-info">
-          <strong>{ko ? '제품 전략 회의' : 'Product strategy meeting'}</strong>
-          <span>2026.08.05 09:30</span>
-          <small>BIGTABLET · Meeting Room A</small>
-        </div>
-        <div class="waveform">
-          {waveform.map((height, index) => <i style={`--bar-height:${height}%; --bar-index:${index}`}></i>)}
-        </div>
-        <div class="record-button"><span></span></div>
-        <strong class="record-time">00:38</strong>
-        <div class="memo-mode"><i></i>{ko ? '메모 화면 모드' : 'Memo mode'}</div>
-      </section>
-      <div class="transcript-panel">
-        <small>LIVE TRANSCRIPT</small>
-        <p><b>00:31</b>{ko ? '반복되는 제품 로직을 공통 구조로 옮기는 방향을 검토합니다.' : 'We are reviewing how to move repeated product logic into a shared structure.'}</p>
-        <p class="current"><b>00:38</b>{ko ? '운영 화면의 실패 지점도 함께 정리하겠습니다.' : 'We will also resolve failure points in operator tools.'}</p>
+
+      <div class="notiiv-stage">
+        <section id={`notiiv-admin-panel-${variant}`} class="notiiv-panel notiiv-admin-view" role="tabpanel" aria-labelledby={`notiiv-admin-tab-${variant}`} data-notiiv-panel="admin" hidden>
+          <aside class="notiiv-product-sidebar">
+            <NotiivLogo size={17} />
+            <nav><span>✉ {ko ? '문의 관리' : 'Inquiries'}</span><span>？ {ko ? 'FAQ 관리' : 'FAQ'}</span><span>◇ {ko ? '공지 등록' : 'Notices'}</span><span class="active">○ {ko ? '유저 관리' : 'Users'}</span><span>⌂ {ko ? '조직 관리' : 'Organizations'}</span><span>▤ {ko ? '로그 조회' : 'Logs'}</span></nav>
+            <small>{ko ? '관리자 계정' : 'Admin account'}</small>
+          </aside>
+          <main class="notiiv-admin-main">
+            <header><div><small>{ko ? '운영 관리' : 'Operations'}</small><h3>{ko ? '유저 관리' : 'Users'}</h3></div><span>PROD</span></header>
+            <div class="notiiv-admin-filters"><label><small>{ko ? '이메일' : 'Email'}</small><span>{ko ? '이메일 검색' : 'Search email'}</span></label><label><small>{ko ? '이름' : 'Name'}</small><span>{ko ? '이름 검색' : 'Search name'}</span></label><button type="button" tabindex="-1">{ko ? '검색' : 'Search'}</button></div>
+            <div class="notiiv-admin-table">
+              <header><span>{ko ? '이름' : 'Name'}</span><span>{ko ? '이메일' : 'Email'}</span><span>{ko ? '가입일' : 'Joined'}</span><span>{ko ? '상태' : 'Status'}</span></header>
+              <div><b>김도윤</b><span>doyun@notiiv.ai</span><span>2026.07.28</span><em>{ko ? '활성' : 'Active'}</em></div>
+              <div><b>이서연</b><span>seoyeon@bigtablet.com</span><span>2026.07.24</span><em>{ko ? '활성' : 'Active'}</em></div>
+              <div><b>박지훈</b><span>jihoon@example.com</span><span>2026.07.18</span><em class="muted">{ko ? '대기' : 'Pending'}</em></div>
+            </div>
+          </main>
+        </section>
+
+        <section id={`notiiv-owner-panel-${variant}`} class="notiiv-panel notiiv-owner-view" role="tabpanel" aria-labelledby={`notiiv-owner-tab-${variant}`} data-notiiv-panel="owner" hidden>
+          <aside class="notiiv-product-sidebar owner"><NotiivLogo size={17} /><nav><span class="active">◎ {ko ? '팀원' : 'Members'}</span><span>□ {ko ? '후속 일정' : 'Calendar'}</span><span>♙ {ko ? '고객' : 'Clients'}</span></nav><small>{ko ? '고객센터' : 'Support'}</small></aside>
+          <main class="notiiv-owner-main">
+            <header><div><i>BT</i><span><h3>{ko ? '빅태블릿' : 'Bigtablet'}</h3><small>{ko ? '조직 대시보드' : 'Organization dashboard'}</small></span></div><div><label>{ko ? '이름으로 검색...' : 'Search by name...'}</label><button type="button" tabindex="-1">{ko ? '팀원 초대' : 'Invite member'}</button></div></header>
+            <div class="notiiv-summary-grid"><article><small>{ko ? '현재 플랜' : 'Current plan'}</small><b>BUSINESS</b></article><article><small>{ko ? '팀원 / 라이선스' : 'Members / licenses'}</small><b>8 <i>/ 12</i></b></article><article><small>{ko ? '다음 결제일' : 'Next billing'}</small><b>2026.09.01</b></article><article><small>{ko ? '크레딧' : 'Credits'}</small><b>{ko ? '무제한' : 'Unlimited'}</b></article></div>
+            <div class="notiiv-member-list"><header><b>{ko ? '팀원 목록' : 'Members'}</b><small>8 {ko ? '명' : 'members'}</small></header><div><span><i>김</i><b>김성태</b></span><span>MASTER</span><em>{ko ? '활성' : 'Active'}</em></div><div><span><i>박</i><b>박상민</b></span><span>ADMIN</span><em>{ko ? '활성' : 'Active'}</em></div><div><span><i>이</i><b>이서연</b></span><span>MEMBER</span><em>{ko ? '활성' : 'Active'}</em></div></div>
+          </main>
+        </section>
+
+        <section id={`notiiv-status-panel-${variant}`} class="notiiv-panel notiiv-status-view" role="tabpanel" aria-labelledby={`notiiv-status-tab-${variant}`} data-notiiv-panel="status" hidden>
+          <header><div><NotiivLogo size="var(--notiiv-header-logo-size, 17px)" /><span>STATUS</span></div><nav><span>한국어⌄</span><i>☼</i></nav></header>
+          <main><section><h3>{ko ? '모든 시스템이 정상 운영 중입니다' : 'All systems are operational'}</h3><p>{ko ? '전체 서버가 정상적으로 응답하고 있습니다.' : 'All servers are responding normally.'}</p></section><div class="notiiv-server-list">{['SERVER-A', 'SERVER-B', 'SERVER-C'].map((server) => <article><header><b>{server}</b><span><i></i>{ko ? '정상' : 'Operational'}</span></header><div>{Array.from({ length: 28 }, (_, index) => <i class:list={{ dim: index === 10 || index === 21 }}></i>)}</div><small>99.99% uptime</small></article>)}</div><footer><span>{ko ? '마지막 업데이트 11:42:08' : 'Last updated 11:42:08'}</span><span>{ko ? '1분마다 자동으로 새로고침됩니다' : 'Refreshes every minute'}</span></footer></main>
+        </section>
+
+        <section id={`notiiv-support-panel-${variant}`} class="notiiv-panel notiiv-support-view" role="tabpanel" aria-labelledby={`notiiv-support-tab-${variant}`} data-notiiv-panel="support">
+          <header><NotiivLogo size="var(--notiiv-header-logo-size, 17px)" /><nav><span>{ko ? '소개' : 'About'}</span><span>{ko ? '플랜' : 'Plans'}</span><span>{ko ? '고객센터' : 'Support'}</span><button type="button" tabindex="-1">{ko ? '로그인' : 'Sign in'}</button></nav></header>
+          <main><div class="notiiv-support-copy"><h3>{ko ? <>미팅 종료, 그 즉시 시작되는<br />당신의 스마트 비즈니스<br /><NotiivLogo size="1em" /></> : <>The moment your meeting ends,<br />your smart business begins<br /><NotiivLogo size="1em" /></>}</h3><div class="notiiv-store-badges" aria-label={ko ? '앱 다운로드' : 'Download the app'}><img src={`/projects/notiiv/store/${ko ? 'ko' : 'en'}/google-play.svg`} alt={ko ? 'Google Play에서 다운로드' : 'Get it on Google Play'} /><img src={`/projects/notiiv/store/${ko ? 'ko' : 'en'}/app-store.svg`} alt={ko ? 'App Store에서 다운로드' : 'Download on the App Store'} /></div></div>
+            <section class="notiiv-phone">
+              <div class="phone-status"><span>9:30</span><i></i></div><div class="phone-title">{ko ? '녹음중' : 'Recording'}</div><div class="meeting-info"><strong>{ko ? '김성태님 미팅' : 'Meeting with Seongtae Kim'}</strong><span>2026.05.12</span><small>{ko ? '빅태블릿 본사 · 9층 회의실' : 'Bigtablet HQ · Meeting Room 9F'}</small></div><div class="waveform">{waveform.map((height, index) => <i style={`--bar-height:${height}%; --bar-index:${index}`}></i>)}</div><div class="record-button"><span></span></div><strong class="record-time">00:38</strong><div class="memo-mode"><i></i>{ko ? '메모 화면 모드' : 'Memo mode'}</div>
+            </section>
+          </main>
+        </section>
       </div>
     </div>
   )}
 
   {projectKey === 'design-system' && (
     <div class="mock mock-ds">
-      <header><strong>@bigtablet/design-system</strong><span>Storybook · v3.1</span></header>
-      <aside>
-        <b>FOUNDATION</b><span>Colors</span><span>Typography</span><span>Spacing</span>
-        <b>COMPONENTS</b><span class="active">Button</span><span>TextField</span><span>Sidebar</span><span>Modal</span>
+      <aside class="ds-sidebar">
+        <header><span class="ds-cube"><i></i></span><strong>Bigtablet</strong><b>•••</b></header>
+        <div class="ds-search"><span>⌕</span>{ko ? '컴포넌트 찾기' : 'Find components'}<kbd>⌘ K</kbd></div>
+        <nav>
+          <b>⌄ GETTING STARTED</b>
+          <span class="active">▤ Introduction</span>
+          <span>▤ How to use</span>
+          <b>› COOKBOOK</b>
+          <b>› EXAMPLES</b>
+          <b>⌄ FOUNDATION</b>
+          <span>◉ Colors</span>
+          <span>A Typography</span>
+          <span>▦ Spacing</span>
+          <b>⌄ COMPONENTS</b>
+          <span>◇ Button</span>
+          <span>◇ TextField</span>
+          <span>◇ Sidebar</span>
+        </nav>
       </aside>
-      <main>
-        <div class="ds-heading"><small>GENERAL / BUTTON</small><strong>Button</strong><p>{ko ? '행동의 중요도와 상태를 일관된 API로 표현합니다.' : 'Express action hierarchy and state through one consistent API.'}</p></div>
-        <div class="ds-canvas">
-          <div class="ds-row"><small>Filled</small><button>Continue</button><button disabled>Disabled</button></div>
-          <div class="ds-row"><small>Outlined</small><button class="outline">Cancel</button><button class="outline">Preview</button></div>
-          <div class="ds-field"><label>Email</label><div>name@company.com</div><small>Supporting text</small></div>
-        </div>
+      <main class="ds-story">
+        <header class="ds-toolbar"><span>Introduction / Docs</span><div><i></i><i></i><i></i><i></i></div></header>
+        <article>
+          <small>GETTING STARTED</small>
+          <h2>Introduction</h2>
+          <p>{ko ? '빅태블릿 제품에서 사용하는 공통 컴포넌트와 디자인 토큰을 Storybook에서 확인합니다.' : 'Browse shared components and design tokens used across Bigtablet products in Storybook.'}</p>
+          <hr />
+          <h3>Bigtablet Design System</h3>
+          <div class="ds-preview-row"><button>Primary</button><button class="outline">Secondary</button><label><span>Label</span><input value="Text field" readonly /></label></div>
+        </article>
       </main>
     </div>
   )}
@@ -242,9 +283,9 @@ const owkrRows = [
       </section>
 
       <aside class="jeomjuro-subsystems">
-        <section class="jeomjuro-admin"><header><span>apps/admin</span><b>{ko ? '관리자 로그인과 운영 도구' : 'Admin access and operations'}</b></header><div><img src="/projects/jeomjuro/non-logo.svg" alt="" /><i></i><i></i><button>{ko ? '로그인' : 'Sign in'}</button></div></section>
-        <section class="jeomjuro-ds"><header><span>packages/design-system</span><b>{ko ? '공통 UI 기반' : 'Shared UI foundation'}</b></header><div><button>Primary</button><button class="outline">Secondary</button><label><span>Text field</span></label></div></section>
-        <footer><small>MONOREPO</small><b>pnpm · Turborepo</b><span>consumer · admin · storybook</span></footer>
+        <section class="jeomjuro-admin"><header><span>{ko ? '관리자 화면' : 'Admin'}</span><b>{ko ? '로그인과 운영 도구' : 'Access and operations'}</b></header><div><img src="/projects/jeomjuro/non-logo.svg" alt="" /><i></i><i></i><button>{ko ? '로그인' : 'Sign in'}</button></div></section>
+        <section class="jeomjuro-ds"><header><span>{ko ? '디자인 시스템' : 'Design system'}</span><b>{ko ? '공통 UI 기반' : 'Shared UI foundation'}</b></header><div><button>Primary</button><button class="outline">Secondary</button><label><span>Text field</span></label></div></section>
+        <footer><small>MONOREPO</small><b>pnpm · Turborepo</b><span>{ko ? '커뮤니티 · 관리자 · 스토리북' : 'Community · Admin · Storybook'}</span></footer>
       </aside>
     </div>
   )}
@@ -252,18 +293,19 @@ const owkrRows = [
   {projectKey === 'marker' && (
     <div class="mock mock-marker">
       <div class="map-grid"></div>
-      <header><strong>Marker</strong><div><span class="active">{ko ? '전체' : 'All'}</span><span>{ko ? '설렘' : 'Excitement'}</span><span>{ko ? '편안함' : 'Comfort'}</span></div><button>{ko ? '기록하기' : 'Write'}</button></header>
-      <div class="map-search">{ko ? '장소를 검색하세요' : 'Search a place'}</div>
-      <div class="pin pin-a"><span>♥</span></div><div class="pin pin-b"><span>☁</span></div><div class="pin pin-c"><span>★</span></div>
-      <section class="place-sheet"><i></i><div class="emotion">♥ {ko ? '설렘' : 'Excitement'}</div><strong>{ko ? '한강에서 본 오늘의 노을' : 'Today’s sunset by the river'}</strong><p>{ko ? '좋아하는 사람들과 함께 걷던 순간을 기록했어요.' : 'A quiet walk with people I care about.'}</p><footer><span>{ko ? '서울 영등포구 여의동로' : 'Yeouido, Seoul'}</span><b>♥ 24</b></footer></section>
+      <header><img src="/projects/marker/logo.svg" alt="Marker" /><button>{ko ? '기록하기' : 'Write'}</button></header>
+      <div class="marker-filters"><div><span class="active">{ko ? '전체' : 'All'}</span><span>💓 {ko ? '설렘' : 'Excitement'}</span><span>☁️ {ko ? '편안함' : 'Comfort'}</span><span>🙏 {ko ? '감사' : 'Gratitude'}</span><span>🏆 {ko ? '성취' : 'Achievement'}</span><span>✏️ {ko ? '내 장소' : 'My places'}</span></div><b>🔥 {ko ? '인기순' : 'Popular'}</b></div>
+      <div class="marker-road road-a"></div><div class="marker-road road-b"></div><div class="marker-river"></div>
+      <div class="current-location"><i></i></div>
+      <div class="pin pin-a"><span>💓</span></div><div class="pin pin-b"><span>☁️</span></div><div class="pin pin-c"><span>🏆</span></div>
+      <section class="place-sheet"><i></i><h3>🔥 {ko ? '인기 장소 TOP 5' : 'Popular places TOP 5'}</h3><div class="top-place-list"><article><b>💓</b><p><strong>{ko ? '한강에서 본 오늘의 노을' : 'Today’s sunset by the river'}</strong><small>{ko ? '설렘' : 'Excitement'}</small></p><em>♥ 24</em></article><article><b class="mint">☁️</b><p><strong>{ko ? '잠시 쉬어간 골목 카페' : 'A quiet neighborhood cafe'}</strong><small>{ko ? '편안함' : 'Comfort'}</small></p><em>♥ 18</em></article></div></section>
     </div>
   )}
 
   {projectKey === 'rust-with-typescript' && (
     <div class="mock mock-rust">
-      <header><strong>Rust with TypeScript</strong><span>KO / EN</span></header>
-      <aside><small>LEARN RUST</small><span>01 Introduction</span><span class="active">02 Ownership</span><span>03 Borrowing</span><span>04 Enums</span><span>05 Traits</span></aside>
-      <main><div class="doc-title"><small>02 · OWNERSHIP</small><strong>{ko ? '소유권을 익숙한 모델로 이해하기' : 'Understand ownership through a familiar model'}</strong><p>{ko ? '같은 데이터를 TypeScript와 Rust가 어떻게 다르게 다루는지 비교합니다.' : 'Compare how TypeScript and Rust handle the same data.'}</p></div>
+      <header><strong><span>Rust</span> with <b>TypeScript</b></strong><div class="rust-tools"><span>⌕ {ko ? '검색' : 'Search'} <kbd>⌘K</kbd></span><i>◖</i><i>⌁</i><small>한국어⌄</small></div></header>
+      <main><div class="rust-hero"><h2>Rust with TypeScript</h2><p>{ko ? 'TypeScript를 알면, Rust는 생각보다 가깝습니다.' : 'If you know TypeScript, Rust is closer than you think.'}</p><div><button>{ko ? '시작하기' : 'Get started'} <span>→</span></button><a>⌁ GitHub</a></div></div>
         <div class="code-compare"><section><header>TypeScript</header><code><i>const</i> user = {'{'} name: <b>'Sangmin'</b> {'}'};<br/><i>const</i> next = user;<br/>console.log(user.name);</code></section><section><header>Rust</header><code><i>let</i> user = User {'{'} name: <b>String::from("Sangmin")</b> {'}'};<br/><i>let</i> next = user;<br/>println!("{'{}'}", user.name);</code></section></div>
       </main>
     </div>
@@ -271,37 +313,37 @@ const owkrRows = [
 
   {projectKey === 'kivra' && (
     <div class="mock mock-kivra">
-      <header><strong>Kivra</strong><div><span>pnpm build</span><span class="success">Memory updated</span></div></header>
-      <main><section class="terminal-log"><small>TERMINAL CAPTURE</small><p><b>$</b> pnpm build</p><p>vite v5.4.21 building for production...</p><p>✓ 142 modules transformed.</p><p class="error">Type error: selected node is not reachable</p><p>src/features/project/code-node-viewer.tsx:122</p></section>
-        <aside><small>DETECTED ERROR</small><article><b>code-node-viewer.tsx</b><span>line 122 · Type error</span></article><small>PROJECT MEMORY</small><article class="memory"><b>Resolution attached</b><p>Preserve selected node id only after the graph has rebuilt.</p></article></aside></main>
-      <footer><span></span>{ko ? '실행, 오류, 파일 경로와 해결 기록을 함께 저장했습니다.' : 'Run, error, file path, and resolution are stored together.'}</footer>
+      <aside class="kivra-sidebar"><header><span>K</span><div><strong>Kivra</strong><small>Local-first memory</small></div></header><nav><b>▣ {ko ? '대시보드' : 'Dashboard'}</b><span class="active">▱ portfolio</span><span>⚙ {ko ? '설정' : 'Settings'}</span></nav><footer><i>PS</i><strong>sangminpark</strong><span>↪</span></footer></aside>
+      <main class="kivra-project"><header><div class="kivra-title"><strong>portfolio</strong><small>/Users/sangminpark/Documents/GitHub/portfolio</small></div><div class="kivra-meta"><span><small>RUNTIME</small>Node.js</span><span><small>FRAMEWORK</small>Astro</span><span><small>PACKAGE</small>pnpm</span><span><small>BRANCH</small>main</span></div><nav><b>Explorer</b><b class="active">Runs</b><b>Errors</b><b>Knowledge</b><button>▶ Run command</button></nav></header>
+        <section class="kivra-workspace"><aside><header><strong>{ko ? '실행 기록' : 'Run history'}</strong><small>3 runs</small></header><article class="selected"><code>pnpm build</code><div><span class="failed">FAILED</span><span>2,481 ms</span></div></article><article><code>pnpm check</code><div><span>SUCCESS</span><span>1,204 ms</span></div></article><article><code>pnpm test</code><div><span>SUCCESS</span><span>892 ms</span></div></article></aside><div class="kivra-log"><header><div><strong>▣ {ko ? '실행 출력' : 'Run output'}</strong><code>pnpm build</code></div><nav><b>All</b><span>stdout</span><span>stderr</span><button>Wrap</button></nav></header><div class="kivra-summary"><span>STATUS <b>FAILED</b></span><span>DURATION <b>2,481 ms</b></span><span>EXIT CODE <b>1</b></span></div><pre>$ pnpm build<br/><br/>astro v5.12.8 building for production...<br/>✓ Completed in 1.32s.<br/><br/><em>Type error: selected node is not reachable</em><br/>src/features/project/code-node-viewer.tsx:122</pre></div></section>
+      </main>
     </div>
   )}
 
   {projectKey === 'homepage' && (
     <div class="mock mock-homepage">
-      <div class="camera-grid"><i></i><i></i><i></i><i></i><i></i><i></i></div>
-      <header><strong>BIGTABLET</strong><nav><span>TECHNOLOGY</span><span>ABOUT</span><span>NEWS</span></nav><small>KO / EN</small></header>
-      <main><small>VIDEO UNDERSTANDING AI</small><strong>Vision<br/>Beyond Pixels</strong><p>{ko ? '매장, 공장, 현장의 영상을 실시간으로 이해합니다.' : 'Understand video from stores, factories, and worksites in real time.'}</p><button>{ko ? '도입 상담' : 'Contact us'}</button></main>
-      <footer><span>{ko ? '리테일 분석' : 'Retail analytics'}</span><span>{ko ? '현장 안전' : 'Site safety'}</span><span>{ko ? '지능형 관제' : 'Video intelligence'}</span></footer>
+      <img class="homepage-poster" src="https://bigtablet.com/images/banner-poster.webp" alt="" />
+      <div class="homepage-scene" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><span class="target t1">＋ 01</span><span class="target t2">＋ 03</span><span class="target t3">＋ 07</span></div>
+      <div class="homepage-overlay"></div>
+      <header><strong>BIGTABLET</strong><nav><span>{ko ? '기술' : 'TECHNOLOGY'}</span><span>{ko ? '회사 소개' : 'ABOUT'}</span><span>{ko ? '소식' : 'NEWS'}</span></nav><div><small>KO <i></i> EN</small><button>{ko ? '데모 신청' : 'Request demo'}</button></div></header>
+      <main><small>{ko ? '영상을 이해하는 AI · VCM 원천기술' : 'VIDEO UNDERSTANDING AI · VCM'}</small><strong>{ko ? <>현장의 영상을,<br/>실시간으로 이해하는 AI</> : <>AI that understands<br/>video in real time</>}</strong><p>{ko ? '영상 데이터를 더 가볍게 전송하고, 필요한 장면을 즉시 분석합니다.' : 'Transmit video data efficiently and analyze important scenes as they happen.'}</p><div><button>{ko ? '데모 신청' : 'Request demo'}</button><button class="outline">{ko ? '기술 알아보기' : 'Learn more'}</button></div></main>
+      <footer><span><b>VCM</b> 8.0MB → 0.8MB</span><span><b>MPEG</b> {ko ? '표준 기여' : 'Contribution'}</span><span><b>{ko ? '등록특허' : 'Patents'}</b> 4</span><span><b>{ko ? '분석' : 'Analysis'}</b> {ko ? '2주 → 실시간' : '2 weeks → real time'}</span></footer>
     </div>
   )}
 
   {projectKey === 'echo' && (
     <div class="mock mock-echo">
-      <section class="echo-phone"><header><div><strong>Echo</strong><small>{ko ? '실시간 음성 감지' : 'Live voice detection'}</small></div><span class="connected">LIVE</span></header>
-        <main><small>{ko ? '오늘의 상태' : 'TODAY'}</small><div class="echo-toggle"><i></i><span>{ko ? '듣고 있어요' : 'Listening'}</span></div><p>{ko ? '음성을 분석하고 있습니다.' : 'Analyzing voice input.'}</p>
-          <div class="echo-metrics"><article><small>{ko ? '활성화 시간' : 'ACTIVE TIME'}</small><div class="ring"><b>42m</b></div></article><article><small>{ko ? '진동 횟수' : 'VIBRATIONS'}</small><strong>7</strong><span>{ko ? '회' : 'times'}</span></article></div>
-        </main><footer><span class="active">HOME</span><span>GROUP</span><span>STATS</span></footer></section>
+      <section class="echo-phone"><header><span><i class="red"></i>{ko ? '연결 끊김' : 'Disconnected'}</span><span><i></i>{ko ? '대기 중' : 'Standby'}</span></header>
+        <main><div class="echo-power"><div><button aria-label={ko ? '전원' : 'Power'}><svg viewBox="0 0 40 40"><path d="M20 5v13M11.5 10.5a13 13 0 1 0 17 0"/></svg></button></div></div>
+          <div class="echo-metrics"><article><small>{ko ? '활성 시간' : 'Active time'}</small><div class="ring"><b>68:12</b></div></article><article><small>{ko ? '진동 횟수' : 'Vibrations'}</small><strong>12</strong><span>{ko ? '회' : 'times'}</span></article></div>
+        </main><footer><span><i>▥</i>{ko ? '통계' : 'Stats'}</span><span class="active"><i>⌂</i>{ko ? '홈' : 'Home'}</span><span><i>♙</i>{ko ? '그룹' : 'Group'}</span></footer></section>
     </div>
   )}
 
   {projectKey === 'chorus' && (
     <div class="mock mock-chorus">
       <div class="aurora a"></div><div class="aurora b"></div>
-      <header><strong>CHORUS</strong><span>{ko ? '목록' : 'BACK'}</span><i></i></header>
-      <section class="story-card"><small><i></i> CHORUS REC.</small><div class="vinyl"><div class="vinyl-label">C</div></div><input value="Midnight Drive · Sangmin" readonly /><div class="track"><span>0:42</span><i><b></b></i><span>3:18</span></div><button aria-label={ko ? '일시정지' : 'Pause'}><i></i><i></i></button></section>
-      <footer>{ko ? '이미지로 저장하기' : 'Save as image'}</footer>
+      <main class="chorus-search"><h2>CHORUS</h2><p>{ko ? '나만의 음악 취향 기록' : 'A record of your music taste'}</p><div><input value="" placeholder={ko ? '노래 제목이나 가수를 입력하세요' : 'Search songs or artists'} readonly /><button>{ko ? '검색' : 'Search'}</button></div><small>{ko ? '좋아하는 음악을 찾고, 나만의 레코드로 남겨보세요.' : 'Find music you love and turn it into your own record.'}</small></main>
     </div>
   )}
 </div>
@@ -312,20 +354,114 @@ const owkrRows = [
   .mock { position: relative; width: 100%; height: 100%; overflow: hidden; }
   .mock small { font-size: 10px; }
 
-  /* Notiiv, based on the live recording mockup in the support app */
-  .mock-notiiv { display: grid; grid-template-columns: 23% 38% 39%; background: #111; }
-  .notiiv-rail { display: flex; flex-direction: column; padding: 28px 22px; border-right: 1px solid #2a2a2a; background: #171717; }
-  .notiiv-brand { display: flex; align-items: center; gap: 8px; }
-  .notiiv-brand b { display: grid; width: 28px; height: 28px; place-items: center; border-radius: 8px; background: white; color: #171717; }
-  .notiiv-brand span { font-weight: 600; }
-  .repo-label { margin-top: 34px; color: #666; font: 500 7px/1 $font-mono; letter-spacing: .08em; }
+  /* Notiiv app switcher, reconstructed from the four product apps in the monorepo */
+  .mock-notiiv { --bt-font-display: 'Outfit'; --bt-blue: #0984e3; --bt-purple-500: #6c5ce7; --bt-violet: #a29bfe; --bt-gradient-brand: linear-gradient(135deg, var(--bt-blue) 0%, var(--bt-purple-500) 50%, var(--bt-violet) 100%); --bt-color-text-heading: #17181c; display: grid; grid-template-columns: minmax(164px, 22%) 1fr; background: #f4f5f7; color: #17181c; }
+  .notiiv-rail { --bt-color-text-heading: #f7f7f8; position: relative; z-index: 12; display: flex; min-width: 0; flex-direction: column; padding: 24px 16px; border-right: 1px solid #303137; background: #17181b; color: #f7f7f8; }
+  .notiiv-brand { display: flex; align-items: center; gap: 8px; padding: 0 7px; }
+  .notiiv-brand > img { width: 28px; height: 28px; flex: 0 0 auto; border-radius: 7px; }
+  .repo-label { margin: 29px 8px 0; color: #a7a9b1; font: 600 7px/1 $font-mono; letter-spacing: .08em; text-transform: uppercase; }
   .notiiv-apps { display: grid; gap: 4px; margin-top: 10px; }
-  .notiiv-apps span { padding: 7px 9px; border-left: 2px solid transparent; color: #777; font: 500 8px/1 $font-mono; }
-  .notiiv-apps span.active { border-left-color: #c2272f; background: #211415; color: #f4f4f5; }
-  .notiiv-packages { display: grid; gap: 8px; margin-top: auto; }
-  .notiiv-packages small { color: #666; font: 500 7px/1 $font-mono; }
-  .notiiv-packages strong { color: #aaa; font: 500 8px/1.7 $font-mono; }
-  .notiiv-phone { display: flex; flex-direction: column; align-items: center; margin: 20px auto; width: min(86%, 245px); overflow: hidden; border: 4px solid #e5e5e5; border-radius: 22px; background: #fff; color: #1d1b20; }
+  .notiiv-apps button { width: 100%; display: grid; grid-template-columns: 25px minmax(0, 1fr); align-items: center; gap: 9px; padding: 8px; border: 1px solid transparent; border-radius: 7px; background: transparent; color: #bfc1c8; text-align: left; cursor: pointer; transition: color 130ms ease, background 130ms ease, border-color 130ms ease; }
+  .notiiv-apps button:hover { background: #222329; color: #fff; }
+  .notiiv-apps button:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }
+  .notiiv-apps button.active { border-color: #35363c; background: #292a30; color: #fff; }
+  .notiiv-apps button > i { width: 25px; height: 25px; display: grid; place-items: center; border-radius: 6px; background: #303138; color: #d9dae0; font: 700 8px/1 $font-mono; font-style: normal; }
+  .notiiv-apps button.active > i { background: #f4f4f5; color: #1a1b1f; }
+  .notiiv-apps button > i img { width: 19px; height: 19px; display: block; }
+  .notiiv-apps button > span { min-width: 0; display: grid; gap: 3px; }
+  .notiiv-apps button b { overflow: hidden; font-size: 9px; font-weight: 650; text-overflow: ellipsis; white-space: nowrap; }
+  .notiiv-apps button small { overflow: hidden; color: #8f919a; font-size: 6px; text-overflow: ellipsis; white-space: nowrap; }
+  .notiiv-apps button.active small { color: #bfc1c8; }
+  .notiiv-packages { display: grid; gap: 8px; margin: auto 8px 0; }
+  .notiiv-packages small { color: #aaaab2; font: 600 7px/1 $font-mono; }
+  .notiiv-packages strong { color: #d5d5da; font: 500 8px/1.65 $font-mono; }
+  .notiiv-stage { min-width: 0; height: 100%; overflow: hidden; }
+  .notiiv-panel { width: 100%; height: 100%; }
+  .notiiv-panel[hidden] { display: none !important; }
+
+  .notiiv-product-sidebar { --bt-color-text-heading: #24262c; display: flex; min-width: 118px; flex-direction: column; padding: 21px 12px 14px; border-right: 1px solid #e2e4e8; background: #fff; color: #2e3138; }
+  .notiiv-product-sidebar > :global(.notiiv-wordmark) { margin: 0 8px 17px; }
+  .notiiv-product-sidebar nav { display: grid; gap: 3px; }
+  .notiiv-product-sidebar nav span { padding: 7px 8px; border-radius: 5px; color: #60636b; font-size: 7px; font-weight: 600; }
+  .notiiv-product-sidebar nav span.active { background: #f0f1f3; color: #191b20; }
+  .notiiv-product-sidebar > small { margin: auto 8px 0; color: #8b8e96; font-size: 6px; }
+
+  .notiiv-admin-view, .notiiv-owner-view { display: grid; grid-template-columns: 126px 1fr; background: #f5f6f8; }
+  .notiiv-admin-main { min-width: 0; padding: 25px 25px 20px; }
+  .notiiv-admin-main > header { display: flex; align-items: start; justify-content: space-between; }
+  .notiiv-admin-main > header small { color: #8b8e96; font-size: 7px; }
+  .notiiv-admin-main h3 { margin: 3px 0 0; font-size: 21px; letter-spacing: -.045em; }
+  .notiiv-admin-main > header > span { padding: 4px 7px; border-radius: 999px; background: #1f2229; color: #fff; font: 600 6px/1 $font-mono; }
+  .notiiv-admin-filters { display: flex; align-items: end; gap: 7px; margin-top: 22px; }
+  .notiiv-admin-filters label { min-width: 0; flex: 1; display: grid; gap: 5px; }
+  .notiiv-admin-filters label small { color: #5d616a; font-size: 6px; font-weight: 650; }
+  .notiiv-admin-filters label span { height: 27px; display: flex; align-items: center; padding: 0 8px; border: 1px solid #d8dae0; border-radius: 5px; background: #fff; color: #a0a3aa; font-size: 6px; }
+  .notiiv-admin-filters button { height: 27px; padding: 0 13px; border: 0; border-radius: 5px; background: #202229; color: #fff; font-size: 6px; font-weight: 700; }
+  .notiiv-admin-table { margin-top: 14px; overflow: hidden; border: 1px solid #dfe1e5; border-radius: 7px; background: #fff; }
+  .notiiv-admin-table > * { display: grid; grid-template-columns: .8fr 1.5fr .8fr .55fr; align-items: center; gap: 7px; min-height: 37px; padding: 0 12px; border-bottom: 1px solid #eceef1; font-size: 6px; }
+  .notiiv-admin-table > *:last-child { border-bottom: 0; }
+  .notiiv-admin-table > header { min-height: 31px; background: #f5f6f8; color: #757982; font-size: 5.5px; font-weight: 700; }
+  .notiiv-admin-table div > span { overflow: hidden; color: #676a72; text-overflow: ellipsis; white-space: nowrap; }
+  .notiiv-admin-table em { width: fit-content; padding: 3px 6px; border-radius: 999px; background: #e8f6ee; color: #267447; font-size: 5px; font-style: normal; font-weight: 700; }
+  .notiiv-admin-table em.muted { background: #f1f2f4; color: #777b83; }
+
+  .notiiv-owner-view { grid-template-columns: 120px 1fr; }
+  .notiiv-product-sidebar.owner nav span.active { background: #f0f1f3; }
+  .notiiv-owner-main { min-width: 0; padding: 20px 22px; }
+  .notiiv-owner-main > header { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+  .notiiv-owner-main > header > div { display: flex; align-items: center; gap: 8px; }
+  .notiiv-owner-main > header > div:first-child > i { width: 32px; height: 32px; display: grid; place-items: center; border-radius: 8px; background: #24262c; color: #fff; font: 700 8px/1 $font-mono; font-style: normal; }
+  .notiiv-owner-main h3 { margin: 0; font-size: 15px; letter-spacing: -.035em; }
+  .notiiv-owner-main header small { color: #868991; font-size: 6px; }
+  .notiiv-owner-main header label { width: 105px; height: 27px; display: flex; align-items: center; padding: 0 8px; border: 1px solid #d8dae0; border-radius: 5px; background: #fff; color: #9b9ea6; font-size: 6px; }
+  .notiiv-owner-main header button { height: 27px; padding: 0 10px; border: 0; border-radius: 5px; background: #202229; color: #fff; font-size: 6px; font-weight: 700; }
+  .notiiv-summary-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 7px; margin-top: 19px; }
+  .notiiv-summary-grid article { min-width: 0; min-height: 66px; display: flex; flex-direction: column; justify-content: space-between; padding: 10px; border: 1px solid #dfe1e5; border-radius: 7px; background: #fff; }
+  .notiiv-summary-grid small { color: #7b7e87; font-size: 5.5px; }
+  .notiiv-summary-grid b { overflow: hidden; color: #25272d; font-size: 9px; text-overflow: ellipsis; white-space: nowrap; }
+  .notiiv-summary-grid b i { color: #8b8e96; font-style: normal; font-weight: 500; }
+  .notiiv-member-list { margin-top: 14px; overflow: hidden; border: 1px solid #dfe1e5; border-radius: 7px; background: #fff; }
+  .notiiv-member-list > * { min-height: 36px; display: grid; grid-template-columns: 1.4fr .7fr .5fr; align-items: center; gap: 8px; padding: 0 11px; border-bottom: 1px solid #eceef1; font-size: 6px; }
+  .notiiv-member-list > *:last-child { border-bottom: 0; }
+  .notiiv-member-list > header { display: flex; justify-content: space-between; background: #f8f9fa; }
+  .notiiv-member-list div > span:first-child { display: flex; align-items: center; gap: 7px; }
+  .notiiv-member-list div > span > i { width: 21px; height: 21px; display: grid; place-items: center; border-radius: 50%; background: #eceef1; font-size: 6px; font-style: normal; }
+  .notiiv-member-list div > span:nth-child(2) { color: #777a82; font: 600 5px/1 $font-mono; }
+  .notiiv-member-list em { color: #267447; font-size: 5px; font-style: normal; font-weight: 700; }
+
+  .notiiv-status-view { overflow: hidden; background: #fff; color: #24262c; }
+  .notiiv-status-view > header { height: 52px; display: flex; align-items: center; justify-content: space-between; padding: 0 28px; border-bottom: 1px solid #e2e4e8; }
+  .notiiv-status-view > header > div { display: flex; align-items: center; gap: 10px; }
+  .notiiv-status-view > header > div span { padding-left: 10px; border-left: 1px solid #d9dbe0; color: #747780; font: 600 7px/1 $font-mono; letter-spacing: .06em; }
+  .notiiv-status-view > header nav { display: flex; align-items: center; gap: 13px; color: #60636b; font-size: 6px; }
+  .notiiv-status-view > header nav i { font-size: 11px; font-style: normal; }
+  .notiiv-status-view > main { width: min(82%, 620px); margin: 0 auto; padding: 24px 0; }
+  .notiiv-status-view > main > section { padding: 14px 17px; border-radius: 8px; background: #2e9b62; color: #fff; }
+  .notiiv-status-view > main > section h3 { margin: 0; font-size: 13px; }
+  .notiiv-status-view > main > section p { margin-top: 4px; font-size: 6px; opacity: .85; }
+  .notiiv-server-list { margin-top: 13px; overflow: hidden; border: 1px solid #e0e2e6; border-radius: 8px; box-shadow: 0 3px 8px rgba(32,36,44,.04); }
+  .notiiv-server-list article { padding: 10px 14px; border-bottom: 1px solid #e9ebee; }
+  .notiiv-server-list article:last-child { border-bottom: 0; }
+  .notiiv-server-list article header { display: flex; align-items: center; justify-content: space-between; }
+  .notiiv-server-list article header b { font-size: 7px; }
+  .notiiv-server-list article header span { display: flex; align-items: center; gap: 5px; color: #27814f; font-size: 6px; font-weight: 700; }
+  .notiiv-server-list article header span i { width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+  .notiiv-server-list article > div { display: grid; grid-template-columns: repeat(28, 1fr); gap: 2px; margin-top: 8px; }
+  .notiiv-server-list article > div i { height: 10px; border-radius: 2px; background: #48b97b; }
+  .notiiv-server-list article > div i.dim { background: #b9ddc8; }
+  .notiiv-server-list article > small { display: block; margin-top: 5px; color: #858891; font-size: 5px; text-align: right; }
+  .notiiv-status-view footer { display: flex; justify-content: space-between; margin-top: 10px; color: #8b8e96; font-size: 5.5px; }
+
+  .notiiv-support-view { --bt-color-text-heading: #fff; background: #111118; color: #f7f7fa; }
+  .notiiv-support-view > header { height: 52px; display: flex; align-items: center; justify-content: space-between; padding: 0 25px; border-bottom: 1px solid #2a2a31; background: #111118; }
+  .notiiv-support-view > header nav { display: flex; align-items: center; gap: 17px; color: #dedee5; font-size: 6px; font-weight: 600; }
+  .notiiv-support-view > header nav button { padding: 6px 10px; border: 0; border-radius: 5px; background: var(--bt-gradient-brand); color: #fff; font-size: 6px; font-weight: 700; }
+  .notiiv-support-view > main { height: calc(100% - 52px); display: grid; grid-template-columns: 1.05fr .95fr; align-items: center; gap: 12px; padding: 16px 34px; }
+  .notiiv-support-copy h3 { margin: 0; font-size: clamp(18px, 2.7vw, 35px); font-weight: 650; line-height: 1.38; letter-spacing: -.045em; }
+  .notiiv-support-copy h3 > :global(.notiiv-wordmark) { display: inline-block; }
+  .notiiv-store-badges { display: flex; align-items: center; gap: 7px; margin-top: 20px; }
+  .notiiv-store-badges img { width: clamp(76px, 8.2vw, 116px); height: auto; display: block; }
+  .notiiv-phone { display: flex; flex-direction: column; align-items: center; justify-self: center; width: min(76%, 205px); height: min(94%, 380px); overflow: hidden; border: 4px solid #e5e5e5; border-radius: 22px; background: #fff; color: #1d1b20; box-shadow: 0 22px 50px rgba(0,0,0,.42); }
   .phone-status { width: 100%; display: flex; align-items: center; justify-content: space-between; padding: 11px 17px 4px; font-size: 9px; }
   .phone-status i { width: 20px; height: 5px; border-radius: 3px; background: #1d1b20; }
   .phone-title { width: 100%; padding: 8px; text-align: center; font-size: 13px; }
@@ -339,36 +475,40 @@ const owkrRows = [
   .record-time { margin-top: 7px; font-size: 15px; }
   .memo-mode { display: flex; align-items: center; gap: 5px; margin-top: 10px; padding: 5px 8px; border: 1px solid #e5e5e5; border-radius: 6px; color: #666; font-size: 8px; font-weight: 600; }
   .memo-mode i { width: 8px; height: 8px; border: 1px solid #999; }
-  .transcript-panel { padding: 36px 30px; background: #0c0c0c; }
-  .transcript-panel > small { color: #777; font: 500 9px/1 $font-mono; }
-  .transcript-panel p { display: grid; grid-template-columns: 38px 1fr; gap: 10px; margin-top: 35px; color: #8b8b8b; font-size: 10px; line-height: 1.7; }
-  .transcript-panel p b { color: #555; font: 500 9px/1.5 $font-mono; }
-  .transcript-panel p.current { padding: 13px; border-left: 2px solid #c2272f; background: #1b1213; color: #e4e4e4; }
 
-  /* Bigtablet design system, based on Storybook page composition and theme tokens */
-  .mock-ds { display: grid; grid-template: 48px 1fr / 180px 1fr; background: #fafafa; color: #18181b; }
-  .mock-ds > header { grid-column: 1 / 3; display: flex; align-items: center; justify-content: space-between; padding: 0 18px; border-bottom: 1px solid #e4e4e7; }
-  .mock-ds > header strong { font-size: 12px; }
-  .mock-ds > header span { color: #71717a; font: 500 9px/1 $font-mono; }
-  .mock-ds > aside { display: flex; flex-direction: column; padding: 18px 12px; border-right: 1px solid #e4e4e7; background: white; }
-  .mock-ds > aside b { margin: 10px 8px 6px; color: #a1a1aa; font: 500 8px/1 $font-mono; }
-  .mock-ds > aside span { padding: 7px 8px; border-radius: 5px; font-size: 10px; }
-  .mock-ds > aside span.active { background: #18181b; color: white; }
-  .mock-ds > main { display: grid; grid-template-columns: .8fr 1.2fr; gap: 24px; padding: 28px; }
-  .ds-heading { align-self: start; }
-  .ds-heading small { color: #71717a; font: 500 8px/1 $font-mono; }
-  .ds-heading strong { display: block; margin-top: 11px; font-size: 28px; }
-  .ds-heading p { margin-top: 10px; color: #52525b; font-size: 10px; line-height: 1.55; }
-  .ds-canvas { display: grid; align-content: center; gap: 15px; padding: 22px; border: 1px solid #e4e4e7; background: white; }
-  .ds-row { display: grid; grid-template-columns: 58px 1fr 1fr; gap: 8px; align-items: center; }
-  .ds-row small { color: #71717a; }
-  .ds-row button { min-height: 30px; border: 1px solid #18181b; border-radius: 5px; background: #18181b; color: white; font-size: 9px; }
-  .ds-row button:disabled { border-color: #e4e4e7; background: #f4f4f5; color: #a1a1aa; }
-  .ds-row button.outline { background: white; color: #18181b; }
-  .ds-field { display: grid; gap: 4px; margin-top: 4px; }
-  .ds-field label { font-size: 9px; font-weight: 600; }
-  .ds-field div { padding: 8px 10px; border: 1px solid #d4d4d8; border-radius: 5px; color: #52525b; font-size: 9px; }
-  .ds-field small { color: #71717a; font-size: 8px; }
+  /* Bigtablet design system, matched to the actual Storybook manager and docs canvas */
+  .mock-ds { display: grid; grid-template-columns: 205px 1fr; background: #f8f9fb; color: #26262b; font-family: Arial, sans-serif; }
+  .ds-sidebar { display: flex; min-width: 0; flex-direction: column; padding: 12px 10px; border-right: 1px solid #d9dce3; background: #eef1f6; }
+  .ds-sidebar > header { display: flex; height: 32px; align-items: center; gap: 8px; padding: 0 6px; }
+  .ds-sidebar > header strong { font-size: 13px; letter-spacing: -.02em; }
+  .ds-sidebar > header b { margin-left: auto; color: #768092; font-size: 8px; }
+  .ds-cube { position: relative; width: 20px; height: 20px; display: grid; place-items: center; border-radius: 5px; background: #111827; }
+  .ds-cube::before, .ds-cube::after, .ds-cube i { content: ''; position: absolute; width: 9px; height: 9px; border: 1px solid #fff; transform: rotate(30deg) skewY(-30deg) scaleY(.86); }
+  .ds-cube::before { translate: -3px 2px; }
+  .ds-cube::after { translate: 3px -2px; }
+  .ds-cube i { translate: 0 0; opacity: .7; }
+  .ds-search { height: 29px; display: flex; align-items: center; gap: 6px; margin-top: 10px; padding: 0 8px; border: 1px solid #c8cdd8; border-radius: 5px; background: #fff; color: #6b7280; font-size: 8px; }
+  .ds-search span { color: #4b5563; font-size: 14px; }
+  .ds-search kbd { margin-left: auto; padding: 2px 4px; border: 1px solid #d6dae2; border-radius: 3px; background: #f6f7f9; color: #89909d; font-size: 6px; }
+  .ds-sidebar nav { display: flex; min-height: 0; flex-direction: column; gap: 1px; margin-top: 10px; overflow: hidden; }
+  .ds-sidebar nav b { margin: 9px 5px 3px; color: #687386; font-size: 7px; letter-spacing: .04em; }
+  .ds-sidebar nav span { padding: 6px 8px 6px 15px; border-radius: 4px; color: #3d4654; font-size: 8px; }
+  .ds-sidebar nav span.active { background: #dcecff; color: #1674d1; font-weight: 700; }
+  .ds-story { min-width: 0; display: grid; grid-template-rows: 38px 1fr; background: white; }
+  .ds-toolbar { display: flex; align-items: center; justify-content: space-between; padding: 0 13px; border-bottom: 1px solid #dfe2e8; color: #525866; font-size: 7px; }
+  .ds-toolbar div { display: flex; gap: 12px; }
+  .ds-toolbar i { width: 10px; height: 10px; display: block; border: 1px solid #9aa1ad; border-radius: 2px; }
+  .ds-story article { width: min(82%, 680px); padding: 30px 38px; }
+  .ds-story article > small { color: #8b93a1; font-size: 7px; font-weight: 700; letter-spacing: .08em; }
+  .ds-story h2 { margin: 8px 0 0; font-size: clamp(24px, 3.3vw, 39px); letter-spacing: -.04em; }
+  .ds-story p { max-width: 560px; margin-top: 10px; color: #606775; font-size: 9px; line-height: 1.65; }
+  .ds-story hr { margin: 24px 0 20px; border: 0; border-top: 1px solid #e2e4e9; }
+  .ds-story h3 { font-size: 14px; }
+  .ds-preview-row { display: flex; align-items: end; gap: 8px; margin-top: 14px; padding: 16px; border: 1px solid #e1e4e9; border-radius: 5px; background: #fbfbfc; }
+  .ds-preview-row button { height: 29px; padding: 0 12px; border: 1px solid #0f172a; border-radius: 5px; background: #0f172a; color: #fff; font-size: 8px; }
+  .ds-preview-row button.outline { background: #fff; color: #0f172a; }
+  .ds-preview-row label { display: grid; gap: 4px; color: #525866; font-size: 7px; }
+  .ds-preview-row input { width: 105px; height: 29px; padding: 0 8px; border: 1px solid #cfd3da; border-radius: 5px; background: #fff; color: #7b828d; font-size: 8px; }
 
   /* Intranet, based on the Flutter home dashboard, app shell and zinc tokens */
   .mock-intranet { display: grid; grid-template-columns: minmax(150px, .75fr) minmax(220px, 290px) minmax(170px, .9fr); gap: clamp(18px, 4vw, 52px); place-content: center; padding: 22px clamp(20px, 4vw, 48px); background: #050506; }
@@ -598,160 +738,259 @@ const owkrRows = [
   .jeomjuro-subsystems > footer b { color: #13243a; font: 600 7px/1 $font-mono; }
   .jeomjuro-subsystems > footer span { color: #7f8b98; font-size: 5px; }
 
-  /* Marker, based on the Kakao map flow, emotion tokens and bottom sheet */
-  .mock-marker { background: #e9eef1; color: #292d32; }
-  .map-grid { position: absolute; inset: 0; opacity: .55; background-image: linear-gradient(28deg, transparent 46%, #c6ced2 47%, #c6ced2 49%, transparent 50%), linear-gradient(108deg, transparent 46%, #d0d7da 47%, #d0d7da 49%, transparent 50%); background-size: 90px 70px, 120px 80px; }
-  .mock-marker > header { position: relative; z-index: 2; height: 48px; display: flex; align-items: center; gap: 20px; padding: 0 16px; background: rgba(255,255,255,.94); box-shadow: 0 2px 12px rgba(37,55,62,.08); }
-  .mock-marker > header strong { color: #ff6b91; }
-  .mock-marker > header div { display: flex; gap: 7px; }
-  .mock-marker > header div span { padding: 5px 9px; border-radius: 999px; background: #f3f4f6; color: #6b7280; font-size: 8px; }
-  .mock-marker > header div span.active { background: #ffebf0; color: #e84d75; }
-  .mock-marker > header button { margin-left: auto; padding: 7px 11px; border: 0; border-radius: 999px; background: #ff6b91; color: white; font-size: 8px; font-weight: 600; }
-  .map-search { position: absolute; z-index: 2; top: 64px; left: 16px; width: 170px; padding: 8px 12px; border-radius: 999px; background: white; color: #9ca3af; font-size: 8px; box-shadow: 0 4px 16px rgba(37,55,62,.1); }
-  .pin { position: absolute; z-index: 1; display: grid; width: 28px; height: 36px; place-items: center; border: 3px solid white; border-radius: 50% 50% 50% 6px; transform: rotate(-45deg); box-shadow: 0 4px 12px rgba(0,0,0,.18); }
-  .pin span { transform: rotate(45deg); color: white; font-size: 9px; }
-  .pin-a { top: 105px; left: 35%; background: #ff6b6b; }
-  .pin-b { top: 160px; left: 65%; background: #4ecdc4; }
-  .pin-c { top: 85px; left: 76%; background: #6c5ce7; }
-  .place-sheet { position: absolute; z-index: 3; right: 18px; bottom: 16px; width: min(52%, 360px); padding: 15px 18px; border-radius: 18px; background: white; box-shadow: 0 16px 50px rgba(20,35,45,.18); }
-  .place-sheet > i { display: block; width: 34px; height: 3px; margin: -6px auto 10px; border-radius: 3px; background: #d1d5db; }
-  .emotion { width: fit-content; padding: 4px 8px; border-radius: 999px; background: #ff6b6b; color: white; font-size: 8px; font-weight: 600; }
-  .place-sheet > strong { display: block; margin-top: 9px; font-size: 12px; }
-  .place-sheet > p { margin-top: 6px; color: #6b7280; font-size: 8px; line-height: 1.5; }
-  .place-sheet footer { display: flex; justify-content: space-between; margin-top: 10px; padding-top: 8px; border-top: 1px solid #f1f5f9; color: #9ca3af; font-size: 7px; }
-  .place-sheet footer b { color: #ff6b6b; }
+  /* Marker, matched to the mobile Kakao map shell, filters and Vaul peek sheet */
+  .mock-marker { background: #e8eef1; color: #292d32; }
+  .map-grid { position: absolute; inset: 0; opacity: .7; background-color: #e8eeed; background-image: linear-gradient(28deg, transparent 47%, #cbd4d5 48%, #cbd4d5 50%, transparent 51%), linear-gradient(107deg, transparent 47%, #d0d8d8 48%, #d0d8d8 50%, transparent 51%), radial-gradient(circle at 18% 44%, #dce9d4 0 13%, transparent 14%); background-size: 105px 76px, 138px 92px, 100% 100%; }
+  .mock-marker > header { position: relative; z-index: 5; height: 56px; display: flex; align-items: center; padding: 0 16px; background: rgba(255,255,255,.96); box-shadow: 0 1px 16px rgba(0,0,0,.06); }
+  .mock-marker > header img { width: 72px; height: 42px; object-fit: contain; object-position: left center; }
+  .mock-marker > header button { margin-left: auto; padding: 7px 13px; border: 0; border-radius: 999px; background: #ff5e8c; color: white; font-size: 8px; font-weight: 700; box-shadow: 0 4px 12px rgba(255,94,140,.28); }
+  .marker-filters { position: relative; z-index: 4; height: 43px; display: flex; align-items: center; padding: 0 12px; background: rgba(255,255,255,.96); box-shadow: 0 2px 10px rgba(0,0,0,.06); }
+  .marker-filters > div { display: flex; min-width: 0; gap: 5px; overflow: hidden; }
+  .marker-filters span, .marker-filters > b { flex: 0 0 auto; padding: 6px 9px; border-radius: 999px; background: #f3f4f6; color: #6b7280; font-size: 7px; font-weight: 700; }
+  .marker-filters span.active { background: #ff5e8c; color: white; }
+  .marker-filters > b { margin-left: auto; border-radius: 8px; background: #fff; color: #ff5e8c; box-shadow: 0 1px 4px rgba(0,0,0,.08); }
+  .marker-road { position: absolute; z-index: 1; height: 16px; background: #fff; border: 1px solid #d9e0e2; transform-origin: center; }
+  .marker-road::after { content: ''; position: absolute; inset: 7px 0 auto; border-top: 1px dashed #bbc5c8; }
+  .marker-road.road-a { width: 82%; top: 48%; left: -9%; transform: rotate(-17deg); }
+  .marker-road.road-b { width: 66%; top: 37%; right: -13%; transform: rotate(43deg); }
+  .marker-river { position: absolute; z-index: 0; top: 95px; bottom: 0; left: 55%; width: 145px; background: rgba(167,213,230,.48); transform: rotate(15deg); }
+  .current-location { position: absolute; z-index: 3; top: 47%; left: 48%; width: 22px; height: 22px; display: grid; place-items: center; border-radius: 50%; background: rgba(59,130,246,.18); }
+  .current-location i { width: 8px; height: 8px; border: 2px solid white; border-radius: 50%; background: #3b82f6; box-shadow: 0 1px 5px rgba(37,99,235,.45); }
+  .pin { position: absolute; z-index: 2; display: grid; width: 30px; height: 36px; place-items: center; border: 3px solid white; border-radius: 50% 50% 50% 7px; transform: rotate(-45deg); box-shadow: 0 4px 12px rgba(0,0,0,.18); }
+  .pin span { transform: rotate(45deg); font-size: 10px; }
+  .pin-a { top: 132px; left: 25%; background: #ff6b6b; }
+  .pin-b { top: 167px; left: 68%; background: #4ecdc4; }
+  .pin-c { top: 112px; left: 79%; background: #6c5ce7; }
+  .place-sheet { position: absolute; z-index: 6; right: 0; bottom: 0; left: 0; min-height: 118px; padding: 11px 18px 16px; border-radius: 24px 24px 0 0; background: white; box-shadow: 0 -8px 30px rgba(0,0,0,.1); }
+  .place-sheet > i { display: block; width: 38px; height: 4px; margin: 0 auto 8px; border-radius: 3px; background: #e5e7eb; }
+  .place-sheet h3 { margin: 0; color: #374151; font-size: 9px; }
+  .top-place-list { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 8px; }
+  .top-place-list article { display: flex; align-items: center; gap: 8px; padding: 8px; border-left: 3px solid #ff6b6b; border-radius: 11px; background: #fff5f5; }
+  .top-place-list article + article { border-left-color: #4ecdc4; background: #f0fcfb; }
+  .top-place-list article > b { width: 28px; height: 28px; display: grid; flex: 0 0 auto; place-items: center; border-radius: 50%; background: #ff6b6b; font-size: 10px; }
+  .top-place-list article > b.mint { background: #4ecdc4; }
+  .top-place-list article p { min-width: 0; display: grid; gap: 3px; }
+  .top-place-list article strong { overflow: hidden; color: #292d32; font-size: 7px; text-overflow: ellipsis; white-space: nowrap; }
+  .top-place-list article small { color: #ff6b6b; font-size: 6px; font-weight: 700; }
+  .top-place-list article em { margin-left: auto; color: #ff6b6b; font-size: 7px; font-style: normal; font-weight: 700; }
 
-  /* Rust with TypeScript, based on the Starlight theme variables */
-  .mock-rust { display: grid; grid-template: 45px 1fr / 170px 1fr; background: #13100e; color: #f5f0ed; }
-  .mock-rust > header { grid-column: 1 / 3; display: flex; align-items: center; justify-content: space-between; padding: 0 16px; border-bottom: 1px solid #2c2218; background: #1b1612; }
-  .mock-rust > header strong { font-size: 11px; }
-  .mock-rust > header span { color: #b8afa9; font: 500 8px/1 $font-mono; }
-  .mock-rust > aside { display: flex; flex-direction: column; gap: 4px; padding: 18px 10px; border-right: 1px solid #2c2218; background: #181310; }
-  .mock-rust > aside small { margin: 0 8px 8px; color: #e05a3a; font: 500 7px/1 $font-mono; }
-  .mock-rust > aside span { padding: 7px 8px; color: #8f8580; font-size: 8px; }
-  .mock-rust > aside span.active { border-left: 2px solid #e05a3a; background: #1e1713; color: #ff8262; }
-  .mock-rust > main { min-width: 0; padding: 20px 24px; }
-  .doc-title small { color: #e05a3a; font: 500 7px/1 $font-mono; }
-  .doc-title strong { display: block; margin-top: 8px; font-size: 17px; }
-  .doc-title p { margin-top: 7px; color: #b8afa9; font-size: 8px; }
-  .code-compare { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 18px; }
-  .code-compare section { min-width: 0; border: 1px solid #2e2018; background: #1e1713; }
-  .code-compare header { padding: 8px 10px; border-bottom: 1px solid #2e2018; color: #ddd5d0; font: 500 8px/1 $font-mono; }
-  .code-compare code { display: block; padding: 11px; overflow: hidden; color: #b8afa9; font: 400 8px/1.65 $font-mono; white-space: nowrap; }
-  .code-compare code i { color: #ff8262; font-style: normal; }
-  .code-compare code b { color: #e8b4a4; font-weight: 400; }
+  /* Rust with TypeScript, matched to the actual bright Starlight landing page */
+  .mock-rust { display: grid; grid-template-rows: 50px 1fr; background: #fff; color: #11131a; }
+  .mock-rust > header { display: flex; align-items: center; padding: 0 22px; border-bottom: 1px solid #e5e7eb; background: rgba(255,255,255,.96); }
+  .mock-rust > header strong { font-size: 12px; letter-spacing: -.025em; }
+  .mock-rust > header strong span { color: #e74f3b; }
+  .mock-rust > header strong b { color: #3178c6; }
+  .rust-tools { display: flex; align-items: center; gap: 13px; margin-left: auto; color: #4b5563; }
+  .rust-tools > span { min-width: 160px; display: flex; align-items: center; padding: 7px 9px; border: 1px solid #dfe3e8; border-radius: 7px; color: #7a808b; font-size: 7px; }
+  .rust-tools kbd { margin-left: auto; padding: 2px 4px; border-radius: 3px; background: #eef0f3; font-size: 6px; }
+  .rust-tools i { font-style: normal; font-size: 11px; }
+  .rust-tools small { font-size: 7px; }
+  .mock-rust > main { min-width: 0; padding: 27px clamp(22px, 7vw, 84px) 22px; }
+  .rust-hero h2 { margin: 0; color: #121318; font-size: clamp(31px, 5vw, 58px); line-height: 1; letter-spacing: -.065em; }
+  .rust-hero > p { margin-top: 13px; color: #343842; font-size: clamp(11px, 1.45vw, 16px); font-weight: 600; }
+  .rust-hero > div { display: flex; align-items: center; gap: 18px; margin-top: 18px; }
+  .rust-hero button { padding: 9px 15px; border: 0; border-radius: 999px; background: #e94834; color: #fff; font-size: 8px; font-weight: 700; }
+  .rust-hero button span { margin-left: 8px; }
+  .rust-hero a { color: #343842; font-size: 8px; font-weight: 700; }
+  .code-compare { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 24px; }
+  .code-compare section { min-width: 0; overflow: hidden; border: 1px solid #e0e3e8; border-radius: 8px; background: #fbfbfc; box-shadow: 0 4px 18px rgba(20,24,32,.04); }
+  .code-compare header { padding: 9px 12px; border-bottom: 1px solid #e0e3e8; color: #4b5563; font: 600 8px/1 $font-mono; }
+  .code-compare code { display: block; padding: 13px; overflow: hidden; color: #454b55; font: 400 8px/1.75 $font-mono; white-space: nowrap; }
+  .code-compare code i { color: #b53b80; font-style: normal; }
+  .code-compare code b { color: #26734d; font-weight: 400; }
 
-  /* Kivra, based on the live landing hero demo */
-  .mock-kivra { display: grid; grid-template-rows: 46px 1fr 38px; background: hsl(220 18% 7%); color: hsl(210 20% 96%); }
-  .mock-kivra > header { display: flex; align-items: center; justify-content: space-between; padding: 0 15px; border-bottom: 1px solid hsl(220 12% 18%); background: hsl(220 16% 10%); }
-  .mock-kivra > header strong { font-size: 11px; }
-  .mock-kivra > header div { display: flex; gap: 7px; }
-  .mock-kivra > header div span { padding: 5px 7px; border: 1px solid hsl(220 12% 18%); border-radius: 5px; color: hsl(220 10% 67%); font: 500 7px/1 $font-mono; }
-  .mock-kivra > header div span.success { border-color: rgba(89,214,194,.35); background: #121d1c; color: #9beadf; }
-  .mock-kivra > main { display: grid; grid-template-columns: 1fr 230px; min-height: 0; }
-  .terminal-log { padding: 18px; font-family: $font-mono; }
-  .terminal-log small, .mock-kivra main aside > small { color: hsl(220 10% 67%); font: 500 7px/1 $font-mono; }
-  .terminal-log p { margin-top: 10px; color: #9ca3af; font-size: 8px; }
-  .terminal-log p b { color: #59d6c2; }
-  .terminal-log p.error { color: #fb7185; }
-  .mock-kivra main aside { display: grid; align-content: start; gap: 10px; padding: 16px; border-left: 1px solid hsl(220 12% 18%); background: rgba(255,255,255,.015); }
-  .mock-kivra main aside article { display: grid; gap: 5px; padding: 10px; border: 1px solid hsl(220 12% 18%); background: hsl(220 16% 10%); }
-  .mock-kivra main aside article b { font-size: 8px; }
-  .mock-kivra main aside article span, .mock-kivra main aside article p { color: hsl(220 10% 67%); font-size: 7px; line-height: 1.45; }
-  .mock-kivra main aside article.memory { border-color: rgba(89,214,194,.28); }
-  .mock-kivra > footer { display: flex; align-items: center; gap: 8px; padding: 0 15px; border-top: 1px solid hsl(220 12% 18%); color: hsl(220 10% 67%); font-size: 8px; }
-  .mock-kivra > footer span { width: 7px; height: 7px; border-radius: 50%; background: #59d6c2; }
+  /* Kivra, matched to the actual Tauri desktop app shell and Runs tab */
+  .mock-kivra { display: grid; grid-template-columns: 160px 1fr; background: hsl(220 14% 7%); color: hsl(220 12% 92%); }
+  .kivra-sidebar { display: flex; min-height: 0; flex-direction: column; border-right: 1px solid hsl(220 10% 18%); background: hsl(220 13% 9%); }
+  .kivra-sidebar > header { display: flex; height: 48px; align-items: center; gap: 8px; padding: 0 12px; border-bottom: 1px solid hsl(220 10% 18%); }
+  .kivra-sidebar > header > span { width: 24px; height: 24px; display: grid; place-items: center; border: 1px solid hsl(220 10% 24%); border-radius: 6px; background: #f1f1f2; color: #111216; font-size: 11px; font-weight: 800; }
+  .kivra-sidebar > header div { display: grid; gap: 2px; }
+  .kivra-sidebar > header strong { font-size: 10px; }
+  .kivra-sidebar > header small { color: hsl(220 8% 58%); font-size: 6px; }
+  .kivra-sidebar nav { display: grid; gap: 3px; padding: 9px 7px; }
+  .kivra-sidebar nav > * { padding: 7px 8px; border-radius: 5px; color: hsl(220 8% 62%); font-size: 8px; font-weight: 500; }
+  .kivra-sidebar nav > .active, .kivra-sidebar nav > b { background: hsl(220 12% 13%); color: hsl(220 12% 92%); }
+  .kivra-sidebar > footer { display: flex; align-items: center; gap: 7px; margin-top: auto; padding: 9px; border-top: 1px solid hsl(220 10% 18%); }
+  .kivra-sidebar > footer i { width: 22px; height: 22px; display: grid; place-items: center; border: 1px solid hsl(220 10% 18%); border-radius: 5px; color: hsl(220 8% 62%); font-size: 6px; font-style: normal; }
+  .kivra-sidebar > footer strong { overflow: hidden; font-size: 7px; text-overflow: ellipsis; }
+  .kivra-sidebar > footer span { margin-left: auto; color: hsl(220 8% 58%); }
+  .kivra-project { min-width: 0; display: grid; grid-template-rows: 110px 1fr; }
+  .kivra-project > header { padding: 10px 13px; border-bottom: 1px solid hsl(220 10% 18%); background: hsl(220 13% 9%); }
+  .kivra-project > header > div:first-child { display: inline-grid; }
+  .kivra-title strong { font-size: 12px; }
+  .kivra-title small { margin-top: 3px; color: hsl(220 8% 58%); font: 500 6px/1 $font-mono; }
+  .kivra-meta { float: right; display: flex; gap: 5px; }
+  .kivra-meta > span { min-width: 62px; display: grid; gap: 4px; padding: 6px 7px; border: 1px solid hsl(220 10% 18%); border-radius: 5px; background: hsl(220 14% 7%); font: 500 6px/1 $font-mono; }
+  .kivra-meta small { color: hsl(220 8% 58%); font-size: 5px; }
+  .kivra-project > header nav { display: flex; align-items: center; gap: 2px; clear: both; margin-top: 12px; }
+  .kivra-project > header nav b { padding: 6px 8px; border-radius: 4px; color: hsl(220 8% 58%); font-size: 6px; font-weight: 500; }
+  .kivra-project > header nav b.active { background: hsl(220 12% 13%); color: hsl(220 12% 92%); }
+  .kivra-project > header nav button { margin-left: auto; padding: 6px 9px; border: 0; border-radius: 5px; background: #f4f4f5; color: #111216; font-size: 6px; font-weight: 700; }
+  .kivra-workspace { min-height: 0; display: grid; grid-template-columns: 175px 1fr; gap: 9px; padding: 9px; }
+  .kivra-workspace > aside, .kivra-log { min-height: 0; overflow: hidden; border: 1px solid hsl(220 10% 18%); border-radius: 6px; background: hsl(220 13% 9%); }
+  .kivra-workspace > aside > header { display: grid; gap: 3px; padding: 10px; border-bottom: 1px solid hsl(220 10% 18%); }
+  .kivra-workspace > aside > header strong { font-size: 8px; }
+  .kivra-workspace > aside > header small { color: hsl(220 8% 58%); font-size: 6px; }
+  .kivra-workspace > aside article { display: grid; gap: 7px; margin: 6px; padding: 8px; border: 1px solid hsl(220 10% 18%); border-radius: 5px; background: hsl(220 14% 7%); }
+  .kivra-workspace > aside article.selected { background: hsl(220 12% 13%); }
+  .kivra-workspace > aside code { font-size: 6px; }
+  .kivra-workspace > aside article div { display: flex; gap: 4px; }
+  .kivra-workspace > aside article span { padding: 3px 4px; border: 1px solid hsl(220 10% 18%); border-radius: 4px; color: hsl(220 8% 58%); font-size: 5px; }
+  .kivra-workspace > aside article span.failed { border-color: rgba(239,68,68,.35); color: #ef6666; }
+  .kivra-log { display: grid; grid-template-rows: auto auto 1fr; }
+  .kivra-log > header { display: flex; align-items: start; justify-content: space-between; padding: 10px; border-bottom: 1px solid hsl(220 10% 18%); }
+  .kivra-log > header div { display: grid; gap: 4px; }
+  .kivra-log > header strong { font-size: 8px; }
+  .kivra-log > header code { color: hsl(220 8% 58%); font-size: 6px; }
+  .kivra-log > header nav { display: flex; gap: 3px; }
+  .kivra-log > header nav > * { padding: 5px 6px; border: 1px solid hsl(220 10% 18%); border-radius: 4px; background: hsl(220 14% 7%); color: hsl(220 8% 58%); font-size: 5px; }
+  .kivra-log > header nav b { background: #f4f4f5; color: #111216; }
+  .kivra-summary { display: flex; gap: 5px; padding: 7px 10px; }
+  .kivra-summary span { padding: 4px 6px; border: 1px solid hsl(220 10% 18%); border-radius: 4px; color: hsl(220 8% 58%); font-size: 5px; }
+  .kivra-summary b { margin-left: 3px; color: hsl(220 12% 92%); }
+  .kivra-log pre { margin: 0 10px 10px; padding: 11px; overflow: hidden; border: 1px solid hsl(220 10% 18%); border-radius: 5px; background: hsl(220 14% 7%); color: #b5bac4; font: 500 6.5px/1.65 $font-mono; }
+  .kivra-log pre em { color: #ef6666; font-style: normal; }
 
-  /* Bigtablet homepage, based on the video hero and solution rail */
-  .mock-homepage { background: #101722; }
-  .camera-grid { position: absolute; inset: 0; display: grid; grid-template-columns: repeat(3, 1fr); opacity: .46; }
-  .camera-grid i { border: 1px solid rgba(255,255,255,.08); background: linear-gradient(145deg, transparent 42%, rgba(115,135,153,.34) 43%, transparent 44%), radial-gradient(circle at 55% 45%, rgba(255,255,255,.12), transparent 34%); }
-  .mock-homepage::after { content: ''; position: absolute; inset: 0; background: rgba(10,15,24,.62); }
+  /* Bigtablet homepage, matched to the production video hero */
+  .mock-homepage { background: #061018; }
+  .homepage-poster, .homepage-overlay { position: absolute; inset: 0; width: 100%; height: 100%; }
+  .homepage-poster { object-fit: cover; }
+  .homepage-scene { position: absolute; inset: 0; display: grid; grid-template-columns: repeat(3, 1fr); opacity: .72; }
+  .homepage-scene > i { border: 1px solid rgba(155,206,211,.14); background: linear-gradient(145deg, transparent 42%, rgba(109,140,147,.26) 43%, transparent 44%), radial-gradient(circle at 56% 45%, rgba(150,202,205,.18), transparent 31%); }
+  .homepage-scene > i:nth-child(2), .homepage-scene > i:nth-child(5) { background: linear-gradient(35deg, transparent 47%, rgba(104,134,139,.22) 48%, transparent 49%), radial-gradient(circle at 42% 52%, rgba(152,207,209,.16), transparent 28%); }
+  .homepage-scene .target { position: absolute; color: #82d3cf; font: 600 6px/1 $font-mono; letter-spacing: .08em; }
+  .homepage-scene .t1 { top: 28%; left: 56%; }
+  .homepage-scene .t2 { top: 62%; left: 73%; }
+  .homepage-scene .t3 { top: 44%; left: 88%; }
+  .homepage-overlay { background: linear-gradient(90deg, rgba(2,9,14,.9), rgba(2,9,14,.52) 62%, rgba(2,9,14,.74)); }
   .mock-homepage > header, .mock-homepage > main, .mock-homepage > footer { position: relative; z-index: 1; }
-  .mock-homepage > header { height: 50px; display: flex; align-items: center; padding: 0 18px; border-bottom: 1px solid rgba(255,255,255,.12); }
-  .mock-homepage > header strong { font-size: 11px; letter-spacing: .12em; }
-  .mock-homepage > header nav { display: flex; gap: 18px; margin-left: auto; }
-  .mock-homepage > header nav span, .mock-homepage > header small { color: rgba(255,255,255,.58); font: 500 7px/1 $font-mono; }
-  .mock-homepage > header small { margin-left: 22px; }
-  .mock-homepage > main { display: flex; height: calc(100% - 90px); flex-direction: column; align-items: center; justify-content: center; text-align: center; }
-  .mock-homepage > main small { color: rgba(255,255,255,.55); font: 500 7px/1 $font-mono; letter-spacing: .12em; }
-  .mock-homepage > main strong { margin-top: 10px; font-size: clamp(28px, 5vw, 50px); line-height: .9; }
-  .mock-homepage > main p { margin-top: 12px; color: rgba(255,255,255,.72); font-size: 9px; }
-  .mock-homepage > main button { margin-top: 15px; padding: 8px 14px; border: 0; background: white; color: #101722; font-size: 8px; font-weight: 600; }
-  .mock-homepage > footer { height: 40px; display: grid; grid-template-columns: repeat(3, 1fr); border-top: 1px solid rgba(255,255,255,.12); }
-  .mock-homepage > footer span { display: grid; place-items: center; border-right: 1px solid rgba(255,255,255,.1); color: rgba(255,255,255,.64); font-size: 8px; }
+  .mock-homepage > header { height: 52px; display: flex; align-items: center; padding: 0 22px; border-bottom: 1px solid rgba(255,255,255,.15); }
+  .mock-homepage > header strong { font-size: 12px; letter-spacing: .11em; }
+  .mock-homepage > header nav { display: flex; gap: 19px; margin-left: auto; }
+  .mock-homepage > header nav span, .mock-homepage > header small { color: rgba(255,255,255,.82); font: 600 7px/1 $font-mono; }
+  .mock-homepage > header > div { display: flex; align-items: center; gap: 13px; margin-left: 26px; }
+  .mock-homepage > header small i { display: inline-block; width: 1px; height: 8px; margin: 0 5px; background: rgba(255,255,255,.35); vertical-align: middle; }
+  .mock-homepage > header button { padding: 7px 11px; border: 1px solid rgba(255,255,255,.65); background: transparent; color: white; font-size: 7px; }
+  .mock-homepage > main { display: flex; height: calc(100% - 94px); flex-direction: column; align-items: flex-start; justify-content: center; padding: 0 clamp(24px, 6vw, 70px); }
+  .mock-homepage > main > small { color: #8ad7d2; font: 600 7px/1 $font-mono; letter-spacing: .1em; }
+  .mock-homepage > main > strong { margin-top: 12px; font-size: clamp(28px, 4.6vw, 52px); line-height: 1.1; letter-spacing: -.06em; }
+  .mock-homepage > main > p { max-width: 440px; margin-top: 13px; color: rgba(255,255,255,.84); font-size: 9px; line-height: 1.55; }
+  .mock-homepage > main > div { display: flex; gap: 7px; margin-top: 16px; }
+  .mock-homepage > main button { padding: 8px 13px; border: 1px solid white; background: white; color: #071019; font-size: 7px; font-weight: 700; }
+  .mock-homepage > main button.outline { background: rgba(5,15,23,.45); color: white; }
+  .mock-homepage > footer { height: 42px; display: grid; grid-template-columns: repeat(4, 1fr); border-top: 1px solid rgba(255,255,255,.15); background: rgba(3,11,17,.62); backdrop-filter: blur(8px); }
+  .mock-homepage > footer span { display: flex; align-items: center; justify-content: center; gap: 5px; border-right: 1px solid rgba(255,255,255,.11); color: rgba(255,255,255,.7); font-size: 6.5px; }
+  .mock-homepage > footer b { color: white; font-weight: 700; }
 
-  /* Echo, based on the Expo home screen, orange progress and metrics */
-  .mock-echo { display: grid; place-items: center; background: #050505; }
-  .echo-phone { width: min(66%, 290px); height: 92%; display: grid; grid-template-rows: 50px 1fr 42px; overflow: hidden; border: 1px solid #2a2a2a; border-radius: 24px; background: #111; }
-  .echo-phone > header { display: flex; align-items: center; justify-content: space-between; padding: 0 16px; }
-  .echo-phone > header div { display: grid; gap: 3px; }
-  .echo-phone > header strong { font-size: 13px; }
-  .echo-phone > header small { color: #777; font-size: 7px; }
-  .connected { padding: 4px 7px; border: 1px solid rgba(255,127,17,.32); border-radius: 999px; color: #ff7f11; font: 500 7px/1 $font-mono; }
-  .echo-phone > main { display: flex; flex-direction: column; align-items: center; padding: 8px 20px; }
-  .echo-phone > main > small { color: #777; font: 500 7px/1 $font-mono; }
-  .echo-toggle { position: relative; display: grid; width: 94px; height: 94px; margin-top: 16px; place-items: center; border: 1px solid rgba(255,127,17,.45); border-radius: 50%; box-shadow: 0 0 0 13px rgba(255,127,17,.06), 0 0 0 27px rgba(255,127,17,.025); }
-  .echo-toggle i { width: 30px; height: 30px; border-radius: 50%; background: #ff7f11; }
-  .echo-toggle span { position: absolute; bottom: -20px; font-size: 8px; font-weight: 600; }
-  .echo-phone > main > p { margin-top: 32px; color: #777; font-size: 8px; }
-  .echo-metrics { width: 100%; display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 14px; }
-  .echo-metrics article { display: flex; min-height: 82px; flex-direction: column; align-items: center; justify-content: center; border: 1px solid #252525; border-radius: 12px; }
-  .echo-metrics article > small { color: #777; font-size: 7px; }
-  .ring { display: grid; width: 42px; height: 42px; margin-top: 8px; place-items: center; border: 4px solid #2a2a2a; border-top-color: #ff7f11; border-right-color: #ff7f11; border-radius: 50%; }
-  .ring b { font-size: 8px; }
-  .echo-metrics article > strong { margin-top: 6px; color: #ff7f11; font-size: 25px; }
-  .echo-metrics article > span { font-size: 7px; }
-  .echo-phone > footer { display: grid; grid-template-columns: repeat(3, 1fr); border-top: 1px solid #252525; }
-  .echo-phone > footer span { display: grid; place-items: center; color: #555; font: 500 6px/1 $font-mono; }
+  /* Echo, matched to the Expo home screen and its power control */
+  .mock-echo { display: grid; place-items: center; background: #020202; }
+  .echo-phone { width: min(64%, 285px); height: 94%; display: grid; grid-template-rows: 40px 1fr 48px; overflow: hidden; border: 1px solid #242424; border-radius: 25px; background: #0a0a0a; box-shadow: 0 24px 60px rgba(0,0,0,.55); }
+  .echo-phone > header { display: flex; align-items: center; justify-content: space-around; padding: 0 13px; }
+  .echo-phone > header span { display: flex; align-items: center; color: #f4f4f5; font-size: 7px; font-weight: 500; }
+  .echo-phone > header i { width: 6px; height: 6px; margin-right: 6px; border-radius: 50%; background: #888; }
+  .echo-phone > header i.red { background: #ff4444; }
+  .echo-phone > main { min-height: 0; display: flex; flex-direction: column; align-items: center; padding: 0 18px 12px; }
+  .echo-power { display: grid; flex: 1; place-items: center; }
+  .echo-power > div { width: 150px; height: 150px; display: grid; place-items: center; border: 1px solid rgba(255,255,255,.2); border-radius: 50%; background: rgba(255,255,255,.1); box-shadow: 0 9px 18px rgba(0,0,0,.3); }
+  .echo-power > div::before { content: ''; position: absolute; width: 126px; height: 126px; border: 1px solid rgba(255,255,255,.1); border-radius: 50%; background: rgba(255,255,255,.04); }
+  .echo-power button { position: relative; z-index: 1; width: 104px; height: 104px; display: grid; place-items: center; border: 1px solid rgba(255,255,255,.45); border-radius: 50%; background: rgba(255,255,255,.95); box-shadow: 0 4px 9px rgba(0,0,0,.2); }
+  .echo-power svg { width: 32px; fill: none; stroke: #696969; stroke-linecap: round; stroke-width: 3; }
+  .echo-metrics { width: 100%; display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .echo-metrics article { display: flex; min-height: 70px; flex-direction: column; align-items: center; justify-content: center; border: 1px solid #252525; border-radius: 12px; background: #0f0f0f; }
+  .echo-metrics article > small { color: #a0a0a0; font-size: 6px; }
+  .ring { display: grid; width: 39px; height: 39px; margin-top: 6px; place-items: center; border: 4px solid #272727; border-top-color: #ff7f11; border-right-color: #ff7f11; border-radius: 50%; }
+  .ring b { font-size: 7px; }
+  .echo-metrics article > strong { margin-top: 4px; color: #ff7f11; font-size: 23px; }
+  .echo-metrics article > span { margin-top: 1px; color: #a0a0a0; font-size: 6px; }
+  .echo-phone > footer { display: grid; grid-template-columns: repeat(3, 1fr); background: #0f0f0f; }
+  .echo-phone > footer span { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; color: #4a4a4a; font-size: 6px; }
+  .echo-phone > footer span i { font-size: 11px; font-style: normal; }
   .echo-phone > footer span.active { color: #ff7f11; }
 
-  /* Chorus, based on the Svelte Studio vertical export card and vinyl scene */
-  .mock-chorus { display: grid; grid-template-rows: 44px 1fr 38px; place-items: center; background: #000; font-family: 'Pretendard', sans-serif; }
+  /* Chorus, matched to the actual search landing screen */
+  .mock-chorus { display: grid; place-items: center; background: #000; font-family: 'Outfit', 'Pretendard', sans-serif; }
   .aurora { position: absolute; width: 320px; height: 320px; border-radius: 50%; filter: blur(90px); opacity: .3; }
   .aurora.a { top: -180px; left: -100px; background: #22c55e; }
   .aurora.b { right: -120px; bottom: -180px; background: #9333ea; }
-  .mock-chorus > header { position: relative; z-index: 2; width: 100%; display: flex; align-items: center; padding: 0 16px; }
-  .mock-chorus > header strong { font-size: 11px; letter-spacing: .08em; }
-  .mock-chorus > header span { margin-left: auto; color: rgba(255,255,255,.55); font-size: 8px; }
-  .mock-chorus > header > i { width: 19px; height: 19px; margin-left: 12px; border: 1px solid rgba(255,255,255,.2); border-radius: 50%; }
-  .story-card { position: relative; z-index: 2; width: min(43%, 230px); height: 92%; display: flex; flex-direction: column; align-items: center; padding: 14px; overflow: hidden; border: 1px solid rgba(255,255,255,.12); border-radius: 24px; background: rgba(10,10,10,.86); box-shadow: 0 20px 50px rgba(0,0,0,.8); }
-  .story-card > small { display: flex; align-items: center; gap: 5px; color: rgba(255,255,255,.75); font: 600 6px/1 $font-mono; letter-spacing: .1em; }
-  .story-card > small i { width: 5px; height: 5px; border-radius: 50%; background: #ef4444; }
-  .vinyl { position: relative; display: grid; width: 115px; height: 115px; margin-top: 12px; place-items: center; border-radius: 50%; background: repeating-radial-gradient(circle, #080808 0 3px, #191919 4px 5px); box-shadow: 16px 18px 28px rgba(0,0,0,.68); animation: spin 10s linear infinite; }
-  .vinyl::before { content: ''; position: absolute; inset: 13px; border-radius: 50%; background: radial-gradient(circle at 35% 30%, #4ade80, #1d4ed8 42%, #111 43%); }
-  .vinyl-label { position: relative; z-index: 1; display: grid; width: 28px; height: 28px; place-items: center; border-radius: 50%; background: #111; font-size: 10px; font-weight: 600; }
-  .story-card input { width: 100%; margin-top: auto; padding: 7px; border: 1px solid rgba(255,255,255,.18); border-radius: 9px; outline: 0; background: rgba(255,255,255,.07); color: white; font-size: 7px; text-align: center; }
-  .track { width: 100%; display: grid; grid-template-columns: 22px 1fr 22px; gap: 6px; align-items: center; margin-top: 10px; color: rgba(255,255,255,.55); font: 500 6px/1 $font-mono; }
-  .track > i { height: 2px; overflow: hidden; border-radius: 2px; background: rgba(255,255,255,.2); }
-  .track > i b { display: block; width: 42%; height: 100%; background: #4ade80; }
-  .story-card > button { display: flex; width: 31px; height: 31px; align-items: center; justify-content: center; gap: 3px; margin-top: 8px; border: 1px solid rgba(255,255,255,.2); border-radius: 50%; background: rgba(255,255,255,.08); }
-  .story-card > button i { width: 3px; height: 11px; background: white; }
-  .mock-chorus > footer { position: relative; z-index: 2; padding: 8px 15px; border: 1px solid rgba(255,255,255,.12); border-radius: 999px; background: rgba(0,0,0,.45); font-size: 8px; font-weight: 600; }
+  .chorus-search { position: relative; z-index: 2; width: min(74%, 520px); display: flex; flex-direction: column; align-items: center; }
+  .chorus-search h2 { margin: 0; color: white; font-size: clamp(38px, 7vw, 72px); font-weight: 800; line-height: 1; letter-spacing: -.065em; }
+  .chorus-search > p { margin-top: 8px; color: rgba(255,255,255,.55); font-size: 11px; letter-spacing: .18em; text-transform: uppercase; }
+  .chorus-search > div { position: relative; width: 100%; display: flex; align-items: center; margin-top: 30px; padding: 3px; border: 1px solid rgba(255,255,255,.12); border-radius: 999px; background: rgba(0,0,0,.3); box-shadow: 0 0 20px rgba(49,46,129,.35); backdrop-filter: blur(18px); }
+  .chorus-search input { min-width: 0; flex: 1; padding: 12px 14px; border: 0; outline: 0; background: transparent; color: white; font-size: 9px; }
+  .chorus-search input::placeholder { color: rgba(255,255,255,.36); }
+  .chorus-search button { flex: 0 0 auto; margin-right: 2px; padding: 8px 18px; border: 1px solid rgba(255,255,255,.12); border-radius: 999px; background: rgba(255,255,255,.1); color: white; font-size: 8px; font-weight: 700; }
+  .chorus-search > small { margin-top: 16px; color: rgba(255,255,255,.36); font-size: 7px; }
 
   @keyframes wave { to { height: calc(var(--bar-height) * .45); } }
-  @keyframes spin { to { transform: rotate(360deg); } }
-  @media (prefers-reduced-motion: reduce) { .waveform i, .vinyl { animation: none; } }
+  @media (prefers-reduced-motion: reduce) { .waveform i { animation: none; } }
 
   /* Compact home rows keep product anatomy while reducing secondary density */
   .compact .mock { font-size: .9em; }
-  .compact .notiiv-rail { padding: 20px 16px; }
-  .compact .transcript-panel { padding: 26px 22px; }
+  .compact .notiiv-rail { padding: 15px 10px; }
+  .compact .notiiv-brand { padding-inline: 5px; }
+  .compact .repo-label { margin-top: 17px; }
+  .compact .notiiv-apps button { grid-template-columns: 22px minmax(0, 1fr); gap: 6px; padding: 6px; }
+  .compact .notiiv-apps button > i { width: 22px; height: 22px; }
+  .compact .notiiv-support-view > main { padding: 11px 23px; }
+  .compact .notiiv-store-badges { margin-top: 12px; }
+  .compact .notiiv-product-sidebar { min-width: 104px; padding: 15px 8px 10px; }
+  .compact .notiiv-admin-view, .compact .notiiv-owner-view { grid-template-columns: 108px 1fr; }
+  .compact .notiiv-admin-main, .compact .notiiv-owner-main { padding: 15px; }
   .compact .mock-ds { grid-template-columns: 145px 1fr; }
-  .compact .mock-ds > main { padding: 20px; }
+  .compact .ds-story article { padding: 24px 28px; }
   .compact .mock-intranet { grid-template-columns: minmax(120px, .7fr) minmax(190px, 225px) minmax(135px, .8fr); gap: 20px; padding: 16px 22px; }
   .compact .mock-boundra { grid-template-columns: minmax(205px, .7fr) minmax(0, 1.3fr); }
   .compact .boundra-intro { padding: 24px; }
   .compact .boundra-intro > strong { font-size: 42px; }
 
   @media (max-width: 720px) {
-    .notiiv-rail, .transcript-panel, .mock-ds > aside, .intranet-context, .intranet-sync, .mock-rust > aside { display: none; }
-    .mock-notiiv { grid-template-columns: 1fr; }
-    .notiiv-phone { width: min(68%, 230px); }
-    .mock-ds { grid-template: 42px 1fr / 1fr; }
-    .mock-ds > header { grid-column: 1; }
-    .mock-ds > main { grid-template-columns: 1fr; padding: 16px; }
-    .ds-heading p { display: none; }
+    .mock-ds > aside, .intranet-context, .intranet-sync { display: none; }
+    .mock-notiiv { grid-template: 78px 1fr / 1fr; }
+    .notiiv-rail, .compact .notiiv-rail { display: grid; grid-template-columns: auto 1fr; grid-template-rows: 1fr; align-items: center; gap: 10px; padding: 9px 10px; border-right: 0; border-bottom: 1px solid #303137; }
+    .notiiv-brand { padding: 0; }
+    .notiiv-brand span, .repo-label, .notiiv-packages { display: none; }
+    .notiiv-brand > img { width: 25px; height: 25px; border-radius: 7px; }
+    .notiiv-apps { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 3px; margin: 0; }
+    .notiiv-apps button, .compact .notiiv-apps button { display: flex; height: 57px; flex-direction: column; justify-content: center; gap: 4px; padding: 4px 2px; text-align: center; }
+    .notiiv-apps button > i, .compact .notiiv-apps button > i { width: 20px; height: 20px; flex: 0 0 auto; }
+    .notiiv-apps button > span { display: block; width: 100%; }
+    .notiiv-apps button b { display: block; font-size: 5.5px; }
+    .notiiv-apps button small { display: none; }
+    .notiiv-admin-view, .notiiv-owner-view, .compact .notiiv-admin-view, .compact .notiiv-owner-view { grid-template-columns: 1fr; }
+    .notiiv-product-sidebar, .compact .notiiv-product-sidebar { display: none; }
+    .notiiv-admin-main, .notiiv-owner-main, .compact .notiiv-admin-main, .compact .notiiv-owner-main { padding: 12px; }
+    .notiiv-admin-main h3 { font-size: 15px; }
+    .notiiv-admin-filters { margin-top: 10px; }
+    .notiiv-admin-table { margin-top: 8px; }
+    .notiiv-admin-table > * { grid-template-columns: .8fr 1.5fr .6fr; }
+    .notiiv-admin-table > * > :nth-child(3) { display: none; }
+    .notiiv-owner-main > header > div:last-child label { display: none; }
+    .notiiv-summary-grid { grid-template-columns: 1fr 1fr; margin-top: 10px; }
+    .notiiv-summary-grid article { min-height: 43px; padding: 7px; }
+    .notiiv-summary-grid article:nth-child(n+3) { display: none; }
+    .notiiv-member-list { margin-top: 8px; }
+    .notiiv-status-view > header, .notiiv-support-view > header { height: 38px; padding: 0 12px; }
+    .notiiv-status-view, .notiiv-support-view { --notiiv-header-logo-size: 13px; }
+    .notiiv-status-view > main { width: 92%; padding: 10px 0; }
+    .notiiv-status-view > main > section { padding: 8px 10px; }
+    .notiiv-status-view > main > section h3 { font-size: 8px; }
+    .notiiv-server-list { margin-top: 7px; }
+    .notiiv-server-list article { padding: 6px 9px; }
+    .notiiv-server-list article:nth-child(n+3) { display: none; }
+    .notiiv-support-view > header nav span { display: none; }
+    .notiiv-support-view > main, .compact .notiiv-support-view > main { height: calc(100% - 38px); grid-template-columns: 1fr 90px; gap: 7px; padding: 8px 12px; }
+    .notiiv-support-copy h3 { font-size: 11px; line-height: 1.42; }
+    .notiiv-store-badges { display: grid; gap: 3px; margin-top: 8px; }
+    .notiiv-store-badges img { width: 58px; }
+    .notiiv-phone { width: 82px; height: 154px; border-width: 2px; border-radius: 12px; }
+    .notiiv-phone .meeting-info { margin-top: 4px; }
+    .notiiv-phone .waveform { height: 20px; margin-top: 4px; }
+    .notiiv-phone .record-button { width: 28px; height: 28px; margin-top: 3px; }
+    .notiiv-phone .record-button span { width: 8px; height: 8px; }
+    .notiiv-phone .record-time { font-size: 8px; }
+    .notiiv-phone .memo-mode { margin-top: 3px; padding: 3px 4px; font-size: 4px; }
+    .mock-ds, .compact .mock-ds { grid-template-columns: 1fr; }
+    .ds-story article, .compact .ds-story article { width: 100%; padding: 20px; }
     .mock-intranet, .compact .mock-intranet { grid-template-columns: 1fr; gap: 0; padding: 10px; }
     .intranet-phone { width: min(78%, 230px); height: 100%; min-height: 0; margin: auto; }
     .mock-boundra, .compact .mock-boundra { grid-template: 82px 1fr / 1fr; }
@@ -795,14 +1034,67 @@ const owkrRows = [
     .jeomjuro-subsystems > footer { display: none; }
     .jeomjuro-subsystems header b { font-size: 6px; }
     .jeomjuro-admin > div, .jeomjuro-ds > div { height: 29px; margin-top: 5px; }
-    .mock-marker > header div { display: none; }
-    .place-sheet { width: 72%; }
-    .mock-rust { grid-template: 42px 1fr / 1fr; }
-    .mock-rust > header { grid-column: 1; }
-    .mock-kivra > main { grid-template-columns: 1fr; }
-    .mock-kivra main aside { display: none; }
+    .marker-filters span:nth-child(n+4) { display: none; }
+    .top-place-list { grid-template-columns: 1fr; }
+    .top-place-list article + article { display: none; }
+    .mock-rust { grid-template-rows: 42px 1fr; }
+    .rust-tools > span, .rust-tools small { display: none; }
+    .mock-rust > main { padding: 22px 18px; }
+    .mock-kivra { grid-template-columns: 1fr; }
+    .kivra-sidebar, .kivra-meta, .kivra-workspace > aside { display: none; }
+    .kivra-project { grid-template-rows: 90px 1fr; }
+    .kivra-workspace { grid-template-columns: 1fr; }
     .mock-homepage > header nav { display: none; }
+    .mock-homepage > header > div small { display: none; }
+    .mock-homepage > footer { grid-template-columns: 1fr 1fr; }
+    .mock-homepage > footer span:nth-child(n+3) { display: none; }
     .echo-phone { width: min(86%, 285px); }
-    .story-card { width: min(68%, 235px); }
+    .chorus-search { width: 86%; }
+    .chorus-search > p { font-size: 8px; }
   }
 </style>
+
+<script>
+  const setupNotiivSwitchers = () => {
+    document.querySelectorAll<HTMLElement>('[data-notiiv-switcher]').forEach((switcher) => {
+      if (switcher.dataset.switcherReady === 'true') return;
+      switcher.dataset.switcherReady = 'true';
+
+      const tabs = Array.from(switcher.querySelectorAll<HTMLButtonElement>('[data-notiiv-tab]'));
+      const panels = Array.from(switcher.querySelectorAll<HTMLElement>('[data-notiiv-panel]'));
+
+      const activate = (app: string, focus = false) => {
+        switcher.dataset.activeApp = app;
+        tabs.forEach((tab) => {
+          const selected = tab.dataset.notiivTab === app;
+          tab.classList.toggle('active', selected);
+          tab.setAttribute('aria-selected', String(selected));
+          tab.tabIndex = selected ? 0 : -1;
+          if (selected && focus) tab.focus();
+        });
+        panels.forEach((panel) => {
+          panel.hidden = panel.dataset.notiivPanel !== app;
+        });
+      };
+
+      tabs.forEach((tab, index) => {
+        tab.addEventListener('click', (event) => {
+          event.stopPropagation();
+          if (tab.dataset.notiivTab) activate(tab.dataset.notiivTab);
+        });
+        tab.addEventListener('keydown', (event) => {
+          if (!['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown'].includes(event.key)) return;
+          event.preventDefault();
+          const direction = event.key === 'ArrowLeft' || event.key === 'ArrowUp' ? -1 : 1;
+          const next = tabs[(index + direction + tabs.length) % tabs.length];
+          if (next.dataset.notiivTab) activate(next.dataset.notiivTab, true);
+        });
+      });
+
+      activate(switcher.dataset.activeApp ?? 'support');
+    });
+  };
+
+  setupNotiivSwitchers();
+  document.addEventListener('astro:page-load', setupNotiivSwitchers);
+</script>
