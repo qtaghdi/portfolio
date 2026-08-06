@@ -51,8 +51,9 @@ const localized = (project: CollectionEntry<'projects'>) => {
                   <svg aria-hidden="true" viewBox="0 0 20 20"><path d="M4 16 16 4M7 4h9v9" /></svg>
                 </a>
               </div>
-              <div class="row-visual" aria-hidden="true">
-                <ProjectVisual projectKey={key} locale={locale} variant="compact" />
+              <div class="row-visual">
+                <div aria-hidden={key === 'notiiv' ? undefined : 'true'}><ProjectVisual projectKey={key} locale={locale} variant="compact" /></div>
+                <a class="visual-link" href={projectPath(locale, project.slug)} aria-label={`${data.title} ${dictionary.detail}`}></a>
               </div>
             </div>
           </article>
@@ -99,7 +100,7 @@ const localized = (project: CollectionEntry<'projects'>) => {
     flex-direction: column;
     justify-content: center;
     border-bottom: 1px solid $line;
-    opacity: .62;
+    opacity: .82;
     transition: opacity $mid;
   }
   .selected-row.active { opacity: 1; }
@@ -110,7 +111,7 @@ const localized = (project: CollectionEntry<'projects'>) => {
     align-items: center;
     gap: 26px;
   }
-  .row-number, .row-category { color: $gunmetal; font: 500 .68rem/1.45 $font-mono; }
+  .row-number, .row-category { color: #a5a5ad; font: 500 .68rem/1.45 $font-mono; }
   .row-title { font-size: clamp(1.75rem, 3.5vw, 3.5rem); font-weight: 500; letter-spacing: -.045em; }
   .row-category { text-align: right; text-transform: uppercase; }
   .row-main svg, .row-copy a svg, .more-work svg { width: 18px; fill: none; stroke: currentColor; stroke-width: 1.2; }
@@ -120,20 +121,24 @@ const localized = (project: CollectionEntry<'projects'>) => {
     grid-template-columns: .8fr 1.2fr;
     gap: 64px;
     overflow: hidden;
-    opacity: .22;
+    opacity: .5;
     transform: translateY(10px);
     filter: saturate(.6);
     transition: opacity $mid, transform $mid, filter $mid;
   }
   .selected-row.active .row-detail { opacity: 1; transform: none; filter: none; }
   .row-copy { display: flex; flex-direction: column; padding: 34px 0 44px 84px; }
-  .row-copy > p { max-width: 520px; color: $silver; font-size: 1.08rem; line-height: 1.78; word-break: keep-all; }
+  .row-copy > p { max-width: 520px; color: #dedee3; font-size: 1.08rem; line-height: 1.78; word-break: keep-all; }
   .row-copy dl { display: grid; grid-template-columns: repeat(3, 1fr); margin-top: 42px; border-top: 1px solid $line; }
   .row-copy dl > div { padding: 16px 12px 0 0; }
   .row-copy dt { font: 500 .94rem/1.2 $font-mono; }
-  .row-copy dd { margin-top: 7px; color: $gunmetal; font-size: .74rem; line-height: 1.55; }
-  .row-copy a { width: fit-content; display: flex; align-items: center; gap: 9px; margin-top: auto; color: $silver; font: 500 .7rem/1 $font-mono; letter-spacing: .06em; }
-  .row-visual { min-width: 0; height: 332px; overflow: hidden; border: 1px solid $line; background: $black-soft; }
+  .row-copy dd { margin-top: 7px; color: #aaaab2; font-size: .74rem; line-height: 1.55; }
+  .row-copy a { width: fit-content; display: flex; align-items: center; gap: 9px; margin-top: auto; color: #dedee3; font: 500 .7rem/1 $font-mono; letter-spacing: .06em; }
+  .row-visual { position: relative; min-width: 0; height: 332px; overflow: hidden; border: 1px solid $line; background: $black-soft; }
+  .row-visual > div { width: 100%; height: 100%; }
+  .visual-link { position: absolute; z-index: 8; inset: 0; cursor: pointer; }
+  .visual-link:focus-visible { outline: 2px solid #fff; outline-offset: -4px; }
+  .row-visual:has(.visual-link:hover) { border-color: rgba(255,255,255,.48); }
   .more-work { margin-top: clamp(130px, 16vw, 230px); }
   .more-work > header { display: grid; grid-template-columns: .55fr 1fr .65fr; gap: 48px; align-items: end; margin-bottom: 48px; }
   .more-work h2 { font-size: clamp(2rem, 4vw, 4.1rem); font-weight: 500; letter-spacing: -.055em; }
