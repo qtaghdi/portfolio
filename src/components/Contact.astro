@@ -6,6 +6,7 @@ const dictionary = copy[locale].contact;
 const links = [
   { label: 'EMAIL', href: 'mailto:qtaghdi@gmail.com' },
   { label: 'GITHUB', href: 'https://github.com/qtaghdi' },
+  { label: 'VELOG', href: 'https://velog.io/@qtaghdi/posts' },
   { label: 'LINKEDIN', href: 'https://www.linkedin.com/in/sangminpp/' },
 ];
 ---
@@ -35,7 +36,7 @@ const links = [
   h2 span { display: block; word-break: keep-all; }
   .contact-foot { display: grid; grid-template-columns: .8fr 1.2fr; gap: 90px; margin-top: clamp(70px, 10vw, 140px); padding-top: 24px; border-top: 1px solid $line-bright; }
   .contact-foot > p { max-width: 470px; color: $silver; font-size: 1rem; line-height: 1.85; word-break: keep-all; }
-  .contact-links { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; }
+  .contact-links { display: grid; grid-template-columns: repeat(4, 1fr); gap: 30px; }
   .contact-links a { display: flex; align-items: center; justify-content: space-between; padding-bottom: 13px; border-bottom: 1px solid $line; color: $silver; font: 500 .7rem/1 $font-mono; letter-spacing: .1em; }
   .contact-links svg { width: 16px; fill: none; stroke: currentColor; stroke-width: 1.2; }
   @media (max-width: 780px) {
