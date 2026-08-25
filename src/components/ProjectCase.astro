@@ -19,6 +19,9 @@ const currentIndex = allProjects.findIndex((item) => item.slug === project.slug)
 const nextProject = allProjects[(currentIndex + 1) % allProjects.length];
 const nextData = locale === 'en' ? { ...nextProject.data, ...projectEn[projectKey(nextProject.slug)] } : nextProject.data;
 const pageTitle = `${data.title} | ${locale === 'ko' ? '박상민 포트폴리오' : 'Park Sangmin Portfolio'}`;
+const chapterIds = locale === 'ko'
+  ? ['problem', 'approach', 'result']
+  : ['problem', 'decisions', 'outcome'];
 ---
 
 <BaseLayout locale={locale} title={pageTitle} description={data.summary}>
@@ -56,9 +59,9 @@ const pageTitle = `${data.title} | ${locale === 'ko' ? '박상민 포트폴리�
       <aside>
         <nav class="chapter-nav" aria-label={dictionary.index}>
           <span>{dictionary.index}</span>
-          <a href="#problem">01 {dictionary.problem}</a>
-          <a href="#decisions">02 {dictionary.decisions}</a>
-          <a href="#outcome">03 {dictionary.outcome}</a>
+          <a href={`#${chapterIds[0]}`}>01 {dictionary.problem}</a>
+          <a href={`#${chapterIds[1]}`}>02 {dictionary.decisions}</a>
+          <a href={`#${chapterIds[2]}`}>03 {dictionary.outcome}</a>
           <a href="#trace">04 {dictionary.trace}</a>
         </nav>
       </aside>
@@ -137,13 +140,29 @@ const pageTitle = `${data.title} | ${locale === 'ko' ? '박상민 포트폴리�
   .content-section > span, .trace-section > span { grid-row: 1 / span 2; color: $gunmetal; font: 500 .63rem/1.4 $font-mono; }
   .content-section h2, .trace-section h2 { margin-bottom: 34px; font-size: clamp(2rem, 4vw, 4.1rem); font-weight: 500; line-height: 1.1; letter-spacing: -.055em; }
   .content-section p { grid-column: 2; max-width: 720px; margin-bottom: 1.35em; color: $silver; font-size: 1.06rem; line-height: 1.95; }
-  .case-content :global(.mdx-content > h2) { margin: 0 0 34px 78px; font-size: clamp(2rem, 4vw, 4.1rem); font-weight: 500; line-height: 1.1; letter-spacing: -.055em; }
+  .case-content :global(.mdx-content) { counter-reset: chapter; }
+  .case-content :global(.mdx-content > h2) { counter-increment: chapter; margin: 0 0 34px 78px; font-size: clamp(2rem, 4vw, 4.1rem); font-weight: 500; line-height: 1.1; letter-spacing: -.055em; }
   .case-content :global(.mdx-content > h2:not(:first-child)) { margin-top: clamp(90px, 10vw, 140px); }
-  .case-content :global(.mdx-content > h2::before) { display: inline-block; width: 78px; margin-left: -78px; color: $gunmetal; font: 500 .63rem/1.4 $font-mono; vertical-align: .7em; }
-  .case-content :global(.mdx-content > h2:nth-of-type(1)::before) { content: '01'; }
-  .case-content :global(.mdx-content > h2:nth-of-type(2)::before) { content: '02'; }
-  .case-content :global(.mdx-content > h2:nth-of-type(3)::before) { content: '03'; }
-  .case-content :global(.mdx-content > p) { max-width: 720px; margin: 0 0 1.35em 78px; color: $silver; font-size: 1.06rem; line-height: 1.95; word-break: keep-all; }
+  .case-content :global(.mdx-content > h2::before) { content: counter(chapter, decimal-leading-zero); display: inline-block; width: 78px; margin-left: -78px; color: $gunmetal; font: 500 .63rem/1.4 $font-mono; vertical-align: .7em; }
+  .case-content :global(.mdx-content > h3) { max-width: 720px; margin: 42px 0 18px 78px; color: #e0e0e4; font-size: clamp(1.15rem, 2vw, 1.45rem); font-weight: 600; line-height: 1.45; letter-spacing: -.02em; word-break: keep-all; }
+  .case-content :global(.mdx-content > h4) { max-width: 720px; margin: 30px 0 14px 78px; color: #d8d8de; font-size: 1rem; font-weight: 600; line-height: 1.55; }
+  .case-content :global(.mdx-content > h3 + p) { margin-top: 0; }
+  .case-content :global(.mdx-content > p),
+  .case-content :global(.mdx-content > ul),
+  .case-content :global(.mdx-content > ol),
+  .case-content :global(.mdx-content > blockquote) { max-width: 720px; margin: 0 0 1.35em 78px; color: $silver; font-size: 1.06rem; line-height: 1.95; word-break: keep-all; }
+  .case-content :global(.mdx-content > ul), .case-content :global(.mdx-content > ol) { padding-left: 1.4em; }
+  .case-content :global(.mdx-content > ul) { list-style: disc; }
+  .case-content :global(.mdx-content > ol) { list-style: decimal; }
+  .case-content :global(.mdx-content li + li) { margin-top: .55em; }
+  .case-content :global(.mdx-content strong) { color: #e8e8ec; font-weight: 600; }
+  .case-content :global(.mdx-content a) { color: #e8e8ec; text-decoration: underline; text-decoration-color: $line-bright; text-underline-offset: .2em; }
+  .case-content :global(.mdx-content code) { padding: .16em .36em; border: 1px solid $line; border-radius: 4px; background: $black-soft; color: #dedee3; font: .88em/1.4 $font-mono; overflow-wrap: anywhere; }
+  .case-content :global(.mdx-content > pre) { max-width: 720px; margin: 28px 0 32px 78px; padding: 20px; overflow-x: auto; border: 1px solid $line; background: $black-soft; color: #dedee3; font: .84rem/1.75 $font-mono; }
+  .case-content :global(.mdx-content > pre code) { padding: 0; border: 0; background: transparent; font: inherit; }
+  .case-content :global(.mdx-content > hr) { max-width: 720px; margin: 42px 0 42px 78px; border: 0; border-top: 1px solid $line; }
+  .case-content :global(.mdx-content > img), .case-content :global(.mdx-content > p > img) { max-width: 100%; height: auto; border: 1px solid $line; }
+  .case-content :global(.mdx-content blockquote) { padding-left: 20px; border-left: 1px solid $line-bright; color: #c8c8ce; }
   .trace-section { padding-top: clamp(90px, 10vw, 140px); }
   .trace-grid, .project-links { grid-column: 2; }
   .trace-grid { display: grid; grid-template-columns: 1fr 1fr; border-top: 1px solid $line-bright; }
@@ -175,6 +194,13 @@ const pageTitle = `${data.title} | ${locale === 'ko' ? '박상민 포트폴리�
     .trace-grid > div:nth-child(even) { padding-left: 0; border-left: 0; }
     .case-content :global(.mdx-content > h2) { margin-left: 48px; }
     .case-content :global(.mdx-content > h2::before) { width: 48px; margin-left: -48px; }
-    .case-content :global(.mdx-content > p) { margin-left: 48px; }
+    .case-content :global(.mdx-content > h3),
+    .case-content :global(.mdx-content > h4),
+    .case-content :global(.mdx-content > p),
+    .case-content :global(.mdx-content > ul),
+    .case-content :global(.mdx-content > ol),
+    .case-content :global(.mdx-content > blockquote),
+    .case-content :global(.mdx-content > pre),
+    .case-content :global(.mdx-content > hr) { margin-left: 48px; }
   }
 </style>
