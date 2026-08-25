@@ -9,25 +9,25 @@ badge: "NPM Published"
 year: "2025-2026"
 role: "디자인 시스템 제작 및 유지보수"
 accentColor: amber
-thesis: "컴포넌트 모음에서 제품을 조립하고 검증하는 인터페이스 플랫폼으로"
-responsibility: "토큰·테마, 컴포넌트 API, 모바일 레이아웃, 접근성·테스트, NPM 릴리즈 운영"
+thesis: "컴포넌트 모음에서 제품을 조립·검증하는 인터페이스 플랫폼으로"
+responsibility: "디자인 토큰·테마, 컴포넌트 API, 반응형 레이아웃, 접근성, 테스트·Storybook, NPM 릴리즈"
 visibility: "공개 GitHub 저장소와 NPM 패키지에서 재현 가능한 수치만 사용했습니다."
 focus:
   - "Design tokens"
   - "Component API"
   - "Accessibility"
   - "Release system"
-summary: "토큰과 테마부터 레이아웃·모션·오버레이·릴리즈까지 제품 팀이 같은 기준으로 화면을 만들고 검증할 수 있는 기반을 구축했습니다."
+summary: "토큰과 테마부터 레이아웃, 컴포넌트 API, 모션, 테스트, 릴리즈까지 제품 팀이 같은 기준으로 화면을 만들고 검증할 수 있는 기반을 구축했습니다."
 evidence:
-  - { val: "40+", label: "공개 컴포넌트", detail: "README 기준" }
-  - { val: "11", label: "디자인 토큰 도메인", detail: "SCSS 변수·CSS custom properties" }
-  - { val: "68", label: "Storybook story 파일", detail: "2026-08-05 저장소 스냅샷" }
+  - { val: "40+", label: "공개 컴포넌트" }
+  - { val: "11", label: "디자인 토큰 도메인"}
+  - { val: "68", label: "Storybook story 파일" }
 metrics: []
 callouts:
   - icon: "📦"
-    title: "듀얼 번들 아키텍처"
+    title: "React + Vanilla 배포 구조"
     color: amber
-    body: "React 소비자를 위한 패키지와 CSS 클래스 기반 vanilla 출력을 함께 제공해, 서로 다른 제품 스택이 동일한 토큰과 인터페이스 규칙을 공유하도록 구성했습니다."
+    body: "DS 소비자를 위한 패키지와 CSS 클래스 기반 vanilla 출력을 함께 제공해, 서로 다른 제품 스택이 동일한 토큰과 인터페이스 규칙을 공유하도록 구성했습니다."
 tech:
   - "React"
   - "TypeScript"
@@ -44,36 +44,48 @@ link: "https://www.npmjs.com/package/@bigtablet/design-system"
 
 ## Problem
 
-사내 여러 제품이 같은 UI 기준을 사용해야 했지만, 컴포넌트 API, 접근성, 테마, 모바일 레이아웃, Storybook 렌더링 환경까지 일관되게 보장해야 했습니다. Button, TextField, Dropdown, Sidebar, Modal 같은 기본 컴포넌트뿐 아니라 실제 제품 화면을 구성하는 레이아웃 프리미티브와 모바일 내비게이션도 필요했습니다.
+사내 여러 제품이 같은 UI 기준을 사용하려면 Button, TextField, Modal 같은 개별 컴포넌트만으로는 부족했습니다. 색상과 테마, 화면 레이아웃, 모바일 내비게이션, 접근성, 모션까지 제품을 구성하는 공통 규칙이 필요했고, React뿐 아니라 서로 다른 프론트엔드 환경에서도 같은 인터페이스 기준을 사용할 수 있어야 했습니다.
 
-기존 모션은 CSS keyframe과 shouldRender/isExiting/onAnimationEnd 패턴이 섞여 있어 컴포넌트별 구현이 달랐고, exit animation 후 unmount 처리가 복잡했습니다. 테스트 환경에서는 animation callback이 기대한 타이밍에 실행되지 않아 unmount 검증이 불안정해질 수 있었습니다.
+컴포넌트가 늘어나면서 구현 방식의 차이도 누적되었습니다. 모션은 CSS keyframe과 shouldRender/isExiting/onAnimationEnd 패턴이 혼재해 exit animation 이후 unmount 처리가 컴포넌트마다 달랐고, anchor와 button을 모두 지원하는 navigation item은 각 element의 native attribute와 disabled semantics를 타입과 런타임에서 함께 보장해야 했습니다.
 
-다크 모드와 Storybook 환경에서도 세부 문제가 있었습니다. 하드코딩된 색상 때문에 일부 문서/예제 화면에서 dark mode 대비가 깨졌고, fixed-position 컴포넌트는 Storybook iframe의 기본 body margin/padding 때문에 실제 viewport edge에 정확히 붙지 않았습니다.
+Storybook과 테스트 환경에서도 실제 제품과 차이가 발생했습니다. iframe의 기본 여백 때문에 fixed-position 컴포넌트가 실제 viewport와 다르게 렌더링되거나, animation callback의 실행 시점 때문에 unmount 테스트가 불안정했습니다. Dark mode에서는 일부 하드코딩된 색상이 토큰 체계에서 벗어나 대비가 깨지는 문제도 있었습니다.
 
-릴리즈 파이프라인 역시 개선이 필요했습니다. NPM publish 과정에서 semantic-release/npm의 OIDC 처리 문제가 있었고, 장기적으로 토큰 기반 publish보다 Trusted Publisher 기반으로 전환하는 편이 안전했습니다.
+패키지 배포 역시 제품 기반의 일부였습니다. 기존 NPM publish 과정의 token과 OIDC 의존성을 정리하고, 지속적으로 릴리즈할 수 있는 공급망을 구축할 필요가 있었습니다.
 
 ## Approach
 
-디자인 시스템 v3에서는 CSS custom property 기반 토큰을 light/dark/system 구조로 정리했습니다. ThemeProvider와 useTheme hook을 제공하고, Storybook toolbar에서도 light/dark/system을 전환할 수 있게 구성했습니다. 기존 컴포넌트에는 navy accent와 dark mode 대응을 적용하고, Tabs, Sidebar, NavBar, Avatar, Badge, Breadcrumb, Tooltip, Menu, EmptyState, Accordion 같은 컴포넌트를 확장했습니다.
+### 1. Token & Layout Foundation
 
-화면 조립을 위해 Container, Section, Stack, Grid 같은 레이아웃 프리미티브를 추가했습니다. 이 프리미티브들은 max-width, spacing, background variant, responsive grid, flex direction 같은 반복 패턴을 제품 코드에서 매번 직접 작성하지 않도록 만들었습니다.
+CSS custom properties를 기반으로 색상과 테마를 light/dark/system 구조로 정리하고, ThemeProvider와 useTheme을 통해 제품과 Storybook에서 동일한 테마 규칙을 사용하도록 했습니다. Storybook toolbar에서도 세 테마를 직접 전환하며 컴포넌트를 검증할 수 있게 구성했습니다.
 
-모바일 내비게이션은 BottomNav, BottomNavItem, BottomNavSpacer를 새로 추가했습니다. Sidebar에는 mode="auto"를 도입해 600px 미만 viewport에서 CSS media query만으로 bottom bar로 변환되게 했고, desktop-only 앱을 위한 mode="static"도 제공했습니다. 이후 PR review를 반영해 anchor disabled는 aria-disabled, tabIndex=-1, preventDefault로 처리하고, button disabled는 native disabled attribute를 사용했습니다.
+개별 컴포넌트를 넘어 화면 자체를 같은 기준으로 조립할 수 있도록 Container, Section, Stack, Grid 등의 layout primitive를 추가했습니다. max-width, spacing, responsive grid, flex direction처럼 제품에서 반복되던 레이아웃 패턴을 컴포넌트 API로 끌어올렸습니다.
 
-SidebarItem과 BottomNavItem은 as="a"와 as="button"을 기준으로 discriminated union 타입을 적용했습니다. 링크에서는 target, rel, download를 자연스럽게 받을 수 있고, 버튼에서는 type, form을 받을 수 있게 해 polymorphic API의 타입 안전성을 높였습니다.
+### 2. Component API & Accessibility
 
-모션 시스템은 react-spring 기반으로 재구성했습니다. useSpringPresence에 onExitComplete를 추가해 exit animation 후 unmount 패턴을 지원했고, Modal과 Alert는 overlay spring과 panel spring을 분리했습니다. Toast도 exiting state와 setTimeout 기반 cleanup을 제거하고 spring 기반 unmount로 옮겼습니다. Dropdown은 선택/ESC 후 즉시 닫혀야 하는 UX와 테스트 요구를 고려해 Menu/Tooltip과 같은 enter-only pattern을 유지했습니다.
+모바일 환경에서는 BottomNav, BottomNavItem, BottomNavSpacer를 추가하고, Sidebar에 mode="auto"를 도입했습니다. 600px 미만에서는 CSS media query를 통해 sidebar가 bottom navigation으로 전환되도록 해 동일한 navigation 구조를 viewport에 따라 재사용할 수 있게 했습니다.
 
-Storybook과 테스트 환경도 정리했습니다. iframe body margin/padding reset을 명시해 fixed-position 컴포넌트가 정확히 viewport edge에 붙도록 했고, test setup에서는 react-spring animation을 skip하도록 설정해 unmount-after-exit 테스트가 안정적으로 끝나게 했습니다.
+SidebarItem과 BottomNavItem은 as="a" | "button"을 discriminated union으로 모델링했습니다. Anchor에서는 target, rel, download를, button에서는 type, form을 타입 수준에서 구분했습니다. Disabled 상태 역시 anchor에는 aria-disabled, tabIndex=-1, preventDefault를 적용하고 button에는 native disabled를 사용해 element semantics를 유지했습니다.
 
-릴리즈는 npm v11+의 auto-OIDC Trusted Publisher 흐름으로 전환했습니다. Node 기본 npm 버전이 auto-OIDC를 지원하지 않는 문제를 피하기 위해 workflow에서 npm을 최신 버전으로 올리고, registry-url, NODE_AUTH_TOKEN 의존성을 제거했습니다.
+### 3. Motion & Verification
+
+컴포넌트마다 달랐던 exit animation을 react-spring 기반 presence pattern으로 통합했습니다. useSpringPresence에 onExitComplete를 제공해 animation 이후 unmount를 공통 처리하고, Modal과 Alert는 overlay와 panel의 motion lifecycle을 분리했습니다. Toast 역시 timer와 별도의 exiting state 대신 spring lifecycle을 사용하도록 변경했습니다.
+
+모든 interaction을 같은 animation 정책으로 강제하지는 않았습니다. Dropdown처럼 선택이나 ESC 입력 이후 즉각적인 종료가 중요한 컴포넌트는 enter-only pattern을 유지해 사용자 경험과 구현 일관성 사이의 trade-off를 조정했습니다.
+
+Storybook iframe의 body margin/padding을 reset해 fixed UI를 실제 viewport와 동일한 조건에서 검증하고, 테스트 환경에서는 spring animation을 skip해 exit 이후 unmount 테스트가 결정적으로 실행되도록 구성했습니다.
+
+### 4. Distribution
+
+React 제품에는 Rollup 기반 패키지를 제공하고, React를 사용하지 않는 환경에서도 같은 디자인 토큰과 인터페이스를 활용할 수 있도록 CSS class 기반 vanilla output을 함께 제공했습니다.
+
+NPM 배포는 npm v11+의 auto-OIDC Trusted Publisher 방식으로 전환했습니다. Workflow에서 npm 버전을 명시적으로 올리고 NODE_AUTH_TOKEN과 registry token 의존성을 제거해 장기 credential 없이 패키지를 배포할 수 있도록 정리했습니다.
 
 ## Result
 
-디자인 시스템은 단순한 UI 컴포넌트 모음에서 제품 레이아웃, 테마, 모바일 대응, 접근성, 모션, 배포까지 포괄하는 기반 패키지로 확장되었습니다. 여러 앱이 같은 컴포넌트와 레이아웃 패턴을 공유할 수 있게 되었고, dark mode와 Storybook 환경에서도 더 안정적으로 검증할 수 있게 됐습니다.
+디자인 시스템은 개별 UI 컴포넌트를 제공하는 패키지에서 제품 화면을 조립하고 동일한 기준으로 검증·배포할 수 있는 인터페이스 기반으로 확장되었습니다. 현재 40개 이상의 공개 컴포넌트와 11개 디자인 토큰 도메인을 제공하며, 68개의 Storybook story 파일을 통해 컴포넌트의 상태와 조합을 검증할 수 있습니다.
 
-모바일 내비게이션과 Sidebar responsive transform을 통해 desktop/sidebar 중심의 구조를 모바일 bottom navigation으로 자연스럽게 전환할 수 있게 되었습니다. Polymorphic item 타입과 disabled 처리도 정리되어 소비 앱에서 실수할 여지가 줄었습니다.
+제품 개발자는 layout primitive와 responsive navigation을 통해 반복적인 화면 구조를 직접 구현할 필요가 줄었고, polymorphic component API와 element별 disabled semantics를 통해 잘못된 속성 조합이나 접근성 오류가 발생할 여지를 API 수준에서 줄였습니다.
 
-모션 시스템은 컴포넌트마다 흩어진 CSS keyframe 패턴에서 일관된 spring 기반 패턴으로 정리되었습니다. 사용자에게는 더 자연스러운 entrance/exit motion을 제공하고, 개발자에게는 테스트 가능한 unmount 흐름을 제공했습니다.
+모션은 컴포넌트마다 관리하던 CSS animation과 별도 lifecycle state에서 공통 spring presence pattern으로 정리했습니다. Storybook과 테스트 환경도 실제 제품 렌더링과 animation lifecycle을 고려하도록 구성해 UI 변경을 더 일관된 조건에서 검증할 수 있게 했습니다.
 
-NPM Trusted Publisher 기반 배포 전환으로 publish token 관리 부담을 줄이고, 패키지 공급망 보안 관점에서도 더 안전한 릴리즈 구조를 갖추었습니다.
+배포에서는 React package와 vanilla output을 함께 제공해 서로 다른 제품 스택이 동일한 디자인 기준을 공유할 수 있도록 했고, NPM Trusted Publisher 전환을 통해 장기 publish token 없이 릴리즈할 수 있는 구조를 구축했습니다.

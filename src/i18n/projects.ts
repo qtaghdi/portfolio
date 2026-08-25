@@ -30,11 +30,11 @@ export const projectEn: Record<string, ProjectTranslation> = {
     responsibility: 'pnpm and Turborepo multi-app architecture, shared frontend infrastructure, operational UX, authentication, sharing, and webview edge conditions',
     visibility: 'Based on public product and repository structures. Internal customer and operational data are excluded.',
     focus: ['pnpm monorepo', 'Turborepo', 'BFF and WebAuthn', 'Operational UX'],
-    summary: 'Operated an admin console, owner dashboard, service status page, and customer support site with 12 shared packages in a pnpm and Turborepo monorepo, consolidating repeated authentication, API, sharing, and webview boundaries.',
+    summary: 'Operated an admin console, owner dashboard, service status page, and customer support site with 13 shared packages in a pnpm and Turborepo monorepo, consolidating repeated authentication, API, sharing, and webview boundaries.',
     evidence: [
-      { val: '4 apps', label: 'One product monorepo', detail: 'Admin · Owner dashboard · Service status · Support' },
-      { val: '12 packages', label: 'Shared foundation', detail: 'Repository snapshot from 2026-08-05' },
-      { val: 'BFF + WebAuthn', label: 'Authentication boundary', detail: 'Cross-checked with code and commits' },
+      { val: '4 Frontend Apps', label: 'One product monorepo' },
+      { val: '13 packages', label: 'Shared API, Query, Schema, and UI foundation' },
+      { val: '90%+ Test Coverage', label: 'Shared package stability' },
     ],
     sections: [
       { id: 'problem', title: 'Four products were repeating the same risk', paragraphs: [

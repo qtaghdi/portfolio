@@ -17,7 +17,8 @@
 | Project | Claim | Source | Reproduction / snapshot | Confidence |
 | --- | --- | --- | --- | --- |
 | Notiiv | 4 frontend apps | `bigtablet-notiiv-monorepo-web/apps` | first-level directories: admin, owner, status, support | High |
-| Notiiv | 12 shared packages | `bigtablet-notiiv-monorepo-web/packages` | first-level directory count on 2026-08-05 | High |
+| Notiiv | 13 shared packages | `bigtablet-notiiv-monorepo-web/packages` | first-level directory count on 2026-08-25 | High |
+| Notiiv | 90%+ shared package test coverage | shared package coverage report | user-confirmed update on 2026-08-25 | User-confirmed |
 | Design System | 40+ public components | `bigtablet-design-system/README.md` | public README capability statement | High |
 | Design System | 11 token domains | `bigtablet-design-system/README.md` | public README and `src/styles` | High |
 | Design System | 68 Storybook story files | `bigtablet-design-system/src` | count `*.stories.tsx`, `*.stories.ts`, `*.stories.mdx` | High |
