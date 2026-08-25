@@ -34,11 +34,17 @@ github: "https://github.com/qtaghdi/chorus"
 
 ## Approach
 
+### 1. Search & State
+
 SvelteKit과 Svelte 5 Runes를 기반으로 음악 검색과 상태 관리를 구성했습니다. iTunes Search API를 사용해 별도 인증 없이 곡을 검색하고, 선택한 곡의 앨범 정보와 메타데이터를 3D 카드에 반영했습니다.
+
+### 2. 3D Visual Experience
 
 3D 렌더링은 Threlte와 Three.js로 구현했습니다. 앨범 커버를 바이닐 LP 형태로 렌더링하고, 실시간 회전 애니메이션과 PBR 광반사를 적용해 평면 카드보다 더 물성 있는 결과물을 만들었습니다.
 
 UI는 모바일 공유 흐름을 우선으로 설계했습니다. 글래스모피즘 카드, 오로라 배경, 세로형 레이아웃을 적용해 인스타그램 스토리 이미지로 바로 사용할 수 있는 분위기를 만들었습니다.
+
+### 3. Image Export
 
 WebGL 캔버스의 결과물을 고해상도 PNG로 내보내는 흐름도 구현했습니다. 사용자가 음악을 검색하고, 3D 바이닐을 확인한 뒤, 탭 한 번으로 공유용 이미지를 생성할 수 있게 했습니다.
 
