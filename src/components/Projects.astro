@@ -100,10 +100,8 @@ const localized = (project: CollectionEntry<'projects'>) => {
     flex-direction: column;
     justify-content: center;
     border-bottom: 1px solid $line;
-    opacity: .82;
-    transition: opacity $mid;
+    opacity: 1;
   }
-  .selected-row.active { opacity: 1; }
   .row-main {
     min-height: 116px;
     display: grid;
@@ -121,12 +119,10 @@ const localized = (project: CollectionEntry<'projects'>) => {
     grid-template-columns: .8fr 1.2fr;
     gap: 64px;
     overflow: hidden;
-    opacity: .5;
-    transform: translateY(10px);
-    filter: saturate(.6);
-    transition: opacity $mid, transform $mid, filter $mid;
+    opacity: 1;
+    transform: none;
+    filter: none;
   }
-  .selected-row.active .row-detail { opacity: 1; transform: none; filter: none; }
   .row-copy { display: flex; flex-direction: column; padding: 34px 0 44px 84px; }
   .row-copy > p { max-width: 520px; color: #dedee3; font-size: 1.08rem; line-height: 1.78; word-break: keep-all; }
   .row-copy dl { display: grid; grid-template-columns: repeat(3, 1fr); margin-top: 42px; border-top: 1px solid $line; }

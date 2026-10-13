@@ -10,6 +10,33 @@ interface Props {
 
 const { projectKey, locale, variant = 'compact' } = Astro.props;
 const ko = locale === 'ko';
+const actualScreens = {
+  notiiv: {
+    src: '/projects/notiiv/img.png',
+    width: 1905,
+    height: 956,
+    alt: ko ? 'Notiiv 고객지원 실제 화면' : 'Actual Notiiv support screen',
+  },
+  'design-system': {
+    src: '/projects/design-system/storybook-overview.png',
+    width: 1440,
+    height: 900,
+    alt: ko ? 'Bigtablet 디자인 시스템 Storybook 실제 화면' : 'Actual Bigtablet design system Storybook screen',
+  },
+  intranet: {
+    src: '/projects/intranet/home.png',
+    width: 390,
+    height: 788,
+    alt: ko ? 'Bigtablet 인트라넷 모바일 홈 실제 화면' : 'Actual Bigtablet intranet mobile home screen',
+  },
+  'document-workspace': {
+    src: '/projects/document-workspace/editor.png',
+    width: 1440,
+    height: 900,
+    alt: ko ? 'document-workspace XLSX 편집기 실제 화면' : 'Actual document-workspace XLSX editor screen',
+  },
+} as const;
+const actualScreen = actualScreens[projectKey as keyof typeof actualScreens];
 const waveform = [32, 58, 44, 76, 52, 88, 62, 40, 72, 48, 82, 56, 34, 68, 46, 78, 54, 38, 64, 42];
 const owkrRoster = [
   { name: 'Alpha#1001', ranks: '다3★ · 플2? · 플3' },
@@ -27,8 +54,22 @@ const owkrRows = [
 ];
 ---
 
-<div class:list={['project-visual', variant]} data-visual={projectKey}>
-  {projectKey === 'notiiv' && (
+<div class:list={['project-visual', variant]} data-visual={projectKey} data-fidelity={actualScreen ? 'original' : 'reconstruction'}>
+  {actualScreen && (
+    <figure class="actual-screen">
+      <img
+        src={actualScreen.src}
+        width={actualScreen.width}
+        height={actualScreen.height}
+        alt={actualScreen.alt}
+        loading={variant === 'detail' ? 'eager' : 'lazy'}
+        decoding="async"
+        data-original-screen
+      />
+    </figure>
+  )}
+
+  {!actualScreen && projectKey === 'notiiv' && (
     <div class="mock mock-notiiv" data-notiiv-switcher data-active-app="support">
       <aside class="notiiv-rail">
         <div class="notiiv-brand"><img src="/projects/notiiv/favicon.svg" alt="" aria-hidden="true" /><NotiivLogo size={15} /></div>
@@ -90,7 +131,7 @@ const owkrRows = [
     </div>
   )}
 
-  {projectKey === 'design-system' && (
+  {!actualScreen && projectKey === 'design-system' && (
     <div class="mock mock-ds">
       <aside class="ds-sidebar">
         <header><span class="ds-cube"><i></i></span><strong>Bigtablet</strong><b>•••</b></header>
@@ -125,7 +166,7 @@ const owkrRows = [
     </div>
   )}
 
-  {projectKey === 'intranet' && (
+  {!actualScreen && projectKey === 'intranet' && (
     <div class="mock mock-intranet">
       <aside class="intranet-context">
         <small>FLUTTER MOBILE APP</small>
@@ -161,6 +202,40 @@ const owkrRows = [
         <article><i></i><p><strong>{ko ? '실시간 상태 병합' : 'Merge live state'}</strong><small>SSE · FCM · deep link</small></p></article>
         <article><i></i><p><strong>{ko ? '부분 실패를 명시' : 'Expose partial failure'}</strong><small>BLoC · recovery state</small></p></article>
       </section>
+    </div>
+  )}
+
+  {!actualScreen && projectKey === 'document-workspace' && (
+    <div class="mock mock-document-workspace">
+      <header class="document-toolbar">
+        <div><span class="document-mark">DW</span><strong>document-workspace</strong><small>portfolio-evidence.xlsx</small></div>
+        <nav><span>{ko ? 'Revision 12' : 'Revision 12'}</span><b>{ko ? '저장됨' : 'Saved'}</b><i>PS</i><i>AI</i></nav>
+      </header>
+      <aside class="document-sidebar">
+        <small>{ko ? '워크북' : 'WORKBOOK'}</small>
+        <strong>portfolio-evidence.xlsx</strong>
+        <div><span class="active">▦ Claims</span><span>▦ Sources</span><span>▦ Release</span></div>
+        <section><small>{ko ? '공동 편집' : 'COLLABORATION'}</small><p><i class="human"></i><b>{ko ? '박상민' : 'Sangmin Park'}</b><em>{ko ? '셀 편집 중' : 'Editing cells'}</em></p><p><i class="agent"></i><b>Codex</b><em>{ko ? '범위 검토 중' : 'Reviewing range'}</em></p></section>
+      </aside>
+      <main class="document-sheet">
+        <div class="document-formula"><b>fx</b><span>=IF(D4=&quot;Verified&quot;,&quot;Publish&quot;,&quot;Hold&quot;)</span></div>
+        <div class="document-grid">
+          <div class="corner"></div><div class="column">A</div><div class="column">B</div><div class="column">C</div><div class="column">D</div><div class="column">E</div>
+          <div class="row">1</div><b>Project</b><b>Claim</b><b>Source</b><b>Status</b><b>Decision</b>
+          <div class="row">2</div><span>Notiiv</span><span>4 frontend apps</span><span>Repository</span><em>Verified</em><span>Publish</span>
+          <div class="row">3</div><span>Design System</span><span>40+ components</span><span>Public README</span><em>Verified</em><span>Publish</span>
+          <div class="row">4</div><span>document-workspace</span><span>400K cells</span><span>Release profile</span><em class="selected">Verified</em><span>Publish</span>
+          <div class="row">5</div><span>Boundra</span><span>164.20 ms</span><span>Benchmark</span><em>Verified</em><span>Publish</span>
+          <div class="row">6</div><span>Homepage</span><span>Build time</span><span>Missing log</span><em class="hold">Pending</em><span>Hold</span>
+        </div>
+        <footer><span>Claims</span><span>＋</span><small>400,000 {ko ? '셀 프로필' : 'cell profile'} · 1,000 {ko ? '셀 커밋' : 'cell commit'} 287.74 ms</small></footer>
+      </main>
+      <aside class="document-events">
+        <header><strong>{ko ? '활동' : 'Activity'}</strong><span>LIVE</span></header>
+        <article><i class="agent"></i><div><b>Codex</b><p>{ko ? 'D4의 검증 상태를 확인했습니다.' : 'Checked the verification state in D4.'}</p><small>revision 11</small></div></article>
+        <article><i class="human"></i><div><b>{ko ? '박상민' : 'Sangmin Park'}</b><p>{ko ? '근거 링크를 수정했습니다.' : 'Updated the evidence link.'}</p><small>revision 12</small></div></article>
+        <section><small>{ko ? '동기화 상태' : 'SYNC STATUS'}</small><strong>{ko ? '모든 변경이 저장되었습니다' : 'All changes saved'}</strong><span>SSE · atomic XLSX</span></section>
+      </aside>
     </div>
   )}
 
@@ -352,6 +427,8 @@ const owkrRows = [
   @use '../styles/tokens' as *;
   .project-visual { width: 100%; height: 100%; overflow: hidden; color: #f4f4f5; font-family: 'Pretendard', sans-serif; }
   .mock { position: relative; width: 100%; height: 100%; overflow: hidden; }
+  .actual-screen { width: 100%; height: 100%; display: grid; margin: 0; place-items: center; overflow: hidden; background: #fff; }
+  .actual-screen img { width: 100%; height: 100%; display: block; object-fit: contain; object-position: center; filter: none; transform: none; }
   .mock small { font-size: 10px; }
 
   /* Notiiv app switcher, reconstructed from the four product apps in the monorepo */
@@ -561,6 +638,56 @@ const owkrRows = [
   .intranet-sync article p { display: grid; gap: 4px; }
   .intranet-sync article strong { font-size: 9px; }
   .intranet-sync article small { color: #71717a; font: 500 7px/1.4 $font-mono; }
+
+  /* document-workspace, based on the shared revision model and Univer editor */
+  .mock-document-workspace { display: grid; grid-template: 44px minmax(0, 1fr) / minmax(150px, 20%) minmax(0, 1fr) minmax(160px, 22%); background: #f5f7fb; color: #1d2433; font-family: $font-mono; }
+  .document-toolbar { grid-column: 1 / 4; display: flex; align-items: center; justify-content: space-between; padding: 0 14px; border-bottom: 1px solid #d8deea; background: #fff; }
+  .document-toolbar > div, .document-toolbar nav { display: flex; align-items: center; gap: 8px; }
+  .document-mark { display: grid; width: 24px; height: 24px; place-items: center; border-radius: 6px; background: #2667ff; color: white; font: 700 7px/1 $font-mono; }
+  .document-toolbar strong { font-size: 9px; }
+  .document-toolbar small, .document-toolbar nav span { color: #7a8498; font-size: 7px; }
+  .document-toolbar nav b { padding: 5px 7px; border-radius: 999px; background: #e9f8ef; color: #27824b; font-size: 7px; }
+  .document-toolbar nav i { display: grid; width: 21px; height: 21px; place-items: center; border: 2px solid white; border-radius: 50%; background: #202838; color: white; font-size: 6px; font-style: normal; }
+  .document-toolbar nav i + i { margin-left: -12px; background: #2667ff; }
+  .document-sidebar { display: flex; min-width: 0; flex-direction: column; padding: 16px 12px; border-right: 1px solid #d8deea; background: #f8f9fc; }
+  .document-sidebar > small, .document-sidebar section > small, .document-events section > small { color: #98a1b3; font-size: 6px; letter-spacing: .08em; }
+  .document-sidebar > strong { margin-top: 7px; overflow: hidden; font-size: 8px; text-overflow: ellipsis; white-space: nowrap; }
+  .document-sidebar > div { display: grid; gap: 4px; margin-top: 16px; }
+  .document-sidebar > div span { padding: 7px 8px; border-radius: 6px; color: #657087; font-size: 7px; }
+  .document-sidebar > div span.active { background: #e8eefc; color: #1f57d6; font-weight: 700; }
+  .document-sidebar section { display: grid; gap: 8px; margin-top: auto; padding-top: 14px; border-top: 1px solid #d8deea; }
+  .document-sidebar section p { display: grid; grid-template-columns: 7px 1fr; align-items: center; gap: 5px; }
+  .document-sidebar section p i, .document-events article > i { width: 7px; height: 7px; border-radius: 50%; background: #2667ff; }
+  .document-sidebar section p i.human, .document-events article > i.human { background: #11a56a; }
+  .document-sidebar section p b { font-size: 7px; }
+  .document-sidebar section p em { grid-column: 2; color: #98a1b3; font-size: 6px; font-style: normal; }
+  .document-sheet { min-width: 0; display: grid; grid-template-rows: 34px 1fr 28px; background: white; }
+  .document-formula { display: flex; align-items: center; border-bottom: 1px solid #d8deea; color: #59647a; font-size: 7px; }
+  .document-formula b { padding: 0 10px; color: #2667ff; font-style: italic; }
+  .document-formula span { overflow: hidden; padding-left: 10px; border-left: 1px solid #d8deea; text-overflow: ellipsis; white-space: nowrap; }
+  .document-grid { display: grid; grid-template-columns: 24px 1fr 1.35fr 1fr .8fr .8fr; grid-auto-rows: minmax(25px, 1fr); min-width: 0; overflow: hidden; }
+  .document-grid > * { display: flex; min-width: 0; align-items: center; padding: 5px 7px; overflow: hidden; border-right: 1px solid #e4e8f0; border-bottom: 1px solid #e4e8f0; font-size: 6.5px; text-overflow: ellipsis; white-space: nowrap; }
+  .document-grid .corner, .document-grid .column, .document-grid .row { justify-content: center; padding: 0; background: #f5f7fa; color: #929cad; font-size: 6px; }
+  .document-grid > b { background: #f9fafc; color: #344056; font-size: 7px; }
+  .document-grid > em { color: #24814a; font-style: normal; }
+  .document-grid > em.selected { position: relative; overflow: visible; outline: 2px solid #2667ff; outline-offset: -2px; background: #f4f7ff; }
+  .document-grid > em.selected::after { content: ''; position: absolute; right: -1px; bottom: -1px; width: 5px; height: 5px; background: #2667ff; }
+  .document-grid > em.hold { color: #b7791f; }
+  .document-sheet footer { display: flex; align-items: center; gap: 4px; padding: 0 9px; border-top: 1px solid #d8deea; background: #f8f9fc; }
+  .document-sheet footer span { padding: 5px 9px; border-radius: 4px; background: white; color: #2667ff; font-size: 6px; font-weight: 700; }
+  .document-sheet footer small { margin-left: auto; color: #98a1b3; font-size: 6px; }
+  .document-events { min-width: 0; padding: 14px 12px; border-left: 1px solid #d8deea; background: #f8f9fc; }
+  .document-events > header { display: flex; align-items: center; justify-content: space-between; }
+  .document-events > header strong { font-size: 8px; }
+  .document-events > header span { color: #11a56a; font-size: 6px; }
+  .document-events article { display: grid; grid-template-columns: 7px 1fr; gap: 7px; margin-top: 14px; }
+  .document-events article div { min-width: 0; }
+  .document-events article b { font-size: 7px; }
+  .document-events article p { margin-top: 4px; color: #657087; font-size: 6px; line-height: 1.5; }
+  .document-events article small { display: block; margin-top: 4px; color: #a3abba; font-size: 5.5px; }
+  .document-events section { display: grid; gap: 6px; margin-top: 18px; padding: 10px; border: 1px solid #d8deea; border-radius: 8px; background: white; }
+  .document-events section strong { color: #27824b; font-size: 7px; line-height: 1.45; }
+  .document-events section span { color: #98a1b3; font-size: 6px; }
 
   /* Boundra, based on the public brand, CLI diagnostics and Vite overlay */
   .mock-boundra { display: grid; grid-template-columns: minmax(225px, .72fr) minmax(0, 1.28fr); background: #07100c; font-family: $font-mono; }
@@ -939,6 +1066,7 @@ const owkrRows = [
   .compact .mock-ds { grid-template-columns: 145px 1fr; }
   .compact .ds-story article { padding: 24px 28px; }
   .compact .mock-intranet { grid-template-columns: minmax(120px, .7fr) minmax(190px, 225px) minmax(135px, .8fr); gap: 20px; padding: 16px 22px; }
+  .compact .mock-document-workspace { grid-template-columns: minmax(125px, 19%) minmax(0, 1fr) minmax(135px, 21%); }
   .compact .mock-boundra { grid-template-columns: minmax(205px, .7fr) minmax(0, 1.3fr); }
   .compact .boundra-intro { padding: 24px; }
   .compact .boundra-intro > strong { font-size: 42px; }
@@ -993,6 +1121,13 @@ const owkrRows = [
     .ds-story article, .compact .ds-story article { width: 100%; padding: 20px; }
     .mock-intranet, .compact .mock-intranet { grid-template-columns: 1fr; gap: 0; padding: 10px; }
     .intranet-phone { width: min(78%, 230px); height: 100%; min-height: 0; margin: auto; }
+    .mock-document-workspace, .compact .mock-document-workspace { grid-template: 38px minmax(0, 1fr) / 1fr; }
+    .document-toolbar { grid-column: 1; padding: 0 8px; }
+    .document-toolbar small, .document-toolbar nav span, .document-toolbar nav i { display: none; }
+    .document-sidebar, .document-events { display: none; }
+    .document-grid { grid-template-columns: 20px .9fr 1.2fr .8fr .7fr .7fr; }
+    .document-grid > * { padding-inline: 4px; font-size: 5.5px; }
+    .document-sheet footer small { display: none; }
     .mock-boundra, .compact .mock-boundra { grid-template: 82px 1fr / 1fr; }
     .boundra-intro, .compact .boundra-intro { padding: 11px 14px; border-right: 0; border-bottom: 1px solid #264737; }
     .boundra-intro > strong, .compact .boundra-intro > strong { margin-top: 6px; font-size: 28px; }
