@@ -20,7 +20,7 @@
 
 - [x] 고객지원 메인 화면
   - 현재 파일: `public/projects/notiiv/img.png`
-  - 현재 상태: 원본 추가 완료, 포트폴리오 렌더링 연결은 별도 작업 필요
+  - 현재 상태: 원본 화면을 포트폴리오 홈과 상세 페이지에 연결 완료
 - [ ] Admin의 FAQ 편집 또는 사용자 관리 화면 (선택)
   - 제안 경로: `public/projects/notiiv/admin.png`
 - [ ] Owner 대시보드 화면 (선택)
@@ -30,8 +30,9 @@
 
 ### Bigtablet Design System
 
-- [ ] Storybook 전체 화면
-  - 제안 경로: `public/projects/design-system/storybook-overview.png`
+- [x] Storybook 전체 화면
+  - 현재 파일: `public/projects/design-system/storybook-overview.png`
+  - 현재 상태: 로컬 Storybook의 Introduction 화면을 원본 크기로 캡처해 연결 완료
 - [ ] 디자인 토큰과 컴포넌트 상태가 함께 보이는 화면
   - 제안 경로: `public/projects/design-system/tokens-components.png`
 - [ ] Sidebar와 BottomNav의 반응형 비교
@@ -52,8 +53,9 @@
 
 ### Bigtablet Intranet
 
-- [ ] 모바일 홈 화면
-  - 제안 경로: `public/projects/intranet/home.png`
+- [x] 모바일 홈 화면
+  - 현재 파일: `public/projects/intranet/home.png`
+  - 현재 상태: integration fixture로 실행한 실제 홈 화면을 캡처해 연결 완료
 - [ ] 메일 또는 전자결재 화면
   - 제안 경로: `public/projects/intranet/mail-or-approval.png`
 - [ ] 알림에서 상세 화면으로 진입한 상태
@@ -94,7 +96,13 @@
 
 ### Boundra
 
-현재 터미널 비주얼로 핵심 기능이 전달된다. 실제 스크린샷을 추가한다면 규칙 위반과 수정 위치가 한 화면에 보이는 결과를 우선한다.
+현재 터미널 비주얼은 원본 캡처가 없는 재현 화면으로 명시했다. 실제 스크린샷을 추가한다면 규칙 위반과 수정 위치가 한 화면에 보이는 결과를 우선한다.
+
+### document-workspace
+
+- [x] XLSX 편집기 실제 화면
+  - 현재 파일: `public/projects/document-workspace/editor.png`
+  - 현재 상태: LibreOffice compatibility fixture를 실제 앱에서 열어 캡처하고 연결 완료
 
 ### Bigtablet Homepage
 
@@ -117,3 +125,7 @@
 3. 데스크톱과 모바일에서 잘리지 않는지 확인한다.
 4. 이미지 용량을 최적화한다.
 5. `pnpm build`로 정적 페이지 생성을 검증한다.
+
+## Automated fidelity audit
+
+`pnpm visual:audit`는 원본 화면 파일의 해시와 크기, 실제 렌더링 경로, `object-fit: contain`, 필터와 변형 미사용, 데스크톱과 모바일 오버플로를 검사한다. GitHub Actions에서도 pull request와 main push마다 같은 검사를 실행한다.

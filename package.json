@@ -6,12 +6,16 @@
     "notion:sync": "node scripts/sync-notion-projects.mjs",
     "dev": "astro dev",
     "build": "astro build",
-    "preview": "astro preview"
+    "preview": "astro preview",
+    "visual:audit": "pnpm build && playwright test --config=playwright.visual.config.ts"
   },
   "dependencies": {
-    "astro":     "^4.16.18",
     "@astrojs/mdx": "^3.1.9",
-    "gsap":      "^3.12.5",
-    "sass":      "^1.77.8"
+    "astro": "^4.16.18",
+    "gsap": "^3.12.5",
+    "sass": "^1.77.8"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.64.0"
   }
 }
