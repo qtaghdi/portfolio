@@ -18,7 +18,7 @@ const enPath = currentPath.startsWith('/en/') ? currentPath : `/en${currentPath 
 const canonical = new URL(currentPath, Astro.site ?? Astro.url.origin);
 const koUrl = new URL(koPath, Astro.site ?? Astro.url.origin);
 const enUrl = new URL(enPath, Astro.site ?? Astro.url.origin);
-const socialImage = new URL(Astro.props.image ?? '/og-v2.png', Astro.site ?? Astro.url.origin);
+const socialImage = new URL(Astro.props.image ?? '/og-v4.png', Astro.site ?? Astro.url.origin);
 ---
 <!DOCTYPE html>
 <html lang={locale}>
@@ -27,7 +27,7 @@ const socialImage = new URL(Astro.props.image ?? '/og-v2.png', Astro.site ?? Ast
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{title}</title>
     <meta name="description" content={description} />
-    <meta name="theme-color" content="#000000" />
+    <meta name="theme-color" content="#ffffff" />
     <link rel="canonical" href={canonical} />
     <link rel="alternate" hreflang="ko" href={koUrl} />
     <link rel="alternate" hreflang="en" href={enUrl} />

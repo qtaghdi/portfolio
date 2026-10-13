@@ -1,14 +1,16 @@
-$black: #000000;
-$black-soft: #0b0b0c;
-$silver: #c7c8ca;
-$silver-bright: #f0f0ed;
-$gunmetal: #85878a;
-$line: #292a2c;
-$line-bright: #55575a;
+$black: #ffffff;
+$black-soft: #f7f7f5;
+$silver: #4f514f;
+$silver-bright: #151615;
+$gunmetal: #747671;
+$line: #e8e8e3;
+$line-bright: #cfcfc8;
+$accent: #e34a2f;
+$accent-dark: #bd3420;
 
 $font-display: 'Pretendard', 'Apple SD Gothic Neo', sans-serif;
 $font-body: 'Pretendard', 'Apple SD Gothic Neo', sans-serif;
 $font-mono: 'SFMono-Regular', 'SF Mono', Menlo, Consolas, monospace;
 
 $fast: 160ms ease;
-$mid: 420ms cubic-bezier(.2, .75, .2, 1);
+$mid: 300ms cubic-bezier(.2, .75, .2, 1);

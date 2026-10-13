@@ -111,17 +111,17 @@ const chapterIds = locale === 'ko'
   @use '../styles/tokens' as *;
   .project-page { min-height: 100vh; padding-top: 80px; }
   .project-hero { padding-top: 54px; }
-  .back-link { display: inline-flex; align-items: center; gap: 10px; min-height: 42px; color: #aaaab2; font: 500 .65rem/1 $font-mono; letter-spacing: .08em; }
+  .back-link { display: inline-flex; align-items: center; gap: 10px; min-height: 42px; color: $gunmetal; font: 500 .65rem/1 $font-mono; letter-spacing: .08em; }
   .back-link svg { width: 16px; fill: none; stroke: currentColor; stroke-width: 1.2; }
   .heading-grid { display: grid; grid-template-columns: .55fr 1.35fr .65fr; gap: 48px; align-items: end; margin-top: 52px; }
   h1 { font-size: clamp(4rem, 9vw, 9.4rem); font-weight: 500; line-height: .89; letter-spacing: -.08em; }
-  .thesis { max-width: 850px; margin-top: 28px; color: #e0e0e4; font-size: clamp(1.2rem, 2.1vw, 1.75rem); line-height: 1.5; letter-spacing: -.025em; word-break: keep-all; }
-  .summary { max-width: 410px; color: #d6d6dc; font-size: 1rem; line-height: 1.85; word-break: keep-all; }
+  .thesis { max-width: 850px; margin-top: 28px; color: $silver-bright; font-size: clamp(1.2rem, 2.1vw, 1.75rem); line-height: 1.5; letter-spacing: -.025em; word-break: keep-all; }
+  .summary { max-width: 410px; color: $silver; font-size: 1rem; line-height: 1.85; word-break: keep-all; }
   .case-visual { position: relative; height: min(42vw, 570px); min-height: 390px; margin-top: 76px; overflow: hidden; border: 1px solid $line-bright; background: $black-soft; }
   .case-visual > div { width: 100%; height: 100%; }
   .case-visual-link { position: absolute; z-index: 8; inset: 0; cursor: pointer; }
-  .case-visual-link:focus-visible { outline: 2px solid #fff; outline-offset: -4px; }
-  .case-visual:has(.case-visual-link:hover) { border-color: rgba(255,255,255,.5); }
+  .case-visual-link:focus-visible { outline: 2px solid $accent; outline-offset: -4px; }
+  .case-visual:has(.case-visual-link:hover) { border-color: $accent; }
   .evidence { display: grid; grid-template-columns: repeat(3, 1fr); border: 1px solid $line; border-top: 0; }
   .evidence > div { min-height: 130px; padding: 26px; border-right: 1px solid $line; }
   .evidence > div:last-child { border-right: 0; }
@@ -144,8 +144,8 @@ const chapterIds = locale === 'ko'
   .case-content :global(.mdx-content > h2) { counter-increment: chapter; margin: 0 0 34px 78px; font-size: clamp(2rem, 4vw, 4.1rem); font-weight: 500; line-height: 1.1; letter-spacing: -.055em; }
   .case-content :global(.mdx-content > h2:not(:first-child)) { margin-top: clamp(90px, 10vw, 140px); }
   .case-content :global(.mdx-content > h2::before) { content: counter(chapter, decimal-leading-zero); display: inline-block; width: 78px; margin-left: -78px; color: $gunmetal; font: 500 .63rem/1.4 $font-mono; vertical-align: .7em; }
-  .case-content :global(.mdx-content > h3) { max-width: 720px; margin: 42px 0 18px 78px; color: #e0e0e4; font-size: clamp(1.15rem, 2vw, 1.45rem); font-weight: 600; line-height: 1.45; letter-spacing: -.02em; word-break: keep-all; }
-  .case-content :global(.mdx-content > h4) { max-width: 720px; margin: 30px 0 14px 78px; color: #d8d8de; font-size: 1rem; font-weight: 600; line-height: 1.55; }
+  .case-content :global(.mdx-content > h3) { max-width: 720px; margin: 42px 0 18px 78px; color: $silver-bright; font-size: clamp(1.15rem, 2vw, 1.45rem); font-weight: 600; line-height: 1.45; letter-spacing: -.02em; word-break: keep-all; }
+  .case-content :global(.mdx-content > h4) { max-width: 720px; margin: 30px 0 14px 78px; color: $silver-bright; font-size: 1rem; font-weight: 600; line-height: 1.55; }
   .case-content :global(.mdx-content > h3 + p) { margin-top: 0; }
   .case-content :global(.mdx-content > p),
   .case-content :global(.mdx-content > ul),
@@ -155,14 +155,14 @@ const chapterIds = locale === 'ko'
   .case-content :global(.mdx-content > ul) { list-style: disc; }
   .case-content :global(.mdx-content > ol) { list-style: decimal; }
   .case-content :global(.mdx-content li + li) { margin-top: .55em; }
-  .case-content :global(.mdx-content strong) { color: #e8e8ec; font-weight: 600; }
-  .case-content :global(.mdx-content a) { color: #e8e8ec; text-decoration: underline; text-decoration-color: $line-bright; text-underline-offset: .2em; }
-  .case-content :global(.mdx-content code) { padding: .16em .36em; border: 1px solid $line; border-radius: 4px; background: $black-soft; color: #dedee3; font: .88em/1.4 $font-mono; overflow-wrap: anywhere; }
-  .case-content :global(.mdx-content > pre) { max-width: 720px; margin: 28px 0 32px 78px; padding: 20px; overflow-x: auto; border: 1px solid $line; background: $black-soft; color: #dedee3; font: .84rem/1.75 $font-mono; }
+  .case-content :global(.mdx-content strong) { color: $silver-bright; font-weight: 600; }
+  .case-content :global(.mdx-content a) { color: $accent; text-decoration: underline; text-decoration-color: $line-bright; text-underline-offset: .2em; }
+  .case-content :global(.mdx-content code) { padding: .16em .36em; border: 1px solid $line; border-radius: 4px; background: $black-soft; color: $silver-bright; font: .88em/1.4 $font-mono; overflow-wrap: anywhere; }
+  .case-content :global(.mdx-content > pre) { max-width: 720px; margin: 28px 0 32px 78px; padding: 20px; overflow-x: auto; border: 1px solid $line; background: $black-soft; color: $silver-bright; font: .84rem/1.75 $font-mono; }
   .case-content :global(.mdx-content > pre code) { padding: 0; border: 0; background: transparent; font: inherit; }
   .case-content :global(.mdx-content > hr) { max-width: 720px; margin: 42px 0 42px 78px; border: 0; border-top: 1px solid $line; }
   .case-content :global(.mdx-content > img), .case-content :global(.mdx-content > p > img) { max-width: 100%; height: auto; border: 1px solid $line; }
-  .case-content :global(.mdx-content blockquote) { padding-left: 20px; border-left: 1px solid $line-bright; color: #c8c8ce; }
+  .case-content :global(.mdx-content blockquote) { padding-left: 20px; border-left: 2px solid $accent; color: $silver; }
   .trace-section { padding-top: clamp(90px, 10vw, 140px); }
   .trace-grid, .project-links { grid-column: 2; }
   .trace-grid { display: grid; grid-template-columns: 1fr 1fr; border-top: 1px solid $line-bright; }

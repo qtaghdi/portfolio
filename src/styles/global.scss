@@ -43,9 +43,9 @@ button, a { -webkit-tap-highlight-color: transparent; }
 img, svg { display: block; max-width: 100%; }
 h1, h2, h3, p, ul, ol, dl, dd, blockquote { margin: 0; }
 ul, ol { padding: 0; }
-::selection { background: $silver-bright; color: $black; }
+::selection { background: $accent; color: #fff; }
 
-:focus-visible { outline: 1px solid $silver-bright; outline-offset: 5px; }
+:focus-visible { outline: 2px solid $accent; outline-offset: 4px; }
 
 .skip-link {
   position: fixed;
@@ -53,8 +53,8 @@ ul, ol { padding: 0; }
   top: 12px;
   left: 12px;
   padding: 10px 14px;
-  background: $silver-bright;
-  color: $black;
+  background: $accent;
+  color: #fff;
   transform: translateY(-160%);
   transition: transform $fast;
 }
@@ -65,20 +65,15 @@ ul, ol { padding: 0; }
   margin-inline: auto;
 }
 
-.eyebrow {
-  color: $gunmetal;
-  font: 500 .7rem/1.3 $font-mono;
-  letter-spacing: .13em;
-  text-transform: uppercase;
-}
+.eyebrow { color: $gunmetal; font: 500 .7rem/1.3 $font-mono; letter-spacing: .08em; }
 
 .section-rule { height: 1px; background: $line; }
 
 @media (prefers-reduced-motion: no-preference) {
   .js .reveal {
     opacity: 0;
-    transform: translateY(20px);
-    transition: opacity 650ms ease, transform 650ms cubic-bezier(.2, .75, .2, 1);
+    transform: translateY(10px);
+    transition: opacity 420ms ease, transform 420ms cubic-bezier(.2, .75, .2, 1);
   }
   .js .reveal.visible { opacity: 1; transform: none; }
 }
