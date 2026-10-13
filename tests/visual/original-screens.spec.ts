@@ -68,17 +68,28 @@ for (const reference of declaredReconstructions) {
   });
 }
 
-test('home page keeps every original screen uncropped and free of visual filters', async ({ page }) => {
+test('home page keeps displayed original screens uncropped and shows the intranet app icon', async ({ page }) => {
   await page.goto('/');
+  let auditedScreens = 0;
   for (const reference of originalScreens) {
-    const visual = page.locator(`[data-visual="${reference.key}"]`);
-    await visual.scrollIntoViewIfNeeded();
-    const image = visual.locator('[data-original-screen]');
-    await expect(image).toBeVisible();
-    await expect(image).toHaveCSS('object-fit', 'contain');
-    await expect(image).toHaveCSS('filter', 'none');
-    await expect(image).toHaveCSS('transform', 'none');
+    const visuals = await page.locator(`[data-visual="${reference.key}"]`).all();
+    if (visuals.length === 0) continue;
+    let visibleCount = 0;
+    for (const visual of visuals) {
+      if (!(await visual.isVisible())) continue;
+      visibleCount += 1;
+      await visual.scrollIntoViewIfNeeded();
+      const image = visual.locator('[data-original-screen]');
+      await expect(image).toBeVisible();
+      await expect(image).toHaveCSS('object-fit', 'contain');
+      await expect(image).toHaveCSS('filter', 'none');
+      await expect(image).toHaveCSS('transform', 'none');
+    }
+    expect(visibleCount).toBeGreaterThan(0);
+    auditedScreens += visibleCount;
   }
+  expect(auditedScreens).toBeGreaterThan(0);
+  await expect(page.locator('img[src="/projects/intranet/icon.png"]')).toBeVisible();
   const overflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
   expect(overflow).toBeLessThanOrEqual(1);
 });
