@@ -86,6 +86,33 @@ export const projectEn: Record<string, ProjectTranslation> = {
       { id: 'outcome', title: 'A calmer experience under unreliable conditions', paragraphs: ['Users can continue reading and acting with clear feedback while the system reconnects. The interface exposes uncertainty instead of silently replacing state.'] },
     ],
   },
+  'document-workspace': {
+    category: 'Open Source · MCP · Document Tool', badge: 'XLSX Production Adapter', role: 'Creator',
+    thesis: 'Letting people and AI collaborate safely on one document revision',
+    responsibility: 'Product design, Go XLSX adapter, MCP transports, Univer browser editor, revision and history model, performance and safety verification',
+    visibility: 'Based on the public repository, verification records, and a reproducible release profile.',
+    focus: ['Human-AI collaboration', 'Revision conflicts', 'XLSX fidelity', 'MCP Apps'],
+    summary: 'Built an MCP document workspace where people and AI edit the same XLSX session with revision conflicts, durable undo and redo, atomic persistence, and bounded large-sheet loading.',
+    evidence: [
+      { val: '400K cells', label: 'Release profile workbook', detail: '4 sheets · 1,000 by 100' },
+      { val: '287.74 ms', label: '1,000-cell batch commit', detail: 'darwin-arm64 · Go 1.25' },
+      { val: 'X-01 to X-06', label: 'Automated safety gates', detail: 'Atomicity · recovery · history' },
+    ],
+    sections: [
+      { id: 'problem', title: 'Shared editing needs one source of truth', paragraphs: [
+        'A browser user and an AI agent can start from the same workbook revision and submit competing changes. Lost responses, retries, external file replacement, and unsupported workbook features can turn a convenient editor into a data-loss risk.',
+        'XLSX also requires preservation beyond cell values. Formulas, styles, merged cells, validation, conditional formatting, drawings, and untouched package parts need explicit compatibility boundaries.',
+      ] },
+      { id: 'decisions', title: 'Make revision, persistence, and recovery server-owned', paragraphs: [
+        'Every human and AI write carries a base revision and passes through one validated commit path. A batch is checked before mutation, persisted atomically, advances the revision once, and publishes ordered events. Concurrent writes from the same revision commit exactly one transaction.',
+        'The Go XLSX adapter owns format operations and durable history, while the Univer editor loads bounded ranges and reflects server state. Streamable HTTP, stdio, an embedded MCP App, and a single-use browser fallback connect different hosts without sharing browser and MCP credentials.',
+      ] },
+      { id: 'outcome', title: 'A document session with reproducible safety evidence', paragraphs: [
+        'X-01 through X-06 gates cover package boundaries, atomic batches, concurrent writes, rollback, external replacement, event resync, and durable undo and redo. A 400,000-cell release profile recorded a 287.74 ms 1,000-cell batch commit on the documented machine.',
+        'The result is a collaboration surface where browser and AI edits converge on one revision sequence and failures pause or reject work without silently duplicating or partially applying it.',
+      ] },
+    ],
+  },
   boundra: {
     category: 'Open Source · Developer Tool', badge: 'Public Preview', role: 'Creator',
     thesis: 'Checking TypeScript monorepo domain boundaries with a Rust CLI',

@@ -187,6 +187,13 @@ declare module 'astro:content' {
   collection: "projects";
   data: InferEntrySchema<"projects">
 } & { render(): Render[".mdx"] };
+"04-document-workspace.mdx": {
+	id: "04-document-workspace.mdx";
+  slug: "04-document-workspace";
+  body: string;
+  collection: "projects";
+  data: InferEntrySchema<"projects">
+} & { render(): Render[".mdx"] };
 "04-jeomjuro.mdx": {
 	id: "04-jeomjuro.mdx";
   slug: "04-jeomjuro";

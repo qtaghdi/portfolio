@@ -1,0 +1,93 @@
+---
+order: 4
+title: "document-workspace"
+titleKo: "document-workspace"
+group: personal
+featured: true
+category: "Open Source · MCP · Document Tool"
+badge: "XLSX Production Adapter"
+year: "2026"
+role: "Creator"
+accentColor: sky
+thesis: "사람과 AI가 같은 문서 revision 위에서 안전하게 협업하다"
+responsibility: "제품 설계, Go XLSX adapter, MCP transport, Univer 웹 편집기, revision·history·persistence 모델, 성능과 안전성 검증"
+visibility: "공개 저장소의 코드, 검증 문서와 재현 가능한 release profile을 기준으로 작성했습니다."
+focus:
+  - "Human-AI collaboration"
+  - "Revision conflicts"
+  - "XLSX fidelity"
+  - "MCP Apps"
+summary: "사람과 AI가 같은 XLSX 세션을 편집하면서 변경 충돌, undo·redo, 원자적 저장과 대용량 시트 로딩을 안전하게 처리하는 MCP 기반 문서 워크스페이스를 만들었습니다."
+evidence:
+  - { val: "400K cells", label: "release profile workbook", detail: "4 sheets · 1000 by 100" }
+  - { val: "287.74 ms", label: "1,000-cell batch commit", detail: "darwin-arm64 · Go 1.25" }
+  - { val: "X-01 to X-06", label: "automated safety gates", detail: "atomicity · recovery · history" }
+metrics: []
+callouts:
+  - icon: "01"
+    title: "One authoritative revision"
+    color: accent
+    body: "브라우저 편집과 AI 도구 호출을 하나의 revisioned commit path로 연결해, 같은 base revision의 동시 쓰기 중 하나만 반영하고 stale write는 부분 변경 없이 거부합니다."
+  - icon: "02"
+    title: "Safe persistence and recovery"
+    color: teal
+    body: "XLSX를 같은 디렉터리의 임시 파일에 기록한 뒤 원자적으로 교체하고, 저장 실패와 외부 파일 변경, 응답 유실 상황에서 기존 문서와 history를 보존합니다."
+  - icon: "03"
+    title: "Evidence before claims"
+    color: amber
+    body: "호환성 corpus, race detector 기반 안전성 gate와 40만 셀 release profile을 기록해 기능 보존과 성능 회귀를 같은 릴리즈 기준으로 확인합니다."
+tech:
+  - "Go"
+  - "TypeScript"
+  - "Vite"
+  - "Univer"
+  - "MCP"
+  - "SSE"
+  - "Excelize"
+  - "Tailwind CSS"
+  - "Playwright"
+  - "pnpm"
+github: "https://github.com/qtaghdi/document-workspace"
+---
+
+## Problem
+
+사람과 AI가 같은 문서를 편집하려면 두 화면을 연결하는 것만으로는 부족합니다. 사용자가 브라우저에서 셀을 수정하는 동안 AI도 같은 파일을 변경할 수 있고, 두 작업이 같은 revision에서 시작하면 어느 쪽을 반영할지 결정해야 합니다. 네트워크 응답이 유실되거나 외부 프로그램이 파일을 교체한 상황에서 요청을 무작정 재시도하면 같은 구조 변경이 두 번 적용될 수도 있습니다.
+
+XLSX는 값만 보존하면 되는 포맷도 아닙니다. 수식, 스타일, 병합 셀, 유효성 검사, 조건부 서식, 이미지와 차트처럼 편집하지 않은 기능이 저장 이후에도 유지되어야 합니다. 큰 시트를 처음부터 모두 브라우저로 보내지 않으면서도 스크롤한 영역은 이어서 읽을 수 있어야 했습니다.
+
+또한 MCP 클라이언트마다 앱 렌더링과 연결 방식이 다릅니다. 브라우저와 MCP가 서로의 자격 증명을 사용할 수 없도록 분리하면서, 임베디드 앱을 지원하지 않는 환경에는 짧게 유효한 single-use URL을 제공해야 했습니다.
+
+## Approach
+
+### 1. Revisioned Collaboration
+
+Go 서버의 document session을 문서 상태의 단일 기준으로 두었습니다. 브라우저와 AI의 모든 변경은 base revision, actor와 작업 목록을 포함하며, 전체 batch를 먼저 검증한 뒤 한 번만 저장하고 revision을 증가시킵니다. 같은 revision을 기준으로 두 쓰기가 동시에 들어오면 하나만 commit되고 나머지는 현재 revision과 함께 conflict로 반환됩니다.
+
+브라우저에는 SSE로 순서가 있는 event를 전달합니다. 재연결 시 event gap이나 session mismatch가 발견되면 최신 상태를 다시 읽도록 하고, newer revision만 보고 이전 요청이 성공했다고 추측하지 않도록 했습니다. 사용자의 셀 편집, paste와 AI 변경은 같은 revision sequence에서 확인할 수 있습니다.
+
+### 2. XLSX Persistence and History
+
+XLSX adapter는 transport나 UI에 의존하지 않고 셀, 범위, 행과 열, 병합, 스타일, 이미지와 차트 작업을 typed operation으로 처리합니다. 지원되는 batch는 메모리와 임시 파일에 적용한 뒤 같은 디렉터리에서 원자적으로 교체합니다. 저장 준비, sync, close나 rename이 실패하면 이전 메모리와 디스크 상태를 유지합니다.
+
+Undo와 redo는 브라우저의 임시 상태가 아니라 서버가 관리하는 revisioned history입니다. 복원 역시 과거 revision으로 되돌아가는 대신 새로운 revision을 만들며, 재시작 이후에도 hash-addressed snapshot과 manifest를 통해 제한된 history를 복구합니다.
+
+### 3. Browser Editor and MCP Delivery
+
+Univer 기반 웹 편집기에서 셀 값, 수식, 스타일, 병합과 rectangular paste를 지원하고, viewport가 초기 범위를 벗어나면 필요한 range를 추가로 불러옵니다. 지원하지 않거나 일부만 보존되는 workbook 기능은 숨기지 않고 compatibility notice로 알립니다.
+
+Streamable HTTP와 stdio MCP transport를 제공하고, 임베디드 MCP App과 인증된 loopback browser fallback을 같은 session에 연결했습니다. 브라우저 session cookie와 MCP bearer credential을 분리하고, fallback URL은 한 번만 사용할 수 있으며 2분 뒤 만료되도록 구성했습니다.
+
+### 4. Reproducible Verification
+
+X-01부터 X-06까지의 자동화 gate로 OOXML 입력 경계, atomic batch, 같은 revision의 동시 쓰기, 저장 실패 rollback, 외부 파일 교체, 응답 유실, event replay, undo와 redo 복구를 검증했습니다. race detector와 프론트엔드 recovery test를 함께 실행해 서버와 브라우저의 복구 흐름을 분리해서 확인했습니다.
+
+성능은 4개 sheet, 40만 셀의 합성 workbook을 release profile로 기록했습니다. 동일한 darwin-arm64 환경에서 session open 757.79ms, 10,000셀 read 7.81ms, 단일 셀 commit 336.87ms, 1,000셀 batch commit 287.74ms를 측정했습니다. 이 수치는 사용자 latency 약속이 아니라 다음 릴리즈의 심각한 회귀를 차단하는 기준으로 사용합니다.
+
+## Result
+
+document-workspace는 브라우저 편집기와 AI 도구를 같은 문서 revision 위에 연결했습니다. 사용자가 편집한 뒤 AI가 변경하거나, AI 변경 직후 사용자가 편집해도 각 작업이 하나의 순서와 저장 결과로 수렴하며 stale write는 부분 변경 없이 거부됩니다.
+
+XLSX 저장과 history는 오류가 발생해도 이전의 정상 상태를 유지하도록 구성했습니다. 원자적 batch, 외부 파일 변경 감지, durable undo와 redo, event resync를 함께 다뤄 단순 데모가 아니라 실패 이후의 복구까지 제품 동작으로 포함했습니다.
+
+40만 셀 release profile과 X-01부터 X-06까지의 안전성 gate를 기록해 성능과 데이터 보존 주장을 다시 실행할 수 있게 했습니다. 현재는 XLSX를 첫 production adapter로 제공하며, 다른 문서 포맷은 각각의 보존 규칙과 검증 corpus가 준비될 때 별도 adapter로 확장하는 원칙을 유지합니다.

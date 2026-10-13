@@ -23,6 +23,9 @@
 | Design System | 11 token domains | `bigtablet-design-system/README.md` | public README and `src/styles` | High |
 | Design System | 68 Storybook story files | `bigtablet-design-system/src` | count `*.stories.tsx`, `*.stories.ts`, `*.stories.mdx` | High |
 | Intranet | 19 test files | `bigtablet-intranet-app/test` | count `*_test.dart` on 2026-08-05 | Medium: scope only |
+| document-workspace | 400,000-cell release profile | `document-workspace/docs/release-evidence/xlsx-performance-2026-10-12.md` | 4 sheets, 1,000 by 100, darwin-arm64 | High |
+| document-workspace | 1,000-cell commit in 287.74ms | `document-workspace/docs/release-evidence/xlsx-performance-2026-10-12.md` | release profile, Go 1.25.0 | High |
+| document-workspace | X-01 to X-06 safety gates passed | `document-workspace/docs/release-evidence/xlsx-safety-2026-10-12.md` | race detector and frontend recovery tests | High |
 | Boundra | 10,000 files / 164.20ms warm median | `boundra/docs/performance.md` | darwin-arm64, Node 24.14.0, baseline 2026-07-03 | High |
 | Boundra | 2,559 normalized imports, 0 missing / 0 extra | `boundra/docs/dogfooding-notes.md` | comparison with TypeScript 6 `preProcessFile` on a 773-file snapshot | High |
 | OWKR Balance | 운영진 내부 실사용 | user confirmation, `owkr-match/README.md` | 실사용 상태를 2026-08-05에 교정 | User-confirmed |
