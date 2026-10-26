@@ -3,7 +3,7 @@ import mdx from '@astrojs/mdx';
 
 export default defineConfig({
   integrations: [mdx()],
-  site: 'https://portfolio-sage-nine-97.vercel.app',
+  site: 'https://park-sangmin.vercel.app',
   i18n: {
     defaultLocale: 'ko',
     locales: ['ko', 'en'],

@@ -50,17 +50,17 @@ const moreNotes: Record<string, string> = ko ? {
 const notes: Record<string, { summary: string; meta: string; role: string }> = {
   'design-system': {
     summary: ko ? '필요한 컴포넌트의 CSS만 불러오도록 배포 구조를 개선했습니다.' : 'Changed package distribution to load CSS for the components in use.',
-    meta: ko ? '회사 프로젝트 · React · TypeScript · SCSS' : 'Company project · React · TypeScript · SCSS',
+    meta: 'React · TypeScript · SCSS',
     role: ko ? '패키지 배포 구조, 토큰, 컴포넌트 유지보수' : 'Package distribution, tokens, and component maintenance',
   },
   notiiv: {
     summary: ko ? '여러 앱에서 반복되는 인증과 API 처리를 공통 패키지로 정리했습니다.' : 'Consolidated repeated authentication and API handling into shared packages.',
-    meta: ko ? '회사 프로젝트 · Next.js · TanStack Query · Zod' : 'Company project · Next.js · TanStack Query · Zod',
+    meta: 'Next.js · TanStack Query · Zod',
     role: ko ? 'BFF 공통화, 운영 화면, 공유 흐름 개선' : 'Shared BFF, operator interfaces, and sharing flows',
   },
   'document-workspace': {
     summary: ko ? '사람과 AI의 XLSX 편집을 하나의 revision으로 관리하는 개인 프로젝트입니다.' : 'An independent project managing human and AI edits in one XLSX revision sequence.',
-    meta: ko ? '개인 프로젝트 · Go · TypeScript · MCP' : 'Personal project · Go · TypeScript · MCP',
+    meta: 'Go · TypeScript · MCP',
     role: ko ? '문서 세션, 변경 충돌, 저장과 복구' : 'Document sessions, revision conflicts, persistence, and recovery',
   },
 };
@@ -79,9 +79,10 @@ const notes: Record<string, { summary: string; meta: string; role: string }> = {
         const icon = projectIcons[key];
         const href = projectPath(locale, project.slug);
         return (
-          <article class="featured-project">
+          <article class="featured-project" data-project-group={project.data.group}>
             <span class="project-number">{String(index + 1).padStart(2, '0')}</span>
             <div class="project-copy">
+              <p class="project-context">{project.data.group === 'personal' ? (ko ? '개인 프로젝트 · 독립 개발' : 'Personal project · Independent work') : groupLabels[project.data.group]}</p>
               <h3><a class="project-title" href={href}>{icon && <img class="project-icon" src={icon} width="24" height="24" alt="" aria-hidden="true" decoding="async" />}{data.title}</a></h3>
               <p class="project-summary">{note?.summary ?? data.summary}</p>
               <p class="project-meta">{note?.meta ?? data.category}</p>
@@ -111,6 +112,8 @@ const notes: Record<string, { summary: string; meta: string; role: string }> = {
   .featured-list { border-top: 1px solid $line; }
   .featured-project { display: grid; grid-template-columns: 68px minmax(0,1fr) auto; gap: 24px; padding: 36px 0; border-bottom: 1px solid $line; }
   .project-number { padding-top: 8px; color: $gunmetal; font-size: 14px; }
+  .project-context { margin-bottom: 8px; color: $gunmetal; font-size: 13px; line-height: 1.6; }
+  .featured-project[data-project-group="personal"] .project-context { color: $accent; font-weight: 500; }
   h3 { font-size: 26px; font-weight: 600; line-height: 1.5; letter-spacing: -.025em; }
   .project-title { display: flex; align-items: center; gap: 12px; width: fit-content; }
   .project-title:hover { color: $accent; }

@@ -21,7 +21,7 @@ export const copy = {
     selected: {
       kicker: 'SELECTED WORK',
       title: '주요 작업',
-      description: '회사에서 맡은 일과 직접 만든 도구를 정리했습니다.',
+      description: '각 프로젝트에서 맡은 역할과 설계 과정을 정리했습니다.',
       detail: '자세히 보기',
       moreKicker: 'MORE WORK',
       moreTitle: '다른 작업',
@@ -66,7 +66,7 @@ export const copy = {
     selected: {
       kicker: 'SELECTED WORK',
       title: 'Selected work',
-      description: 'Selected work from my role at Bigtablet and independent projects.',
+      description: 'My role and design decisions in selected projects.',
       detail: 'View project',
       moreKicker: 'MORE WORK',
       moreTitle: 'More work',
