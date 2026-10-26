@@ -13,7 +13,7 @@ const enPath = Astro.url.pathname.startsWith('/en/') ? Astro.url.pathname : `/en
 
 <header class="site-header" id="site-header">
   <nav class="nav-shell" aria-label={locale === 'ko' ? '주요 메뉴' : 'Primary navigation'}>
-    <a class="brand" href={home}>박상민<span>Park Sangmin</span></a>
+    <a class="brand" href={home}>{locale === 'ko' ? '박상민' : 'Park Sangmin'}</a>
     <div class="nav-panel" id="nav-panel">
       <ul class="nav-links">
         <li><a href={section('projects')}>{dictionary.nav.work}</a></li>
@@ -34,32 +34,21 @@ const enPath = Astro.url.pathname.startsWith('/en/') ? Astro.url.pathname : `/en
 
 <style lang="scss">
   @use '../styles/tokens' as *;
-  .site-header { position: fixed; inset: 0 0 auto; z-index: 100; border-bottom: 1px solid $line; background: rgba(255,255,255,.92); backdrop-filter: blur(18px); }
-  .nav-shell { width: min(1440px, calc(100% - 96px)); height: 72px; display: flex; align-items: center; justify-content: space-between; margin-inline: auto; }
-  .brand { display: flex; align-items: baseline; gap: 10px; color: $silver-bright; font-size: .98rem; font-weight: 600; }
-  .brand span { color: $gunmetal; font: 500 .6rem/1 $font-mono; }
+  .site-header { position: fixed; inset: 0 0 auto; z-index: 100; background: #fff; border-bottom: 1px solid $line; }
+  .nav-shell { width: min(1080px, calc(100% - 80px)); height: 76px; display: flex; align-items: center; justify-content: space-between; margin-inline: auto; }
+  .brand { font-size: 19px; font-weight: 600; letter-spacing: -.03em; }
   .nav-panel, .nav-links, .language { display: flex; align-items: center; }
-  .nav-panel { gap: 54px; }
-  .nav-links { gap: 34px; list-style: none; }
-  .nav-links a, .language { font: 500 .69rem/1 $font-mono; }
-  .nav-links a, .language a { color: $silver; transition: color $fast; }
+  .nav-panel { gap: 40px; }.nav-links { gap: 28px; list-style: none; }
+  .nav-links a, .language a { display: inline-flex; align-items: center; min-height: 44px; color: $silver; font-size: 14px; }
   .nav-links a:hover, .language a:hover, .language a[aria-current='page'] { color: $accent; }
-  .language { gap: 8px; }
-  .language span { color: $line-bright; }
-  .menu-button { display: none; width: 42px; height: 42px; padding: 10px; border: 0; background: transparent; color: $silver-bright; cursor: pointer; }
-  .menu-button span { display: block; height: 2px; margin: 6px 0; background: currentColor; transition: transform $fast; }
-  @media (max-width: 760px) {
-    .nav-shell { width: calc(100% - 40px); height: 68px; }
-    .brand span { display: none; }
-    .menu-button { display: block; }
-    .nav-panel { position: absolute; top: 68px; left: 0; right: 0; display: none; align-items: stretch; gap: 24px; padding: 24px 20px 28px; border-bottom: 1px solid $line; background: #fff; }
-    .site-header.menu-open .nav-panel { display: grid; }
-    .nav-links { display: grid; gap: 0; }
-    .nav-links li { border-bottom: 1px solid $line; }
-    .nav-links a { display: flex; min-height: 48px; align-items: center; font-size: .82rem; }
-    .language { font-size: .72rem; }
-    .site-header.menu-open .menu-button span:first-child { transform: translateY(4px) rotate(45deg); }
-    .site-header.menu-open .menu-button span:last-child { transform: translateY(-4px) rotate(-45deg); }
+  .language { gap: 8px; font-size: 14px; }.language span { color: $gunmetal; }
+  .menu-button { display: none; width: 44px; height: 44px; padding: 10px; border: 0; background: transparent; color: $silver-bright; cursor: pointer; }
+  .menu-button span { display: block; height: 1.5px; margin: 6px 0; background: currentColor; }
+  @media (max-width: 680px) {
+    .nav-shell { width: calc(100% - 40px); height: 68px; }.brand { font-size: 18px; }.menu-button { display: block; }
+    .nav-panel { position: absolute; top: 68px; left: 0; right: 0; display: none; align-items: stretch; gap: 16px; padding: 16px 20px 24px; border-bottom: 1px solid $line; background: #fff; }
+    .site-header.menu-open .nav-panel { display: grid; }.nav-links { display: grid; gap: 0; }.nav-links li { border-bottom: 1px solid $line; }.nav-links a { display: flex; min-height: 48px; }
+    .site-header.menu-open .menu-button span:first-child { transform: translateY(3.75px) rotate(45deg); }.site-header.menu-open .menu-button span:last-child { transform: translateY(-3.75px) rotate(-45deg); }
   }
 </style>
 
@@ -73,6 +62,9 @@ const enPath = Astro.url.pathname.startsWith('/en/') ? Astro.url.pathname : `/en
   button?.addEventListener('click', () => {
     const open = header?.classList.toggle('menu-open') ?? false;
     button.setAttribute('aria-expanded', String(open));
+  });
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape' && header?.classList.contains('menu-open')) { closeMenu(); button?.focus(); }
   });
   header?.querySelectorAll('a').forEach((link) => link.addEventListener('click', closeMenu));
 </script>

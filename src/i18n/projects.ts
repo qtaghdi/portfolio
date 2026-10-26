@@ -2,6 +2,8 @@ export interface ProjectSection {
   id: 'problem' | 'decisions' | 'outcome';
   title: string;
   paragraphs: string[];
+  links?: { label: string; href: string }[];
+  subsections?: { title: string; paragraphs: string[]; items?: string[] }[];
 }
 
 export interface ProjectTranslation {
@@ -23,51 +25,208 @@ export const projectKey = (slug: string) => slug.replace(/^\d+-/, '');
 
 export const projectEn: Record<string, ProjectTranslation> = {
   notiiv: {
-    category: 'Company · Production',
-    badge: 'Flagship',
-    role: 'Frontend Engineer',
-    thesis: 'Operating four product apps and shared packages as one monorepo',
-    responsibility: 'pnpm and Turborepo multi-app architecture, shared frontend infrastructure, operational UX, authentication, sharing, and webview edge conditions',
-    visibility: 'Based on public product and repository structures. Internal customer and operational data are excluded.',
-    focus: ['pnpm monorepo', 'Turborepo', 'BFF and WebAuthn', 'Operational UX'],
-    summary: 'Operated an admin console, owner dashboard, service status page, and customer support site with 13 shared packages in a pnpm and Turborepo monorepo, consolidating repeated authentication, API, sharing, and webview boundaries.',
-    evidence: [
-      { val: '4 Frontend Apps', label: 'One product monorepo' },
-      { val: '13 packages', label: 'Shared API, Query, Schema, and UI foundation' },
-      { val: '90%+ Test Coverage', label: 'Shared package stability' },
+    "category": "Company · Production",
+    "badge": "Flagship",
+    "role": "Frontend Engineer",
+    "thesis": "Consolidating repeated authentication and API handling across apps",
+    "responsibility": "Shared BFF and Query infrastructure, operational interfaces, and authentication, sharing, and webview edge conditions",
+    "visibility": "Company work described through implementation and authored commits. Repository links may require access. Internal customer data is excluded.",
+    "focus": [
+        "pnpm monorepo",
+        "BFF boundaries",
+        "Operational UX",
+        "Browser edge conditions"
     ],
-    sections: [
-      { id: 'problem', title: 'Four products were repeating the same risk', paragraphs: [
-        'Admin, customer support, owner dashboards, and shared pages each needed authentication, session handling, BFF proxies, customer registration, document viewing, and sharing. Similar logic was duplicated while browser and server edge conditions could still fail in different ways.',
-        'Operator tools also exposed product friction. FAQ previews differed from the customer view, simple customer entry depended on spreadsheets, and mobile webviews could break OAuth, deep links, blob downloads, or browser APIs.',
-      ] },
-      { id: 'decisions', title: 'Make the boundaries shared and explicit', paragraphs: [
-        'I extracted shared QueryClient and BFF proxy factories, added path validation and authentication options, and moved WebAuthn responses to Zod-based runtime parsing. Shared paths became a single source of truth across apps.',
-        'I aligned the FAQ editor with the public renderer, added unsaved-change protection, simplified direct customer entry, and used optimistic updates for operator actions. Calendar exports followed RFC 5545, while webview fallbacks and PDF viewer gesture rules protected mobile edge cases.',
-      ] },
-      { id: 'outcome', title: 'A product surface that is easier to operate', paragraphs: [
-        'Shared infrastructure reduced the need to fix the same issue in multiple apps. Operator workflows became shorter and more predictable, and real-world browser failures were handled as part of the product experience.',
-      ] },
+    "summary": "Maintained shared frontend infrastructure and improved operational interfaces, authentication, sharing, and webview behavior across four apps and 13 shared packages.",
+    "evidence": [
+        {
+            "val": "4 Frontend Apps",
+            "label": "One product monorepo"
+        },
+        {
+            "val": "13 packages",
+            "label": "Shared API, Query, Schema, and UI foundation"
+        },
+        {
+            "val": "90% Coverage Gate",
+            "label": "API package configuration, not whole-product coverage"
+        }
     ],
-  },
+    "sections": [
+        {
+            "id": "problem",
+            "title": "The same authentication boundary was maintained in several apps",
+            "paragraphs": [
+                "Notiiv includes an admin console, owner dashboard, status app, and support site. I maintained shared BFF and Query infrastructure and improved operational interfaces and browser boundaries, rather than independently designing the entire product.",
+                "Separate proxies duplicated path checks, cookie injection, refresh, and error handling. Fixing one app could leave another behind. A single rigid proxy would introduce a different problem: app-specific login responses and uploads would become entangled with shared infrastructure.",
+                "Operators also encountered mismatched FAQ previews, spreadsheet-dependent customer entry, webview download restrictions, and PDF page navigation during zoom."
+            ]
+        },
+        {
+            "id": "decisions",
+            "title": "Separate shared request handling from product policy",
+            "paragraphs": [],
+            "subsections": [
+                {
+                    "title": "One pipeline, app-owned response policy",
+                    "paragraphs": [
+                        "I consolidated path validation, URL construction, authentication injection, and refresh-and-retry handling in createSimpleBffProxy. The owner app moved away from its separate request and response pipeline.",
+                        "Login and signup responses still use an app-owned hook to move returned tokens into cookies. Public paths do not receive an old session token or trigger refresh. JSON and upload routes share the pipeline with different body, content-type, and timeout limits.",
+                        "A protected request receiving 401 and a failed login returning 401 require different behavior. Cookie injection and refresh also depend on each other, so invalid option combinations fail when the proxy is created instead of leaving stale sessions to trigger navigation loops."
+                    ]
+                },
+                {
+                    "title": "Verify that rejection prevents upstream effects",
+                    "paragraphs": [
+                        "Path and origin tests check both the response and whether the backend was called: invalid segments return 400, disallowed prefixes return 404, and cross-origin state changes return 403 without forwarding.",
+                        "The redirect helper rejects protocol-relative external targets as well as obvious external URLs. Merely starting with a slash is insufficient. QueryClient factories retain per-app overrides, and Zod distinguishes TypeScript assumptions from actual API response validity."
+                    ]
+                },
+                {
+                    "title": "Improve the task operators need to finish",
+                    "paragraphs": [
+                        "I aligned FAQ preview and support rendering, improved editor error and focus states, and connected unsaved-change protection to form state so successful saves could still navigate.",
+                        "Direct customer input, empty-row checks, phone formatting, and optimistic image deletion support operational tasks without requiring every small entry to pass through a spreadsheet."
+                    ]
+                },
+                {
+                    "title": "Treat shared pages and mobile browsers as distinct conditions",
+                    "paragraphs": [
+                        "Calendar sharing moved from inferring dates from titles to explicit backend follow-up events displayed on the share card and exported together. Handling includes time zones, invalid dates, escaping, and long lines.",
+                        "Webview guidance and browser fallbacks cover unsupported downloads and APIs. PDF interaction separates zoom from page swipes and accounts for Korean IME keyboard-event differences."
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "outcome",
+            "title": "Shared boundaries with app-level verification",
+            "paragraphs": [],
+            "subsections": [
+                {
+                    "title": "What changed",
+                    "paragraphs": [
+                        "The owner app now uses the shared proxy while retaining login and signup response policy. QueryClient, runtime parsing, and share paths also have shared boundaries. Authored changes cover operational entry and preview behavior alongside browser-specific failures."
+                    ]
+                },
+                {
+                    "title": "What the checks establish",
+                    "paragraphs": [
+                        "Proxy tests cover response status and upstream-call prevention. Refresh and owner-route tests cover authentication behavior after consolidation. The 90% API coverage figure is a configured threshold, not a measured whole-product result."
+                    ]
+                },
+                {
+                    "title": "Limits and next validation",
+                    "paragraphs": [
+                        "Shared-package tests cannot establish that every app still authenticates, uploads, and behaves correctly in real browsers. Operational task-time and support-request improvements have not been measured. The next evidence should combine app-level scenarios with completion time and failure categories."
+                    ]
+                }
+            ]
+        }
+    ]
+},
   'design-system': {
-    category: 'Company · Open Source · NPM', badge: 'NPM Published', role: 'Design System Engineer',
-    thesis: 'From a component set to an interface platform for assembling and validating products',
-    responsibility: 'Tokens, themes, component APIs, mobile layouts, accessibility, testing, and NPM releases',
-    visibility: 'All figures can be reproduced from the public GitHub repository and NPM package.',
-    focus: ['Design tokens', 'Component API', 'Accessibility', 'Release system'],
-    summary: 'Built the foundation for product teams to create and validate interfaces with shared rules across tokens, layouts, motion, overlays, and releases.',
-    evidence: [
-      { val: '40+', label: 'Public components', detail: 'Public README' },
-      { val: '11', label: 'Token domains', detail: 'SCSS variables and CSS custom properties' },
-      { val: '68', label: 'Story files', detail: 'Repository snapshot from 2026-08-05' },
+    "category": "Company · UI Library · NPM",
+    "role": "Frontend Engineer and Design System Contributor",
+    "thesis": "Load CSS for the components in use",
+    "responsibility": "Per-component ESM and CSS output, token generation, overlay motion, component maintenance, and consumer migration",
+    "visibility": "Company work described through authored commits. Internal customer data is excluded.",
+    "focus": [
+        "Package distribution",
+        "Design tokens",
+        "Overlay behavior",
+        "Consumer migration"
     ],
-    sections: [
-      { id: 'problem', title: 'Consistency had to include behavior', paragraphs: ['Shared UI meant more than matching colors. Component APIs, accessibility, themes, mobile navigation, motion, Storybook, tests, and publishing all had to behave consistently across products.'] },
-      { id: 'decisions', title: 'Build a platform around the components', paragraphs: ['I organized light, dark, and system themes around CSS custom properties, added layout primitives and responsive mobile navigation, and used polymorphic types to protect link and button semantics.', 'Motion moved to a shared react-spring presence pattern. Storybook viewport resets and deterministic test setup made verification reliable, while NPM Trusted Publishing removed long-lived publish tokens.'] },
-      { id: 'outcome', title: 'One shared way to build product UI', paragraphs: ['The system now covers more than 40 public components, 11 token domains, and 68 Storybook story files. Product teams can share interface rules, responsive behavior, and release practices through one package.'] },
+    "summary": "Changed distribution so component dependencies bring their own CSS, separated overlay lifetime from CSS motion, and updated migration guidance and consuming apps.",
+    "evidence": [
+        {
+            "val": "ESM + CSS",
+            "label": "Per-component distribution"
+        },
+        {
+            "val": "4 apps",
+            "label": "Package dependencies in the Notiiv monorepo"
+        },
+        {
+            "val": "CSS motion",
+            "label": "Removed the react-spring runtime dependency"
+        }
     ],
-  },
+    "sections": [
+        {
+            "id": "problem",
+            "title": "Using one component still brought the whole stylesheet",
+            "paragraphs": [
+                "I maintained an existing company library across package distribution, tokens, overlays, and consumer migration. A page using only a button could still import styles for overlays and every other component through one shared stylesheet.",
+                "JavaScript tree shaking did not remove that explicit CSS import. Removing a motion dependency also required preserving DOM lifetime: immediate unmount removes exit motion, while an outdated exit callback can close an overlay that has already reopened."
+            ]
+        },
+        {
+            "id": "decisions",
+            "title": "Align styles, module dependencies, and element lifetime",
+            "paragraphs": [],
+            "subsections": [
+                {
+                    "title": "Split modules and remove barrel side effects",
+                    "paragraphs": [
+                        "I emitted component-level ESM with adjacent CSS. Components import their own styles and bring styles for dependencies such as a DatePicker using Popover.",
+                        "Splitting files alone was insufficient while the barrel still imported shared CSS. Theme, autofill, and link styles moved to the modules that need them, leaving the barrel with re-exports. Package side-effect declarations preserve CSS without retaining every unused JavaScript module.",
+                        "The postprocessor resolves real ESM file paths and compiles SCSS into the same CSS layer. Unsupported barrel exports fail the build instead of disappearing silently. Watch rebuilds run the same postprocessing as distribution builds."
+                    ]
+                },
+                {
+                    "title": "Let CSS animate and a small hook manage lifetime",
+                    "paragraphs": [
+                        "usePresence mounts on the opening render, then waits for the overlay element's animations before unmounting. Reopening cancels the previous exit wait. No active animation, including reduced motion, means immediate removal.",
+                        "The wait excludes child animations so an infinite spinner cannot keep an overlay mounted forever. This preserves lifecycle boundaries while removing react-spring and the public spring hooks."
+                    ]
+                },
+                {
+                    "title": "Complete the change in consuming apps",
+                    "paragraphs": [
+                        "The previous full stylesheet remains available for compatibility. Migration guidance distinguishes removing it from cases requiring theme variables, and documents the package-import optimization needed for webpack.",
+                        "tokens.json generates SCSS, TypeScript, and theme output. A stale-output check detects divergence. Consumer updates include package versions and stylesheet imports rather than stopping at a successful package build."
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "outcome",
+            "title": "A different distribution and consumption model",
+            "paragraphs": [],
+            "subsections": [
+                {
+                    "title": "Checks and implementation evidence",
+                    "paragraphs": [
+                        "Authored changes establish the output modules, rewritten imports, pure re-export barrel, and guards for unsupported exports and watch rebuilds. Presence tests cover immediate mount, no-animation removal, exit completion, interrupted exit, and callbacks for an overlay that never opened.",
+                        "Migration documentation records consumer CSS and theme requirements. Four Notiiv apps reference the package. The result is a dependency-aligned distribution model with CSS-driven overlay motion."
+                    ]
+                },
+                {
+                    "title": "Limits and next validation",
+                    "paragraphs": [
+                        "An app retaining the full stylesheet or unsuitable bundler settings may not benefit from module splitting. No loading-time improvement or bundle-reduction percentage is claimed without a matched report.",
+                        "The next validation should compare a button-only consumer and real product pages under the same build settings, recording JavaScript and CSS output alongside light and dark theme and overlay behavior."
+                    ]
+                }
+            ],
+            "links": [
+                {
+                    "label": "Per-component distribution commit",
+                    "href": "https://github.com/Bigtablet/bigtablet-design-system/commit/3a9c75010f1f0aeae551e2127e7c4b5f1e7a355e"
+                },
+                {
+                    "label": "CSS motion migration commit",
+                    "href": "https://github.com/Bigtablet/bigtablet-design-system/commit/32972ad735ff921c2bfc1fa84867cfb50dd1dc96"
+                },
+                {
+                    "label": "Consumer migration guidance",
+                    "href": "https://github.com/Bigtablet/bigtablet-design-system/blob/develop/docs/MIGRATION.md"
+                }
+            ]
+        }
+    ]
+},
   intranet: {
     category: 'Company · Flutter App · Production', badge: 'Mobile', role: 'Flutter Developer',
     thesis: 'Connecting collaborative work and state inside one Flutter app',
@@ -87,80 +246,293 @@ export const projectEn: Record<string, ProjectTranslation> = {
     ],
   },
   'document-workspace': {
-    category: 'Open Source · MCP · Document Tool', badge: 'XLSX Production Adapter', role: 'Creator',
-    thesis: 'Letting people and AI collaborate safely on one document revision',
-    responsibility: 'Product design, Go XLSX adapter, MCP transports, Univer browser editor, revision and history model, performance and safety verification',
-    visibility: 'Based on the public repository, verification records, and a reproducible release profile.',
-    focus: ['Human-AI collaboration', 'Revision conflicts', 'XLSX fidelity', 'MCP Apps'],
-    summary: 'Built an MCP document workspace where people and AI edit the same XLSX session with revision conflicts, durable undo and redo, atomic persistence, and bounded large-sheet loading.',
-    evidence: [
-      { val: '400K cells', label: 'Release profile workbook', detail: '4 sheets · 1,000 by 100' },
-      { val: '287.74 ms', label: '1,000-cell batch commit', detail: 'darwin-arm64 · Go 1.25' },
-      { val: 'X-01 to X-06', label: 'Automated safety gates', detail: 'Atomicity · recovery · history' },
+    "category": "Personal · MCP · Document Tool",
+    "badge": "Private XLSX Alpha",
+    "role": "Creator",
+    "thesis": "One authoritative document state for human and AI edits",
+    "responsibility": "Product design, Go XLSX adapter, MCP transport, Univer editor, revision, history, persistence, and verification",
+    "visibility": "Independent private project at local XLSX alpha stage. Evidence links require repository access. Benchmarks describe the recorded environment, not production outcomes.",
+    "focus": [
+        "Human-AI collaboration",
+        "Revision conflicts",
+        "XLSX fidelity",
+        "Recovery"
     ],
-    sections: [
-      { id: 'problem', title: 'Shared editing needs one source of truth', paragraphs: [
-        'A browser user and an AI agent can start from the same workbook revision and submit competing changes. Lost responses, retries, external file replacement, and unsupported workbook features can turn a convenient editor into a data-loss risk.',
-        'XLSX also requires preservation beyond cell values. Formulas, styles, merged cells, validation, conditional formatting, drawings, and untouched package parts need explicit compatibility boundaries.',
-      ] },
-      { id: 'decisions', title: 'Make revision, persistence, and recovery server-owned', paragraphs: [
-        'Every human and AI write carries a base revision and passes through one validated commit path. A batch is checked before mutation, persisted atomically, advances the revision once, and publishes ordered events. Concurrent writes from the same revision commit exactly one transaction.',
-        'The Go XLSX adapter owns format operations and durable history, while the Univer editor loads bounded ranges and reflects server state. Streamable HTTP, stdio, an embedded MCP App, and a single-use browser fallback connect different hosts without sharing browser and MCP credentials.',
-      ] },
-      { id: 'outcome', title: 'A document session with reproducible safety evidence', paragraphs: [
-        'X-01 through X-06 gates cover package boundaries, atomic batches, concurrent writes, rollback, external replacement, event resync, and durable undo and redo. A 400,000-cell release profile recorded a 287.74 ms 1,000-cell batch commit on the documented machine.',
-        'The result is a collaboration surface where browser and AI edits converge on one revision sequence and failures pause or reject work without silently duplicating or partially applying it.',
-      ] },
+    "summary": "Built a local XLSX workspace connecting human and AI edits through revisioned commits, durable history, atomic persistence, and bounded range loading.",
+    "evidence": [
+        {
+            "val": "400K cells",
+            "label": "Release profile workbook",
+            "detail": "4 sheets · 1,000 by 100"
+        },
+        {
+            "val": "287.74 ms",
+            "label": "Recorded 1,000-cell batch commit",
+            "detail": "2026-10-12 · darwin-arm64 · Go 1.25"
+        },
+        {
+            "val": "X-01 to X-06",
+            "label": "Recorded automated safety gates",
+            "detail": "Local atomicity, recovery, and history"
+        }
     ],
-  },
+    "sections": [
+        {
+            "id": "problem",
+            "title": "Two editors still need one definition of saved state",
+            "paragraphs": [
+                "I designed and implemented the product, XLSX adapter, transports, editor, and recovery model as an independent project. It remains a private local XLSX alpha.",
+                "If a person and an AI both read revision 12, accepting both writes without a revision boundary can lose the earlier change. A successful save followed by a lost response is different: automatically retrying a row insertion can duplicate it, and a higher server revision does not identify which request succeeded.",
+                "A workbook is more than displayed cell values. A small edit must not silently discard formulas, validation, or charts. The UI engine cannot be assumed to own the original document state."
+            ]
+        },
+        {
+            "id": "decisions",
+            "title": "Keep format preservation and commit authority on the server",
+            "paragraphs": [],
+            "subsections": [
+                {
+                    "title": "Choose a UI engine behind a replaceable boundary",
+                    "paragraphs": [
+                        "The recorded ADR compares Univer, ONLYOFFICE, and a custom engine. A custom grid would require selection, keyboard, clipboard, and formula UI work. ONLYOFFICE offers broad editing but introduces frame and deployment considerations for an embedded MCP App.",
+                        "I chose Univer OSS behind SpreadsheetEngine for direct range control and embedding, while the Go adapter owns validated operations, revisions, conflicts, and persistence. This preserves a path to replace the UI engine, at the cost of maintaining compatibility mapping and verification."
+                    ]
+                },
+                {
+                    "title": "Reject stale writes rather than guessing a merge",
+                    "paragraphs": [
+                        "Browser and AI writes carry an actor, base revision, and operations through one commit path. Of two requests based on revision 12, the first saves revision 13 and the second receives a conflict. A whole batch is validated before candidate mutation.",
+                        "Structural edits such as row insertion and merges make blind replay unsafe. This coarse boundary may reject simultaneous edits to different cells, but keeps the source state explicit. Finer automatic merging requires additional semantic rules."
+                    ]
+                },
+                {
+                    "title": "Separate persistence failure from an uncertain response",
+                    "paragraphs": [
+                        "A candidate workbook is written to a temporary file in the same directory and atomically replaces the original. Failure during preparation, writing, sync, close, or replacement preserves the previous authoritative state. If the workbook commits but the history manifest cannot finalize, pending history is reconciled before another write.",
+                        "On an uncertain write response or event resync, the browser pauses its queue, checks the server snapshot, and presents draft and recovery state instead of replaying writes. SSE replay gaps and session mismatch also require resynchronization.",
+                        "Source hashes and a cooperative writer lock detect external changes, but do not eliminate an uncooperative writer racing between the last check and replacement."
+                    ]
+                },
+                {
+                    "title": "Make undo a new server revision",
+                    "paragraphs": [
+                        "Undo and redo restore content through a new revision instead of moving the revision counter backward. Disk snapshots and a manifest recover bounded history after restart. Snapshot count and size limits separate unavailable history from a failed document commit."
+                    ]
+                },
+                {
+                    "title": "Bound reads and defer unproven abstractions",
+                    "paragraphs": [
+                        "The browser loads viewport ranges incrementally; MCP reads metadata and needed ranges. Browser and MCP credentials are separate, with a single-use fallback URL expiring after two minutes.",
+                        "Format rules remain in the XLSX adapter. A shared multi-format abstraction is deferred until a second real adapter demonstrates it. Formulas are stored but not calculated by the server, and browser previews are distinguished from source cached results."
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "outcome",
+            "title": "Recorded evidence for failure behavior and performance",
+            "paragraphs": [],
+            "subsections": [
+                {
+                    "title": "Automated safety evidence",
+                    "paragraphs": [
+                        "The 2026-10-12 report records X-01 through X-06 passing, with race-enabled Go checks and separate browser recovery tests."
+                    ],
+                    "items": [
+                        "Input boundaries, atomic batches, and exactly one commit from competing same-revision writes.",
+                        "Persistence rollback, pending history recovery, external replacement, and stale sessions.",
+                        "Replay gaps, slow subscribers, lost-response protection against duplicate structural edits, and session resync.",
+                        "Durable undo and redo, restart recovery, bounded history, and monotonic revisions."
+                    ]
+                },
+                {
+                    "title": "Performance in its recorded environment",
+                    "paragraphs": [
+                        "The 2026-10-12 release profile used a synthetic 400,000-cell workbook across four sheets on darwin/arm64, Go 1.25.0, and Excelize 2.11.0. Recorded times were 757.79 ms to open, 7.81 ms for a 10,000-cell read, 336.87 ms for one-cell commit, and 287.74 ms for a 1,000-cell commit.",
+                        "These are observations of separate operations, not evidence that a batch is always faster than one cell. The workload is a regression guardrail rather than a general latency promise or user-outcome measure."
+                    ]
+                },
+                {
+                    "title": "Remaining release boundaries",
+                    "paragraphs": [
+                        "The gates do not certify actual Microsoft Excel reopen and recalculation, repeated external use, power loss, or network filesystems. Image insertion and advanced chart editing remain unsupported.",
+                        "The next stage is validation with copied Excel workbooks and observation of whether users understand recovery and reapplication. The implemented result is one server-owned path for human and AI changes, conflicts, persistence, and history."
+                    ]
+                }
+            ]
+        }
+    ]
+},
   boundra: {
     category: 'Open Source · Developer Tool', badge: 'Public Preview', role: 'Creator',
     thesis: 'Checking TypeScript monorepo domain boundaries with a Rust CLI',
     responsibility: 'Rule model, Rust analyzer, configuration validation, editor overlay, and benchmark design',
     visibility: 'Benchmarks use public fixtures and a documented local environment.',
     focus: ['Static analysis', 'Architecture rules', 'Vite overlay', 'Benchmarking'],
-    summary: 'Built a Rust CLI that checks client, server, shared, domain, and app boundaries through BR-001 to BR-005, with Zod runtime contracts and a Vite development overlay.',
+    summary: 'Built a Rust CLI that checks client, server, shared, domain, and app boundaries through BR-001 to BR-006, with Zod runtime contracts and a Vite development overlay.',
     evidence: [
-      { val: '5 rules', label: 'BR-001 through BR-005' },
+      { val: '6 rules', label: 'BR-001 through BR-006' },
       { val: '10K files', label: 'Large fixture benchmark' },
       { val: '164.20 ms', label: 'Measured analysis time' },
     ],
     sections: [
       { id: 'problem', title: 'Architecture documents drift from the code', paragraphs: ['Layer and import rules are easy to agree on and hard to enforce. Reviewers repeatedly catch the same violations, while developers receive feedback too late.'] },
-      { id: 'decisions', title: 'Make the rule executable and local', paragraphs: ['I implemented BR001 through BR005 in a Rust analyzer, validated configuration at runtime with Zod, and connected results to a Vite overlay for immediate feedback.', 'Benchmarks include generated fixtures and a real monorepo snapshot so performance claims remain reproducible instead of anecdotal.'] },
+      { id: 'decisions', title: 'Make the rule executable and local', paragraphs: ['I implemented BR-001 through BR-006 in a Rust analyzer, validated configuration at runtime with Zod, and connected results to a Vite overlay for immediate feedback.', 'Benchmarks include generated fixtures and a real monorepo snapshot so performance claims remain reproducible instead of anecdotal.'] },
       { id: 'outcome', title: 'Fast feedback at repository scale', paragraphs: ['The analyzer processed a 10,000-file fixture in 164.20 ms and matched 2,559 import edges. Architecture rules became part of the development loop rather than a document checked after the fact.'] },
     ],
   },
   owkr: {
-    title: 'OWKR Balance', category: 'Community · Live Operations', role: 'Creator',
-    thesis: 'Bringing participant review and team setup into one live operations tool',
-    responsibility: 'Product design, balancing algorithm, operator interface, shared user sheet, and data architecture for OWKR Balance',
-    focus: ['Live operations', 'Constraint matching', 'Admin workflow', 'Shared roster'],
-    summary: 'Built the live balancing tool used by OWKR operators to review Discord rosters, match teams by role and tier, share results, and maintain a shared user sheet.',
-    evidence: [{ val: 'In use', label: 'OWKR live operations' }, { val: '10 players', label: 'Role and tier matching' }, { val: 'Discord OAuth', label: 'Operator access control' }],
-    sections: [
-      { id: 'problem', title: 'Every match repeated the same coordination work', paragraphs: ['Operators had to reconcile Discord rosters, actual participants, role preferences, tiers, team assignments, and shareable results across separate tools.'] },
-      { id: 'decisions', title: 'Follow the operator workflow from roster to result', paragraphs: ['OWKR Balance imports or manually accepts rosters, checks actual participants, and evaluates team candidates using role preferences, unranked states, tank gaps, and microphone status.', 'Shared user sheets, private operator notes, Discord OAuth, and Upstash Redis keep team data, personal notes, and access control clearly separated. Operators can copy the final matchup as an image and paste it directly into Discord.'] },
-      { id: 'outcome', title: 'Keep live use separate from development validation', paragraphs: ['OWKR Balance is actively used by OWKR operators. The separately developed Gather Bot passed automated concurrency and restart-recovery scenarios but was not adopted, so its results are presented only as development validation.'] },
+    "title": "OWKR Community Tools",
+    "category": "Community · Collaboration",
+    "role": "Developer contributor",
+    "thesis": "Tools for match setup, admin exams, recruitment, and community guidance",
+    "responsibility": "Match collaboration, revision conflicts and editor presence; exam improvements; recruitment bot and operations documentation",
+    "focus": [
+        "Collaborative editing",
+        "Exam workflow",
+        "Session recovery",
+        "Operations docs"
     ],
-  },
+    "summary": "A community tooling case covering the collaborative OWKR Match project, an admin exam app, a Discord recruitment bot, and operations documentation.",
+    "evidence": [
+        {
+            "val": "Match",
+            "label": "Used by community operators"
+        },
+        {
+            "val": "Exam",
+            "label": "Implemented and deployed",
+            "detail": "Usage scale and operational savings not measured"
+        },
+        {
+            "val": "Gather Bot",
+            "label": "Development and testing",
+            "detail": "Not adopted by the community"
+        }
+    ],
+    "sections": [
+        {
+            "id": "problem",
+            "title": "Operators need shared state as well as fast updates",
+            "paragraphs": [
+                "OWKR operations include team setup, admin selection exams, recruitment, waiting lists, and rules. Match editing must prevent one operator from silently overwriting another, rather than merely showing updates quickly."
+            ]
+        },
+        {
+            "id": "decisions",
+            "title": "Give each operational tool an explicit state boundary",
+            "paragraphs": [],
+            "subsections": [
+                {
+                    "title": "Match: two operators editing the same roster",
+                    "paragraphs": [
+                        "In PR #10, I implemented shared roster editing. If one operator adds a participant while another rearranges positions, replacing the full roster with the last write can lose the first change.",
+                        "A Redis Lua operation checks the expected revision and updates atomically. Separate read and write calls could both pass the same check. A stale write receives a conflict with the current state.",
+                        "The PR #10 client applies the current roster and asks the operator to reapply needed changes. It does not automatically merge edits. Whole-roster revision checks can conflict even for different participants, trading finer concurrency for an explicit validated state."
+                    ]
+                },
+                {
+                    "title": "Match: limit replicated data and update scope",
+                    "paragraphs": [
+                        "Sessions store Discord IDs, participant order, and optional team positions. Display names and role tiers are hydrated from the user sheet rather than copied into every session. Missing or duplicate IDs and incomplete team positions are rejected.",
+                        "PR #10 uses polling with delayed local publishing. Polling avoids overwriting pending local edits, skips hidden tabs, and does not run while publishing. PR #17 adds authenticated editor presence and recent changes to the existing response.",
+                        "Polling introduces update delay and repeated requests. Presence is approximate and is not an editing lock. Revision checks remain the final conflict boundary."
+                    ]
+                },
+                {
+                    "title": "Match: evidence and collaboration scope",
+                    "paragraphs": [
+                        "Store tests check revision advancement and stale-write conflicts; contract tests check participant and waiting-list order, full team positions, and invalid IDs. The Redis tests use a test double, so they do not certify Lua execution or real Redis concurrency.",
+                        "Other contributors improved authentication and matchup UI. My authored work covers the shared contract, API, hook, UI integration, and editor presence. Next validation should use two browsers and real Redis to record concurrent saves, disconnection, and recovery."
+                    ]
+                },
+                {
+                    "title": "Exam: server-owned time controls",
+                    "paragraphs": [
+                        "The app covers Discord sign-in, assigned codes, answer saving, submission, questions, and grading. In PR #4, I added pause, resume, and extension state on the server with regression checks for ownership, admin authority, expiration, submission locks, and repeated actions. PR #5 separates test attempts from normal admin records."
+                    ]
+                },
+                {
+                    "title": "Gather Bot: recruitment and restart recovery",
+                    "paragraphs": [
+                        "I worked on the Python and SQLite recruitment bot with per-session actors, participants, waiting lists, tier collection, and restart recovery. Authored changes include substitute recruitment, lobby assignment, migrations, and tests. It remains in development and testing without automatic Match integration."
+                    ]
+                },
+                {
+                    "title": "Docs: maintain guidance alongside the tools",
+                    "paragraphs": [
+                        "The Astro site provides rules, participation instructions, and FAQs. My commits update participation and notification rules and connect the entry points for the tools."
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "outcome",
+            "title": "Separate implementation, adoption, and remaining validation",
+            "paragraphs": [
+                "Match is used for community match setup and result sharing. Exam has an implemented and deployed workflow, without measured usage scale or time savings. Gather Bot has not been adopted.",
+                "The work extends from a web interface to editing conflicts, server-owned exam state, event processing, recovery, and documentation. Authored links establish the implementation. Conflict rates, operating-time improvements, and concurrent usage scale have not been measured."
+            ]
+        }
+    ]
+},
   jeomjuro: {
-    title: 'Jeomjuro', category: 'Team Product · Monorepo', badge: 'pnpm Monorepo', role: 'Frontend Engineer',
-    thesis: 'Keeping the consumer experience at the center while sharing admin and UI foundations',
-    responsibility: 'pnpm and Turborepo migration, consumer, admin and Storybook apps, shared API, design-system and test packages, notifications, and CI',
-    focus: ['Monorepo', 'Admin tools', 'Optimistic UI', 'Delivery'],
-    summary: 'Built the store-owner consumer community as the primary product surface, with admin operations and a shared design system maintained in the same pnpm and Turborepo monorepo.',
-    evidence: [
-      { val: '3 apps', label: 'consumer · admin · storybook' },
-      { val: '4 packages', label: 'api · config · design-system · test-utils' },
-      { val: 'Turborepo', label: 'Build, test, and typecheck flow' },
+    "title": "Jeomjuro",
+    "category": "Team Product · Monorepo",
+    "role": "Frontend Engineer",
+    "thesis": "Improving consumer and admin workflows within a shared team codebase",
+    "responsibility": "Notification and token-reissue BFF, admin search and comment moderation, shared UI and CI, and the post editor",
+    "visibility": "Collaborative private repository. PR links require access. These changes were merged into develop; merges alone do not establish production deployment or user outcomes.",
+    "focus": [
+        "BFF integration",
+        "Admin workflow",
+        "Shared UI",
+        "Editor UX"
     ],
-    sections: [
-      { id: 'problem', title: 'Consumer and admin work needed one operating structure', paragraphs: ['Community, brand, profile, notification, and moderation features were growing inside one repository without clear boundaries between applications, shared UI, API clients, tests, Storybook, and delivery rules.'] },
-      { id: 'decisions', title: 'Rebuild the repository as a product monorepo', paragraphs: ['I moved the existing app into apps/consumer, added apps/admin and apps/storybook, and separated API, configuration, design-system, and test utilities into packages. pnpm workspace and Turborepo now coordinate builds, tests, and type checks.', 'Consumer tokens and flows were refined alongside admin authentication, moderation tables, search, filters, delete and restore actions, optimistic notification reads, Storybook, and CI.'] },
-      { id: 'outcome', title: 'One repository for the product and its operations', paragraphs: ['Consumer and operator experiences now evolve inside explicit app and package boundaries, with shared interface rules and repeatable verification from development through deployment.'] },
+    "summary": "A collaborative community product for current and future store owners, with contributions to the consumer app, admin tools, shared UI, and writing experience.",
+    "evidence": [
+        {
+            "val": "BFF",
+            "label": "Notifications and token reissue",
+            "detail": "PR #262"
+        },
+        {
+            "val": "Admin",
+            "label": "Search, deletion, restoration, and state",
+            "detail": "PR #273"
+        },
+        {
+            "val": "Editor",
+            "label": "Tiptap writing experience",
+            "detail": "PR #310"
+        }
     ],
-  },
+    "sections": [
+        {
+            "id": "problem",
+            "title": "Consumer and admin changes shared the same codebase",
+            "paragraphs": [
+                "The product needed more consistent authentication and notification requests, admin search state, and post authoring while multiple contributors worked in the same monorepo."
+            ]
+        },
+        {
+            "id": "decisions",
+            "title": "Keep personal contributions concrete",
+            "paragraphs": [
+                "In PR #262, I added a Next.js Route Handler proxy limited to notifications and token reissue. It forwards authentication and response cookies and handles the EventSource authentication-header limitation.",
+                "In PR #273, I integrated admin user, post, and comment search plus comment deletion and restoration. I separated typed and applied search values, reset pagination on condition changes, rejected invalid post IDs, and invalidated affected lists. The same change adds shared UI and Storybook examples and standardizes CI workflows on pnpm.",
+                "In PR #310, I replaced Markdown input with a Tiptap editor, connecting formatting, links, colors, image uploads, popover dismissal, and sanitized rendering. Other contributors handled social-login, authentication-state, and deployment changes; my changes build on that shared foundation."
+            ]
+        },
+        {
+            "id": "outcome",
+            "title": "Merged implementation with traceable ownership",
+            "paragraphs": [
+                "The cited changes were merged into develop. They demonstrate changes to integration boundaries, admin state, shared UI, and authoring. Deployment, user counts, and performance gains are not inferred from those merges."
+            ]
+        }
+    ]
+},
   marker: {
     category: 'Hackathon · Grand Prize', badge: '12th Highthon Grand Prize', role: 'Frontend Engineer',
     thesis: 'Connecting emotions to places as a shared map',
@@ -187,17 +559,56 @@ export const projectEn: Record<string, ProjectTranslation> = {
     ],
   },
   kivra: {
-    category: 'Developer Tool · Prototype', role: 'Creator',
-    thesis: 'Making execution, errors, and solutions searchable in the next development session',
-    responsibility: 'Tauri desktop app, editor plugin protocol, and development memory model',
-    focus: ['Tauri', 'Developer memory', 'IDE protocol', 'Local-first'],
-    summary: 'A local-first developer memory prototype that connects terminal context and solution notes across VS Code and JetBrains.',
-    sections: [
-      { id: 'problem', title: 'Solutions lose the context that made them useful', paragraphs: ['Execution history, errors, fixes, and notes are scattered across terminals, editors, chat, and personal documents.'] },
-      { id: 'decisions', title: 'Share a memory protocol across tools', paragraphs: ['Kivra stores project execution context locally and lets VS Code and JetBrains plugins access it through one editor-neutral protocol.'] },
-      { id: 'outcome', title: 'A prototype for portable development memory', paragraphs: ['The project currently validates the product model and basic integrations. It is presented as a design experiment, not a finished production result.'] },
+    "category": "Team Developer Tool · Prototype",
+    "role": "Developer contributor",
+    "thesis": "Capturing execution context across terminals and editors",
+    "responsibility": "Execution-capture contract, terminal and IDE integrations, and desktop module separation",
+    "visibility": "A collaborative prototype. Claims concern merged implementation and basic integrations, without production outcome metrics.",
+    "focus": [
+        "Tauri",
+        "Execution capture",
+        "IDE protocol",
+        "Module boundaries"
     ],
-  },
+    "summary": "A collaborative local-first developer-memory prototype connecting execution context across a desktop app, VS Code, and JetBrains.",
+    "evidence": [
+        {
+            "val": "Capture",
+            "label": "Execution capture flow",
+            "detail": "PR #1"
+        },
+        {
+            "val": "Modules",
+            "label": "Rust and renderer responsibility split",
+            "detail": "PR #4"
+        }
+    ],
+    "sections": [
+        {
+            "id": "problem",
+            "title": "Execution context is scattered across tools",
+            "paragraphs": [
+                "The team explored collecting terminal execution, errors, and solution context locally and making it accessible from different editors."
+            ]
+        },
+        {
+            "id": "decisions",
+            "title": "Share a capture contract and separate responsibilities",
+            "paragraphs": [
+                "In PR #1, I added shared start, event, and end contracts and connected shell capture, Rust ingestion, the runs UI, and VS Code and JetBrains integrations.",
+                "In PR #4, I split the existing Rust entry point into authentication, captured-run, project, and integration modules, alongside renderer components, services, and settings. The refactor preserves existing functionality while making each responsibility easier to change independently.",
+                "Another contributor changed central captured-run storage in PR #2, updating VS Code tests and diagnostics. This demonstrates shared work on the same integration boundary after the capture implementation."
+            ]
+        },
+        {
+            "id": "outcome",
+            "title": "A prototype with identifiable contributions",
+            "paragraphs": [
+                "The capture contract, integrations, and module split were merged. The product remains a prototype; production adoption and productivity improvements have not been measured."
+            ]
+        }
+    ]
+},
   homepage: {
     title: 'Bigtablet Homepage Renewal', category: 'Company', role: 'Frontend Engineer',
     thesis: 'Maintaining one coherent brand experience across languages, devices, and releases',

@@ -1,52 +1,84 @@
 ---
 order: 6
-title: "OWKR Balance"
-titleKo: "OWKR 내전 밸런싱 도구"
-group: personal
+title: "OWKR Community Tools"
+titleKo: "OWKR 커뮤니티 운영 도구"
+group: team
 featured: false
-category: "Community · Live Operations"
+category: "Community · Collaboration"
 year: "2026"
-role: "Creator"
+role: "개발 기여자"
 accentColor: sky
-thesis: "내전마다 반복하던 참가자 확인과 팀 구성을 하나의 운영 도구로"
-responsibility: "OWKR 내부 밸런싱 도구의 제품 설계, 팀 구성 알고리즘, 운영 화면과 데이터 구조 구현"
-focus: ["Live operations", "Constraint matching", "Admin workflow", "Shared roster"]
-summary: "OWKR 운영진이 실제로 사용하는 내전 밸런싱 도구입니다. Discord 참가 명단 확인, 역할과 티어를 반영한 팀 구성, 결과 공유, 유저 시트 관리를 한 흐름으로 연결했습니다."
+thesis: "팀 편성부터 관리자 시험과 모집까지, 커뮤니티 운영의 반복 작업을 도구로"
+responsibility: "Match 공동 편집·충돌 처리·접속자 표시, 관리자 시험 개선, 모집 봇과 운영 문서 개발"
+focus: ["Collaborative editing", "Exam workflow", "Session recovery", "Operations docs"]
+summary: "협업으로 개발한 OWKR Match를 중심으로 관리자 시험 웹, Discord 모집 봇, 운영 문서를 함께 정리한 커뮤니티 운영 도구 사례입니다."
 evidence:
-  - { val: "실제 운영 중", label: "OWKR 운영진 내부 사용", detail: "내전 준비와 결과 공유" }
-  - { val: "10명", label: "역할과 티어 기반 팀 구성", detail: "선호 역할과 탱커 격차 반영" }
-  - { val: "Discord OAuth", label: "운영자 접근 제어", detail: "관리자 목록과 서명 세션" }
+  - { val: "Match", label: "운영진 내부 사용", detail: "팀 편성과 결과 공유" }
+  - { val: "Exam", label: "관리자 시험 웹 구현·배포", detail: "운영 규모와 효과는 별도 측정하지 않음" }
+  - { val: "Gather Bot", label: "개발·테스트 단계", detail: "실제 커뮤니티 미도입" }
+traceLinks:
+  - { label: "Match 공동 편집 PR #10", labelEn: "Match collaboration PR #10", href: "https://github.com/Overwatch-KR/owkr-balance/pull/10" }
+  - { label: "접속자 표시 PR #17", labelEn: "Editor presence PR #17", href: "https://github.com/Overwatch-KR/owkr-balance/pull/17" }
+  - { label: "시험 시간 제어 PR #4", labelEn: "Exam time controls PR #4", href: "https://github.com/Overwatch-KR/owkr-exam/pull/4" }
+  - { label: "Gather Bot 저장소", labelEn: "Gather Bot repository", href: "https://github.com/Overwatch-KR/owkr-gather-bot" }
+  - { label: "운영 문서 저장소", labelEn: "Operations docs repository", href: "https://github.com/Overwatch-KR/owkr-docs" }
 metrics: []
 callouts: []
 tech:
   - "React 19"
-  - "Vite"
   - "TypeScript"
-  - "Vercel Functions"
   - "Upstash Redis"
-  - "Discord OAuth"
-  - "Vitest"
+  - "SvelteKit"
+  - "PostgreSQL"
+  - "Drizzle ORM"
+  - "Python"
+  - "SQLite"
+  - "Astro"
 github: "https://github.com/Overwatch-KR/owkr-balance"
 ---
 
-## Problem
+## 문제
 
-커뮤니티 내전을 준비할 때 운영진은 Discord 참가 명단과 실제 참여자를 대조하고, 역할과 티어를 고려해 두 팀을 구성한 뒤 결과를 다시 공유해야 합니다. 참가자 정보와 운영 메모가 여러 곳에 흩어져 있어 경기마다 같은 정리 작업을 반복하고 있었습니다.
+내전 운영에는 참가자 확인과 팀 편성뿐 아니라 운영진 선발 시험, 모집과 대기열 관리, 규정 안내가 필요했습니다. 운영자가 여러 명이면 같은 명단을 동시에 고치거나, 시험과 모집 도중 상태가 달라지는 상황도 다뤄야 했습니다.
 
-## Approach
+## 선택한 방법
 
-### 1. Team Balancing Workflow
+### Match: 두 운영자가 같은 명단을 바꿀 때
 
-실사용 중인 OWKR Balance는 Discord 명단을 읽거나 참가자를 직접 입력한 뒤, 실제 참여자와 대조해 팀 조합을 만듭니다. 선호 역할, 비선호 역할, 미배치 상태, 탱커 격차, 마이크 사용 여부를 함께 평가합니다. 운영자는 여러 대안 중 하나를 선택하거나 선수를 직접 교체할 수 있습니다.
+PR #10에서 공동 편집을 구현했습니다. 예를 들어 두 운영자가 같은 명단을 열고 한 명은 참가자를 추가하고 다른 한 명은 팀 위치를 바꾸면, 마지막 저장으로 전체 상태를 교체하는 방식은 먼저 저장한 변경을 잃게 할 수 있습니다. 화면에 다른 사람의 변경을 빨리 표시하는 일과 서버에서 덮어쓰기를 막는 일은 별도의 문제였습니다.
 
-### 2. Shared Operations Data
+공유 명단에 revision을 두고 Redis의 비교와 갱신을 Lua로 한 번에 처리했습니다. 서버가 값을 읽은 뒤 별도 요청으로 저장하면 두 요청이 같은 revision 검사를 모두 통과할 수 있기 때문입니다. 기대 revision이 맞으면 다음 revision으로 저장하고, 맞지 않으면 최신 상태가 포함된 conflict를 반환합니다.
 
-공유 유저 시트와 개인 운영 메모는 저장 범위를 분리했습니다. Discord OAuth와 관리자 목록으로 내부 접근을 제한했고, 여러 운영자가 함께 쓰는 데이터는 Upstash Redis에 저장합니다. 완성된 대진표는 이미지로 복사해 Discord에 바로 붙여넣을 수 있습니다.
+PR #10의 클라이언트는 충돌 시 서버의 최신 명단을 반영하고, 다른 운영자가 먼저 수정했으므로 필요한 변경을 다시 적용하라고 안내합니다. 사용자의 변경을 자동 병합하는 방식은 아닙니다. 전체 명단과 팀 위치가 한 단위라 서로 다른 참가자를 고쳤어도 충돌할 수 있지만, 검증하지 않은 조합을 조용히 저장하는 것은 피했습니다.
 
-### 3. Separate Prototype Scope
+### Match: 공유할 데이터와 갱신 방식을 제한
 
-별도로 Gather Bot도 개발했습니다. 모집 순서, 대기열, 티어 수집, 재시작 복구를 구현하고 동시 참여 시나리오까지 검증했지만 실제 커뮤니티에는 도입하지 않았습니다. 봇의 테스트 결과는 운영 성과가 아니라 개발 검증 기록으로만 구분합니다.
+공유 세션에는 Discord ID, 참가 순서와 선택적인 팀 위치를 저장하고, 표시할 배틀태그와 역할별 티어는 유저 시트에서 읽어 복원합니다. 참가자의 상세 정보를 세션마다 복제하면 유저 시트 수정 후 서로 다른 티어를 보게 될 수 있어, 식별자와 배치를 중심으로 계약을 정리했습니다. Discord ID가 없거나 중복된 참가자, 불완전한 팀 위치는 검증에서 거부합니다.
 
-## Result
+이 공동 편집은 WebSocket이 아닌 polling으로 구현했습니다. PR #10에서는 짧은 주기의 조회와 로컬 변경 전송을 구분하고, 저장 중이거나 아직 보내지 않은 변경이 있으면 조회로 화면을 덮지 않도록 했습니다. 숨겨진 탭의 polling도 건너뜁니다. 이후 PR #17에서는 기존 응답에 접속자와 최근 변경 정보를 추가하고, 인증된 작업자 정보와 만료 시간을 사용했습니다.
 
-OWKR Balance는 현재 운영진의 내전 준비와 결과 공유에 사용되고 있습니다. Gather Bot은 구현과 검증을 마쳤지만 도입하지 않았습니다. 두 프로젝트의 상태를 분리해, 이 사례에서는 실사용 중인 밸런싱 도구의 결과만 중심으로 설명합니다.
+polling은 조회 간격만큼 반영 지연과 반복 요청 비용이 있습니다. 접속자 표시도 정확한 온라인 여부나 편집 잠금을 뜻하지 않습니다. 대신 기존 조회 경로 안에서 공동 작업 상태를 제공하고, 변경 충돌의 최종 판단은 revision 검사에 맡기는 구조입니다.
+
+### Match: 테스트와 협업 범위
+
+PR #10의 저장소 테스트는 정상 갱신 뒤 revision 증가와 stale 저장의 conflict 응답을 확인합니다. 계약 테스트에는 참가·대기 순서와 팀 위치 보존, 중복 ID와 일부만 채워진 팀 위치 거절이 포함됩니다. Redis 저장소 테스트는 test double을 사용하므로 실제 Redis의 동시 실행 성능이나 Lua 실행을 인증하는 검사는 아닙니다.
+
+인증과 대진표 UI를 개선한 다른 기여자의 변경도 같은 저장소에 병합되어 있습니다. 제 개인 기여는 위 공동 편집의 저장 계약·API·훅·UI 연결과 접속자 표시를 중심으로 확인할 수 있습니다. 다음 검증은 실제 Redis와 두 브라우저에서 동시 저장, 연결 단절과 재연결을 재현해 충돌 안내와 명단 복원이 맞는지 기록하는 것입니다.
+
+### Exam: 시험 시간을 서버에서 관리하도록
+
+관리자 시험 웹은 Discord 로그인, 응시 코드, 답안 저장과 제출, 문제은행과 채점을 다룹니다. 제가 작성한 PR #4에서는 시험 정지·재개와 시간 연장 기록을 서버에서 처리하고 응시 화면에 반영했습니다. 만료·제출된 시험의 변경 제한, 소유자와 관리자 권한, 반복 요청 시 상태 보존을 다루는 회귀 검사도 함께 추가했습니다. PR #5에서는 테스트 응시를 일반 관리 현황에서 분리했습니다.
+
+### Gather Bot: 모집 상태와 복구 경계를 설계
+
+Python과 SQLite로 모집 반응, 확정 참가자와 대기열, 티어 수집을 다루는 Discord 봇을 개발했습니다. 내전별 Session Actor로 이벤트를 처리하고, 재시작 시 세션과 알림 상태를 복구하는 구조입니다. 담당 변경에는 대타 모집, 대기실 배정과 관련 마이그레이션 및 테스트가 포함됩니다. 현재는 Match 자동 연동 없이 독립적으로 개발·테스트하고 있습니다.
+
+### Docs: 규정과 참여 안내를 함께 유지
+
+Astro 기반 문서 사이트에 규정, 참가 안내와 FAQ를 정리하고 관련 도구의 진입점을 연결했습니다. 참여 안내와 알림 규칙을 수정한 커밋이 남아 있습니다. 운영자가 도구 사용과 규정 확인을 함께 이어갈 수 있도록 구성했습니다.
+
+## 확인한 결과
+
+Match는 운영진의 팀 편성과 결과 공유에 사용되고 있습니다. Exam은 관리자 시험 흐름을 구현하고 배포한 상태이며, 응시 규모나 운영 시간 절감은 측정하지 않았습니다. Gather Bot은 커뮤니티에 도입하지 않은 개발·테스트 단계입니다.
+
+이 사례는 하나의 웹 화면을 만드는 작업을 넘어, 공동 편집의 충돌 처리, 시험 상태의 서버 관리, 봇의 이벤트 처리와 복구, 운영 문서까지 다룬 경험입니다. 각 도구의 담당 구현은 아래 PR과 저장소에서 확인할 수 있습니다. 공동 편집의 충돌률, 운영 시간 절감과 동시 접속 규모는 측정하지 않았으며 구현 결과와 운영 효과를 구분합니다.

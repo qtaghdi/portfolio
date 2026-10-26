@@ -3,52 +3,30 @@ import { copy, type Locale } from '../i18n';
 interface Props { locale: Locale; }
 const { locale } = Astro.props;
 const dictionary = copy[locale].contact;
-const links = [
-  { label: 'GitHub', href: 'https://github.com/qtaghdi' },
-  { label: 'LinkedIn', href: 'https://www.linkedin.com/in/sangminpp/' },
-  { label: 'Velog', href: 'https://velog.io/@qtaghdi/posts' },
-];
+const links = [{ label: 'GitHub', href: 'https://github.com/qtaghdi' }, { label: 'LinkedIn', href: 'https://www.linkedin.com/in/sangminpp/' }, { label: 'Velog', href: 'https://velog.io/@qtaghdi/posts' }];
 ---
-
 <section id="contact" class="contact-section">
-  <div class="shell contact-grid reveal">
-    <p class="section-label">Contact</p>
-    <div class="contact-copy">
-      <h2>{dictionary.title.split('\n').map((line) => <span>{line}</span>)}</h2>
+  <div class="shell contact-grid">
+    <h2>{locale === 'ko' ? '연락' : 'Contact'}</h2>
+    <div>
+      <h3>{dictionary.title.replace('\n', ' ')}</h3>
       <p>{dictionary.description}</p>
-      <a class="email" href="mailto:qtaghdi@gmail.com">qtaghdi@gmail.com</a>
+      <a class="email" href="mailto:qtaghdi@gmail.com">{dictionary.email}<svg aria-hidden="true" viewBox="0 0 20 20"><path d="M4 10h12m-5-5 5 5-5 5" /></svg></a>
+      <nav aria-label={locale === 'ko' ? '외부 링크' : 'External links'}>{links.map((link) => <a href={link.href} target="_blank" rel="noopener noreferrer">{link.label}</a>)}</nav>
     </div>
-    <nav aria-label={locale === 'ko' ? '외부 링크' : 'External links'}>
-      {links.map((link) => (
-        <a href={link.href} target="_blank" rel="noopener noreferrer">
-          {link.label}<span aria-hidden="true">↗</span>
-        </a>
-      ))}
-    </nav>
   </div>
 </section>
-
 <style lang="scss">
   @use '../styles/tokens' as *;
-  .contact-section { padding: clamp(90px, 11vw, 150px) 0 80px; border-top: 1px solid $line-bright; }
-  .contact-grid { display: grid; grid-template-columns: .28fr 1.18fr .54fr; gap: clamp(40px, 6vw, 92px); align-items: end; }
-  .section-label { align-self: start; color: $accent; font: 600 .64rem/1 $font-mono; }
-  h2 { font-size: clamp(2.8rem, 6vw, 6.4rem); font-weight: 500; line-height: 1.03; letter-spacing: -.067em; }
-  h2 span { display: block; word-break: keep-all; }
-  .contact-copy > p { max-width: 610px; margin-top: 31px; color: $silver; line-height: 1.8; word-break: keep-all; }
-  .email { display: inline-block; margin-top: 31px; padding-bottom: 5px; border-bottom: 1px solid $accent; font-size: clamp(1.1rem, 1.7vw, 1.42rem); font-weight: 600; }
-  nav { display: grid; border-top: 1px solid $silver-bright; }
-  nav a { display: flex; align-items: center; justify-content: space-between; min-height: 52px; border-bottom: 1px solid $line; color: $silver; font-size: .8rem; }
-  nav a:hover { color: $accent; }
-  nav span { font-size: 1rem; }
-  @media (max-width: 900px) {
-    .contact-grid { grid-template-columns: .25fr 1fr; }
-    nav { grid-column: 2; margin-top: 28px; }
-  }
-  @media (max-width: 680px) {
-    .contact-section { padding: 76px 0 56px; }
-    .contact-grid { grid-template-columns: 1fr; gap: 38px; }
-    nav { grid-column: 1; margin-top: 4px; }
-    h2 { font-size: 3.1rem; }
-  }
+  .contact-section { padding: 80px 0; border-top: 1px solid $line; }
+  .contact-grid { display: grid; grid-template-columns: 180px minmax(0,1fr); gap: 48px; }
+  h2 { padding-top: 7px; font-size: 17px; font-weight: 500; }
+  h3 { font-size: 32px; font-weight: 600; line-height: 1.45; letter-spacing: -.035em; word-break: keep-all; }
+  p { margin-top: 24px; color: $silver; font-size: 17px; line-height: 1.8; word-break: keep-all; }
+  a { display: inline-flex; align-items: center; min-height: 44px; color: $accent; font-size: 16px; }
+  a:hover { color: $accent-dark; text-decoration: underline; text-underline-offset: 4px; }
+  .email { gap: 8px; margin-top: 24px; text-decoration: underline; text-underline-offset: 4px; }
+  svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 1.4; }
+  nav { display: flex; flex-wrap: wrap; gap: 26px; margin-top: 16px; }
+  @media (max-width: 680px) { .contact-section { padding: 56px 0; }.contact-grid { grid-template-columns: 1fr; gap: 24px; }h2 { padding: 0; font-size: 15px; }h3 { font-size: 26px; }p { font-size: 16px; margin-top: 18px; } }
 </style>

@@ -4,20 +4,8 @@ interface Props { locale: Locale; }
 const { locale } = Astro.props;
 const year = new Date().getFullYear();
 ---
-
-<footer>
-  <div class="shell footer-inner">
-    <p>© {year} PARK SANGMIN</p>
-    <p>DAEGU, KOREA</p>
-    <a href="#hero">{locale === 'ko' ? '맨 위로' : 'Back to top'}</a>
-  </div>
-</footer>
-
+<footer><div class="shell footer-inner"><p>{locale === 'ko' ? '박상민' : 'Park Sangmin'}</p><p>© {year}</p></div></footer>
 <style lang="scss">
   @use '../styles/tokens' as *;
-  footer { padding: 28px 0; }
-  .footer-inner { display: grid; grid-template-columns: 1fr 1fr auto; gap: 24px; padding-top: 24px; border-top: 1px solid $line; }
-  p, a { color: $gunmetal; font: 500 .59rem/1.4 $font-mono; letter-spacing: .08em; }
-  a:hover { color: $silver; }
-  @media (max-width: 620px) { .footer-inner { grid-template-columns: 1fr; } }
+  footer { padding: 32px 0; }.footer-inner { display: flex; justify-content: space-between; gap: 24px; }p { color: $gunmetal; font-size: 13px; }
 </style>

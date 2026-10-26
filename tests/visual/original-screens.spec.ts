@@ -68,28 +68,54 @@ for (const reference of declaredReconstructions) {
   });
 }
 
-test('home page keeps displayed original screens uncropped and shows the intranet app icon', async ({ page }) => {
+test('home shows small project icons in both work lists', async ({ page }) => {
   await page.goto('/');
-  let auditedScreens = 0;
-  for (const reference of originalScreens) {
-    const visuals = await page.locator(`[data-visual="${reference.key}"]`).all();
-    if (visuals.length === 0) continue;
-    let visibleCount = 0;
-    for (const visual of visuals) {
-      if (!(await visual.isVisible())) continue;
-      visibleCount += 1;
-      await visual.scrollIntoViewIfNeeded();
-      const image = visual.locator('[data-original-screen]');
-      await expect(image).toBeVisible();
-      await expect(image).toHaveCSS('object-fit', 'contain');
-      await expect(image).toHaveCSS('filter', 'none');
-      await expect(image).toHaveCSS('transform', 'none');
-    }
-    expect(visibleCount).toBeGreaterThan(0);
-    auditedScreens += visibleCount;
+  await expect(page.locator('[data-original-screen]')).toHaveCount(0);
+  const icons = page.locator('#projects .project-icon');
+  await expect(icons).toHaveCount(13);
+  await expect(icons.nth(0)).toHaveAttribute('src', '/projects/design-system/favicon.png');
+  await expect(icons.nth(1)).toHaveAttribute('src', '/projects/notiiv/favicon.svg');
+  for (const icon of await icons.all()) {
+    await icon.scrollIntoViewIfNeeded();
+    await expect(icon).toBeVisible();
+    await expect(icon).toHaveCSS('width', '24px');
+    await expect(icon).toHaveCSS('height', '24px');
+    expect(await icon.evaluate((image: HTMLImageElement) => image.complete && image.naturalWidth > 0)).toBe(true);
+    await expect(icon).toHaveAttribute('alt', '');
   }
-  expect(auditedScreens).toBeGreaterThan(0);
-  await expect(page.locator('img[src="/projects/intranet/icon.png"]')).toBeVisible();
+  await expect(page.locator('#hero img')).toHaveCount(0);
+  await expect(page.locator('#more-work .project-icon')).toHaveCount(10);
+  await expect(page.locator('.featured-list .project-icon').nth(2)).toHaveAttribute('src', '/projects/document-workspace/icon.svg');
   const overflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
   expect(overflow).toBeLessThanOrEqual(1);
+});
+
+test('work, contents and language links retain navigation', async ({ page }, testInfo) => {
+  await page.goto('/');
+  await page.getByRole('link', { name: '작업 보기', exact: true }).click();
+  await expect(page).toHaveURL(/#projects$/);
+  await page.getByRole('link', { name: 'Bigtablet Design System 자세히 보기', exact: true }).click();
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Bigtablet Design System');
+  await page.getByRole('navigation', { name: '목차', exact: true }).getByRole('link', { name: '선택한 방법', exact: true }).click();
+  await expect(page.locator('h2[id="선택한-방법"]')).toBeInViewport();
+  if (testInfo.project.name === 'mobile') {
+    await page.getByRole('button', { name: '메뉴 열기' }).click();
+    await expect(page.getByRole('button', { name: '메뉴 열기' })).toHaveAttribute('aria-expanded', 'true');
+  }
+  await page.getByRole('link', { name: 'EN', exact: true }).click();
+  await expect(page).toHaveURL(/\/en\/projects\/design-system\/?$/);
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Bigtablet Design System');
+  await expect(page.getByRole('link', { name: 'Per-component distribution commit' })).toBeVisible();
+});
+
+test('layouts stay within narrow and desktop viewports', async ({ page }, testInfo) => {
+  const widths = testInfo.project.name === 'mobile' ? [320, 375, 390] : [1440, 1505];
+  for (const width of widths) {
+    await page.setViewportSize({ width, height: 1045 });
+    for (const route of ['/', '/en/', '/projects/design-system/', '/en/projects/document-workspace/']) {
+      await page.goto(route);
+      const overflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
+      expect(overflow, `${route} at ${width}px`).toBeLessThanOrEqual(1);
+    }
+  }
 });

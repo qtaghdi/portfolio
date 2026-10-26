@@ -1,0 +1,19 @@
+<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="256" cy="256" r="256" fill="#111111"/>
+
+    <defs>
+        <linearGradient id="aurora" x1="100" y1="100" x2="400" y2="400" gradientUnits="userSpaceOnUse">
+            <stop offset="0%" stop-color="#4ade80" /> <stop offset="100%" stop-color="#a855f7" /> </linearGradient>
+    </defs>
+
+    <circle cx="256" cy="256" r="240" stroke="#222" stroke-width="2"/>
+    <circle cx="256" cy="256" r="210" stroke="#222" stroke-width="2"/>
+    <circle cx="256" cy="256" r="180" stroke="#222" stroke-width="2"/>
+    <circle cx="256" cy="256" r="150" stroke="#222" stroke-width="2"/>
+
+    <circle cx="256" cy="256" r="100" fill="url(#aurora)"/>
+
+    <circle cx="256" cy="256" r="15" fill="#000000"/>
+
+    <path d="M280 210 C 240 210, 220 230, 220 256 C 220 282, 240 302, 280 302" stroke="white" stroke-width="15" stroke-linecap="round" fill="none" opacity="0.9"/>
+</svg>

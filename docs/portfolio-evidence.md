@@ -1,6 +1,6 @@
 # Portfolio evidence register
 
-검토 기준일: 2026-08-05 (Asia/Seoul)
+최근 내용 검토일: 2026-10-26 (Asia/Seoul). 아래 과거 스냅샷은 당시 기록이며 최신 상태와 구분합니다.
 
 이 문서는 포트폴리오에 적은 주장과 근거를 분리해 관리하기 위한 내부 기록이다. 커밋 수는 작업 참여 범위를 탐색하는 색인으로만 사용하며, 사용자 성과나 생산성 지표로 공개하지 않는다.
 
@@ -62,3 +62,16 @@ Authored commit counts below use unique SHAs across all local refs and the known
 2. Re-run repository counts on a fixed commit and record the SHA if the number appears publicly.
 3. For benchmarks, compare the same fixture on the same class of hardware; never combine results from different environments as an improvement percentage.
 4. Review company-project disclosure with the relevant owner before adding screenshots or internal metrics.
+
+## 2026-10-26 copy revision
+
+- 디자인 시스템 대표 사례는 본인 명의 커밋 `3a9c750`의 컴포넌트별 ESM·CSS 배포와 `32972ad`의 CSS 모션 전환으로 교체했다. 과거 spring 기반 설계를 현재 상태처럼 소개하던 본문을 수정했다.
+- Notiiv의 네 앱이 디자인 시스템 패키지를 참조하는 것을 로컬 package.json에서 확인했다. 사용자 수나 독립적인 고객사 수를 뜻하지 않는다.
+- 90% 커버리지는 현재 전체 제품의 측정 결과로 재검증하지 않았다. 대표 화면에는 API 패키지의 커버리지 임계값 90%로 구분해 표기한다. 과거 사용자 확인 기록은 위 표에 보존한다.
+- Boundra 공개 README 기준 BR-001부터 BR-006까지 여섯 규칙으로 갱신했다. 기존 벤치마크는 과거 기록이며 이번 작업에서 다시 실행하지 않았다.
+- document-workspace는 GitHub 저장소 목록에서 private로 확인했다. 공개 저장소라는 표현과 production 상태를 암시하는 배지를 교체했다. 기존 검증 수치는 프로젝트에 기록되어 있던 값이며 이번에 재실행한 수치가 아니다.
+- OWKR 서비스 이름은 OWKR Match로 정리했다. README에 따라 마이크는 참가 필수 조건이며 선택적인 팀 배정 변수로 설명하지 않는다.
+
+## Design concept delivery
+
+`docs/design/clean-v1/index.html`은 Image Gen 시안 네 개를 포함한 독립적인 디자인 검토 문서다. 생성 프롬프트는 동일 폴더의 `prompts.md`에 기록한다. 초기 구상 단계에서 한·영 소개와 내용을 먼저 수정했다. 이후 사용자 승인에 따라 시안의 레이아웃과 스타일을 적용하고 주요 작업의 실제 아이콘을 추가했다. 검증 기록은 `docs/design/clean-v1/verification.md`에 있다.

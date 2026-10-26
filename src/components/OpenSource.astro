@@ -1,0 +1,92 @@
+---
+import { type Locale } from '../i18n';
+interface Props { locale: Locale; }
+const { locale } = Astro.props;
+const ko = locale === 'ko';
+const contributions = [
+  {
+    name: 'OverPy',
+    status: ko ? '병합 · v9.7.16 릴리즈' : 'Merged · Released in v9.7.16',
+    title: ko ? '언어 서버의 문서 다국어 지원' : 'Localized language-server documentation',
+    paragraphs: ko ? [
+      '자동완성, hover와 인자 도움말이 다국어 문서 데이터를 사용하도록 변경했습니다. 컴파일 언어와 문서 표시 언어를 분리하고, 편집기 언어 자동 선택과 번역 누락 시 영어 대체, 관련 테스트를 추가했습니다.',
+      '유지보수자의 피드백에 따라 생성된 문서의 후처리 대신 원본 데이터 모델을 다국어 구조로 수정했습니다.',
+    ] : [
+      'Updated completion, hover, and signature help to use localized documentation data. Separated documentation and compilation languages, added editor-locale selection, English fallback, and localization tests.',
+      'Following maintainer feedback, I replaced generated-document postprocessing with localization in the source data model.',
+    ],
+    links: [
+      { label: 'PR #476', href: 'https://github.com/Zezombye/overpy/pull/476' },
+      { label: ko ? '피드백과 설계 변경' : 'Feedback and design revision', href: 'https://github.com/Zezombye/overpy/pull/476#issuecomment-5463006801' },
+      { label: ko ? '릴리즈 기록' : 'Release notes', href: 'https://github.com/Zezombye/overpy/releases/tag/v9.7.16' },
+    ],
+  },
+  {
+    name: 'Pretext',
+    status: ko ? '별도 커밋 반영 · 공동 작성자 명시' : 'Applied in a separate commit · Co-author credit',
+    title: ko ? '한국어 줄바꿈 검증용 corpus 기여' : 'A Korean corpus for line-layout validation',
+    paragraphs: ko ? [
+      '한국어 검증 텍스트의 고정 폭 줄바꿈을 정리한 자료를 제안했습니다. 기존 corpus를 교체하는 제안은 유지보수자에 의해 두 번째 한국어 corpus 추가로 반영되었습니다. PR 자체는 미병합 종료되었고, 반영 커밋에 공동 작성자로 기록되었습니다.',
+    ] : [
+      'Proposed Korean validation text with fixed-width source wrapping removed. The maintainer adopted it as a second Korean corpus rather than replacing the existing one. The PR closed without a merge; the separate implementation commit credits me as a co-author.',
+    ],
+    links: [
+      { label: 'PR #24', href: 'https://github.com/chenglou/pretext/pull/24' },
+      { label: ko ? '반영 커밋' : 'Implementation commit', href: 'https://github.com/chenglou/pretext/commit/08a5ba080045538d9c3ff63fcf01cd5abee34c1e' },
+    ],
+  },
+];
+---
+<section id="open-source" class="open-source-section" aria-labelledby="open-source-title">
+  <div class="shell section-grid">
+    <h2 id="open-source-title">{ko ? '오픈 소스 기여' : 'Open source'}</h2>
+    <div class="contributions">
+      {contributions.map((contribution) => <article>
+        <header>
+          <h3>{contribution.name}</h3>
+          <p class="contribution-status">{contribution.status}</p>
+        </header>
+        <h4>{contribution.title}</h4>
+        {contribution.paragraphs.map((paragraph) => <p class="description">{paragraph}</p>)}
+        <div class="source-links" aria-label={`${contribution.name} ${ko ? '근거' : 'sources'}`}>
+          {contribution.links.map((link) => <a href={link.href} target="_blank" rel="noopener noreferrer">{link.label}</a>)}
+        </div>
+      </article>)}
+      <p class="other-contribution">
+        <span>{ko ? '문서 기여' : 'Documentation'}</span>
+        <a href="https://github.com/axios/axios-docs/pull/320" target="_blank" rel="noopener noreferrer">{ko ? 'Axios 한국어 예제 제목의 표현 개선 · PR #320 병합' : 'Axios Korean example heading correction · PR #320 merged'}</a>
+      </p>
+    </div>
+  </div>
+</section>
+<style lang="scss">
+  @use '../styles/tokens' as *;
+  .open-source-section { padding: 72px 0; border-top: 1px solid $line; }
+  .section-grid { display: grid; grid-template-columns: 180px minmax(0,1fr); gap: 48px; }
+  h2 { padding-top: 4px; font-size: 17px; font-weight: 500; }
+  article + article { margin-top: 32px; padding-top: 32px; border-top: 1px solid $line; }
+  header { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 18px; }
+  h3 { font-size: 22px; font-weight: 600; letter-spacing: -.025em; }
+  .contribution-status { color: $gunmetal; font-size: 12px; }
+  h4 { margin: 10px 0; font-size: 16px; font-weight: 500; line-height: 1.7; }
+  .description { color: $silver; font-size: 15px; line-height: 1.9; word-break: keep-all; overflow-wrap: anywhere; }
+  .description + .description { margin-top: 8px; }
+  .source-links { display: flex; flex-wrap: wrap; gap: 0 24px; margin-top: 10px; }
+  a { color: $accent; text-decoration: underline; text-underline-offset: 4px; }
+  .source-links a { display: inline-flex; align-items: center; min-height: 44px; font-size: 14px; }
+  .other-contribution { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 16px; margin-top: 28px; padding-top: 20px; border-top: 1px solid $line; font-size: 13px; line-height: 1.8; overflow-wrap: anywhere; }
+  .other-contribution span { color: $gunmetal; }
+  .other-contribution a { display: inline-flex; align-items: center; min-height: 44px; }
+  @media (max-width: 760px) {
+    .section-grid { grid-template-columns: 1fr; gap: 24px; }
+  }
+  @media (max-width: 680px) {
+    .open-source-section { padding: 48px 0; }
+    h2 { padding: 0; font-size: 15px; }
+    h3 { font-size: 20px; }
+    header { flex-direction: column; }
+    h4 { font-size: 15px; }
+    .description { font-size: 14px; }
+    .source-links { gap: 0 20px; }
+  }
+</style>

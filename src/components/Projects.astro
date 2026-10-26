@@ -2,193 +2,144 @@
 import { getCollection, type CollectionEntry } from 'astro:content';
 import { copy, projectPath, type Locale } from '../i18n';
 import { projectEn, projectKey } from '../i18n/projects';
-import ProjectVisual from './ProjectVisual.astro';
-
 interface Props { locale: Locale; }
 const { locale } = Astro.props;
+const ko = locale === 'ko';
 const dictionary = copy[locale].selected;
+const groupLabels = ko ? { company: '회사 프로젝트', team: '협업 프로젝트', personal: '개인 프로젝트' } : { company: 'Company project', team: 'Team project', personal: 'Personal project' };
 const projects = (await getCollection('projects')).sort((a, b) => a.data.order - b.data.order);
-const featured = projects.filter((project) => project.data.featured);
-const more = projects.filter((project) => !project.data.featured);
-const localized = (project: CollectionEntry<'projects'>) => {
-  if (locale === 'ko') return project.data;
-  return { ...project.data, ...projectEn[projectKey(project.slug)] };
+const localized = (project: CollectionEntry<'projects'>) => locale === 'ko' ? project.data : { ...project.data, ...projectEn[projectKey(project.slug)] };
+const projectIcons: Record<string, string> = {
+  'design-system': '/projects/design-system/favicon.png',
+  notiiv: '/projects/notiiv/favicon.svg',
+  'document-workspace': '/projects/document-workspace/icon.svg',
+  intranet: '/projects/intranet/icon.png',
+  boundra: '/projects/boundra/icon.svg',
+  owkr: '/projects/owkr/favicon.webp',
+  jeomjuro: '/projects/jeomjuro/non-favicon.svg',
+  marker: '/projects/marker/icon.png',
+  'rust-with-typescript': '/projects/rust-with-typescript/favicon.svg',
+  kivra: '/projects/kivra/icon.svg',
+  homepage: '/projects/design-system/favicon.png',
+  echo: '/projects/echo/icon.svg',
+  chorus: '/projects/chorus/favicon.svg',
 };
-const notes = locale === 'ko' ? {
-  notiiv: {
-    title: '반복되던 기반을 하나의 규칙으로',
-    body: '앱마다 따로 존재하던 인증, API, 공유 로직을 공통 구조로 옮기고 운영 화면의 실제 작업 흐름까지 함께 다듬었습니다.',
-    labels: ['4개 프론트엔드 앱', '13개 공통 패키지', '공통 패키지 테스트 90%+'],
-  },
-  'design-system': {
-    title: '화면을 만드는 기준을 배포 가능한 제품으로',
-    body: '토큰과 컴포넌트 API뿐 아니라 접근성, 반응형 레이아웃, Storybook 검증과 NPM 릴리즈까지 하나의 운영 흐름으로 연결했습니다.',
-    labels: ['Token', 'Component API', 'Storybook', 'Release'],
-  },
-  'document-workspace': {
-    title: '편집 UI와 저장 모델을 같은 문제로',
-    body: '사람과 AI가 같은 XLSX를 편집할 때 생기는 revision 충돌, undo와 redo, 원자적 저장을 화면과 서버 양쪽에서 함께 설계했습니다.',
-    labels: ['Editor', 'MCP', 'Revision', 'Persistence'],
-  },
+const moreNotes: Record<string, string> = ko ? {
+  intranet: '메일, 메신저와 업무 메뉴를 연결한 사내 모바일 앱',
+  boundra: '도메인 경계를 검사하는 Rust CLI',
+  owkr: '팀 편성, 관리자 시험, 모집 봇과 운영 문서',
+  jeomjuro: '점주와 예비 점주를 위한 커뮤니티',
+  marker: '감정과 장소를 기록하는 지도 서비스',
+  'rust-with-typescript': 'TypeScript 개발자를 위한 Rust 학습 가이드',
+  kivra: '프로젝트의 실행 맥락을 기록하는 개발 도구',
+  homepage: '회사 홈페이지의 다국어·반응형 화면 개선',
+  echo: '실시간 음성 감지와 그룹 통계 앱',
+  chorus: '음악을 3D 바이닐 이미지로 만드는 도구',
 } : {
-  notiiv: {
-    title: 'One set of rules for repeated foundations',
-    body: 'I moved authentication, API, and sharing logic from individual apps into shared structure, while improving real operational workflows.',
-    labels: ['4 frontend apps', '13 shared packages', '90%+ shared package tests'],
-  },
+  intranet: 'An internal mobile app for mail, messaging, and work',
+  boundra: 'A Rust CLI for checking domain boundaries',
+  owkr: 'Match setup, admin exams, a recruitment bot, and guides',
+  jeomjuro: 'A community for current and future store owners',
+  marker: 'A map for recording emotions and places',
+  'rust-with-typescript': 'A Rust learning guide for TypeScript developers',
+  kivra: 'A developer tool for recording project context',
+  homepage: 'Bilingual and responsive company website improvements',
+  echo: 'A real-time voice detection and group statistics app',
+  chorus: 'A tool for turning music into 3D vinyl images',
+};
+const notes: Record<string, { summary: string; meta: string; role: string }> = {
   'design-system': {
-    title: 'A deployable product for building interfaces',
-    body: 'I connected tokens and component APIs with accessibility, responsive layouts, Storybook validation, and NPM releases.',
-    labels: ['Token', 'Component API', 'Storybook', 'Release'],
+    summary: ko ? '필요한 컴포넌트의 CSS만 불러오도록 배포 구조를 개선했습니다.' : 'Changed package distribution to load CSS for the components in use.',
+    meta: ko ? '회사 프로젝트 · React · TypeScript · SCSS' : 'Company project · React · TypeScript · SCSS',
+    role: ko ? '패키지 배포 구조, 토큰, 컴포넌트 유지보수' : 'Package distribution, tokens, and component maintenance',
+  },
+  notiiv: {
+    summary: ko ? '여러 앱에서 반복되는 인증과 API 처리를 공통 패키지로 정리했습니다.' : 'Consolidated repeated authentication and API handling into shared packages.',
+    meta: ko ? '회사 프로젝트 · Next.js · TanStack Query · Zod' : 'Company project · Next.js · TanStack Query · Zod',
+    role: ko ? 'BFF 공통화, 운영 화면, 공유 흐름 개선' : 'Shared BFF, operator interfaces, and sharing flows',
   },
   'document-workspace': {
-    title: 'One problem across editing and persistence',
-    body: 'I designed revision conflicts, undo and redo, and atomic saves across both UI and server for shared XLSX editing.',
-    labels: ['Editor', 'MCP', 'Revision', 'Persistence'],
+    summary: ko ? '사람과 AI의 XLSX 편집을 하나의 revision으로 관리하는 개인 프로젝트입니다.' : 'An independent project managing human and AI edits in one XLSX revision sequence.',
+    meta: ko ? '개인 프로젝트 · Go · TypeScript · MCP' : 'Personal project · Go · TypeScript · MCP',
+    role: ko ? '문서 세션, 변경 충돌, 저장과 복구' : 'Document sessions, revision conflicts, persistence, and recovery',
   },
 };
 ---
-
 <section id="projects" class="projects-section">
   <div class="shell">
-    <header class="section-head reveal">
-      <p>Work / 2025-2026</p>
-      <h2>{dictionary.title}</h2>
-      <p>{dictionary.description}</p>
+    <header class="section-head">
+      <h2>{dictionary.title}</h2><p class="years">2025-2026</p>
+      <p class="section-description">{dictionary.description}</p>
     </header>
-
     <div class="featured-list">
-      {featured.map((project, index) => {
+      {projects.filter((project) => project.data.featured).map((project, index) => {
         const data = localized(project);
-        const key = projectKey(project.slug) as keyof typeof notes;
+        const key = projectKey(project.slug);
         const note = notes[key];
+        const icon = projectIcons[key];
+        const href = projectPath(locale, project.slug);
         return (
-          <article class:list={['featured-project', `project-${key}`, 'reveal']}>
-            <header class="project-head">
-              <span class="project-number">{String(index + 1).padStart(2, '0')}</span>
-              <div>
-                <p>{data.category} / {data.year}</p>
-                <h3><a href={projectPath(locale, project.slug)}>{data.title}</a></h3>
-              </div>
-              <p class="project-thesis">{data.thesis ?? data.summary}</p>
-            </header>
-
-            <div class="project-body">
-              <a class="project-media" href={projectPath(locale, project.slug)} aria-label={`${data.title} ${dictionary.detail}`}>
-                <ProjectVisual projectKey={key} locale={locale} variant="compact" />
-              </a>
-              <aside class="project-note">
-                <p>{locale === 'ko' ? '제가 맡은 문제' : 'Problem I owned'}</p>
-                <h4>{note.title}</h4>
-                <p class="note-body">{note.body}</p>
-                {key === 'notiiv' ? (
-                  <ul class="fact-list">{note.labels.map((label) => <li>{label}</li>)}</ul>
-                ) : key === 'design-system' ? (
-                  <div class="token-strip">{note.labels.map((label, itemIndex) => <span><i style={`--tone:${itemIndex}`}></i>{label}</span>)}</div>
-                ) : (
-                  <div class="flow-note">{note.labels.map((label, itemIndex) => <span>{label}{itemIndex < note.labels.length - 1 && <i>→</i>}</span>)}</div>
-                )}
-                <a class="case-link" href={projectPath(locale, project.slug)}>{dictionary.detail}<span aria-hidden="true">↗</span></a>
-              </aside>
+          <article class="featured-project">
+            <span class="project-number">{String(index + 1).padStart(2, '0')}</span>
+            <div class="project-copy">
+              <h3><a class="project-title" href={href}>{icon && <img class="project-icon" src={icon} width="24" height="24" alt="" aria-hidden="true" decoding="async" />}{data.title}</a></h3>
+              <p class="project-summary">{note?.summary ?? data.summary}</p>
+              <p class="project-meta">{note?.meta ?? data.category}</p>
+              <p class="project-role">{ko ? '담당' : 'Scope'}: {note?.role ?? data.role}</p>
             </div>
+            <a class="case-link" href={href} aria-label={`${data.title} ${dictionary.detail}`}>{dictionary.detail}<svg aria-hidden="true" viewBox="0 0 20 20"><path d="M4 10h12m-5-5 5 5-5 5" /></svg></a>
           </article>
         );
       })}
     </div>
-
-    <section id="more-work" class="more-work reveal" aria-labelledby="more-work-title">
-      <header>
-        <h2 id="more-work-title">{dictionary.moreTitle}</h2>
-        <p>{dictionary.moreDescription}</p>
-      </header>
-      <ol>
-        {more.map((project, index) => {
-          const data = localized(project);
-          const key = projectKey(project.slug);
-          return (
-            <li class:list={{ intranet: key === 'intranet' }}>
-              <a href={projectPath(locale, project.slug)}>
-                <span class="more-number">{String(index + 1).padStart(2, '0')}</span>
-                {key === 'intranet' && <img src="/projects/intranet/icon.png" width="52" height="52" alt={locale === 'ko' ? 'Bigtablet Intranet 앱 아이콘' : 'Bigtablet Intranet app icon'} />}
-                <span class="more-name"><strong>{data.title}</strong><small>{data.summary}</small></span>
-                <span class="more-year">{data.year}</span>
-                <span class="more-arrow" aria-hidden="true">↗</span>
-              </a>
-            </li>
-          );
-        })}
-      </ol>
+    <section id="more-work" class="more-work" aria-labelledby="more-work-title">
+      <h2 id="more-work-title">{dictionary.moreTitle}</h2>
+      <ol>{projects.filter((project) => !project.data.featured).map((project) => {
+        const data = localized(project);
+        return <li><a href={projectPath(locale, project.slug)}><strong>{projectIcons[projectKey(project.slug)] && <img class="project-icon" src={projectIcons[projectKey(project.slug)]} width="24" height="24" alt="" aria-hidden="true" decoding="async" loading="lazy" />}<span>{data.title}</span></strong><span class="more-summary"><small class="work-type">{groupLabels[project.data.group]}</small>{moreNotes[projectKey(project.slug)] ?? data.summary}</span><svg aria-hidden="true" viewBox="0 0 20 20"><path d="M4 10h12m-5-5 5 5-5 5" /></svg></a></li>;
+      })}</ol>
     </section>
   </div>
 </section>
-
 <style lang="scss">
   @use '../styles/tokens' as *;
-  .projects-section { padding: clamp(90px, 10vw, 140px) 0 clamp(105px, 12vw, 170px); }
-  .section-head { display: grid; grid-template-columns: .28fr 1.18fr .54fr; gap: clamp(40px, 6vw, 92px); align-items: end; padding-bottom: 42px; border-bottom: 1px solid $silver-bright; }
-  .section-head > p:first-child { align-self: start; color: $accent; font: 600 .62rem/1.4 $font-mono; }
-  .section-head h2, .more-work h2 { font-size: clamp(2.7rem, 5vw, 5rem); font-weight: 500; line-height: 1; letter-spacing: -.06em; }
-  .section-head > p:last-child, .more-work header p { color: $silver; font-size: .92rem; line-height: 1.78; word-break: keep-all; }
-  .featured-project { padding: clamp(72px, 9vw, 126px) 0; border-bottom: 1px solid $line-bright; }
-  .project-head { display: grid; grid-template-columns: .28fr 1.18fr .54fr; gap: clamp(40px, 6vw, 92px); align-items: end; }
-  .project-number { align-self: start; color: $accent; font: 600 .7rem/1 $font-mono; }
-  .project-head > div > p { color: $gunmetal; font: 500 .62rem/1.4 $font-mono; }
-  .project-head h3 { margin-top: 13px; font-size: clamp(2.6rem, 5.3vw, 5.7rem); font-weight: 500; line-height: .98; letter-spacing: -.065em; }
-  .project-head h3 a:hover { color: $accent; }
-  .project-thesis { color: $silver; font-size: 1rem; line-height: 1.7; word-break: keep-all; }
-  .project-body { display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(280px, .5fr); gap: clamp(42px, 6vw, 86px); align-items: start; margin-top: 52px; }
-  .project-media { height: clamp(390px, 45vw, 650px); overflow: hidden; border: 1px solid $line; background: $black-soft; transition: border-color $fast; }
-  .project-media:hover { border-color: $silver-bright; }
-  .project-note { padding-top: 16px; border-top: 1px solid $silver-bright; }
-  .project-note > p:first-child { color: $accent; font: 600 .61rem/1 $font-mono; }
-  .project-note h4 { margin-top: 24px; font-size: clamp(1.3rem, 2vw, 1.75rem); font-weight: 600; line-height: 1.38; letter-spacing: -.03em; word-break: keep-all; }
-  .note-body { margin-top: 19px; color: $silver; font-size: .9rem; line-height: 1.78; word-break: keep-all; }
-  .fact-list { margin-top: 28px; list-style: none; border-top: 1px solid $line; }
-  .fact-list li { padding: 11px 0; border-bottom: 1px solid $line; color: $gunmetal; font: 500 .66rem/1.5 $font-mono; }
-  .token-strip { display: grid; grid-template-columns: 1fr 1fr; gap: 15px 12px; margin-top: 31px; }
-  .token-strip span { display: flex; align-items: center; gap: 9px; color: $gunmetal; font: 500 .6rem/1.3 $font-mono; }
-  .token-strip i { width: 16px; height: 16px; border-radius: 50%; background: hsl(calc(12 + var(--tone) * 22), calc(74% - var(--tone) * 10%), calc(54% + var(--tone) * 9%)); }
-  .flow-note { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 30px; }
-  .flow-note span { display: flex; align-items: center; gap: 7px; color: $gunmetal; font: 500 .6rem/1.3 $font-mono; }
-  .flow-note i { color: $accent; font-style: normal; }
-  .case-link { display: flex; align-items: center; justify-content: space-between; margin-top: 34px; padding: 14px 0 9px; border-bottom: 1px solid $silver-bright; font-size: .75rem; font-weight: 600; }
-  .case-link:hover { color: $accent; }
-  .more-work { padding-top: clamp(100px, 12vw, 170px); }
-  .more-work > header { display: grid; grid-template-columns: 1fr minmax(300px, .45fr); gap: 70px; align-items: end; margin-bottom: 45px; }
-  .more-work ol { list-style: none; border-top: 1px solid $silver-bright; }
+  .projects-section { padding-bottom: 100px; }
+  .section-head { display: grid; grid-template-columns: 1fr auto; gap: 16px 24px; padding-bottom: 32px; }
+  h2 { font-size: 32px; font-weight: 600; letter-spacing: -.035em; line-height: 1.4; }
+  .years { align-self: center; color: $silver; font-size: 14px; }
+  .section-description { grid-column: 1 / -1; color: $silver; font-size: 17px; }
+  .featured-list { border-top: 1px solid $line; }
+  .featured-project { display: grid; grid-template-columns: 68px minmax(0,1fr) auto; gap: 24px; padding: 36px 0; border-bottom: 1px solid $line; }
+  .project-number { padding-top: 8px; color: $gunmetal; font-size: 14px; }
+  h3 { font-size: 26px; font-weight: 600; line-height: 1.5; letter-spacing: -.025em; }
+  .project-title { display: flex; align-items: center; gap: 12px; width: fit-content; }
+  .project-title:hover { color: $accent; }
+  .project-icon { width: 24px; height: 24px; object-fit: contain; flex: 0 0 24px; }
+  .project-summary { margin-top: 8px; color: $silver; font-size: 17px; line-height: 1.75; word-break: keep-all; }
+  .project-meta { margin-top: 10px; color: $gunmetal; font-size: 14px; }
+  .project-role { margin-top: 14px; color: $silver; font-size: 15px; line-height: 1.7; }
+  .case-link { display: inline-flex; align-items: center; gap: 8px; align-self: start; min-height: 44px; color: $accent; font-size: 15px; white-space: nowrap; text-decoration: underline; text-underline-offset: 4px; }
+  svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 1.4; }
+  .more-work { padding-top: 72px; }
+  .more-work h2 { margin-bottom: 24px; font-size: 26px; }
+  .more-work ol { list-style: none; border-top: 1px solid $line; }
   .more-work li { border-bottom: 1px solid $line; }
-  .more-work li a { min-height: 92px; display: grid; grid-template-columns: 45px 1fr auto 20px; align-items: center; gap: 18px; }
-  .more-work li.intranet a { grid-template-columns: 45px 54px 1fr auto 20px; }
-  .more-work li a:hover .more-name strong, .more-work li a:hover .more-arrow { color: $accent; }
-  .more-work img { width: 50px; height: 50px; border-radius: 12px; box-shadow: 0 4px 12px rgba(21,22,21,.12); }
-  .more-number, .more-year { color: $gunmetal; font: 500 .61rem/1 $font-mono; }
-  .more-name { min-width: 0; }
-  .more-name strong { display: block; font-size: 1rem; font-weight: 600; transition: color $fast; }
-  .more-name small { display: block; max-width: 740px; margin-top: 5px; overflow: hidden; color: $gunmetal; font-size: .72rem; line-height: 1.45; text-overflow: ellipsis; white-space: nowrap; }
-  .more-arrow { transition: color $fast; }
-  @media (max-width: 960px) {
-    .section-head, .project-head { grid-template-columns: .2fr 1fr; }
-    .section-head > p:last-child, .project-thesis { grid-column: 2; margin-top: 10px; }
-    .project-body { grid-template-columns: 1fr; }
-    .project-note { max-width: 620px; }
-  }
+  .more-work li a { display: grid; grid-template-columns: 230px minmax(0,1fr) 20px; gap: 24px; min-height: 80px; align-items: center; padding: 18px 0; }
+  .more-work strong { display: flex; align-items: center; gap: 12px; min-width: 0; font-size: 16px; font-weight: 600; }
+  .more-work strong span { min-width: 0; overflow-wrap: anywhere; }
+  .work-type { display: block; margin-bottom: 2px; color: $gunmetal; font-size: 12px; }
+  .more-summary { color: $silver; font-size: 14px; line-height: 1.7; }
+  .more-work li a:hover strong, .more-work li a:hover svg { color: $accent; }
   @media (max-width: 680px) {
-    .projects-section { padding-top: 70px; }
-    .section-head, .project-head { grid-template-columns: 32px 1fr; gap: 15px; }
-    .section-head { padding-bottom: 30px; }
-    .section-head > p:first-child { font-size: 0; }
-    .section-head > p:first-child::after { content: '01'; font-size: .62rem; }
-    .section-head h2, .more-work h2 { font-size: 2.55rem; }
-    .section-head > p:last-child, .project-thesis { grid-column: 2; }
-    .featured-project { padding: 62px 0; }
-    .project-head h3 { font-size: 2.75rem; }
-    .project-body { gap: 34px; margin-top: 35px; }
-    .project-media { height: 64vw; min-height: 250px; }
-    .more-work > header { grid-template-columns: 1fr; gap: 20px; }
-    .more-work li a, .more-work li.intranet a { min-height: 86px; grid-template-columns: 29px auto 1fr 18px; gap: 12px; }
-    .more-work li:not(.intranet) .more-name { grid-column: 2 / 4; }
-    .more-work img { width: 44px; height: 44px; border-radius: 10px; }
-    .more-year { display: none; }
-    .more-name small { max-width: 210px; }
+    .projects-section { padding-bottom: 64px; }
+    h2 { font-size: 26px; }.section-description { font-size: 16px; }.years { font-size: 12px; }
+    .featured-project { grid-template-columns: 24px minmax(0,1fr); gap: 12px; padding: 28px 0; }
+    h3 { font-size: 20px; overflow-wrap: anywhere; }.project-title { align-items: flex-start; gap: 10px; }.project-icon { margin-top: 3px; }
+    .project-number { padding-top: 5px; font-size: 12px; }
+    .project-summary { font-size: 16px; }.project-meta { font-size: 13px; }.project-role { font-size: 14px; }
+    .case-link { grid-column: 2; margin-top: 0; font-size: 14px; width: fit-content; }
+    .more-work { padding-top: 52px; }.more-work h2 { font-size: 23px; }
+    .more-work li a { grid-template-columns: minmax(0,1fr) 20px; gap: 8px 16px; }
+    .more-summary { grid-column: 1; grid-row: 2; padding-left: 36px; }.more-work li svg { grid-column: 2; grid-row: 1 / 3; }
   }
 </style>

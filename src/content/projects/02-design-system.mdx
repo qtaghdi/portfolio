@@ -1,91 +1,78 @@
 ---
-order: 2
+order: 1
 title: "Bigtablet Design System"
 titleKo: "사내 디자인 시스템"
 group: company
 featured: true
-category: "Company · Open Source · NPM"
-badge: "NPM Published"
+category: "Company · UI Library · NPM"
 year: "2025-2026"
-role: "디자인 시스템 제작 및 유지보수"
+role: "프론트엔드 개발 및 디자인 시스템 유지보수"
 accentColor: amber
-thesis: "컴포넌트 모음에서 제품을 조립·검증하는 인터페이스 플랫폼으로"
-responsibility: "디자인 토큰·테마, 컴포넌트 API, 반응형 레이아웃, 접근성, 테스트·Storybook, NPM 릴리즈"
-visibility: "공개 GitHub 저장소와 NPM 패키지에서 재현 가능한 수치만 사용했습니다."
-focus:
-  - "Design tokens"
-  - "Component API"
-  - "Accessibility"
-  - "Release system"
-summary: "토큰과 테마부터 레이아웃, 컴포넌트 API, 모션, 테스트, 릴리즈까지 제품 팀이 같은 기준으로 화면을 만들고 검증할 수 있는 기반을 구축했습니다."
+thesis: "필요한 컴포넌트의 CSS만 불러오도록"
+responsibility: "컴포넌트별 ESM·CSS 배포, 토큰 생성, 오버레이 모션, 컴포넌트 유지보수와 마이그레이션 문서"
+visibility: "회사 프로젝트 중 본인 명의 커밋으로 확인할 수 있는 변경을 중심으로 정리했습니다. 내부 고객 데이터는 포함하지 않았습니다."
+focus: ["Package distribution", "Design tokens", "Overlay behavior", "Consumer migration"]
+summary: "컴포넌트 하나를 사용해도 전체 스타일이 따라오던 배포 구조를 컴포넌트별 ESM과 CSS로 변경했습니다. 토큰 생성과 오버레이 모션을 정리하고 소비하는 앱의 마이그레이션을 진행했습니다."
 evidence:
-  - { val: "40+", label: "공개 컴포넌트" }
-  - { val: "11", label: "디자인 토큰 도메인"}
-  - { val: "68", label: "Storybook story 파일" }
+  - { val: "ESM + CSS", label: "컴포넌트별 배포" }
+  - { val: "4 apps", label: "Notiiv 모노레포의 패키지 의존성 기준" }
+  - { val: "CSS motion", label: "react-spring 런타임 의존성 제거" }
 metrics: []
-callouts:
-  - icon: "📦"
-    title: "React + Vanilla 배포 구조"
-    color: amber
-    body: "DS 소비자를 위한 패키지와 CSS 클래스 기반 vanilla 출력을 함께 제공해, 서로 다른 제품 스택이 동일한 토큰과 인터페이스 규칙을 공유하도록 구성했습니다."
-tech:
-  - "React"
-  - "TypeScript"
-  - "SCSS"
-  - "CSS Custom Properties"
-  - "Storybook"
-  - "Vitest"
-  - "Rollup"
-  - "react-spring"
-  - "NPM Trusted Publisher"
+callouts: []
+tech: ["React", "TypeScript", "SCSS", "CSS Custom Properties", "Storybook", "Vitest", "tsup"]
 github: "https://github.com/Bigtablet/bigtablet-design-system"
 link: "https://www.npmjs.com/package/@bigtablet/design-system"
 ---
 
-## Problem
+## 문제
 
-사내 여러 제품이 같은 UI 기준을 사용하려면 Button, TextField, Modal 같은 개별 컴포넌트만으로는 부족했습니다. 색상과 테마, 화면 레이아웃, 모바일 내비게이션, 접근성, 모션까지 제품을 구성하는 공통 규칙이 필요했고, React뿐 아니라 서로 다른 프론트엔드 환경에서도 같은 인터페이스 기준을 사용할 수 있어야 했습니다.
+### 컴포넌트를 적게 써도 전체 스타일이 따라오는 구조
 
-컴포넌트가 늘어나면서 구현 방식의 차이도 누적되었습니다. 모션은 CSS keyframe과 shouldRender/isExiting/onAnimationEnd 패턴이 혼재해 exit animation 이후 unmount 처리가 컴포넌트마다 달랐고, anchor와 button을 모두 지원하는 navigation item은 각 element의 native attribute와 disabled semantics를 타입과 런타임에서 함께 보장해야 했습니다.
+사내 디자인 시스템은 여러 제품 앱에서 사용하는 공통 패키지입니다. 제 담당은 기존 라이브러리의 배포 구조, 토큰과 오버레이 동작을 유지보수하고, 변경을 소비하는 앱에 적용하는 일이었습니다.
 
-Storybook과 테스트 환경에서도 실제 제품과 차이가 발생했습니다. iframe의 기본 여백 때문에 fixed-position 컴포넌트가 실제 viewport와 다르게 렌더링되거나, animation callback의 실행 시점 때문에 unmount 테스트가 불안정했습니다. Dark mode에서는 일부 하드코딩된 색상이 토큰 체계에서 벗어나 대비가 깨지는 문제도 있었습니다.
+예를 들어 버튼만 필요한 화면에서도 패키지 진입점이 전체 CSS를 가져오면 사용하지 않는 모달, 드롭다운과 다른 컴포넌트의 스타일이 함께 포함됩니다. JavaScript의 사용하지 않는 코드를 제거하는 것만으로는 이 CSS import를 없앨 수 없었습니다. 컴포넌트 API를 그대로 유지하면서, 실제 사용 범위에 맞게 스타일이 따라오도록 배포 단위를 바꿔야 했습니다.
 
-패키지 배포 역시 제품 기반의 일부였습니다. 기존 NPM publish 과정의 token과 OIDC 의존성을 정리하고, 지속적으로 릴리즈할 수 있는 공급망을 구축할 필요가 있었습니다.
+모션도 별도의 과제였습니다. 오버레이의 열고 닫는 효과에 사용하던 런타임 의존성을 제거하려면 보이는 애니메이션뿐 아니라 DOM을 언제 붙이고 떼는지까지 유지해야 했습니다. 닫기를 누르자마자 요소를 지우면 퇴출 모션이 사라지고, 닫는 도중 다시 열었는데 이전 완료 처리가 실행되면 열린 창이 사라질 수 있습니다.
 
-## Approach
+## 선택한 방법
 
-### 1. Token & Layout Foundation
+### 1. CSS 파일 분할과 배럴의 부작용을 함께 정리
 
-CSS custom properties를 기반으로 색상과 테마를 light/dark/system 구조로 정리하고, ThemeProvider와 useTheme을 통해 제품과 Storybook에서 동일한 테마 규칙을 사용하도록 했습니다. Storybook toolbar에서도 세 테마를 직접 전환하며 컴포넌트를 검증할 수 있게 구성했습니다.
+컴포넌트별 ESM 모듈과 CSS를 나란히 출력하고, 각 컴포넌트가 자신의 스타일을 import하도록 빌드를 변경했습니다. DatePicker가 Popover를 사용하면 의존 관계를 따라 Popover의 스타일도 가져오게 했습니다. 필요한 스타일을 소비 앱이 직접 조합하도록 넘기지 않고, 컴포넌트의 의존성과 일치시킨 구조입니다.
 
-개별 컴포넌트를 넘어 화면 자체를 같은 기준으로 조립할 수 있도록 Container, Section, Stack, Grid 등의 layout primitive를 추가했습니다. max-width, spacing, responsive grid, flex direction처럼 제품에서 반복되던 레이아웃 패턴을 컴포넌트 API로 끌어올렸습니다.
+파일을 나누는 것만으로 끝나지는 않았습니다. 공통 CSS import가 배럴에 남으면 번들러가 그 진입점을 부작용이 있는 모듈로 취급할 수 있습니다. 테마, autofill과 링크 스타일은 필요한 모듈로 옮기고, 배럴에는 재수출만 남겼습니다. CSS는 부작용이 있는 파일로 표시하되, 사용하지 않는 JavaScript 모듈까지 모두 유지하지 않도록 패키지 설정을 맞췄습니다.
 
-### 2. Component API & Accessibility
+빌드 후처리는 확장자 없는 상대 import를 실제 ESM 출력 경로로 바꾸고, SCSS를 같은 CSS layer로 컴파일합니다. 배럴로 옮길 수 없는 export가 추가되면 조용히 누락하는 대신 빌드를 실패시키도록 했습니다. 개발 중 watch 재빌드에서도 같은 후처리를 실행해 개발 결과와 배포 결과가 달라지지 않도록 했습니다.
 
-모바일 환경에서는 BottomNav, BottomNavItem, BottomNavSpacer를 추가하고, Sidebar에 mode="auto"를 도입했습니다. 600px 미만에서는 CSS media query를 통해 sidebar가 bottom navigation으로 전환되도록 해 동일한 navigation 구조를 viewport에 따라 재사용할 수 있게 했습니다.
+### 2. 화면의 모션과 요소의 수명을 분리
 
-SidebarItem과 BottomNavItem은 as="a" | "button"을 discriminated union으로 모델링했습니다. Anchor에서는 target, rel, download를, button에서는 type, form을 타입 수준에서 구분했습니다. Disabled 상태 역시 anchor에는 aria-disabled, tabIndex=-1, preventDefault를 적용하고 button에는 native disabled를 사용해 element semantics를 유지했습니다.
+모션 자체는 CSS transition으로 옮기고, 작은 `usePresence` 훅은 마운트 수명만 관리하도록 했습니다. 열리는 렌더에서 바로 요소를 마운트해 포커스 처리가 한 렌더 늦어지지 않게 하고, 닫힐 때는 해당 요소의 애니메이션이 끝난 후 해제합니다.
 
-### 3. Motion & Verification
+다시 열리면 이전 해제 대기를 취소합니다. 모션 감소 설정 등으로 진행 중인 애니메이션이 없으면 즉시 해제합니다. 자식 요소의 애니메이션까지 모두 기다리면 본문의 무한 Spinner 때문에 창이 닫히지 않을 수 있어, 기다릴 대상도 오버레이 요소로 제한했습니다. `@react-spring/web`과 공개 spring 훅을 제거하면서 이런 동작 경계를 함께 유지했습니다.
 
-컴포넌트마다 달랐던 exit animation을 react-spring 기반 presence pattern으로 통합했습니다. useSpringPresence에 onExitComplete를 제공해 animation 이후 unmount를 공통 처리하고, Modal과 Alert는 overlay와 panel의 motion lifecycle을 분리했습니다. Toast 역시 timer와 별도의 exiting state 대신 spring lifecycle을 사용하도록 변경했습니다.
+### 3. 패키지 변경을 소비 앱의 마이그레이션까지 연결
 
-모든 interaction을 같은 animation 정책으로 강제하지는 않았습니다. Dropdown처럼 선택이나 ESC 입력 이후 즉각적인 종료가 중요한 컴포넌트는 enter-only pattern을 유지해 사용자 경험과 구현 일관성 사이의 trade-off를 조정했습니다.
+기존 전체 `style.css` 진입점은 호환성을 위해 유지했습니다. 다만 새 컴포넌트 CSS와 함께 가져오면 중복되므로, 앱의 전체 스타일 import를 제거하는 절차와 테마 변수만 필요한 경우를 마이그레이션 문서에 구분했습니다. Next.js의 webpack 빌드에서는 패키지 import 최적화 설정도 필요하다고 안내했습니다.
 
-Storybook iframe의 body margin/padding을 reset해 fixed UI를 실제 viewport와 동일한 조건에서 검증하고, 테스트 환경에서는 spring animation을 skip해 exit 이후 unmount 테스트가 결정적으로 실행되도록 구성했습니다.
+토큰은 `tokens.json`에서 SCSS, TypeScript와 테마 변수를 생성하도록 통합했습니다. 생성 결과와 커밋된 파일이 다르면 검사가 실패하게 해, 한쪽 출력만 수동 수정하면서 테마가 어긋나는 문제를 드러내도록 했습니다. 소비하는 Notiiv 앱에서는 패키지 버전과 스타일 import를 함께 갱신했습니다.
 
-### 4. Distribution
+## 확인한 결과
 
-React 제품에는 Rollup 기반 패키지를 제공하고, React를 사용하지 않는 환경에서도 같은 디자인 토큰과 인터페이스를 활용할 수 있도록 CSS class 기반 vanilla output을 함께 제공했습니다.
+### 검증한 동작
 
-NPM 배포는 npm v11+의 auto-OIDC Trusted Publisher 방식으로 전환했습니다. Workflow에서 npm 버전을 명시적으로 올리고 NODE_AUTH_TOKEN과 registry token 의존성을 제거해 장기 credential 없이 패키지를 배포할 수 있도록 정리했습니다.
+- **배포 경계:** 컴포넌트별 ESM·CSS 출력, 실제 파일을 가리키는 import, 재수출만 남은 배럴을 변경 코드로 확인할 수 있습니다. 지원하지 않는 export와 watch 후처리 누락도 후속 커밋에서 방어했습니다.
+- **오버레이 수명:** 열리는 렌더의 마운트, 모션이 없을 때 즉시 해제, 퇴출 완료 대기, 퇴출 도중 재열기, 처음부터 닫혀 있던 요소의 콜백 처리를 단위 테스트로 남겼습니다.
+- **소비 앱 적용:** 마이그레이션 문서에는 전체 CSS import 제거, 테마 변수와 번들러별 설정을 기록했습니다. Notiiv의 네 앱은 같은 디자인 시스템 패키지를 참조합니다.
 
-## Result
+결과는 필요한 컴포넌트와 스타일이 같은 의존 관계로 배포되고, 별도 모션 런타임 없이 오버레이 수명을 관리하도록 바뀐 것입니다. 제 기여는 배포 후처리와 설정, presence 훅, 토큰 생성과 소비 앱 변경까지 이어지는 범위입니다.
 
-디자인 시스템은 개별 UI 컴포넌트를 제공하는 패키지에서 제품 화면을 조립하고 동일한 기준으로 검증·배포할 수 있는 인터페이스 기반으로 확장되었습니다. 현재 40개 이상의 공개 컴포넌트와 11개 디자인 토큰 도메인을 제공하며, 68개의 Storybook story 파일을 통해 컴포넌트의 상태와 조합을 검증할 수 있습니다.
+### 남은 한계와 다음 검증
 
-제품 개발자는 layout primitive와 responsive navigation을 통해 반복적인 화면 구조를 직접 구현할 필요가 줄었고, polymorphic component API와 element별 disabled semantics를 통해 잘못된 속성 조합이나 접근성 오류가 발생할 여지를 API 수준에서 줄였습니다.
+패키지를 나눠 배포해도 앱이 전체 CSS를 계속 import하거나 번들러 설정이 맞지 않으면 이점을 얻지 못합니다. 그래서 패키지 빌드 성공과 실제 소비 앱의 결과를 구분해야 합니다. 이 페이지에서는 동일 조건의 번들 분석 보고서를 첨부하지 않은 크기 감소율이나 사용자 로딩 시간 개선율을 성과로 내세우지 않습니다.
 
-모션은 컴포넌트마다 관리하던 CSS animation과 별도 lifecycle state에서 공통 spring presence pattern으로 정리했습니다. Storybook과 테스트 환경도 실제 제품 렌더링과 animation lifecycle을 고려하도록 구성해 UI 변경을 더 일관된 조건에서 검증할 수 있게 했습니다.
+다음 검증은 버튼만 사용하는 최소 앱과 실제 제품 화면을 같은 설정으로 빌드해 JavaScript·CSS 결과물을 비교하고, 라이트·다크 테마와 오버레이 동작이 유지되는지 함께 기록하는 것입니다.
 
-배포에서는 React package와 vanilla output을 함께 제공해 서로 다른 제품 스택이 동일한 디자인 기준을 공유할 수 있도록 했고, NPM Trusted Publisher 전환을 통해 장기 publish token 없이 릴리즈할 수 있는 구조를 구축했습니다.
+- [컴포넌트별 ESM·CSS 배포 변경](https://github.com/Bigtablet/bigtablet-design-system/commit/3a9c75010f1f0aeae551e2127e7c4b5f1e7a355e)
+- [CSS 모션 전환과 presence 테스트](https://github.com/Bigtablet/bigtablet-design-system/commit/32972ad735ff921c2bfc1fa84867cfb50dd1dc96)
+- [소비 앱 마이그레이션 안내](https://github.com/Bigtablet/bigtablet-design-system/blob/develop/docs/MIGRATION.md)
+- [토큰 생성 스크립트](https://github.com/Bigtablet/bigtablet-design-system/blob/develop/scripts/build-tokens.mjs)

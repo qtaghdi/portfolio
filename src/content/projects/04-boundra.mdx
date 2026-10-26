@@ -17,9 +17,9 @@ focus:
   - "Static analysis"
   - "Runtime contracts"
   - "Developer experience"
-summary: "TypeScript 모노레포에서 client·server·shared·public API 경계를 BR-001부터 BR-005까지 검사하는 Rust CLI와 Zod 런타임 계약을 만들었습니다."
+summary: "TypeScript 모노레포에서 client·server·shared·public API 경계를 BR-001부터 BR-006까지 검사하는 Rust CLI와 Zod 런타임 계약을 만들었습니다."
 evidence:
-  - { val: "5 rules", label: "BR-001부터 BR-005", detail: "실행 환경·shared·domain·app 경계" }
+  - { val: "6 rules", label: "BR-001부터 BR-006", detail: "실행 환경·shared·domain·app 경계" }
   - { val: "10K files", label: "합성 TypeScript 워크스페이스", detail: "release benchmark fixture" }
   - { val: "164.20 ms", label: "warm median", detail: "darwin-arm64 · Node 24.14.0" }
 metrics: []
@@ -27,7 +27,7 @@ callouts:
   - icon: "01"
     title: "Stable rules, actionable diagnostics"
     color: accent
-    body: "BR-001~005 규칙에 안정적인 오류 코드, 파일·필드 경로와 수정 제안을 연결해 위반을 발견하는 것에서 고치는 경험까지 설계했습니다."
+    body: "BR-001~006 규칙에 안정적인 오류 코드, 파일·필드 경로와 수정 제안을 연결해 위반을 발견하는 것에서 고치는 경험까지 설계했습니다."
   - icon: "02"
     title: "Static boundary + runtime contract"
     color: teal
@@ -48,17 +48,17 @@ link: "https://www.npmjs.com/package/boundra"
 github: "https://github.com/qtaghdi/boundra"
 ---
 
-## Problem
+## 문제
 
 도메인 구조와 import 규칙은 프로젝트 초기에 문서로 합의하기 쉽지만, 기능과 팀이 늘어나면 가장 먼저 흐려집니다. client 코드가 server 구현을 가져오고, shared 계층이 UI와 데이터베이스에 의존하고, 다른 도메인의 내부 파일을 직접 참조해도 빌드가 성공하면 문제는 늦게 드러납니다.
 
 기존 lint 규칙만으로는 앱의 도메인 선언과 공개 API, 실행 환경을 하나의 모델로 다루기 어려웠습니다. 오류 메시지가 추상적이면 규칙을 지키는 비용이 커지고 결국 예외가 늘어납니다. 빠르게 검사하면서도 개발자가 바로 수정할 수 있는 피드백이 필요했습니다.
 
-## Approach
+## 선택한 방법
 
 ### 1. Static Architecture Rules
 
-Boundra는 도메인 manifest를 기준으로 BR-001부터 BR-005까지의 경계를 검사합니다. client/server 침범, shared 계층 오염, 도메인 내부 직접 참조, composition root 우회를 각각 독립적인 규칙으로 만들고 오류 코드가 릴리즈 사이에서 바뀌지 않게 했습니다.
+Boundra는 도메인 manifest를 기준으로 BR-001부터 BR-006까지의 경계를 검사합니다. client/server 침범, shared 계층 오염, 도메인 내부 직접 참조, composition root 우회와 선언하지 않은 도메인 의존성을 각각 독립적인 규칙으로 만들고 오류 코드가 릴리즈 사이에서 바뀌지 않게 했습니다.
 
 ### 2. Runtime Contracts & Feedback
 
@@ -68,7 +68,7 @@ Boundra는 도메인 manifest를 기준으로 BR-001부터 BR-005까지의 경�
 
 성능 주장은 작은 예제의 체감 대신 재현 스크립트로 남겼습니다. release CLI로 1천·1만 TypeScript 파일을 생성해 cold와 warm median을 기록하고, 실제 773-file 모노레포에서는 TypeScript 전처리 결과와 import 단위로 비교했습니다. 누락과 초과가 0인지 확인한 뒤 parser 예외를 수정했습니다.
 
-## Result
+## 확인한 결과
 
 Boundra는 규칙 문서, 정적 분석, 런타임 계약, scaffold, Vite 피드백을 하나의 공개 NPM 도구로 연결했습니다. 2026년 7월 3일의 동일 환경 기준으로 1만 파일 fixture를 cold 163.32ms, warm median 164.20ms에 검사했습니다.
 

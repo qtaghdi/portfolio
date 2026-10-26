@@ -6,7 +6,6 @@ import Footer from './Footer.astro';
 import { copy, localePath, projectPath, type Locale } from '../i18n';
 import { projectEn, projectKey } from '../i18n/projects';
 import ProjectVisual from './ProjectVisual.astro';
-
 interface Props { locale: Locale; project: CollectionEntry<'projects'>; }
 const { locale, project } = Astro.props;
 const { Content } = await project.render();
@@ -14,193 +13,114 @@ const key = projectKey(project.slug);
 const translation = projectEn[key];
 const data = locale === 'en' ? { ...project.data, ...translation } : project.data;
 const dictionary = copy[locale].detail;
+const groupLabels = locale === 'ko' ? { company: '회사 프로젝트', team: '협업 프로젝트', personal: '개인 프로젝트' } : { company: 'Company project', team: 'Team project', personal: 'Personal project' };
 const allProjects = (await getCollection('projects')).sort((a, b) => a.data.order - b.data.order);
 const currentIndex = allProjects.findIndex((item) => item.slug === project.slug);
 const nextProject = allProjects[(currentIndex + 1) % allProjects.length];
 const nextData = locale === 'en' ? { ...nextProject.data, ...projectEn[projectKey(nextProject.slug)] } : nextProject.data;
 const pageTitle = `${data.title} | ${locale === 'ko' ? '박상민 포트폴리오' : 'Park Sangmin Portfolio'}`;
-const chapterIds = locale === 'ko'
-  ? ['problem', 'approach', 'result']
-  : ['problem', 'decisions', 'outcome'];
+const chapterIds = locale === 'ko' ? ['문제', '선택한-방법', '확인한-결과'] : ['problem', 'decisions', 'outcome'];
+const hasEvidenceScreen = ['notiiv', 'design-system', 'intranet', 'document-workspace', 'boundra'].includes(key);
 ---
-
 <BaseLayout locale={locale} title={pageTitle} description={data.summary}>
   <Navbar locale={locale} />
   <main id="main-content" class="project-page">
     <header class="project-hero shell">
-      <a class="back-link" href={`${localePath(locale)}#projects`}>
-        <svg aria-hidden="true" viewBox="0 0 20 20"><path d="M16 10H4M9 5l-5 5 5 5" /></svg>
-        {dictionary.back}
-      </a>
-      <div class="heading-grid">
-        <p class="eyebrow">{data.category} · {data.year}</p>
-        <div>
-          <h1>{data.title}</h1>
-          {data.thesis && <p class="thesis">{data.thesis}</p>}
-        </div>
-        <p class="summary">{data.summary}</p>
-      </div>
-
-      <div id="project-visual" class="case-visual">
-        <div aria-hidden={key === 'notiiv' ? undefined : 'true'}><ProjectVisual projectKey={key} locale={locale} variant="detail" /></div>
-        {(data.link || data.github) && <a class="case-visual-link" href={data.link ?? data.github} target="_blank" rel="noopener noreferrer" aria-label={`${data.title} ${data.link ? dictionary.live : dictionary.github}`}></a>}
-      </div>
-    </header>
-
-    {data.evidence.length > 0 && (
-      <dl class="evidence shell">
-        {data.evidence.slice(0, 3).map((item) => (
-          <div><dt>{item.val}</dt><dd>{item.label}</dd>{item.detail && <small>{item.detail}</small>}</div>
-        ))}
+      <a class="back-link" href={`${localePath(locale)}#projects`}><svg aria-hidden="true" viewBox="0 0 20 20"><path d="M16 10H4m5-5-5 5 5 5" /></svg>{dictionary.back}</a>
+      <h1>{data.title}</h1>
+      {data.thesis && <p class="thesis">{data.thesis}</p>}
+      <dl class="project-meta">
+        <div><dt>{locale === 'ko' ? '구분' : 'Context'}</dt><dd>{groupLabels[project.data.group]}</dd></div>
+        <div><dt>{locale === 'ko' ? '담당' : 'Scope'}</dt><dd>{data.responsibility ?? data.role}</dd></div>
+        <div><dt>{dictionary.stack}</dt><dd>{data.tech.join(', ')}</dd></div>
       </dl>
-    )}
-
+    </header>
     <div class="case-layout shell">
-      <aside>
-        <nav class="chapter-nav" aria-label={dictionary.index}>
-          <span>{dictionary.index}</span>
-          <a href={`#${chapterIds[0]}`}>01 {dictionary.problem}</a>
-          <a href={`#${chapterIds[1]}`}>02 {dictionary.decisions}</a>
-          <a href={`#${chapterIds[2]}`}>03 {dictionary.outcome}</a>
-          <a href="#trace">04 {dictionary.trace}</a>
-        </nav>
-      </aside>
-
+      <aside><nav class="chapter-nav" aria-label={dictionary.index}>
+        <a href={`#${chapterIds[0]}`}>{dictionary.problem}</a>
+        <a href={`#${chapterIds[1]}`}>{dictionary.decisions}</a>
+        <a href={`#${chapterIds[2]}`}>{dictionary.outcome}</a>
+        <a href="#trace">{dictionary.trace}</a>
+      </nav></aside>
       <article class="case-content">
-        {locale === 'ko' ? (
-          <div class="mdx-content"><Content /></div>
-        ) : (
-          translation.sections.map((section, index) => (
-            <section id={section.id} class="content-section">
-              <span>{String(index + 1).padStart(2, '0')}</span>
-              <h2>{section.title}</h2>
-              {section.paragraphs.map((paragraph) => <p>{paragraph}</p>)}
-            </section>
-          ))
-        )}
-
+        {locale === 'ko' ? <div class="mdx-content"><Content /></div> : translation.sections.map((section) => (
+          <section id={section.id} class="content-section">
+            <h2>{section.title}</h2>
+            {section.paragraphs.map((paragraph) => <p>{paragraph}</p>)}
+            {section.subsections?.map((subsection) => <div class="case-subsection">
+              <h3>{subsection.title}</h3>
+              {subsection.paragraphs.map((paragraph) => <p>{paragraph}</p>)}
+              {subsection.items && <ul>{subsection.items.map((item) => <li>{item}</li>)}</ul>}
+            </div>)}
+            {section.links && <div class="project-links">{section.links.map((link) => <a href={link.href} target="_blank" rel="noopener noreferrer">{link.label}</a>)}</div>}
+          </section>
+        ))}
         <section id="trace" class="trace-section">
-          <span>04</span>
           <h2>{dictionary.trace}</h2>
-          <div class="trace-grid">
-            <div><small>{dictionary.role}</small><p>{data.responsibility ?? data.role}</p></div>
-            <div><small>{dictionary.focus}</small><p>{data.focus.join(' · ')}</p></div>
-            <div><small>{dictionary.stack}</small><p>{data.tech.join(' · ')}</p></div>
-            {data.visibility && <div><small>{dictionary.disclosure}</small><p>{data.visibility}</p></div>}
-          </div>
           <div class="project-links">
-            {data.link && <a href={data.link} target="_blank" rel="noopener noreferrer">{dictionary.live}<svg aria-hidden="true" viewBox="0 0 20 20"><path d="M4 16 16 4M7 4h9v9" /></svg></a>}
-            {data.github && <a href={data.github} target="_blank" rel="noopener noreferrer">{dictionary.github}<svg aria-hidden="true" viewBox="0 0 20 20"><path d="M4 16 16 4M7 4h9v9" /></svg></a>}
+            {data.link && <a href={data.link} target="_blank" rel="noopener noreferrer">{dictionary.live}</a>}
+            {data.github && <a href={data.github} target="_blank" rel="noopener noreferrer">{dictionary.github}</a>}
+            {data.traceLinks.map((link) => <a href={link.href} target="_blank" rel="noopener noreferrer">{locale === 'ko' ? link.label : link.labelEn}</a>)}
           </div>
+          {data.evidence.length > 0 && <dl class="evidence">{data.evidence.map((item) => <div><dt>{item.val}</dt><dd>{item.label}{item.detail && <small>{item.detail}</small>}</dd></div>)}</dl>}
+          {hasEvidenceScreen && <figure class="screen-evidence">
+            <div id="project-visual" class:list={['case-visual', { 'mobile-screen': key === 'intranet' }]}><ProjectVisual projectKey={key} locale={locale} variant="detail" /></div>
+            <figcaption>{key === 'boundra' ? (locale === 'ko' ? 'CLI 출력 구조를 재구성한 예시입니다.' : 'Reconstructed example of the CLI output.') : (locale === 'ko' ? '구현 화면. 공개용 예시 데이터를 사용한 기존 캡처입니다.' : 'Implementation screenshot with example data prepared for this portfolio.')}</figcaption>
+          </figure>}
+          {data.visibility && <p class="disclosure">{data.visibility}</p>}
         </section>
       </article>
     </div>
-
-    <div class="next-project shell">
-      <span>{dictionary.next}</span>
-      <a href={projectPath(locale, nextProject.slug)}>
-        {nextData.title}
-        <svg aria-hidden="true" viewBox="0 0 20 20"><path d="M4 16 16 4M7 4h9v9" /></svg>
-      </a>
-    </div>
+    <nav class="next-project shell" aria-label={dictionary.next}><span>{dictionary.next}</span><a href={projectPath(locale, nextProject.slug)}>{nextData.title}<svg aria-hidden="true" viewBox="0 0 20 20"><path d="M4 10h12m-5-5 5 5-5 5" /></svg></a></nav>
   </main>
   <Footer locale={locale} />
 </BaseLayout>
-
 <style lang="scss">
   @use '../styles/tokens' as *;
-  .project-page { min-height: 100vh; padding-top: 80px; }
-  .project-hero { padding-top: 54px; }
-  .back-link { display: inline-flex; align-items: center; gap: 10px; min-height: 42px; color: $gunmetal; font: 500 .65rem/1 $font-mono; letter-spacing: .08em; }
-  .back-link svg { width: 16px; fill: none; stroke: currentColor; stroke-width: 1.2; }
-  .heading-grid { display: grid; grid-template-columns: .55fr 1.35fr .65fr; gap: 48px; align-items: end; margin-top: 52px; }
-  h1 { font-size: clamp(4rem, 9vw, 9.4rem); font-weight: 500; line-height: .89; letter-spacing: -.08em; }
-  .thesis { max-width: 850px; margin-top: 28px; color: $silver-bright; font-size: clamp(1.2rem, 2.1vw, 1.75rem); line-height: 1.5; letter-spacing: -.025em; word-break: keep-all; }
-  .summary { max-width: 410px; color: $silver; font-size: 1rem; line-height: 1.85; word-break: keep-all; }
-  .case-visual { position: relative; height: min(42vw, 570px); min-height: 390px; margin-top: 76px; overflow: hidden; border: 1px solid $line-bright; background: $black-soft; }
-  .case-visual > div { width: 100%; height: 100%; }
-  .case-visual-link { position: absolute; z-index: 8; inset: 0; cursor: pointer; }
-  .case-visual-link:focus-visible { outline: 2px solid $accent; outline-offset: -4px; }
-  .case-visual:has(.case-visual-link:hover) { border-color: $accent; }
-  .evidence { display: grid; grid-template-columns: repeat(3, 1fr); border: 1px solid $line; border-top: 0; }
-  .evidence > div { min-height: 130px; padding: 26px; border-right: 1px solid $line; }
-  .evidence > div:last-child { border-right: 0; }
-  .evidence dt { font: 500 1.2rem/1 $font-mono; }
-  .evidence dd { margin-top: 12px; color: $silver; font-size: .82rem; line-height: 1.5; }
-  .evidence small { display: block; margin-top: 7px; color: $gunmetal; font-size: .69rem; line-height: 1.5; }
-  .case-layout { display: grid; grid-template-columns: .55fr 1.35fr .65fr; gap: 48px; padding-top: clamp(100px, 13vw, 190px); }
-  aside { grid-column: 1; }
-  .chapter-nav { position: sticky; top: 112px; display: grid; border-top: 1px solid $line-bright; }
-  .chapter-nav span, .chapter-nav a { padding: 14px 0; border-bottom: 1px solid $line; font: 500 .68rem/1.35 $font-mono; }
-  .chapter-nav span { color: $gunmetal; }
-  .chapter-nav a { color: $silver; }
-  .case-content { grid-column: 2 / 4; min-width: 0; }
-  .content-section, .case-content :global(.mdx-content > h2), .trace-section { scroll-margin-top: 110px; }
-  .content-section, .trace-section { display: grid; grid-template-columns: 54px 1fr; column-gap: 24px; padding: 0 0 clamp(90px, 10vw, 140px); }
-  .content-section > span, .trace-section > span { grid-row: 1 / span 2; color: $gunmetal; font: 500 .63rem/1.4 $font-mono; }
-  .content-section h2, .trace-section h2 { margin-bottom: 34px; font-size: clamp(2rem, 4vw, 4.1rem); font-weight: 500; line-height: 1.1; letter-spacing: -.055em; }
-  .content-section p { grid-column: 2; max-width: 720px; margin-bottom: 1.35em; color: $silver; font-size: 1.06rem; line-height: 1.95; }
-  .case-content :global(.mdx-content) { counter-reset: chapter; }
-  .case-content :global(.mdx-content > h2) { counter-increment: chapter; margin: 0 0 34px 78px; font-size: clamp(2rem, 4vw, 4.1rem); font-weight: 500; line-height: 1.1; letter-spacing: -.055em; }
-  .case-content :global(.mdx-content > h2:not(:first-child)) { margin-top: clamp(90px, 10vw, 140px); }
-  .case-content :global(.mdx-content > h2::before) { content: counter(chapter, decimal-leading-zero); display: inline-block; width: 78px; margin-left: -78px; color: $gunmetal; font: 500 .63rem/1.4 $font-mono; vertical-align: .7em; }
-  .case-content :global(.mdx-content > h3) { max-width: 720px; margin: 42px 0 18px 78px; color: $silver-bright; font-size: clamp(1.15rem, 2vw, 1.45rem); font-weight: 600; line-height: 1.45; letter-spacing: -.02em; word-break: keep-all; }
-  .case-content :global(.mdx-content > h4) { max-width: 720px; margin: 30px 0 14px 78px; color: $silver-bright; font-size: 1rem; font-weight: 600; line-height: 1.55; }
-  .case-content :global(.mdx-content > h3 + p) { margin-top: 0; }
-  .case-content :global(.mdx-content > p),
-  .case-content :global(.mdx-content > ul),
-  .case-content :global(.mdx-content > ol),
-  .case-content :global(.mdx-content > blockquote) { max-width: 720px; margin: 0 0 1.35em 78px; color: $silver; font-size: 1.06rem; line-height: 1.95; word-break: keep-all; }
-  .case-content :global(.mdx-content > ul), .case-content :global(.mdx-content > ol) { padding-left: 1.4em; }
-  .case-content :global(.mdx-content > ul) { list-style: disc; }
-  .case-content :global(.mdx-content > ol) { list-style: decimal; }
-  .case-content :global(.mdx-content li + li) { margin-top: .55em; }
+  .project-page { padding-top: 76px; }
+  .project-hero { padding-top: 48px; padding-bottom: 40px; border-bottom: 1px solid $line; }
+  .back-link { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; color: $accent; font-size: 14px; }
+  svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 1.4; flex-shrink: 0; }
+  h1 { margin-top: 24px; font-size: 48px; font-weight: 600; letter-spacing: -.04em; line-height: 1.25; overflow-wrap: anywhere; }
+  .thesis { max-width: 850px; margin-top: 16px; color: $silver; font-size: 24px; line-height: 1.5; letter-spacing: -.025em; word-break: keep-all; }
+  .project-meta { display: grid; gap: 14px; margin-top: 40px; }
+  .project-meta > div { display: grid; grid-template-columns: 88px minmax(0,1fr); gap: 24px; }
+  dt { color: $silver; }dd { color: $silver; font-size: 15px; line-height: 1.8; overflow-wrap: anywhere; }
+  .case-layout { display: grid; grid-template-columns: 180px minmax(0,760px); justify-content: space-between; gap: 48px; padding-top: 48px; }
+  .chapter-nav { position: sticky; top: 108px; display: grid; gap: 4px; }
+  .chapter-nav a { display: flex; align-items: center; min-height: 44px; color: $silver; font-size: 14px; }
+  .chapter-nav a:hover { color: $accent; }
+  .case-content { min-width: 0; }
+  .content-section, .trace-section, .case-content :global(.mdx-content > h2) { scroll-margin-top: 108px; }
+  .content-section { margin-bottom: 56px; }
+  .content-section h2, .trace-section h2, .case-content :global(.mdx-content > h2) { margin-bottom: 20px; font-size: 26px; font-weight: 600; line-height: 1.5; letter-spacing: -.03em; }
+  .case-content :global(.mdx-content > h2:not(:first-child)) { margin-top: 56px; }
+  .case-subsection h3, .case-content :global(.mdx-content > h3) { margin: 32px 0 16px; font-size: 20px; font-weight: 600; line-height: 1.5; letter-spacing: -.02em; word-break: keep-all; }
+  .case-content :global(.mdx-content > h4) { margin: 24px 0 12px; font-size: 18px; }
+  .content-section p, .case-subsection ul, .case-content :global(.mdx-content > p), .case-content :global(.mdx-content > ul), .case-content :global(.mdx-content > ol), .case-content :global(.mdx-content > blockquote) { margin-bottom: 20px; color: $silver; font-size: 17px; line-height: 1.9; word-break: keep-all; overflow-wrap: anywhere; }
+  .case-subsection ul, .case-content :global(.mdx-content > ul), .case-content :global(.mdx-content > ol) { padding-left: 24px; }
+  .case-subsection li + li, .case-content :global(.mdx-content li + li) { margin-top: 10px; }
   .case-content :global(.mdx-content strong) { color: $silver-bright; font-weight: 600; }
-  .case-content :global(.mdx-content a) { color: $accent; text-decoration: underline; text-decoration-color: $line-bright; text-underline-offset: .2em; }
-  .case-content :global(.mdx-content code) { padding: .16em .36em; border: 1px solid $line; border-radius: 4px; background: $black-soft; color: $silver-bright; font: .88em/1.4 $font-mono; overflow-wrap: anywhere; }
-  .case-content :global(.mdx-content > pre) { max-width: 720px; margin: 28px 0 32px 78px; padding: 20px; overflow-x: auto; border: 1px solid $line; background: $black-soft; color: $silver-bright; font: .84rem/1.75 $font-mono; }
-  .case-content :global(.mdx-content > pre code) { padding: 0; border: 0; background: transparent; font: inherit; }
-  .case-content :global(.mdx-content > hr) { max-width: 720px; margin: 42px 0 42px 78px; border: 0; border-top: 1px solid $line; }
-  .case-content :global(.mdx-content > img), .case-content :global(.mdx-content > p > img) { max-width: 100%; height: auto; border: 1px solid $line; }
-  .case-content :global(.mdx-content blockquote) { padding-left: 20px; border-left: 2px solid $accent; color: $silver; }
-  .trace-section { padding-top: clamp(90px, 10vw, 140px); }
-  .trace-grid, .project-links { grid-column: 2; }
-  .trace-grid { display: grid; grid-template-columns: 1fr 1fr; border-top: 1px solid $line-bright; }
-  .trace-grid > div { padding: 22px 24px 30px 0; border-bottom: 1px solid $line; }
-  .trace-grid > div:nth-child(even) { padding-left: 24px; border-left: 1px solid $line; }
-  .trace-grid small { color: $gunmetal; font: 500 .61rem/1 $font-mono; text-transform: uppercase; }
-  .trace-grid p { margin-top: 14px; color: $silver; font-size: .9rem; line-height: 1.75; }
-  .project-links { display: flex; gap: 28px; margin-top: 30px; }
-  .project-links a { display: flex; align-items: center; gap: 9px; padding-bottom: 8px; border-bottom: 1px solid $silver; color: $silver; font: 500 .65rem/1 $font-mono; }
-  .project-links svg, .next-project svg { width: 17px; fill: none; stroke: currentColor; stroke-width: 1.2; }
-  .next-project { margin-top: 10px; padding: 50px 0 120px; border-top: 1px solid $line-bright; }
-  .next-project > span { color: $gunmetal; font: 500 .62rem/1 $font-mono; text-transform: uppercase; }
-  .next-project a { display: flex; justify-content: space-between; align-items: end; gap: 30px; margin-top: 30px; font-size: clamp(2.8rem, 7vw, 7.2rem); font-weight: 500; line-height: .95; letter-spacing: -.07em; }
-  .next-project svg { width: 36px; flex: 0 0 auto; }
-  @media (max-width: 900px) {
-    .heading-grid { grid-template-columns: 1fr; gap: 24px; }
-    .summary { max-width: 620px; }
-    .case-layout { grid-template-columns: 1fr; }
-    aside { display: none; }
-    .case-content { grid-column: 1; }
-  }
+  .case-content :global(.mdx-content a), .project-links a { color: $accent; text-decoration: underline; text-underline-offset: 4px; }
+  .case-content :global(.mdx-content code) { padding: 2px 5px; background: $black-soft; font: .88em/1.5 $font-mono; overflow-wrap: anywhere; }
+  .case-content :global(.mdx-content > pre) { margin: 24px 0; padding: 20px; overflow-x: auto; background: $black-soft; font-size: 14px; }
+  .case-content :global(.mdx-content > pre code) { background: transparent; padding: 0; }
+  .case-content :global(.mdx-content img) { max-width: 100%; height: auto; }
+  .case-content :global(.mdx-content hr) { margin: 32px 0; border: 0; border-top: 1px solid $line; }
+  .case-content :global(.mdx-content blockquote) { padding-left: 20px; border-left: 2px solid $line; }
+  .trace-section { margin-top: 56px; }
+  .project-links { display: flex; flex-wrap: wrap; gap: 8px 24px; }
+  .project-links a { display: inline-flex; align-items: center; min-height: 44px; font-size: 15px; }
+  .evidence { margin-top: 24px; border-top: 1px solid $line; }
+  .evidence > div { display: grid; grid-template-columns: 150px minmax(0,1fr); gap: 20px; padding: 16px 0; border-bottom: 1px solid $line; }
+  .evidence dt { color: $silver-bright; font-size: 15px; }.evidence small { display: block; color: $gunmetal; font-size: 13px; }
+  .screen-evidence { margin: 32px 0 0; }.case-visual { height: 440px; border: 1px solid $line; overflow: hidden; }.case-visual.mobile-screen { max-width: 390px; height: 788px; }
+  figcaption, .disclosure { margin-top: 14px; color: $gunmetal; font-size: 13px; line-height: 1.8; }
+  .next-project { display: flex; align-items: center; justify-content: space-between; gap: 24px; padding: 32px 0; margin-top: 72px; border-top: 1px solid $line; }.next-project span { color: $gunmetal; font-size: 14px; }.next-project a { display: flex; align-items: center; gap: 12px; min-height: 44px; color: $accent; font-size: 18px; }
+  @media (max-width: 760px) { .case-layout { grid-template-columns: 1fr; gap: 24px; }.chapter-nav { position: static; display: flex; flex-wrap: wrap; gap: 8px 24px; padding-bottom: 16px; border-bottom: 1px solid $line; } }
   @media (max-width: 680px) {
-    .project-page { padding-top: 68px; }
-    .case-visual { min-height: 300px; height: 74vw; margin-top: 52px; }
-    .evidence { grid-template-columns: 1fr; }
-    .evidence > div { min-height: 0; border-right: 0; border-bottom: 1px solid $line; }
-    .content-section, .trace-section { grid-template-columns: 32px 1fr; gap: 14px; }
-    .trace-grid { grid-template-columns: 1fr; }
-    .trace-grid > div:nth-child(even) { padding-left: 0; border-left: 0; }
-    .case-content :global(.mdx-content > h2) { margin-left: 48px; }
-    .case-content :global(.mdx-content > h2::before) { width: 48px; margin-left: -48px; }
-    .case-content :global(.mdx-content > h3),
-    .case-content :global(.mdx-content > h4),
-    .case-content :global(.mdx-content > p),
-    .case-content :global(.mdx-content > ul),
-    .case-content :global(.mdx-content > ol),
-    .case-content :global(.mdx-content > blockquote),
-    .case-content :global(.mdx-content > pre),
-    .case-content :global(.mdx-content > hr) { margin-left: 48px; }
+    .project-page { padding-top: 68px; }.project-hero { padding-top: 24px; padding-bottom: 28px; }h1 { font-size: 32px; margin-top: 20px; }.thesis { font-size: 20px; }.project-meta { margin-top: 28px; }.project-meta > div { grid-template-columns: 48px minmax(0,1fr); gap: 16px; }dt,dd { font-size: 14px; }
+    .case-layout { padding-top: 24px; }.content-section h2, .trace-section h2, .case-content :global(.mdx-content > h2) { font-size: 24px; }.case-subsection h3, .case-content :global(.mdx-content > h3) { font-size: 19px; }.content-section p, .case-subsection ul, .case-content :global(.mdx-content > p), .case-content :global(.mdx-content > ul), .case-content :global(.mdx-content > ol) { font-size: 16px; }
+    .evidence > div { grid-template-columns: 110px minmax(0,1fr); gap: 16px; }.case-visual { height: 300px; }.case-visual.mobile-screen { height: auto; aspect-ratio: 390 / 788; }.next-project { align-items: start; flex-direction: column; gap: 8px; margin-top: 48px; }
   }
 </style>
