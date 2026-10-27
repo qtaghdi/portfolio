@@ -9,8 +9,8 @@ const profile = await getGitHubProfile();
 <section id="hero" class="hero">
   <div class="shell">
     <div class="hero-heading">
-      <h1>{dictionary.lines.map((line) => <span>{line}</span>)}</h1>
       <img class="profile-avatar" src={profile.avatarUrl} alt={locale === 'ko' ? `${profile.name} 프로필 사진` : `${profile.name}'s profile photo`} width="112" height="112" decoding="async" />
+      <h1>{dictionary.lines.map((line) => <span>{line}</span>)}</h1>
     </div>
     <p class="hero-description">{dictionary.description.split(/(?<=\.)\s+/).map((sentence) => <span>{sentence}</span>)}</p>
     <nav class="hero-actions" aria-label={locale === 'ko' ? '프로필 링크' : 'Profile links'}>
