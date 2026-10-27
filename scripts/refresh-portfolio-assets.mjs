@@ -106,7 +106,7 @@ try {
   await page.setViewportSize({ width: 1440, height: 1200 });
   await page.goto(origin + '/');
   await page.evaluate(() => document.fonts.ready);
-  await page.locator('.github-profile img').evaluate((image) => image.decode());
+  await page.locator('.profile-avatar').evaluate((image) => image.decode());
   const height = await page.locator('.featured-list').evaluate((node) => Math.ceil(node.getBoundingClientRect().bottom + 48));
   await page.setViewportSize({ width: 1440, height });
   await page.locator('.featured-list img').evaluateAll((images) => Promise.all(images.map((image) => image.decode())));

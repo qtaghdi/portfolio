@@ -83,10 +83,9 @@ test('home shows small project icons in both work lists', async ({ page }) => {
     expect(await icon.evaluate((image: HTMLImageElement) => image.complete && image.naturalWidth > 0)).toBe(true);
     await expect(icon).toHaveAttribute('alt', '');
   }
-  const profile = page.locator('#hero .github-profile');
-  await expect(profile).toHaveAttribute('href', 'https://github.com/qtaghdi');
-  await expect(profile.locator('img')).toHaveAttribute('alt', /GitHub 프로필 사진$/);
-  await expect(profile.locator('strong')).toHaveText('@qtaghdi');
+  const profile = page.locator('#hero .hero-heading .profile-avatar');
+  await expect(profile).toHaveAttribute('alt', /프로필 사진$/);
+  await expect(page.locator('#hero a[href="https://github.com/qtaghdi"]')).toHaveCount(1);
   await expect(page.locator('#more-work .project-icon')).toHaveCount(10);
   await expect(page.locator('.featured-list .project-icon').nth(2)).toHaveAttribute('src', '/projects/document-workspace/icon.svg');
   const overflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
