@@ -1,5 +1,14 @@
 export const originalScreens = [
   {
+    key: 'apple-music-discord-presence',
+    route: '/projects/apple-music-discord-presence',
+    asset: '/projects/apple-music-discord-presence/discord-presence.png',
+    width: 828,
+    height: 340,
+    sha256: 'b8c299d4a44358383feb24d6679b465ba6be0d34afc8948a04243f54369fae7a',
+    source: 'apple-music-discord-presence public macOS Discord activity capture',
+  },
+  {
     key: 'notiiv',
     route: '/projects/notiiv',
     asset: '/projects/notiiv/img.png',

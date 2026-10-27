@@ -1,0 +1,76 @@
+---
+order: 11
+title: "Apple Music Discord Presence"
+titleKo: "Apple Music Discord Presence"
+group: personal
+featured: false
+category: "Personal · Desktop Tool"
+badge: "macOS · Windows"
+year: "2026"
+role: "제작자"
+accentColor: rose
+thesis: "운영체제의 재생 상태를 Discord에 연결하는 설치형 도구"
+responsibility: "OS별 재생 정보 수집, Discord IPC, 상태·이미지 동기화, 로컬 설정 UI, 설치 패키지와 릴리스"
+focus: ["Native integration", "Connection recovery", "Local settings", "Desktop distribution"]
+summary: "Apple Music 재생 정보를 Discord 활동으로 연결하는 macOS·Windows용 개인 개발 도구입니다. OS별 정보 수집, 연결 복구, 설정 UI와 설치 패키지까지 구현했습니다."
+evidence:
+  - { val: "macOS + Windows", label: "OS별 수집 경로와 공통 상태 모델" }
+  - { val: "Local IPC", label: "Unix socket · Windows named pipe" }
+  - { val: "v0.8.0", label: "두 플랫폼의 설치형 ZIP 공개", detail: "2026-10-25 릴리스" }
+traceLinks:
+  - { label: "v0.8.0 릴리스와 설치 파일", labelEn: "v0.8.0 release and installers", href: "https://github.com/qtaghdi/apple-music-discord-presence/releases/tag/v0.8.0" }
+  - { label: "OS별 메타데이터 연결", labelEn: "Platform metadata integration", href: "https://github.com/qtaghdi/apple-music-discord-presence/blob/main/src/music.ts" }
+  - { label: "상태 동기화와 이미지 응답 처리", labelEn: "State synchronization and artwork responses", href: "https://github.com/qtaghdi/apple-music-discord-presence/blob/main/src/index.ts" }
+  - { label: "Discord IPC와 재연결", labelEn: "Discord IPC and reconnection", href: "https://github.com/qtaghdi/apple-music-discord-presence/blob/main/src/discord-ipc.ts" }
+  - { label: "로컬 설정 서버", labelEn: "Local settings server", href: "https://github.com/qtaghdi/apple-music-discord-presence/blob/main/src/settings-server.ts" }
+  - { label: "패키징·릴리스 워크플로우", labelEn: "Packaging and release workflow", href: "https://github.com/qtaghdi/apple-music-discord-presence/blob/main/.github/workflows/release.yml" }
+metrics: []
+callouts: []
+tech: ["TypeScript", "Node.js", "Swift", "ScriptingBridge", "PowerShell", "Discord IPC", "HTML / CSS", "GitHub Actions"]
+link: "https://qtaghdi.github.io/apple-music-discord-presence/"
+github: "https://github.com/qtaghdi/apple-music-discord-presence"
+---
+
+## 문제
+
+Apple Music에서 듣는 곡과 앨범, 재생 진행 상황을 Discord 활동에 표시하려고 만든 개인 프로젝트입니다. 재생 정보는 운영체제가 제공하고, 표시할 활동은 Discord의 로컬 연결을 통해 전달해야 했습니다. 각 앱이 시작·종료되는 순서와 네트워크의 앨범 이미지 조회까지 서로 다른 수명을 가집니다.
+
+곡 제목을 한 번 전달하는 것만으로는 충분하지 않았습니다. 곡을 바꾸거나 재생 위치를 이동했을 때 이전 정보가 남지 않아야 하고, Discord를 재시작하면 현재 곡을 다시 전달해야 했습니다. 사용자는 Node.js 설치나 개발자용 앱 설정 없이 도구를 시작할 수 있어야 했습니다.
+
+## 선택한 방법
+
+### OS별 수집을 같은 재생 상태로 정규화
+
+macOS에서는 Swift와 ScriptingBridge로 Music의 재생 상태와 곡 정보를 읽습니다. Windows에서는 PowerShell과 시스템 미디어 세션 API로 Apple Music 세션을 찾습니다. 두 경로는 재생 상태, 곡·아티스트·앨범, 재생 시간과 위치를 같은 snapshot 형식으로 전달합니다.
+
+TypeScript의 watcher가 helper 출력을 줄 단위로 읽고, 공통 상태를 Discord 활동으로 변환합니다. 수집 프로세스가 예상치 않게 종료되면 다시 시작하도록 해, OS 연동과 활동 표시의 책임을 나눴습니다.
+
+### 연결 복구와 재생 상태 갱신을 함께 설계
+
+Discord IPC는 macOS의 Unix socket과 Windows named pipe를 지원하고, 0부터 9까지 연결 슬롯을 탐색합니다. 프레임 길이와 opcode를 처리하는 로컬 전송 계층을 직접 구현했습니다. 연결에 실패하면 backoff와 jitter를 적용해 재시도합니다.
+
+연결 복구 시에는 마지막 전송 결과를 그대로 믿지 않고 최신 재생 상태를 다시 발행합니다. 같은 활동을 반복해서 보내는 것은 signature 비교로 줄이되, 곡 변경·재생과 일시정지 전환·seek는 갱신 대상으로 구분했습니다. 진행 시간은 현재 위치에서 시작·종료 타임스탬프를 계산해 표시합니다.
+
+### 앨범 이미지는 기본 상태 표시와 분리
+
+곡이 바뀌면 우선 텍스트 상태를 보내고, iTunes 검색으로 이미지를 비동기 조회합니다. 요청을 보낸 뒤 다른 곡으로 넘어갈 수 있어 generation 값을 비교하고 이전 곡의 늦은 응답은 반영하지 않습니다.
+
+검색은 아티스트·제목·앨범과 재생 길이를 함께 대조하고, 지역 카탈로그 조회가 실패하면 다른 카탈로그와 검색 조건을 시도합니다. 앨범 단위로 찾은 결과에는 곡 링크를 만들지 않습니다. 조회 결과와 실패를 캐시하고, 이미지를 찾지 못해도 재생 상태 전달은 계속하도록 했습니다.
+
+### 설정을 저장하면 현재 활동에 바로 반영
+
+설정 화면에서 앨범 정보, 이미지, 진행 시간, 일시정지 표시와 메타데이터 순서를 바꾸고 Discord 활동 미리보기를 볼 수 있습니다. 저장한 설정은 앱을 재시작하지 않고 현재 활동에 반영합니다.
+
+설정 서버는 로컬 주소에 바인딩하고 변경 요청의 Origin과 JSON 형식을 검사합니다. 영어·한국어 전환은 저장 전 입력을 유지하고, 곡 자체의 메타데이터와 화면 문구의 언어를 분리했습니다.
+
+### 설치와 종료까지 데스크톱 도구의 흐름으로
+
+macOS 메뉴바와 Windows 트레이에서 설정, 연결 상태, 재연결, 로그와 자동 실행을 관리합니다. 데스크톱 호스트가 백그라운드 worker의 수명을 소유해, 사용자가 종료하면 상태 전송도 함께 끝나도록 구성했습니다.
+
+릴리스 ZIP에는 Node.js 런타임을 포함하고 공유 Discord Application ID를 기본 제공해 설치 준비를 줄였습니다. 태그 기반 워크플로우는 macOS와 Windows에서 검증·패키징한 파일을 모아 공개 릴리스로 발행합니다. Windows 설치 과정에는 압축 해제 상태와 필수 파일 검사도 포함했습니다.
+
+## 확인한 결과
+
+macOS Apple Silicon과 Windows x64용 설치 패키지를 공개했고, v0.8.0 릴리스에서 두 플랫폼의 다운로드 파일을 확인할 수 있습니다. 제품 안내 사이트와 설정 화면은 한국어·영어를 지원합니다. 아래에는 macOS에서 Discord 활동에 곡·앨범 이미지·재생 진행 상태가 표시된 실제 화면을 담았습니다.
+
+재생 상태 포맷, 타임스탬프, IPC 프레임과 연결 경로, 이미지 검색과 설정 저장 경계를 테스트로 남겼습니다. OS 연동부터 연결 복구, 설정 UI와 설치·릴리스까지 하나의 로컬 도구로 연결한 경험입니다.

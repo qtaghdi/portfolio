@@ -11,6 +11,12 @@ interface Props {
 const { projectKey, locale, variant = 'compact' } = Astro.props;
 const ko = locale === 'ko';
 const actualScreens = {
+  'apple-music-discord-presence': {
+    src: '/projects/apple-music-discord-presence/discord-presence.png',
+    width: 828,
+    height: 340,
+    alt: ko ? 'macOS Discord의 Apple Music 활동 실제 화면' : 'Actual Apple Music activity in Discord on macOS',
+  },
   notiiv: {
     src: '/projects/notiiv/img.png',
     width: 1905,

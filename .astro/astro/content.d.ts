@@ -243,6 +243,13 @@ declare module 'astro:content' {
   collection: "projects";
   data: InferEntrySchema<"projects">
 } & { render(): Render[".mdx"] };
+"11-apple-music-discord-presence.mdx": {
+	id: "11-apple-music-discord-presence.mdx";
+  slug: "11-apple-music-discord-presence";
+  body: string;
+  collection: "projects";
+  data: InferEntrySchema<"projects">
+} & { render(): Render[".mdx"] };
 };
 
 	};

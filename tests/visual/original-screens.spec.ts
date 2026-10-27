@@ -72,7 +72,7 @@ test('home shows small project icons in both work lists', async ({ page }) => {
   await page.goto('/');
   await expect(page.locator('[data-original-screen]')).toHaveCount(0);
   const icons = page.locator('#projects .project-icon');
-  await expect(icons).toHaveCount(13);
+  await expect(icons).toHaveCount(14);
   await expect(icons.nth(0)).toHaveAttribute('src', '/projects/design-system/favicon.png');
   await expect(icons.nth(1)).toHaveAttribute('src', '/projects/notiiv/favicon.svg');
   for (const icon of await icons.all()) {
@@ -86,7 +86,7 @@ test('home shows small project icons in both work lists', async ({ page }) => {
   const profile = page.locator('#hero .hero-heading .profile-avatar');
   await expect(profile).toHaveAttribute('alt', /프로필 사진$/);
   await expect(page.locator('#hero a[href="https://github.com/qtaghdi"]')).toHaveCount(1);
-  await expect(page.locator('#more-work .project-icon')).toHaveCount(10);
+  await expect(page.locator('#more-work .project-icon')).toHaveCount(11);
   await expect(page.locator('.featured-list .project-icon').nth(2)).toHaveAttribute('src', '/projects/document-workspace/icon.svg');
   const overflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
   expect(overflow).toBeLessThanOrEqual(1);

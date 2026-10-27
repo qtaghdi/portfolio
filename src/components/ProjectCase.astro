@@ -21,13 +21,14 @@ const nextProject = allProjects[(currentIndex + 1) % allProjects.length];
 const nextData = locale === 'en' ? { ...nextProject.data, ...projectEn[projectKey(nextProject.slug)] } : nextProject.data;
 const pageTitle = `${data.title} | ${locale === 'ko' ? '박상민 포트폴리오' : 'Park Sangmin Portfolio'}`;
 const chapterIds = locale === 'ko' ? ['문제', '선택한-방법', '확인한-결과'] : ['problem', 'decisions', 'outcome'];
-const hasEvidenceScreen = ['notiiv', 'design-system', 'intranet', 'document-workspace', 'boundra'].includes(key);
+const hasEvidenceScreen = ['notiiv', 'design-system', 'intranet', 'document-workspace', 'boundra', 'apple-music-discord-presence'].includes(key);
 const screenCaptions: Record<string, { ko: string; en: string }> = {
   notiiv: { ko: 'Notiiv · 고객지원', en: 'Notiiv · Customer support' },
   'design-system': { ko: 'Bigtablet Design System · Storybook', en: 'Bigtablet Design System · Storybook' },
   intranet: { ko: 'Bigtablet Intranet · 모바일 홈', en: 'Bigtablet Intranet · Mobile home' },
   'document-workspace': { ko: 'document-workspace · XLSX 편집기', en: 'document-workspace · XLSX editor' },
   boundra: { ko: 'Boundra · CLI 출력 예시', en: 'Boundra · Reconstructed CLI output' },
+  'apple-music-discord-presence': { ko: 'Apple Music Discord Presence · macOS의 Discord 활동', en: 'Apple Music Discord Presence · Discord activity on macOS' },
 };
 ---
 <BaseLayout locale={locale} title={pageTitle} description={data.summary}>
@@ -72,7 +73,7 @@ const screenCaptions: Record<string, { ko: string; en: string }> = {
           </div>
           {data.evidence.length > 0 && <dl class="evidence">{data.evidence.map((item) => <div><dt>{item.val}</dt><dd><ProjectText text={item.label} references={data.traceLinks} />{item.detail && <small><ProjectText text={item.detail} references={data.traceLinks} /></small>}</dd></div>)}</dl>}
           {hasEvidenceScreen && <figure class="screen-evidence">
-            <div id="project-visual" class:list={['case-visual', { 'mobile-screen': key === 'intranet' }]}><ProjectVisual projectKey={key} locale={locale} variant="detail" /></div>
+            <div id="project-visual" class:list={['case-visual', { 'mobile-screen': key === 'intranet', 'presence-screen': key === 'apple-music-discord-presence' }]}><ProjectVisual projectKey={key} locale={locale} variant="detail" /></div>
             <figcaption>{screenCaptions[key][locale]}</figcaption>
           </figure>}
         </section>
@@ -122,6 +123,7 @@ const screenCaptions: Record<string, { ko: string; en: string }> = {
   .evidence > div { display: grid; grid-template-columns: 150px minmax(0,1fr); gap: 20px; padding: 16px 0; border-bottom: 1px solid $line; }
   .evidence dt { color: $silver-bright; font-size: 15px; }.evidence small { display: block; color: $gunmetal; font-size: 13px; }
   .screen-evidence { margin: 32px 0 0; }.case-visual { height: 440px; border: 1px solid $line; overflow: hidden; }.case-visual.mobile-screen { max-width: 390px; height: 788px; }
+  .case-visual.presence-screen { height: auto; aspect-ratio: 828 / 340; }
   figcaption { margin-top: 14px; color: $gunmetal; font-size: 13px; line-height: 1.8; }
   .next-project { display: flex; align-items: center; justify-content: space-between; gap: 24px; padding: 32px 0; margin-top: 72px; border-top: 1px solid $line; }.next-project span { color: $gunmetal; font-size: 14px; }.next-project a { display: flex; align-items: center; gap: 12px; min-height: 44px; color: $accent; font-size: 18px; }
   @media (max-width: 760px) { .case-layout { grid-template-columns: 1fr; gap: 24px; }.chapter-nav { position: static; display: flex; flex-wrap: wrap; gap: 8px 24px; padding-bottom: 16px; border-bottom: 1px solid $line; } }

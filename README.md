@@ -21,4 +21,4 @@ Astro, TypeScript와 SCSS로 구성한 정적 사이트입니다. GitHub 공개 
 pnpm assets:refresh
 ```
 
-현재 화면으로 README 이미지를 촬영하고, 국문·영문 메인 및 프로젝트별 공유 카드 28개를 생성합니다. 공유 이미지는 1200 × 630 PNG이며, 명령 실행 전 Playwright의 Chromium 또는 Chrome이 설치되어 있어야 합니다.
+현재 화면으로 README 이미지를 촬영하고, 국문·영문 메인 및 프로젝트별 공유 카드를 생성합니다. 공유 이미지는 1200 × 630 PNG이며, 명령 실행 전 Playwright의 Chromium 또는 Chrome이 설치되어 있어야 합니다.
