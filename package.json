@@ -7,7 +7,10 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "visual:audit": "pnpm build && playwright test --config=playwright.visual.config.ts"
+    "test:profile": "node --test tests/data/github-profile.test.mjs",
+    "test:social": "node --test tests/data/social-images.test.mjs",
+    "assets:refresh": "node scripts/refresh-portfolio-assets.mjs",
+    "visual:audit": "pnpm build && pnpm test:social && playwright test --config=playwright.visual.config.ts"
   },
   "dependencies": {
     "@astrojs/mdx": "^3.1.9",
