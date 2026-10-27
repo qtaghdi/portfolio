@@ -15,7 +15,6 @@ export interface ProjectTranslation {
   summary: string;
   thesis?: string;
   responsibility?: string;
-  visibility?: string;
   focus: string[];
   evidence?: { val: string; label: string; detail?: string }[];
   sections: ProjectSection[];
@@ -30,7 +29,6 @@ export const projectEn: Record<string, ProjectTranslation> = {
     "role": "Frontend Engineer",
     "thesis": "Consolidating repeated authentication and API handling across apps",
     "responsibility": "Shared BFF and Query infrastructure, operational interfaces, and authentication, sharing, and webview edge conditions",
-    "visibility": "Company work described through implementation and authored commits. Repository links may require access. Internal customer data is excluded.",
     "focus": [
         "pnpm monorepo",
         "BFF boundaries",
@@ -48,8 +46,8 @@ export const projectEn: Record<string, ProjectTranslation> = {
             "label": "Shared API, Query, Schema, and UI foundation"
         },
         {
-            "val": "90% Coverage Gate",
-            "label": "API package configuration, not whole-product coverage"
+            "val": "Shared BFF",
+            "label": "Shared request validation, authentication, and refresh"
         }
     ],
     "sections": [
@@ -57,7 +55,7 @@ export const projectEn: Record<string, ProjectTranslation> = {
             "id": "problem",
             "title": "The same authentication boundary was maintained in several apps",
             "paragraphs": [
-                "Notiiv includes an admin console, owner dashboard, status app, and support site. I maintained shared BFF and Query infrastructure and improved operational interfaces and browser boundaries, rather than independently designing the entire product.",
+                "Notiiv includes an admin console, owner dashboard, status app, and support site. I maintained shared BFF and Query infrastructure and improved operational interfaces and browser boundaries.",
                 "Separate proxies duplicated path checks, cookie injection, refresh, and error handling. Fixing one app could leave another behind. A single rigid proxy would introduce a different problem: app-specific login responses and uploads would become entangled with shared infrastructure.",
                 "Operators also encountered mismatched FAQ previews, spreadsheet-dependent customer entry, webview download restrictions, and PDF page navigation during zoom."
             ]
@@ -110,15 +108,9 @@ export const projectEn: Record<string, ProjectTranslation> = {
                     ]
                 },
                 {
-                    "title": "What the checks establish",
+                    "title": "Regression checks for authentication boundaries",
                     "paragraphs": [
-                        "Proxy tests cover response status and upstream-call prevention. Refresh and owner-route tests cover authentication behavior after consolidation. The 90% API coverage figure is a configured threshold, not a measured whole-product result."
-                    ]
-                },
-                {
-                    "title": "Limits and next validation",
-                    "paragraphs": [
-                        "Shared-package tests cannot establish that every app still authenticates, uploads, and behaves correctly in real browsers. Operational task-time and support-request improvements have not been measured. The next evidence should combine app-level scenarios with completion time and failure categories."
+                        "Proxy tests verify rejection status and upstream-call prevention. Refresh and owner-route tests cover authentication behavior after consolidation, keeping input validation, token renewal, and response handling on a shared verification baseline."
                     ]
                 }
             ]
@@ -130,7 +122,6 @@ export const projectEn: Record<string, ProjectTranslation> = {
     "role": "Frontend Engineer and Design System Contributor",
     "thesis": "Load CSS for the components in use",
     "responsibility": "Per-component ESM and CSS output, token generation, overlay motion, component maintenance, and consumer migration",
-    "visibility": "Company work described through authored commits. Internal customer data is excluded.",
     "focus": [
         "Package distribution",
         "Design tokens",
@@ -201,13 +192,6 @@ export const projectEn: Record<string, ProjectTranslation> = {
                         "Authored changes establish the output modules, rewritten imports, pure re-export barrel, and guards for unsupported exports and watch rebuilds. Presence tests cover immediate mount, no-animation removal, exit completion, interrupted exit, and callbacks for an overlay that never opened.",
                         "Migration documentation records consumer CSS and theme requirements. Four Notiiv apps reference the package. The result is a dependency-aligned distribution model with CSS-driven overlay motion."
                     ]
-                },
-                {
-                    "title": "Limits and next validation",
-                    "paragraphs": [
-                        "An app retaining the full stylesheet or unsuitable bundler settings may not benefit from module splitting. No loading-time improvement or bundle-reduction percentage is claimed without a matched report.",
-                        "The next validation should compare a button-only consumer and real product pages under the same build settings, recording JavaScript and CSS output alongside light and dark theme and overlay behavior."
-                    ]
                 }
             ],
             "links": [
@@ -231,7 +215,6 @@ export const projectEn: Record<string, ProjectTranslation> = {
     category: 'Company · Flutter App · Production', badge: 'Mobile', role: 'Flutter Developer',
     thesis: 'Connecting collaborative work and state inside one Flutter app',
     responsibility: 'Flutter app shell, messenger, mail and approval screens, offline data, notification deep links, and failure recovery',
-    visibility: 'Internal business data is excluded. The case focuses on implementation structure and reproducible behavior.',
     focus: ['Flutter app shell', 'BLoC architecture', 'Offline-first', 'Real-time sync'],
     summary: 'Built a Flutter mobile app shell connecting Home, Messenger, and Work apps, then designed cache and real-time boundaries for mail, approvals, notifications, deep links, and partial failures.',
     evidence: [
@@ -251,7 +234,6 @@ export const projectEn: Record<string, ProjectTranslation> = {
     "role": "Creator",
     "thesis": "One authoritative document state for human and AI edits",
     "responsibility": "Product design, Go XLSX adapter, MCP transport, Univer editor, revision, history, persistence, and verification",
-    "visibility": "Independent private project at local XLSX alpha stage. Evidence links require repository access. Benchmarks describe the recorded environment, not production outcomes.",
     "focus": [
         "Human-AI collaboration",
         "Revision conflicts",
@@ -331,7 +313,9 @@ export const projectEn: Record<string, ProjectTranslation> = {
         {
             "id": "outcome",
             "title": "Recorded evidence for failure behavior and performance",
-            "paragraphs": [],
+            "paragraphs": [
+                "Human and AI changes, conflicts, persistence, and history now follow one server-owned document state."
+            ],
             "subsections": [
                 {
                     "title": "Automated safety evidence",
@@ -349,14 +333,7 @@ export const projectEn: Record<string, ProjectTranslation> = {
                     "title": "Performance in its recorded environment",
                     "paragraphs": [
                         "The 2026-10-12 release profile used a synthetic 400,000-cell workbook across four sheets on darwin/arm64, Go 1.25.0, and Excelize 2.11.0. Recorded times were 757.79 ms to open, 7.81 ms for a 10,000-cell read, 336.87 ms for one-cell commit, and 287.74 ms for a 1,000-cell commit.",
-                        "These are observations of separate operations, not evidence that a batch is always faster than one cell. The workload is a regression guardrail rather than a general latency promise or user-outcome measure."
-                    ]
-                },
-                {
-                    "title": "Remaining release boundaries",
-                    "paragraphs": [
-                        "The gates do not certify actual Microsoft Excel reopen and recalculation, repeated external use, power loss, or network filesystems. Image insertion and advanced chart editing remain unsupported.",
-                        "The next stage is validation with copied Excel workbooks and observation of whether users understand recovery and reapplication. The implemented result is one server-owned path for human and AI changes, conflicts, persistence, and history."
+                        "The values were recorded on 2026-10-12 using the same synthetic workbook and environment. This workload serves as a release regression baseline."
                     ]
                 }
             ]
@@ -367,7 +344,6 @@ export const projectEn: Record<string, ProjectTranslation> = {
     category: 'Open Source · Developer Tool', badge: 'Public Preview', role: 'Creator',
     thesis: 'Checking TypeScript monorepo domain boundaries with a Rust CLI',
     responsibility: 'Rule model, Rust analyzer, configuration validation, editor overlay, and benchmark design',
-    visibility: 'Benchmarks use public fixtures and a documented local environment.',
     focus: ['Static analysis', 'Architecture rules', 'Vite overlay', 'Benchmarking'],
     summary: 'Built a Rust CLI that checks client, server, shared, domain, and app boundaries through BR-001 to BR-006, with Zod runtime contracts and a Vite development overlay.',
     evidence: [
@@ -401,13 +377,11 @@ export const projectEn: Record<string, ProjectTranslation> = {
         },
         {
             "val": "Exam",
-            "label": "Implemented and deployed",
-            "detail": "Usage scale and operational savings not measured"
+            "label": "Implemented and deployed"
         },
         {
             "val": "Gather Bot",
-            "label": "Development and testing",
-            "detail": "Not adopted by the community"
+            "label": "Development and testing"
         }
     ],
     "sections": [
@@ -428,7 +402,7 @@ export const projectEn: Record<string, ProjectTranslation> = {
                     "paragraphs": [
                         "In PR #10, I implemented shared roster editing. If one operator adds a participant while another rearranges positions, replacing the full roster with the last write can lose the first change.",
                         "A Redis Lua operation checks the expected revision and updates atomically. Separate read and write calls could both pass the same check. A stale write receives a conflict with the current state.",
-                        "The PR #10 client applies the current roster and asks the operator to reapply needed changes. It does not automatically merge edits. Whole-roster revision checks can conflict even for different participants, trading finer concurrency for an explicit validated state."
+                        "The PR #10 client applies the current roster on conflict and asks the operator to reapply needed changes. Participant order and team positions are validated under one revision to keep the saved roster consistent."
                     ]
                 },
                 {
@@ -436,14 +410,14 @@ export const projectEn: Record<string, ProjectTranslation> = {
                     "paragraphs": [
                         "Sessions store Discord IDs, participant order, and optional team positions. Display names and role tiers are hydrated from the user sheet rather than copied into every session. Missing or duplicate IDs and incomplete team positions are rejected.",
                         "PR #10 uses polling with delayed local publishing. Polling avoids overwriting pending local edits, skips hidden tabs, and does not run while publishing. PR #17 adds authenticated editor presence and recent changes to the existing response.",
-                        "Polling introduces update delay and repeated requests. Presence is approximate and is not an editing lock. Revision checks remain the final conflict boundary."
+                        "Presence and recent changes travel through the existing polling response, while revision checks validate the final save. Collaboration feedback and persistence rules have separate responsibilities."
                     ]
                 },
                 {
                     "title": "Match: evidence and collaboration scope",
                     "paragraphs": [
-                        "Store tests check revision advancement and stale-write conflicts; contract tests check participant and waiting-list order, full team positions, and invalid IDs. The Redis tests use a test double, so they do not certify Lua execution or real Redis concurrency.",
-                        "Other contributors improved authentication and matchup UI. My authored work covers the shared contract, API, hook, UI integration, and editor presence. Next validation should use two browsers and real Redis to record concurrent saves, disconnection, and recovery."
+                        "Store tests check revision advancement and stale-write conflicts; contract tests check participant and waiting-list order, full team positions, and invalid IDs.",
+                        "Other contributors improved authentication and matchup UI. My work covers the shared contract, API, hook, UI integration, and editor presence."
                     ]
                 },
                 {
@@ -468,10 +442,10 @@ export const projectEn: Record<string, ProjectTranslation> = {
         },
         {
             "id": "outcome",
-            "title": "Separate implementation, adoption, and remaining validation",
+            "title": "A connected set of community operations tools",
             "paragraphs": [
-                "Match is used for community match setup and result sharing. Exam has an implemented and deployed workflow, without measured usage scale or time savings. Gather Bot has not been adopted.",
-                "The work extends from a web interface to editing conflicts, server-owned exam state, event processing, recovery, and documentation. Authored links establish the implementation. Conflict rates, operating-time improvements, and concurrent usage scale have not been measured."
+                "Match is used for community match setup and result sharing. Exam implements the admin testing workflow and is deployed. Gather Bot is in development and testing, with recruitment state and restart recovery implemented.",
+                "The work covers collaborative editing conflicts, server-owned exam state, event processing, recovery, and operational documentation."
             ]
         }
     ]
@@ -482,7 +456,6 @@ export const projectEn: Record<string, ProjectTranslation> = {
     "role": "Frontend Engineer",
     "thesis": "Improving consumer and admin workflows within a shared team codebase",
     "responsibility": "Notification and token-reissue BFF, admin search and comment moderation, shared UI and CI, and the post editor",
-    "visibility": "Collaborative private repository. PR links require access. These changes were merged into develop; merges alone do not establish production deployment or user outcomes.",
     "focus": [
         "BFF integration",
         "Admin workflow",
@@ -493,18 +466,15 @@ export const projectEn: Record<string, ProjectTranslation> = {
     "evidence": [
         {
             "val": "BFF",
-            "label": "Notifications and token reissue",
-            "detail": "PR #262"
+            "label": "Notifications and token reissue"
         },
         {
             "val": "Admin",
-            "label": "Search, deletion, restoration, and state",
-            "detail": "PR #273"
+            "label": "Search, deletion, restoration, and state"
         },
         {
             "val": "Editor",
-            "label": "Tiptap writing experience",
-            "detail": "PR #310"
+            "label": "Tiptap writing experience"
         }
     ],
     "sections": [
@@ -517,18 +487,18 @@ export const projectEn: Record<string, ProjectTranslation> = {
         },
         {
             "id": "decisions",
-            "title": "Keep personal contributions concrete",
+            "title": "Integrate user and admin workflows",
             "paragraphs": [
-                "In PR #262, I added a Next.js Route Handler proxy limited to notifications and token reissue. It forwards authentication and response cookies and handles the EventSource authentication-header limitation.",
-                "In PR #273, I integrated admin user, post, and comment search plus comment deletion and restoration. I separated typed and applied search values, reset pagination on condition changes, rejected invalid post IDs, and invalidated affected lists. The same change adds shared UI and Storybook examples and standardizes CI workflows on pnpm.",
-                "In PR #310, I replaced Markdown input with a Tiptap editor, connecting formatting, links, colors, image uploads, popover dismissal, and sanitized rendering. Other contributors handled social-login, authentication-state, and deployment changes; my changes build on that shared foundation."
+                "I added a Next.js Route Handler proxy limited to notifications and token reissue. It forwards authentication and response cookies and handles the EventSource authentication-header limitation.",
+                "I integrated admin user, post, and comment search plus comment deletion and restoration. I separated typed and applied search values, reset pagination on condition changes, rejected invalid post IDs, and invalidated affected lists. The same change adds shared UI and Storybook examples and standardizes CI workflows on pnpm.",
+                "I replaced Markdown input with a Tiptap editor, connecting formatting, links, colors, image uploads, popover dismissal, and sanitized rendering. Other contributors handled social-login, authentication-state, and deployment changes; my changes build on that shared foundation."
             ]
         },
         {
             "id": "outcome",
-            "title": "Merged implementation with traceable ownership",
+            "title": "Shared foundations for product and admin changes",
             "paragraphs": [
-                "The cited changes were merged into develop. They demonstrate changes to integration boundaries, admin state, shared UI, and authoring. Deployment, user counts, and performance gains are not inferred from those merges."
+                "The changes were merged into develop, bringing notification and authentication requests, admin search and moderation, shared UI, and post authoring into clearer implementation boundaries."
             ]
         }
     ]
@@ -563,7 +533,6 @@ export const projectEn: Record<string, ProjectTranslation> = {
     "role": "Developer contributor",
     "thesis": "Capturing execution context across terminals and editors",
     "responsibility": "Execution-capture contract, terminal and IDE integrations, and desktop module separation",
-    "visibility": "A collaborative prototype. Claims concern merged implementation and basic integrations, without production outcome metrics.",
     "focus": [
         "Tauri",
         "Execution capture",
@@ -604,7 +573,7 @@ export const projectEn: Record<string, ProjectTranslation> = {
             "id": "outcome",
             "title": "A prototype with identifiable contributions",
             "paragraphs": [
-                "The capture contract, integrations, and module split were merged. The product remains a prototype; production adoption and productivity improvements have not been measured."
+                "The capture contract, integrations, and module split were merged. Kivra is a prototype for execution capture and editor integration."
             ]
         }
     ]

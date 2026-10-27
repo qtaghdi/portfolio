@@ -35,7 +35,6 @@ const projects = defineCollection({
     thesis:     z.string().optional(),
     responsibility: z.string().optional(),
     focus:      z.array(z.string()).default([]),
-    visibility: z.string().optional(),
     evidence:   z.array(EvidenceSchema).default([]),
     traceLinks: z.array(z.object({ label: z.string(), labelEn: z.string(), href: z.string().url() })).default([]),
     accentColor: z.string().default('accent'),

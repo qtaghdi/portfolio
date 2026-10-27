@@ -11,7 +11,6 @@ role: "프론트엔드 개발자"
 accentColor: accent
 thesis: "여러 앱에서 반복되는 인증과 API 처리를 정리하다"
 responsibility: "공통 BFF 프록시와 API 패키지 유지보수, 운영 화면, 인증·공유·웹뷰 경계 조건 개선"
-visibility: "회사 프로젝트의 담당 코드와 변경 기록을 설명합니다. 저장소 링크는 접근 권한에 따라 열람이 제한될 수 있습니다. 내부 고객·운영 데이터는 포함하지 않았습니다."
 focus:
   - "pnpm monorepo"
   - "Turborepo"
@@ -21,13 +20,7 @@ summary: "어드민, 오너, 서비스 상태, 고객지원 네 앱과 13개 공
 evidence:
   - { val: "4 Frontend Apps", label: "하나의 제품 모노레포" }
   - { val: "13 packages", label: "API · Query · Schema · UI 등 공통 기반" }
-  - { val: "90% Coverage Gate", label: "API 패키지 설정값, 전체 제품의 측정 결과 아님" }
-traceLinks:
-  - { label: "공통 프록시 확장 커밋", labelEn: "Shared proxy extension commit", href: "https://github.com/Bigtablet/bigtablet-notiiv-monorepo-web/commit/8fe85063f3c86bb743c14eff06531f9945cbbbc7" }
-  - { label: "오너 BFF 통합 커밋", labelEn: "Owner BFF consolidation commit", href: "https://github.com/Bigtablet/bigtablet-notiiv-monorepo-web/commit/1d5144c3481545b187f6ec2a96fc1972e3ea3225" }
-  - { label: "공통 QueryClient 추출 커밋", labelEn: "Shared QueryClient commit", href: "https://github.com/Bigtablet/bigtablet-notiiv-monorepo-web/commit/0c3452665e42147704d1a2772f1dfe9e54ea77c0" }
-  - { label: "외부 redirect 거절 커밋", labelEn: "External redirect rejection commit", href: "https://github.com/Bigtablet/bigtablet-notiiv-monorepo-web/commit/1edef5edac15847a15eda1364b1e3b2403ecf846" }
-  - { label: "후속 일정 공유 커밋", labelEn: "Follow-up event sharing commit", href: "https://github.com/Bigtablet/bigtablet-notiiv-monorepo-web/commit/b4f513150e3af45612b21f87a2fee0af4445e018" }
+  - { val: "Shared BFF", label: "요청 검증·인증·재발급 공통 처리" }
 metrics: []
 callouts:
   - icon: "🔐"
@@ -59,7 +52,7 @@ link: "https://notiiv.ai/"
 
 ### 같은 인증 흐름을 여러 앱에서 따로 고쳐야 하는 상황
 
-Notiiv는 어드민, 오너 대시보드, 서비스 상태와 고객지원 네 앱을 13개 공통 패키지와 함께 운영하는 회사 제품입니다. 저는 공통 BFF·Query 기반의 유지보수와 운영 화면, 인증·공유·웹뷰의 경계 조건 개선을 담당했습니다. 제품 전체나 백엔드를 단독 설계한 범위는 아닙니다.
+Notiiv는 어드민, 오너 대시보드, 서비스 상태와 고객지원 네 앱을 13개 공통 패키지와 함께 운영하는 회사 제품입니다. 저는 공통 BFF·Query 기반의 유지보수와 운영 화면, 인증·공유·웹뷰의 경계 조건 개선을 담당했습니다.
 
 앱마다 BFF 프록시가 별도로 있으면 경로 검증, 인증 쿠키 주입, 토큰 재발급, 오류 변환을 비슷하게 구현하게 됩니다. 한 앱에서 실패 처리를 고쳐도 다른 앱은 이전 동작을 유지할 수 있습니다. 반대로 모든 앱을 하나의 고정 처리에 맞추면 로그인 응답이나 파일 업로드처럼 앱마다 다른 정책이 공통 코드 안에 뒤섞입니다.
 
@@ -97,14 +90,12 @@ FAQ 작성 화면은 미리보기와 고객지원 렌더링의 규칙을 맞추�
 
 ## 확인한 결과
 
-### 개인 기여를 확인할 수 있는 변화
+### 앱과 공통 패키지의 책임 정리
 
 오너 BFF의 독립 파이프라인을 제거하고 공통 프록시를 사용하도록 바뀌었습니다. 로그인·가입 응답 정책은 앱에 남겨 두면서 경로, 요청 제한과 재발급 처리는 공통 패키지에서 유지합니다. QueryClient, 공유 경로와 런타임 응답 검증도 공통 경계를 통해 관리하도록 정리했습니다.
 
-운영 화면에서는 FAQ 미리보기와 실제 렌더링, 직접 고객 입력, 저장 전 이탈과 이미지 삭제 상태를 다뤘습니다. 공유 기능에서는 명시적인 일정 데이터와 브라우저별 실패 조건을 처리했습니다. 이런 변경은 담당 커밋과 관련 테스트에서 확인할 수 있습니다.
+운영 화면에서는 FAQ 미리보기와 실제 렌더링, 직접 고객 입력, 저장 전 이탈과 이미지 삭제 상태를 다뤘습니다. 공유 기능에서는 명시적인 일정 데이터와 브라우저별 실패 조건을 처리했습니다.
 
-### 검증 범위와 남은 과제
+### 인증과 요청 경계의 회귀 검사
 
-경로 검증 테스트는 거절 상태와 백엔드 호출 차단을, 재발급 테스트와 오너 route 테스트는 공통화 이후의 인증 동작을 다룹니다. API 패키지의 90%는 커버리지 **임계값 설정**이며, 전체 제품의 측정 커버리지나 결함이 없다는 증거로 사용하지 않습니다.
-
-공통 패키지의 변경은 여러 앱에 영향을 줄 수 있으므로 패키지 단위 테스트만으로 충분하지 않습니다. 앱별 인증 응답, 업로드와 실제 브라우저 동작을 함께 확인해야 합니다. 운영 작업 시간과 오류 문의의 전후 수치는 확보하지 않았으며, 다음에는 동일 작업 시나리오의 완료 시간과 실패 유형을 기록하는 것이 필요합니다.
+경로 검증 테스트는 거절 상태와 백엔드 호출 차단을, 재발급 테스트와 오너 route 테스트는 공통화 이후의 인증 동작을 다룹니다. 입력 검증, 토큰 갱신과 응답 처리를 같은 테스트 기준으로 유지해 앱별 예외가 공통 처리에 섞이지 않도록 했습니다.

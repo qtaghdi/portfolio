@@ -11,7 +11,6 @@ role: "Creator"
 accentColor: sky
 thesis: "사람과 AI가 같은 문서 revision 위에서 안전하게 협업하다"
 responsibility: "제품 설계, Go XLSX adapter, MCP transport, Univer 웹 편집기, revision·history·persistence 모델, 성능과 안전성 검증"
-visibility: "개인 비공개 저장소의 로컬 XLSX 알파입니다. 근거 문서 링크는 접근 권한이 필요합니다. 성능 수치는 2026-10-12의 기록이며 이번 내용 검토에서 재측정하지 않았습니다."
 focus:
   - "Human-AI collaboration"
   - "Revision conflicts"
@@ -22,11 +21,6 @@ evidence:
   - { val: "400K cells", label: "release profile workbook", detail: "4 sheets · 1000 by 100" }
   - { val: "287.74 ms", label: "1,000-cell batch commit", detail: "darwin-arm64 · Go 1.25" }
   - { val: "X-01 to X-06", label: "automated safety gates", detail: "atomicity · recovery · history" }
-traceLinks:
-  - { label: "엔진 선택 ADR (비공개)", labelEn: "Engine decision ADR (private)", href: "https://github.com/qtaghdi/document-workspace/blob/main/docs/adr/0001-spreadsheet-engine.md" }
-  - { label: "아키텍처 문서 (비공개)", labelEn: "Architecture (private)", href: "https://github.com/qtaghdi/document-workspace/blob/main/docs/architecture.md" }
-  - { label: "안전성 기록 (비공개)", labelEn: "Safety report (private)", href: "https://github.com/qtaghdi/document-workspace/blob/main/docs/release-evidence/xlsx-safety-2026-10-12.md" }
-  - { label: "성능 기록 (비공개)", labelEn: "Performance report (private)", href: "https://github.com/qtaghdi/document-workspace/blob/main/docs/release-evidence/xlsx-performance-2026-10-12.md" }
 metrics: []
 callouts:
   - icon: "01"
@@ -52,7 +46,6 @@ tech:
   - "Tailwind CSS"
   - "Playwright"
   - "pnpm"
-github: "https://github.com/qtaghdi/document-workspace"
 ---
 
 ## 문제
@@ -110,14 +103,10 @@ XLSX의 형식 규칙은 adapter에 둡니다. DOCX·PPTX·PDF도 같은 모델�
 - **연결과 복구:** event replay gap, 느린 구독자, 응답 유실 뒤 구조 변경의 중복 적용 방지, session 불일치 재동기화.
 - **영속 이력:** undo·redo 복원, 재시작 뒤 이력 복구, 보관 한도 이후에도 revision의 단조 증가.
 
-### 기록된 성능과 해석 범위
+### 40만 셀 workbook의 성능 기록
 
 같은 날의 성능 기록은 darwin/arm64, Go 1.25.0, Excelize 2.11.0 환경에서 생성한 4개 시트·40만 셀 workbook을 사용했습니다. 세션 열기 757.79ms, 10,000셀 읽기 7.81ms, 1셀 commit 336.87ms, 1,000셀 commit 287.74ms가 기록되어 있습니다.
 
-서로 다른 작업의 관찰값이며, 1,000셀 쓰기가 1셀 쓰기보다 항상 빠르다는 뜻은 아닙니다. 합성 문서 한 workload의 회귀 확인 기준으로 사용하며, 일반 문서의 지연 보장이나 사용자 체감 개선율로 해석하지 않습니다.
-
-### 현재 한계와 다음 단계
-
-자동 gate는 실제 Microsoft Excel의 reopen·수식 재계산, 반복적인 외부 사용, 전원 손실이나 network filesystem을 인증하지 않습니다. 이미지 삽입과 고급 차트 편집도 현재 지원 범위 밖입니다. 로컬 XLSX 알파를 실제 Excel 복사본으로 검증하고, 복구 과정에서 사용자가 무엇을 이해하고 다시 해야 하는지 관찰하는 것이 다음 단계입니다.
+이 값은 2026-10-12에 동일한 합성 workbook과 환경에서 기록한 결과입니다. 해당 workload를 릴리즈 회귀 기준으로 사용합니다.
 
 이 프로젝트에서 구현한 것은 사람과 AI의 입력 화면뿐 아니라 **충돌, 저장, 이력과 복구가 같은 서버 상태를 기준으로 동작하는 편집 경로**입니다. 기능 확장보다 원본을 지키는 경계와 실패 이후의 동작을 먼저 명시한 설계 경험입니다.

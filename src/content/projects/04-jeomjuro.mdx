@@ -14,14 +14,9 @@ thesis: "사용자 기능과 관리자 도구를 같은 팀 코드베이스에�
 responsibility: "알림·인증 재발급 BFF, 관리자 검색·댓글 삭제·복구, 공통 UI와 CI 정리, 게시글 에디터 개선"
 focus: ["BFF integration", "Admin workflow", "Shared UI", "Editor UX"]
 evidence:
-  - { val: "BFF", label: "알림·인증 재발급에 한정한 도입", detail: "PR #262" }
-  - { val: "Admin", label: "검색·삭제·복구와 상태 처리", detail: "PR #273" }
-  - { val: "Editor", label: "Tiptap 글쓰기 경험", detail: "PR #310" }
-visibility: "협업한 비공개 저장소입니다. PR 링크는 접근 권한이 필요합니다. develop 병합 기록을 근거로 하며 운영 배포나 사용자 성과를 의미하지 않습니다."
-traceLinks:
-  - { label: "BFF 도입 PR #262 (비공개)", labelEn: "BFF PR #262 (private)", href: "https://github.com/winwin1010/winwin_front04/pull/262" }
-  - { label: "관리자 개선 PR #273 (비공개)", labelEn: "Admin PR #273 (private)", href: "https://github.com/winwin1010/winwin_front04/pull/273" }
-  - { label: "에디터 PR #310 (비공개)", labelEn: "Editor PR #310 (private)", href: "https://github.com/winwin1010/winwin_front04/pull/310" }
+  - { val: "BFF", label: "알림·인증 재발급에 한정한 도입" }
+  - { val: "Admin", label: "검색·삭제·복구와 상태 처리" }
+  - { val: "Editor", label: "Tiptap 글쓰기 경험" }
 metrics: []
 callouts: []
 tech:
@@ -37,7 +32,6 @@ tech:
   - "GitHub Actions"
   - "Vercel"
   - "Cloudflare OpenNext"
-github: "https://github.com/winwin1010/winwin_front04"
 ---
 
 ## 문제
@@ -48,15 +42,15 @@ github: "https://github.com/winwin1010/winwin_front04"
 
 ### 알림과 인증 재발급에 한정한 BFF
 
-PR #262에서 Next.js Route Handler 기반 프록시를 추가했습니다. 인증 쿠키와 Authorization을 전달하고 백엔드의 Set-Cookie를 응답에 반영했습니다. 브라우저 EventSource가 인증 헤더를 직접 넣을 수 없는 조건도 프록시에서 처리했습니다. 전면적인 서버 구조 교체가 아니라 알림과 인증 재발급에 범위를 한정한 도입입니다.
+Next.js Route Handler 기반 프록시를 추가했습니다. 인증 쿠키와 Authorization을 전달하고 백엔드의 Set-Cookie를 응답에 반영했습니다. 브라우저 EventSource가 인증 헤더를 직접 넣을 수 없는 조건도 프록시에서 처리했습니다. 전면적인 서버 구조 교체가 아니라 알림과 인증 재발급에 범위를 한정한 도입입니다.
 
 ### 관리자 검색과 삭제·복구
 
-PR #273에서 사용자·게시글·댓글 검색 API와 댓글 삭제·복구를 연결했습니다. 입력 중인 검색어와 실제 적용한 검색어를 분리하고, 검색 조건이 바뀌면 페이지를 초기화했습니다. 잘못된 게시글 ID 요청을 막고 작업 후 관련 목록을 갱신하도록 했습니다. 공통 UI 컴포넌트와 Storybook 예제를 보강하고 CI와 Storybook 워크플로우의 실행 기준을 pnpm으로 정리했습니다.
+사용자·게시글·댓글 검색 API와 댓글 삭제·복구를 연결했습니다. 입력 중인 검색어와 실제 적용한 검색어를 분리하고, 검색 조건이 바뀌면 페이지를 초기화했습니다. 잘못된 게시글 ID 요청을 막고 작업 후 관련 목록을 갱신하도록 했습니다. 공통 UI 컴포넌트와 Storybook 예제를 보강하고 CI와 Storybook 워크플로우의 실행 기준을 pnpm으로 정리했습니다.
 
 ### 게시글 작성 경험
 
-PR #310에서는 기존 Markdown 입력기를 Tiptap 기반 에디터로 교체했습니다. 서식, 링크, 색상과 이미지 업로드를 작성 흐름에 연결하고 팝오버의 외부 클릭·Escape 닫기를 처리했습니다. 렌더링 쪽에는 허용된 색상 표현과 sanitization을 연결했습니다.
+기존 Markdown 입력기를 Tiptap 기반 에디터로 교체했습니다. 서식, 링크, 색상과 이미지 업로드를 작성 흐름에 연결하고 팝오버의 외부 클릭·Escape 닫기를 처리했습니다. 렌더링 쪽에는 허용된 색상 표현과 sanitization을 연결했습니다.
 
 ### 팀 작업 안에서의 담당 범위
 
@@ -64,4 +58,4 @@ PR #310에서는 기존 Markdown 입력기를 Tiptap 기반 에디터로 교체�
 
 ## 확인한 결과
 
-위 변경들은 develop 브랜치에 병합되었습니다. 인증과 알림의 프록시 경계, 관리자 검색·삭제·복구, 공통 UI와 게시글 작성 흐름을 변경한 기록으로 개인 기여를 확인할 수 있습니다. 운영 배포 여부와 사용자 수, 속도 개선 수치는 이 병합 기록만으로 주장하지 않습니다.
+위 변경들은 develop 브랜치에 병합되었습니다. 인증과 알림의 요청 경계를 정리하고, 관리자 검색·삭제·복구와 게시글 작성 흐름을 개선했습니다. 공통 UI와 Storybook 예제를 함께 갱신해 사용자 화면과 관리자 도구에서 변경을 이어갈 수 있도록 했습니다.

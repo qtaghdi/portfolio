@@ -21,6 +21,13 @@ const nextData = locale === 'en' ? { ...nextProject.data, ...projectEn[projectKe
 const pageTitle = `${data.title} | ${locale === 'ko' ? '박상민 포트폴리오' : 'Park Sangmin Portfolio'}`;
 const chapterIds = locale === 'ko' ? ['문제', '선택한-방법', '확인한-결과'] : ['problem', 'decisions', 'outcome'];
 const hasEvidenceScreen = ['notiiv', 'design-system', 'intranet', 'document-workspace', 'boundra'].includes(key);
+const screenCaptions: Record<string, { ko: string; en: string }> = {
+  notiiv: { ko: 'Notiiv · 고객지원', en: 'Notiiv · Customer support' },
+  'design-system': { ko: 'Bigtablet Design System · Storybook', en: 'Bigtablet Design System · Storybook' },
+  intranet: { ko: 'Bigtablet Intranet · 모바일 홈', en: 'Bigtablet Intranet · Mobile home' },
+  'document-workspace': { ko: 'document-workspace · XLSX 편집기', en: 'document-workspace · XLSX editor' },
+  boundra: { ko: 'Boundra · CLI 출력 예시', en: 'Boundra · Reconstructed CLI output' },
+};
 ---
 <BaseLayout locale={locale} title={pageTitle} description={data.summary}>
   <Navbar locale={locale} />
@@ -65,9 +72,8 @@ const hasEvidenceScreen = ['notiiv', 'design-system', 'intranet', 'document-work
           {data.evidence.length > 0 && <dl class="evidence">{data.evidence.map((item) => <div><dt>{item.val}</dt><dd>{item.label}{item.detail && <small>{item.detail}</small>}</dd></div>)}</dl>}
           {hasEvidenceScreen && <figure class="screen-evidence">
             <div id="project-visual" class:list={['case-visual', { 'mobile-screen': key === 'intranet' }]}><ProjectVisual projectKey={key} locale={locale} variant="detail" /></div>
-            <figcaption>{key === 'boundra' ? (locale === 'ko' ? 'CLI 출력 구조를 재구성한 예시입니다.' : 'Reconstructed example of the CLI output.') : (locale === 'ko' ? '구현 화면. 공개용 예시 데이터를 사용한 기존 캡처입니다.' : 'Implementation screenshot with example data prepared for this portfolio.')}</figcaption>
+            <figcaption>{screenCaptions[key][locale]}</figcaption>
           </figure>}
-          {data.visibility && <p class="disclosure">{data.visibility}</p>}
         </section>
       </article>
     </div>
@@ -115,7 +121,7 @@ const hasEvidenceScreen = ['notiiv', 'design-system', 'intranet', 'document-work
   .evidence > div { display: grid; grid-template-columns: 150px minmax(0,1fr); gap: 20px; padding: 16px 0; border-bottom: 1px solid $line; }
   .evidence dt { color: $silver-bright; font-size: 15px; }.evidence small { display: block; color: $gunmetal; font-size: 13px; }
   .screen-evidence { margin: 32px 0 0; }.case-visual { height: 440px; border: 1px solid $line; overflow: hidden; }.case-visual.mobile-screen { max-width: 390px; height: 788px; }
-  figcaption, .disclosure { margin-top: 14px; color: $gunmetal; font-size: 13px; line-height: 1.8; }
+  figcaption { margin-top: 14px; color: $gunmetal; font-size: 13px; line-height: 1.8; }
   .next-project { display: flex; align-items: center; justify-content: space-between; gap: 24px; padding: 32px 0; margin-top: 72px; border-top: 1px solid $line; }.next-project span { color: $gunmetal; font-size: 14px; }.next-project a { display: flex; align-items: center; gap: 12px; min-height: 44px; color: $accent; font-size: 18px; }
   @media (max-width: 760px) { .case-layout { grid-template-columns: 1fr; gap: 24px; }.chapter-nav { position: static; display: flex; flex-wrap: wrap; gap: 8px 24px; padding-bottom: 16px; border-bottom: 1px solid $line; } }
   @media (max-width: 680px) {

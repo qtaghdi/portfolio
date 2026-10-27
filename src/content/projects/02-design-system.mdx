@@ -10,7 +10,6 @@ role: "프론트엔드 개발 및 디자인 시스템 유지보수"
 accentColor: amber
 thesis: "필요한 컴포넌트의 CSS만 불러오도록"
 responsibility: "컴포넌트별 ESM·CSS 배포, 토큰 생성, 오버레이 모션, 컴포넌트 유지보수와 마이그레이션 문서"
-visibility: "회사 프로젝트 중 본인 명의 커밋으로 확인할 수 있는 변경을 중심으로 정리했습니다. 내부 고객 데이터는 포함하지 않았습니다."
 focus: ["Package distribution", "Design tokens", "Overlay behavior", "Consumer migration"]
 summary: "컴포넌트 하나를 사용해도 전체 스타일이 따라오던 배포 구조를 컴포넌트별 ESM과 CSS로 변경했습니다. 토큰 생성과 오버레이 모션을 정리하고 소비하는 앱의 마이그레이션을 진행했습니다."
 evidence:
@@ -65,12 +64,6 @@ link: "https://www.npmjs.com/package/@bigtablet/design-system"
 - **소비 앱 적용:** 마이그레이션 문서에는 전체 CSS import 제거, 테마 변수와 번들러별 설정을 기록했습니다. Notiiv의 네 앱은 같은 디자인 시스템 패키지를 참조합니다.
 
 결과는 필요한 컴포넌트와 스타일이 같은 의존 관계로 배포되고, 별도 모션 런타임 없이 오버레이 수명을 관리하도록 바뀐 것입니다. 제 기여는 배포 후처리와 설정, presence 훅, 토큰 생성과 소비 앱 변경까지 이어지는 범위입니다.
-
-### 남은 한계와 다음 검증
-
-패키지를 나눠 배포해도 앱이 전체 CSS를 계속 import하거나 번들러 설정이 맞지 않으면 이점을 얻지 못합니다. 그래서 패키지 빌드 성공과 실제 소비 앱의 결과를 구분해야 합니다. 이 페이지에서는 동일 조건의 번들 분석 보고서를 첨부하지 않은 크기 감소율이나 사용자 로딩 시간 개선율을 성과로 내세우지 않습니다.
-
-다음 검증은 버튼만 사용하는 최소 앱과 실제 제품 화면을 같은 설정으로 빌드해 JavaScript·CSS 결과물을 비교하고, 라이트·다크 테마와 오버레이 동작이 유지되는지 함께 기록하는 것입니다.
 
 - [컴포넌트별 ESM·CSS 배포 변경](https://github.com/Bigtablet/bigtablet-design-system/commit/3a9c75010f1f0aeae551e2127e7c4b5f1e7a355e)
 - [CSS 모션 전환과 presence 테스트](https://github.com/Bigtablet/bigtablet-design-system/commit/32972ad735ff921c2bfc1fa84867cfb50dd1dc96)
