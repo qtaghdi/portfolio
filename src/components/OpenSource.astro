@@ -26,9 +26,9 @@ const contributions = [
     status: ko ? '별도 커밋 반영 · 공동 작성자 명시' : 'Applied in a separate commit · Co-author credit',
     title: ko ? '한국어 줄바꿈 검증용 corpus 기여' : 'A Korean corpus for line-layout validation',
     paragraphs: ko ? [
-      '한국어 검증 텍스트의 고정 폭 줄바꿈을 정리한 자료를 제안했습니다. 기존 corpus를 교체하는 제안은 유지보수자에 의해 두 번째 한국어 corpus 추가로 반영되었습니다. PR 자체는 미병합 종료되었고, 반영 커밋에 공동 작성자로 기록되었습니다.',
+      '한국어 검증 텍스트의 고정 폭 줄바꿈을 정리한 자료를 제안했습니다. 유지보수자는 기존 corpus를 유지하면서 제안 자료를 두 번째 한국어 corpus로 추가했고, 반영 커밋에 공동 작성자로 기록했습니다.',
     ] : [
-      'Proposed Korean validation text with fixed-width source wrapping removed. The maintainer adopted it as a second Korean corpus rather than replacing the existing one. The PR closed without a merge; the separate implementation commit credits me as a co-author.',
+      'Proposed Korean validation text with fixed-width source wrapping removed. The maintainer preserved the existing corpus and added the proposed material as a second Korean corpus, crediting me as a co-author in the implementation commit.',
     ],
     links: [
       { label: 'PR #24', href: 'https://github.com/chenglou/pretext/pull/24' },

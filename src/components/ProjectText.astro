@@ -1,0 +1,23 @@
+---
+interface Props {
+  text: string;
+  references: { href: string }[];
+}
+const { text, references } = Astro.props;
+const targets = new Map<string, string | null>();
+for (const { href } of references) {
+  const number = href.match(/^https:\/\/github\.com\/[^/]+\/[^/]+\/pull\/(\d+)$/)?.[1];
+  if (!number) continue;
+  const previous = targets.get(number);
+  targets.set(number, previous === undefined || previous === href ? href : null);
+}
+const parts = text.split(/(PR\s*#\d+)/g).map((value) => ({
+  value,
+  href: targets.get(value.match(/^PR\s*#(\d+)$/)?.[1] ?? ''),
+}));
+---
+{parts.map(({ value, href }) => href ? <a href={href} target="_blank" rel="noopener noreferrer">{value}</a> : value)}
+<style lang="scss">
+  @use '../styles/tokens' as *;
+  a { color: $accent; text-decoration: underline; text-underline-offset: 4px; }
+</style>

@@ -13,7 +13,14 @@ summary: "TypeScript 개발자를 위한 Rust 학습 가이드로, 브라우저�
 thesis: "낯선 언어를 익숙한 멘탈 모델에서 출발해 배우게 만들기"
 responsibility: "콘텐츠 구조, KO·EN 문서, 브라우저 예제 실행 흐름"
 focus: ["Developer education", "Rust", "Bilingual docs", "Browser runner"]
-evidence: []
+evidence:
+  - { val: "14 chapters", label: "TypeScript와 Rust 비교 학습", detail: "한국어·영어 콘텐츠" }
+  - { val: "SHA-256", label: "문서 예제 실행 허용 목록" }
+  - { val: "Workers + Axum", label: "문서와 실행 서버 분리" }
+traceLinks:
+  - {"label": "예제 검증·실행 API", "labelEn": "Example validation and execution API", "href": "https://github.com/qtaghdi/rust-with-typescript/blob/main/src/pages/api/run-rust.ts"}
+  - {"label": "Rust 실행 서버", "labelEn": "Rust execution server", "href": "https://github.com/qtaghdi/rust-with-typescript/blob/main/sandbox-runner/src/main.rs"}
+  - {"label": "배포·릴리스 워크플로우", "labelEn": "Deployment and release workflow", "href": "https://github.com/qtaghdi/rust-with-typescript/blob/main/.github/workflows/deploy.yml"}
 metrics: []
 callouts: []
 tech:
@@ -31,28 +38,32 @@ github: "https://github.com/qtaghdi/rust-with-typescript"
 
 ## 문제
 
-대부분의 Rust 학습 자료는 C/C++ 배경을 어느 정도 전제합니다. TypeScript 개발자가 Rust를 배울 때는 소유권, borrowing, trait, lifetime 같은 개념을 기존에 알고 있던 JavaScript/TypeScript의 멘탈 모델과 연결하기 어렵습니다.
+TypeScript 개발자가 Rust를 배울 때는 새로운 문법보다 소유권, borrowing과 lifetime을 기존의 사고방식과 연결하는 일이 어려웠습니다. 익숙한 코드를 Rust와 나란히 비교하고, 컴파일 결과를 설명 바로 옆에서 확인할 수 있는 학습 환경을 만들었습니다.
 
-또한 문서만 읽는 방식은 Rust의 타입 시스템과 컴파일 에러를 체감하기 어렵습니다. 예제를 직접 실행해 보고, TypeScript와 Rust가 같은 문제를 어떻게 다르게 푸는지 비교할 수 있는 학습 환경이 필요했습니다.
+브라우저에서 코드를 실행하게 하면 문서 사이트가 실행 서버의 진입점이 됩니다. 학습용 예제를 편하게 실행하는 경험과 서버에 들어오는 요청을 제한하는 경계를 함께 설계해야 했습니다.
 
 ## 선택한 방법
 
-### 1. Learning Structure
+### 14개 챕터를 TypeScript의 개념에서 시작
 
-Astro와 Starlight를 기반으로 문서형 학습 사이트를 만들었습니다. 각 챕터는 TypeScript 개발자가 이미 알고 있는 개념에서 출발해 Rust의 문법과 사고방식으로 확장되도록 구성했습니다.
+Astro와 Starlight로 한국어·영어 문서를 구성했습니다. 각 챕터에 TypeScript와 Rust 예제를 나란히 배치하고, 소유권·borrowing, enum과 pattern matching, trait, 오류 처리와 비동기를 단계적으로 연결했습니다. 문법을 번역하는 대신 같은 문제를 두 타입 시스템에서 어떻게 표현하는지 비교하도록 했습니다.
 
-챕터마다 TypeScript 예제와 Rust 예제를 나란히 배치해, 단순 번역이 아니라 “같은 문제를 다른 타입 시스템에서 어떻게 표현하는가”를 비교할 수 있게 했습니다. 문법, 소유권, borrowing, enum, pattern matching, trait, error handling, async/concurrency 같은 주제를 단계적으로 정리했습니다.
+### 문서 화면과 Rust 실행 서버를 분리
 
-### 2. In-browser Execution
+문서와 실행 API는 Cloudflare Workers에, Rust/Axum 실행 서버는 별도 서비스에 두었습니다. 코드 블록의 실행 버튼은 API를 거쳐 실행 서버를 호출하고 stdout, stderr, 종료 코드와 실행 시간을 문서 안에 표시합니다. 성공 출력뿐 아니라 컴파일 오류도 같은 학습 흐름에서 볼 수 있도록 했습니다.
 
-브라우저 안에서 Rust 코드를 실행할 수 있도록 별도 실행 흐름도 구성했습니다. Astro 문서의 코드 블록에서 Rust/Axum 기반 백엔드로 요청을 보내고, 실행 결과를 다시 문서 안에서 확인할 수 있게 했습니다.
+### 문서에 포함된 예제만 실행하도록 검증
 
-### 3. Bilingual Documentation
+빌드할 때 실행 가능한 코드의 SHA-256 허용 목록을 생성합니다. API는 요청을 정규화해 이 목록과 대조하고, 문서에 없는 코드는 실행 서버로 전달하기 전에 거부합니다. 임의 코드 입력기 대신 설명에 포함된 예제를 실행하는 제품 범위에 맞춘 선택입니다.
 
-한국어와 영어를 모두 지원하도록 콘텐츠 구조를 나누고, 사용자의 언어 환경에 맞춰 자연스럽게 접근할 수 있도록 라우팅을 구성했습니다. MDX 기반으로 설명, 예제, 주석, 실행 결과를 한 문서 안에서 다룰 수 있게 했습니다.
+실행 서버에는 동시 컴파일 수, IP별 요청 빈도와 컴파일·실행 타임아웃을 두었습니다. 실행마다 별도의 임시 디렉터리를 사용하고 출력 길이도 제한했습니다. 프런트엔드는 실행 서버의 실패를 API 오류로 받아 결과 영역에 표시합니다.
+
+### 문서와 실행 코드의 검증·배포를 연결
+
+CI에서 Astro 타입 검사·빌드와 Rust clippy·테스트를 분리해 실행합니다. main 변경은 Workers 배포로 이어지고, 배포가 끝나면 태그와 변경 내역을 포함한 GitHub Release를 생성하도록 구성했습니다.
 
 ## 확인한 결과
 
-TypeScript 개발자가 C/C++ 배경 없이 Rust를 학습할 수 있는 문서형 프로젝트를 완성했습니다. 문법과 개념을 단순히 나열하는 대신, TypeScript와 Rust의 차이를 비교하면서 Rust의 사고방식을 이해할 수 있도록 구성했습니다.
+한국어·영어 14개 챕터와 문서 내 Rust 예제 실행 흐름을 구현해 배포했습니다. 문서 사이트는 Workers 주소로 공개되어 있으며, 소스와 배포·릴리스 기록을 함께 확인할 수 있습니다.
 
-브라우저 내 Rust 코드 실행 환경을 제공해 학습자가 예제를 직접 실행하고 결과를 확인할 수 있게 했습니다. 한국어/영어 콘텐츠를 함께 구성해 더 넓은 독자가 접근할 수 있는 형태로 배포했습니다.
+콘텐츠 제작뿐 아니라 문서 예제의 빌드 시점 검증, 실행 API와 Rust 서버의 역할 분리, 결과 표시와 배포 자동화까지 연결한 프로젝트입니다.

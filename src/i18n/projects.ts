@@ -212,25 +212,85 @@ export const projectEn: Record<string, ProjectTranslation> = {
     ]
 },
   intranet: {
-    category: 'Company · Flutter App · Production', badge: 'Mobile', role: 'Flutter Developer',
-    thesis: 'Connecting collaborative work and state inside one Flutter app',
-    responsibility: 'Flutter app shell, messenger, mail and approval screens, offline data, notification deep links, and failure recovery',
-    focus: ['Flutter app shell', 'BLoC architecture', 'Offline-first', 'Real-time sync'],
-    summary: 'Built a Flutter mobile app shell connecting Home, Messenger, and Work apps, then designed cache and real-time boundaries for mail, approvals, notifications, deep links, and partial failures.',
-    evidence: [
-      { val: 'Flutter', label: 'iOS and Android app' },
-      { val: 'BLoC + SQLite', label: 'State and offline cache' },
-      { val: 'SSE + FCM', label: 'Real-time and push' },
+    "category": "Company · Flutter App · Production",
+    "badge": "Mobile",
+    "role": "Flutter Developer",
+    "thesis": "Connecting collaborative work and state inside one Flutter app",
+    "responsibility": "Flutter app shell, mail and approval state, notification deep links, failure handling, and training resume",
+    "focus": [
+      "Flutter app shell",
+      "BLoC architecture",
+      "Offline cache",
+      "Notification routing"
     ],
-    sections: [
-      { id: 'problem', title: 'Mobile work cannot stop with the network', paragraphs: ['Messages, mail, approvals, and notifications had to remain understandable when requests were slow, duplicated, or partially failed. Real-time events and push notifications could also arrive out of order.'] },
-      { id: 'decisions', title: 'Separate immediate feedback from eventual truth', paragraphs: ['I used cache-then-network reads, explicit stale states, and optimistic actions with rollback. SSE handled in-app freshness while FCM handled background delivery, with idempotent reconciliation between them.', 'Critical transitions were covered with focused tests so reconnects, partial failures, and stale responses produced predictable UI states.'] },
-      { id: 'outcome', title: 'A calmer experience under unreliable conditions', paragraphs: ['Users can continue reading and acting with clear feedback while the system reconnects. The interface exposes uncertainty instead of silently replacing state.'] },
+    "summary": "Improved mail caching, notification destinations, batch-action feedback, and training resume in the company’s Flutter mobile app.",
+    "evidence": [
+      {
+        "val": "Flutter",
+        "label": "iOS and Android app"
+      },
+      {
+        "val": "BLoC + SQLite",
+        "label": "State and cache-then-network reads"
+      },
+      {
+        "val": "SSE + FCM",
+        "label": "Real-time updates and push destinations"
+      }
     ],
+    "sections": [
+      {
+        "id": "problem",
+        "title": "Mobile work spans more than one request or screen",
+        "paragraphs": [
+          "The company intranet combines Home, Messenger, and Work tabs with mail, approvals, schedules, documents, and organization information. Slow requests and notification launches can expose data from different moments.",
+          "I worked on preserving readable state, opening the correct destination from notifications, and preventing partial failures or late responses from looking like successful current results."
+        ]
+      },
+      {
+        "id": "decisions",
+        "title": "Make data sources and completion states explicit",
+        "paragraphs": [],
+        "subsections": [
+          {
+            "title": "Cache first, then replace with the network result",
+            "paragraphs": [
+              "The mail inbox paints its local SQLite snapshot before receiving live data. Cache-only and network reads are separate so the user starts with readable content and the same screen can then receive the latest result."
+            ]
+          },
+          {
+            "title": "Route notifications into their actual context",
+            "paragraphs": [
+              "I connected mail and approval notifications to their detail screens, including launch-time routing. FCM token rotation re-registers the token, and channel mute state is reflected while connected."
+            ]
+          },
+          {
+            "title": "Distinguish partial failure and stale responses",
+            "paragraphs": [
+              "Mail and approval batch actions distinguish transport failures, partial success, and duplicate results. Late responses are discarded after page changes instead of replacing the current list."
+            ]
+          },
+          {
+            "title": "Resume training from server-owned progress",
+            "paragraphs": [
+              "I carried lastPositionSec from the training response through the domain model to the player. Both the native video player and YouTube path receive the resume position when the user reopens the lesson."
+            ]
+          }
+        ]
+      },
+      {
+        "id": "outcome",
+        "title": "More predictable behavior around everyday interruptions",
+        "paragraphs": [
+          "Mail starts with readable cached content and swaps in fresh results. Notifications open the related document, batch actions report actual completion, and training screens receive saved playback progress.",
+          "The work focuses on explaining which state is visible and what a request completed when connectivity, navigation, and background events overlap."
+        ]
+      }
+    ]
   },
   'document-workspace': {
     "category": "Personal · MCP · Document Tool",
-    "badge": "Private XLSX Alpha",
+    "badge": "Local XLSX Alpha",
     "role": "Creator",
     "thesis": "One authoritative document state for human and AI edits",
     "responsibility": "Product design, Go XLSX adapter, MCP transport, Univer editor, revision, history, persistence, and verification",
@@ -263,7 +323,7 @@ export const projectEn: Record<string, ProjectTranslation> = {
             "id": "problem",
             "title": "Two editors still need one definition of saved state",
             "paragraphs": [
-                "I designed and implemented the product, XLSX adapter, transports, editor, and recovery model as an independent project. It remains a private local XLSX alpha.",
+                "I independently designed and implemented the product, XLSX adapter, transports, editor, and recovery model as a local XLSX alpha.",
                 "If a person and an AI both read revision 12, accepting both writes without a revision boundary can lose the earlier change. A successful save followed by a lost response is different: automatically retrying a row insertion can duplicate it, and a higher server revision does not identify which request succeeded.",
                 "A workbook is more than displayed cell values. A small edit must not silently discard formulas, validation, or charts. The UI engine cannot be assumed to own the original document state."
             ]
@@ -341,21 +401,81 @@ export const projectEn: Record<string, ProjectTranslation> = {
     ]
 },
   boundra: {
-    category: 'Open Source · Developer Tool', badge: 'Public Preview', role: 'Creator',
-    thesis: 'Checking TypeScript monorepo domain boundaries with a Rust CLI',
-    responsibility: 'Rule model, Rust analyzer, configuration validation, editor overlay, and benchmark design',
-    focus: ['Static analysis', 'Architecture rules', 'Vite overlay', 'Benchmarking'],
-    summary: 'Built a Rust CLI that checks client, server, shared, domain, and app boundaries through BR-001 to BR-006, with Zod runtime contracts and a Vite development overlay.',
-    evidence: [
-      { val: '6 rules', label: 'BR-001 through BR-006' },
-      { val: '10K files', label: 'Large fixture benchmark' },
-      { val: '164.20 ms', label: 'Measured analysis time' },
+    "category": "Open Source · Developer Tool",
+    "badge": "Public Preview",
+    "role": "Creator",
+    "thesis": "Checking TypeScript domain boundaries with a Rust CLI",
+    "responsibility": "Rule model, Rust analyzer, TypeScript runtime, diagnostics, benchmarks, and releases",
+    "focus": [
+      "Static analysis",
+      "Runtime contracts",
+      "Vite overlay",
+      "Benchmarking"
     ],
-    sections: [
-      { id: 'problem', title: 'Architecture documents drift from the code', paragraphs: ['Layer and import rules are easy to agree on and hard to enforce. Reviewers repeatedly catch the same violations, while developers receive feedback too late.'] },
-      { id: 'decisions', title: 'Make the rule executable and local', paragraphs: ['I implemented BR-001 through BR-006 in a Rust analyzer, validated configuration at runtime with Zod, and connected results to a Vite overlay for immediate feedback.', 'Benchmarks include generated fixtures and a real monorepo snapshot so performance claims remain reproducible instead of anecdotal.'] },
-      { id: 'outcome', title: 'Fast feedback at repository scale', paragraphs: ['The analyzer processed a 10,000-file fixture in 164.20 ms and matched 2,559 import edges. Architecture rules became part of the development loop rather than a document checked after the fact.'] },
+    "summary": "A published Rust CLI and TypeScript runtime connecting BR-001 through BR-006 architecture checks with Zod contracts, scaffolding, and Vite feedback.",
+    "evidence": [
+      {
+        "val": "6 rules",
+        "label": "BR-001 through BR-006"
+      },
+      {
+        "val": "10K files",
+        "label": "Synthetic TypeScript workspace"
+      },
+      {
+        "val": "164.20 ms",
+        "label": "Recorded warm median",
+        "detail": "2026-07-03 · darwin-arm64 · Node 24.14.0"
+      }
     ],
+    "sections": [
+      {
+        "id": "problem",
+        "title": "An architecture convention needs an enforceable boundary",
+        "paragraphs": [
+          "Client code can import server internals or bypass a domain’s public API while still building successfully. I wanted one model for declared domains, execution environments, and public entry points, with diagnostics that explain how to fix a violation."
+        ]
+      },
+      {
+        "id": "decisions",
+        "title": "Connect static structure with runtime feedback",
+        "paragraphs": [],
+        "subsections": [
+          {
+            "title": "Stable architecture rule codes",
+            "paragraphs": [
+              "The Rust analyzer uses domain manifests and BR-001 through BR-006 for client and server boundaries, shared-layer dependencies, private domain access, composition roots, and undeclared dependencies. Diagnostics retain stable codes and actionable paths."
+            ]
+          },
+          {
+            "title": "Validate requests and results at runtime",
+            "paragraphs": [
+              "Zod contracts derive query and mutation inputs and results from schemas and validate actual transport data. A Vite overlay exposes development violations without changing production interfaces."
+            ]
+          },
+          {
+            "title": "Measure repeatable workloads",
+            "paragraphs": [
+              "The release CLI benchmark generates 1,000- and 10,000-file fixtures and records cold and warm medians. A 773-file monorepo comparison checks import-level output against TypeScript preprocessing and helped identify parser exceptions."
+            ]
+          },
+          {
+            "title": "Distribute an installable tool",
+            "paragraphs": [
+              "The NPM launcher retrieves a platform-specific native CLI and verifies its checksum. Scaffolding, resource generation, checks, and Vite feedback are part of the tool flow, with native binaries published through GitHub Releases."
+            ]
+          }
+        ]
+      },
+      {
+        "id": "outcome",
+        "title": "A published tool with a recorded regression baseline",
+        "paragraphs": [
+          "Boundra connects the rule documentation, analyzer, runtime contracts, scaffolding, and development feedback in a public NPM package.",
+          "The July 3, 2026 benchmark recorded 163.32 ms cold and a 164.20 ms warm median for the 10,000-file fixture on darwin-arm64 with Node 24.14.0. The recorded environment and fixture make this workload a repeatable release regression baseline."
+        ]
+      }
+    ]
   },
   owkr: {
     "title": "OWKR Community Tools",
@@ -414,8 +534,9 @@ export const projectEn: Record<string, ProjectTranslation> = {
                     ]
                 },
                 {
-                    "title": "Match: evidence and collaboration scope",
+                    "title": "Match: deployment constraints and regression coverage",
                     "paragraphs": [
+                        "Live collaboration and snapshot sharing use modes within the same Vercel Function. This fits the Hobby function limit while retaining the existing snapshot-sharing path.",
                         "Store tests check revision advancement and stale-write conflicts; contract tests check participant and waiting-list order, full team positions, and invalid IDs.",
                         "Other contributors improved authentication and matchup UI. My work covers the shared contract, API, hook, UI integration, and editor presence."
                     ]
@@ -444,174 +565,519 @@ export const projectEn: Record<string, ProjectTranslation> = {
             "id": "outcome",
             "title": "A connected set of community operations tools",
             "paragraphs": [
-                "Match is used for community match setup and result sharing. Exam implements the admin testing workflow and is deployed. Gather Bot is in development and testing, with recruitment state and restart recovery implemented.",
+                "Match is used for community match setup and result sharing, with collaboration and presence changes included in production deployments. Exam deployments include time controls and test-attempt separation. The operations guide is published on GitHub Pages; Gather Bot is in development and testing.",
                 "The work covers collaborative editing conflicts, server-owned exam state, event processing, recovery, and operational documentation."
             ]
         }
     ]
 },
   jeomjuro: {
-    "title": "Jeomjuro",
-    "category": "Team Product · Monorepo",
+    "category": "Team Product · Production",
     "role": "Frontend Engineer",
-    "thesis": "Improving consumer and admin workflows within a shared team codebase",
-    "responsibility": "Notification and token-reissue BFF, admin search and comment moderation, shared UI and CI, and the post editor",
+    "thesis": "Improving consumer features and admin workflows in one team codebase",
+    "responsibility": "Notification and refresh BFF, admin search and moderation, shared UI, editor, and consumer rendering",
     "focus": [
-        "BFF integration",
-        "Admin workflow",
-        "Shared UI",
-        "Editor UX"
+      "BFF integration",
+      "Admin workflow",
+      "Shared UI",
+      "Editor UX"
     ],
-    "summary": "A collaborative community product for current and future store owners, with contributions to the consumer app, admin tools, shared UI, and writing experience.",
+    "summary": "Improved notification and refresh boundaries, admin workflows, shared UI, and consumer behavior in a community product with production deployments.",
     "evidence": [
-        {
-            "val": "BFF",
-            "label": "Notifications and token reissue"
-        },
-        {
-            "val": "Admin",
-            "label": "Search, deletion, restoration, and state"
-        },
-        {
-            "val": "Editor",
-            "label": "Tiptap writing experience"
-        }
+      {
+        "val": "BFF",
+        "label": "Notification and token refresh routes",
+        "detail": "Included in production code"
+      },
+      {
+        "val": "Admin",
+        "label": "Search, deletion, restoration, and state",
+        "detail": "Consumer and admin deployment history"
+      },
+      {
+        "val": "Editor",
+        "label": "Tiptap writing experience"
+      }
     ],
     "sections": [
-        {
-            "id": "problem",
-            "title": "Consumer and admin changes shared the same codebase",
+      {
+        "id": "problem",
+        "title": "Consumer and admin features were growing together",
+        "paragraphs": [
+          "Jeomjuro is a collaborative community product for current and future store owners. Consumer and admin apps share a monorepo, so authentication, notifications, shared components, and moderation need consistent boundaries.",
+          "My work covered the request path for notification and token refresh, admin search state, article editing, and consumer rendering and session behavior."
+        ]
+      },
+      {
+        "id": "decisions",
+        "title": "Connect product behavior across requests, state, and UI",
+        "paragraphs": [],
+        "subsections": [
+          {
+            "title": "Notification and refresh request boundaries",
             "paragraphs": [
-                "The product needed more consistent authentication and notification requests, admin search state, and post authoring while multiple contributors worked in the same monorepo."
+              "I introduced Next.js Route Handler proxies for notifications and token refresh, forwarding authentication cookies and Authorization and reflecting upstream Set-Cookie responses.",
+              "A same-origin proxy handles the browser EventSource constraint on custom authentication headers. This introduced the boundary where it was needed while preserving the existing API integration."
             ]
-        },
-        {
-            "id": "decisions",
-            "title": "Integrate user and admin workflows",
+          },
+          {
+            "title": "Admin search and moderation",
             "paragraphs": [
-                "I added a Next.js Route Handler proxy limited to notifications and token reissue. It forwards authentication and response cookies and handles the EventSource authentication-header limitation.",
-                "I integrated admin user, post, and comment search plus comment deletion and restoration. I separated typed and applied search values, reset pagination on condition changes, rejected invalid post IDs, and invalidated affected lists. The same change adds shared UI and Storybook examples and standardizes CI workflows on pnpm.",
-                "I replaced Markdown input with a Tiptap editor, connecting formatting, links, colors, image uploads, popover dismissal, and sanitized rendering. Other contributors handled social-login, authentication-state, and deployment changes; my changes build on that shared foundation."
+              "I connected user, post, and comment search with comment deletion and restoration. Draft search input is separate from the applied query, and changing filters resets pagination.",
+              "The changes reject invalid post IDs, refresh related lists after actions, and expand shared UI and Storybook examples. I also aligned CI and Storybook workflows with pnpm."
             ]
-        },
-        {
-            "id": "outcome",
-            "title": "Shared foundations for product and admin changes",
+          },
+          {
+            "title": "Rich article editing",
             "paragraphs": [
-                "The changes were merged into develop, bringing notification and authentication requests, admin search and moderation, shared UI, and post authoring into clearer implementation boundaries."
+              "I replaced Markdown input with a Tiptap editor supporting formatting, links, colors, and image upload. Popovers close on outside interaction or Escape, while rendered content uses permitted color forms and sanitization."
             ]
-        }
+          },
+          {
+            "title": "Consumer rendering and session order",
+            "paragraphs": [
+              "I reduced work on public routes and initial home hydration and corrected ad-banner hydration behavior. Logout keeps the token needed by the server request until that request settles, then clears the client session. This keeps the visible state aligned with the authentication operation."
+            ]
+          }
+        ]
+      },
+      {
+        "id": "outcome",
+        "title": "Changes delivered through consumer and admin deployments",
+        "paragraphs": [
+          "The notification and refresh BFF and admin improvements moved from develop into main and were included in successful production deployments of both apps. Consumer rendering and logout changes are also present in that deployed code.",
+          "I subsequently extended article editing and shared UI examples. Working alongside the team’s social-login and deployment foundation, I improved both the consumer experience and the tools used to operate it."
+        ]
+      }
     ]
-},
+  },
   marker: {
-    category: 'Hackathon · Grand Prize', badge: '12th Highthon Grand Prize', role: 'Frontend Engineer',
-    thesis: 'Connecting emotions to places as a shared map',
-    responsibility: 'Map interaction, two-step contribution form, API contract, and presentation flow',
-    focus: ['Kakao Map', 'Interaction flow', 'API contract', 'Hackathon delivery'],
-    summary: 'A place-based emotion map that won the Grand Prize at the 12th Highthon.',
-    evidence: [{ val: 'Grand Prize', label: '12th Highthon', detail: '2026' }],
-    sections: [
-      { id: 'problem', title: 'Feelings are easier to share with context', paragraphs: ['The team wanted to make emotions visible through places instead of reducing them to an isolated text post.'] },
-      { id: 'decisions', title: 'Keep contribution simple and spatial', paragraphs: ['I built the Kakao Map experience, a two-step place and emotion form, marker sheets, and the frontend API contract. The interaction was scoped for a working hackathon demo.'] },
-      { id: 'outcome', title: 'Grand Prize at the 12th Highthon', paragraphs: ['Marker connected place discovery and emotional expression in one clear flow and received the event Grand Prize.'] },
+    "category": "Hackathon · Grand Prize",
+    "badge": "12th Highthon Grand Prize",
+    "role": "Frontend Engineer",
+    "thesis": "Recording places through emotions and stories",
+    "responsibility": "Map UI, place recording, emotion filters, mobile sheets, and API specification",
+    "focus": [
+      "Kakao Map",
+      "Mobile sheets",
+      "Location UX",
+      "API design"
     ],
+    "summary": "A collaborative map app for recording and exploring emotions attached to places, awarded the 12th Highthon Grand Prize.",
+    "evidence": [
+      {
+        "val": "Grand Prize",
+        "label": "12th Highthon",
+        "detail": "2026"
+      }
+    ],
+    "sections": [
+      {
+        "id": "problem",
+        "title": "Selecting a coordinate needs to lead to a useful action",
+        "paragraphs": [
+          "The hackathon team built a map for recording emotions and stories at places. Location permission, address search, recording, and discovery needed to work as one flow while frontend and backend development happened in parallel."
+        ]
+      },
+      {
+        "id": "decisions",
+        "title": "Connect location, recording, and exploration",
+        "paragraphs": [],
+        "subsections": [
+          {
+            "title": "Map and server state",
+            "paragraphs": [
+              "React, TypeScript, and Vite provide the app foundation, with TanStack Router and Query for navigation and server state. Kakao Map supports current-location movement, coordinate selection, markers, and address search with coordinate conversion."
+            ]
+          },
+          {
+            "title": "Two-step recording",
+            "paragraphs": [
+              "Users first choose an emotion and then add a title, story, and photo. The selected emotion appears in the marker and badge, preserving the meaning of the record beyond its coordinates."
+            ]
+          },
+          {
+            "title": "Discovery on a mobile map",
+            "paragraphs": [
+              "Emotion filters, newest and popular sorting, personal records, and a top-places sheet support discovery. Records sharing a coordinate can be explored with previous and next navigation.",
+              "Forms, place details, and popular lists use bottom sheets, with action and filter placement arranged around the map."
+            ]
+          },
+          {
+            "title": "An explicit backend contract",
+            "paragraphs": [
+              "I documented place-list, detail, creation, deletion, like, and liked-state endpoints with multipart image upload. The shared specification provided a concrete integration target during parallel development."
+            ]
+          }
+        ]
+      },
+      {
+        "id": "outcome",
+        "title": "Grand Prize at the 12th Highthon",
+        "paragraphs": [
+          "Marker connected map selection, emotional recording, image upload, filtering, likes, and sheet interactions in one web app and received the event Grand Prize.",
+          "The main design work was turning a selected location into a clear recording or exploration flow, supported by an explicit API contract."
+        ]
+      }
+    ]
   },
   'rust-with-typescript': {
-    category: 'Open Source · Learning', role: 'Creator',
-    thesis: 'Explaining Rust through concepts TypeScript developers already know',
-    responsibility: 'Curriculum structure, bilingual documentation, examples, and browser runner',
-    focus: ['Technical writing', 'Rust', 'TypeScript', 'Bilingual docs'],
-    summary: 'A bilingual learning project that compares Rust and TypeScript side by side and lets readers run examples in the browser.',
-    sections: [
-      { id: 'problem', title: 'New syntax is not the hardest part of Rust', paragraphs: ['TypeScript developers often understand syntax quickly but struggle to map ownership, borrowing, enums, and traits onto familiar mental models.'] },
-      { id: 'decisions', title: 'Teach through contrast and execution', paragraphs: ['Each chapter pairs TypeScript and Rust examples, explains where the models differ, and provides a browser runner for immediate feedback. Korean and English content share the same curriculum structure.'] },
-      { id: 'outcome', title: 'A bridge between two programming models', paragraphs: ['The project turns abstract Rust concepts into concrete comparisons that web developers can explore without leaving the document.'] },
+    "category": "Personal · Open Source",
+    "badge": "Live",
+    "role": "Creator",
+    "thesis": "Explaining Rust through concepts TypeScript developers already know",
+    "responsibility": "Fourteen-chapter curriculum, bilingual content, example validation, browser runner, and deployment",
+    "focus": [
+      "Developer education",
+      "Rust",
+      "Bilingual docs",
+      "Browser runner"
     ],
+    "summary": "A deployed bilingual Rust guide with 14 chapters, paired TypeScript examples, and a browser runner restricted to documented code.",
+    "evidence": [
+      {
+        "val": "14 chapters",
+        "label": "TypeScript and Rust comparisons",
+        "detail": "Korean and English"
+      },
+      {
+        "val": "SHA-256",
+        "label": "Documented-example execution allowlist"
+      },
+      {
+        "val": "Workers + Axum",
+        "label": "Separate documentation and execution services"
+      }
+    ],
+    "sections": [
+      {
+        "id": "problem",
+        "title": "New syntax is only part of learning Rust",
+        "paragraphs": [
+          "TypeScript developers need a bridge from familiar concepts to ownership, borrowing, and lifetimes. I built a learning environment that pairs examples and displays compiler feedback beside the explanation.",
+          "Running examples also turns a documentation site into an entry point to an execution service. The learning flow and the boundary on accepted requests needed to be designed together."
+        ]
+      },
+      {
+        "id": "decisions",
+        "title": "Connect the curriculum, execution boundary, and deployment",
+        "paragraphs": [],
+        "subsections": [
+          {
+            "title": "Fourteen chapters built around familiar concepts",
+            "paragraphs": [
+              "Astro and Starlight provide Korean and English content. Paired examples cover ownership, borrowing, enums, pattern matching, traits, error handling, and concurrency, explaining how the two type systems express the same problem."
+            ]
+          },
+          {
+            "title": "Separate the document from the Rust process",
+            "paragraphs": [
+              "The site and execution API run on Cloudflare Workers and forward accepted examples to a separate Rust/Axum service. Code blocks display stdout, stderr, exit code, and duration, keeping compiler errors within the learning flow."
+            ]
+          },
+          {
+            "title": "Accept examples included in the documentation",
+            "paragraphs": [
+              "A build step generates a SHA-256 allowlist of runnable snippets. The API normalizes requests and rejects undocumented code before forwarding it, matching a product built for running examples rather than accepting arbitrary input.",
+              "The execution service limits concurrent compilations and per-IP requests, uses separate compile and run timeouts and per-run temporary directories, and truncates returned output."
+            ]
+          },
+          {
+            "title": "Verify and publish the two parts",
+            "paragraphs": [
+              "CI checks the Astro site and the Rust service separately through type checks, builds, clippy, and tests. Main-branch changes deploy to Workers before a version tag and GitHub Release are generated."
+            ]
+          }
+        ]
+      },
+      {
+        "id": "outcome",
+        "title": "A published curriculum with an integrated execution flow",
+        "paragraphs": [
+          "The project provides 14 chapters in Korean and English and an implemented in-document Rust execution flow. The Workers site, source, deployment workflow, and release history are publicly accessible.",
+          "The work extends from technical writing to build-time example validation, API and execution-service separation, feedback display, and release automation."
+        ]
+      }
+    ]
   },
   kivra: {
-    "category": "Team Developer Tool · Prototype",
+    "category": "Team Developer Tool · Local Desktop App",
     "role": "Developer contributor",
     "thesis": "Capturing execution context across terminals and editors",
     "responsibility": "Execution-capture contract, terminal and IDE integrations, and desktop module separation",
     "focus": [
-        "Tauri",
-        "Execution capture",
-        "IDE protocol",
-        "Module boundaries"
+      "Tauri",
+      "Execution capture",
+      "IDE protocol",
+      "Module boundaries"
     ],
-    "summary": "A collaborative local-first developer-memory prototype connecting execution context across a desktop app, VS Code, and JetBrains.",
+    "summary": "A collaborative local-first desktop tool connecting project execution context across a Tauri app, terminal, VS Code, and JetBrains.",
     "evidence": [
-        {
-            "val": "Capture",
-            "label": "Execution capture flow",
-            "detail": "PR #1"
-        },
-        {
-            "val": "Modules",
-            "label": "Rust and renderer responsibility split",
-            "detail": "PR #4"
-        }
+      {
+        "val": "Capture",
+        "label": "Execution capture flow",
+        "detail": "PR #1"
+      },
+      {
+        "val": "Modules",
+        "label": "Rust and renderer responsibility split",
+        "detail": "PR #4"
+      }
     ],
     "sections": [
-        {
-            "id": "problem",
-            "title": "Execution context is scattered across tools",
+      {
+        "id": "problem",
+        "title": "Execution context is scattered across tools",
+        "paragraphs": [
+          "Kivra collects projects, execution history, and solution notes in a local desktop app. I worked on collecting terminal and editor runs in a shared format and showing them alongside project context."
+        ]
+      },
+      {
+        "id": "decisions",
+        "title": "Share a capture contract and separate responsibilities",
+        "paragraphs": [],
+        "subsections": [
+          {
+            "title": "One contract for execution start, events, and completion",
             "paragraphs": [
-                "The team explored collecting terminal execution, errors, and solution context locally and making it accessible from different editors."
+              "In PR #1, I added the capture contract in packages/protocol and connected zsh shell capture, Rust ingestion, and the runs interface. External execution records are included in the desktop Runs list with their output and completion information.",
+              "VS Code and JetBrains use the same capture flow rather than independent record formats. Each integration can evolve while retaining a shared contract for the desktop reader."
             ]
-        },
-        {
-            "id": "decisions",
-            "title": "Share a capture contract and separate responsibilities",
+          },
+          {
+            "title": "Separate the existing desktop responsibilities",
             "paragraphs": [
-                "In PR #1, I added shared start, event, and end contracts and connected shell capture, Rust ingestion, the runs UI, and VS Code and JetBrains integrations.",
-                "In PR #4, I split the existing Rust entry point into authentication, captured-run, project, and integration modules, alongside renderer components, services, and settings. The refactor preserves existing functionality while making each responsibility easier to change independently.",
-                "Another contributor changed central captured-run storage in PR #2, updating VS Code tests and diagnostics. This demonstrates shared work on the same integration boundary after the capture implementation."
+              "In PR #4, I split the existing Rust entry point into authentication, captured-run, project, and integration modules. Renderer components, services, and settings were also separated, preserving behavior while making the responsibilities easier to change independently."
             ]
-        },
-        {
-            "id": "outcome",
-            "title": "A prototype with identifiable contributions",
+          },
+          {
+            "title": "Collaborate on the same integration boundary",
             "paragraphs": [
-                "The capture contract, integrations, and module split were merged. Kivra is a prototype for execution capture and editor integration."
+              "Another contributor updated central captured-run storage in PR #2, including VS Code tests and diagnostics. The team refined record creation, storage paths, and integration diagnostics around the same collection flow."
             ]
-        }
+          }
+        ]
+      },
+      {
+        "id": "outcome",
+        "title": "External runs appear in the local desktop workflow",
+        "paragraphs": [
+          "Terminal, VS Code, and JetBrains integrations produce a shared execution record that Rust reads and passes to the desktop Runs interface.",
+          "Local collection is separate from optional account and synchronization features. My contribution connects the protocol, editor integrations, and module boundaries that let several tools share execution context."
+        ]
+      }
     ]
-},
+  },
   homepage: {
-    title: 'Bigtablet Homepage Renewal', category: 'Company', role: 'Frontend Engineer',
-    thesis: 'Maintaining one coherent brand experience across languages, devices, and releases',
-    responsibility: 'Bilingual content, responsive UI, SEO, and delivery quality',
-    focus: ['Brand experience', 'i18n', 'SEO', 'Delivery'],
-    summary: 'Improved brand expression, bilingual content, responsive behavior, interactions, and delivery quality for the company website.',
-    sections: [
-      { id: 'problem', title: 'Every small detail becomes part of brand trust', paragraphs: ['A company website combines product, company, hiring, policy, and contact content across Korean and English. Copy, links, metadata, and responsive behavior all need to stay accurate.'] },
-      { id: 'decisions', title: 'Treat content and delivery as product quality', paragraphs: ['I organized localized content with next-intl, refined hierarchy and responsive layouts, applied restrained GSAP interactions, and maintained metadata, links, assets, CI, and deployment flows.'] },
-      { id: 'outcome', title: 'A more coherent public product surface', paragraphs: ['The site communicates the company more consistently across languages and devices while remaining easier to maintain and release.'] },
+    "title": "Bigtablet Homepage Renewal",
+    "category": "Company · Public Website",
+    "role": "Frontend Engineer",
+    "thesis": "Keeping localized content, rendering, and motion coherent",
+    "responsibility": "Server and client boundaries, localization, responsive UI, motion cleanup, and SEO",
+    "focus": [
+      "Rendering boundaries",
+      "i18n",
+      "Motion lifecycle",
+      "SEO"
     ],
+    "summary": "Contributed to the company website renewal and maintenance, covering server rendering, bilingual error flows, animation cleanup, and public-site delivery.",
+    "sections": [
+      {
+        "id": "problem",
+        "title": "Localization and interaction extend beyond the main content",
+        "paragraphs": [
+          "I contributed to the renewal and maintenance of Bigtablet’s Korean and English company website, including company information, history, and recruitment content.",
+          "Error screens could retain Korean copy or display mismatched history content. Rapid year changes could also leave an earlier GSAP animation running against the new screen."
+        ]
+      },
+      {
+        "id": "decisions",
+        "title": "Align rendering, language, and interaction lifetimes",
+        "paragraphs": [],
+        "subsections": [
+          {
+            "title": "Keep static composition on the server",
+            "paragraphs": [
+              "I removed the unnecessary client declaration from the main page’s static widget composition. The about page reads localized messages in a server component and validates the history structure with Zod instead of relying on a type assertion."
+            ]
+          },
+          {
+            "title": "Translate failure and return paths",
+            "paragraphs": [
+              "The next-intl messages cover errors, retries, and back-to-list actions across recruitment, blog, about, root error, and 404 pages. I also corrected multiline message rendering and news-image alternative text."
+            ]
+          },
+          {
+            "title": "Clean up the animations an effect creates",
+            "paragraphs": [
+              "History animations run inside a gsap.context scoped to the content element and revert on cleanup. This cleans up the created tweens as well as the animation frame when the year changes or the screen unmounts.",
+              "A reduced-motion hook is applied to scroll effects and the banner so interaction respects the user’s system preference."
+            ]
+          },
+          {
+            "title": "Maintain the public delivery surface",
+            "paragraphs": [
+              "I maintained metadata, sitemap and robots output, asset paths, localized links, and responsive behavior alongside build checks and deployment-branch changes."
+            ]
+          }
+        ]
+      },
+      {
+        "id": "outcome",
+        "title": "Concrete changes to rendering, language, and motion",
+        "paragraphs": [
+          "Static page composition moved to server rendering while interactive areas retained client behavior. Localization now includes error, retry, and return actions.",
+          "History animations clean up on transitions and support reduced-motion preferences. Public commits show the authored changes to these rendering and interaction boundaries."
+        ]
+      }
+    ]
   },
   echo: {
-    category: 'Hackathon · Excellence Prize', badge: '제11회 하이톤 우수상', role: 'Frontend Engineer',
-    thesis: 'Turning a live voice into a shared group experience',
-    responsibility: 'Real-time audio UI, WebSocket lifecycle, group flows, and statistics',
-    focus: ['WebSocket audio', 'Resource cleanup', 'Group UX', 'Hackathon delivery'],
-    summary: 'A real-time voice experience that received the Excellence Prize at the 11th Highthon.',
-    sections: [
-      { id: 'problem', title: 'Real-time audio is also a lifecycle problem', paragraphs: ['Recording, streaming, reconnecting, and leaving a room all create resources that must be reflected clearly in the UI and cleaned up correctly.'] },
-      { id: 'decisions', title: 'Model connection state as product state', paragraphs: ['I connected audio streaming over WebSocket with explicit cleanup, group participation flows, and result statistics, keeping the hackathon scope focused on one complete experience.'] },
-      { id: 'outcome', title: 'Excellence Prize at the 11th Highthon', paragraphs: ['Echo delivered an end-to-end real-time voice experience and received the event Excellence Prize.'] },
+    "category": "Hackathon · Excellence Prize",
+    "badge": "11th Highthon Excellence Prize",
+    "role": "Frontend Engineer",
+    "thesis": "Connecting voice detection feedback with a clear recording lifecycle",
+    "responsibility": "Expo interfaces, WebSocket state, audio lifecycle, group flows, and statistics UI",
+    "focus": [
+      "React Native",
+      "WebSocket",
+      "Audio lifecycle",
+      "Data visualization"
     ],
+    "summary": "An Expo hackathon app connecting voice-detection feedback, group management, and statistics interfaces, awarded the 11th Highthon Excellence Prize.",
+    "evidence": [
+      {
+        "val": "Excellence Prize",
+        "label": "11th Highthon",
+        "detail": "2025"
+      },
+      {
+        "val": "WebSocket",
+        "label": "Connection and detection-result states"
+      },
+      {
+        "val": "Web Audio",
+        "label": "Browser audio capture and transmission"
+      }
+    ],
+    "sections": [
+      {
+        "id": "problem",
+        "title": "Recording and connection state change independently",
+        "paragraphs": [
+          "The team built a voice-feedback app with group and statistics screens. I worked on Expo interfaces, group integration, connection state, and audio resource handling.",
+          "Permission, server connection, and recording can change at different moments. Starting, stopping, and disconnecting needed clear ordering so the screen and microphone state did not drift apart."
+        ]
+      },
+      {
+        "id": "decisions",
+        "title": "Model the lifecycle alongside the interface",
+        "paragraphs": [],
+        "subsections": [
+          {
+            "title": "Show recording and server feedback together",
+            "paragraphs": [
+              "Expo Router separates Home, Group, Create, and Statistics. The home screen reflects the recording toggle, connection, and parsed server text, detection, confidence, and energy values.",
+              "Connection timeouts, errors, and close codes are distinguished. An unexpected disconnect triggers cleanup and a reconnect attempt while the user has the feature enabled. Resource cleanup is separate from stop-API calls to avoid a recursive shutdown path."
+            ]
+          },
+          {
+            "title": "Use environment-specific audio paths",
+            "paragraphs": [
+              "The browser converts Web Audio input to Int16 samples and sends them over WebSocket. The native path uses expo-av to start and stop recording and sends recording-status messages.",
+              "Cleanup covers processors, audio contexts, stream tracks, recording objects, and timers. Permission, recording API, and connection checks run in sequence, with toggle state restored when a step fails."
+            ]
+          },
+          {
+            "title": "Connect group operations and build exploratory statistics UI",
+            "paragraphs": [
+              "The group flow covers creation, joined groups, invitation codes, forbidden-word actions, and sortable member lists.",
+              "The statistics interface uses sample data for React Native SVG charts, hourly and weekly views, point selection, tooltips, and metric cards. Horizontal scrolling keeps hourly values explorable on a narrow screen."
+            ]
+          }
+        ]
+      },
+      {
+        "id": "outcome",
+        "title": "A complete hackathon presentation across the main screens",
+        "paragraphs": [
+          "The app connected detection feedback, recording and connection state, group operations, and statistics interfaces and received the 11th Highthon Excellence Prize.",
+          "The project combined fast interface delivery with explicit permission, connection, and audio cleanup sequencing."
+        ]
+      }
+    ]
   },
   chorus: {
-    category: 'Creative Tool', role: 'Creator',
-    thesis: 'Giving shared music a sense of material and motion',
-    responsibility: 'Music search, 3D vinyl rendering, mobile composition, and image export',
-    focus: ['Svelte 5', 'Threlte', 'Three.js', 'Image export'],
-    summary: 'A mobile music-card maker that turns a selected song into a rotating 3D vinyl and exports a story-sized image.',
-    sections: [
-      { id: 'problem', title: 'Most music sharing cards feel interchangeable', paragraphs: ['Listeners needed a fast way to search, preview, and export a more tactile vertical composition from a phone.'] },
-      { id: 'decisions', title: 'Combine a simple flow with a physical object', paragraphs: ['SvelteKit manages the search and selection flow, while Threlte and Three.js render album art as a rotating vinyl with reflective materials. The WebGL result can be exported as a high-resolution PNG.'] },
-      { id: 'outcome', title: 'Search, render, and export in one flow', paragraphs: ['Users can turn an iTunes search result into a vertical 3D music card ready for social sharing.'] },
+    "category": "Personal · Creative Tool",
+    "role": "Creator",
+    "thesis": "Giving shared music a sense of material and motion",
+    "responsibility": "Music search, Web Audio behavior, 3D rendering, mobile composition, and image export",
+    "focus": [
+      "Svelte 5",
+      "Threlte",
+      "Three.js",
+      "Image export"
     ],
+    "summary": "A deployed music-card maker connecting iTunes search, audio preview, reactive 3D vinyl, and vertical image export.",
+    "evidence": [
+      {
+        "val": "Live",
+        "label": "Public service deployment"
+      },
+      {
+        "val": "Web Audio",
+        "label": "Gesture-driven playback and visualization"
+      },
+      {
+        "val": "PNG",
+        "label": "Capture WebGL and card content together"
+      }
+    ],
+    "sections": [
+      {
+        "id": "problem",
+        "title": "A visual card still needs to work on a phone",
+        "paragraphs": [
+          "I wanted to turn a song, album cover, and short message into a vertical sharing card. Search, audio preview, 3D rendering, and saving needed to form one mobile flow.",
+          "This required handling browser audio policies, capturing WebGL content, and adapting image saving to different devices."
+        ]
+      },
+      {
+        "id": "decisions",
+        "title": "Connect rendering to playback and export behavior",
+        "paragraphs": [],
+        "subsections": [
+          {
+            "title": "Search and card state",
+            "paragraphs": [
+              "SvelteKit and Svelte 5 Runes connect iTunes search and track selection to the studio. The cover, title, artist, and custom message are reflected in one composition."
+            ]
+          },
+          {
+            "title": "Audio-driven material and motion",
+            "paragraphs": [
+              "Threlte and Three.js render a reflective vinyl record. Web Audio frequency data drives a bass-responsive visualizer, while playback controls rotation and visual state.",
+              "Audio context creation, resume, and playback begin from a user gesture for mobile browsers. Leaving the screen pauses audio, closes the context, and cancels the animation frame."
+            ]
+          },
+          {
+            "title": "Capture WebGL and text together",
+            "paragraphs": [
+              "The WebGL renderer preserves its drawing buffer and html-to-image captures the canvas with the surrounding card. A saving guard prevents duplicate requests and a brief render delay precedes capture.",
+              "Desktop export triggers a download; mobile export opens the image for saving. Link sharing prefers the Web Share API and falls back to copying the URL."
+            ]
+          }
+        ]
+      },
+      {
+        "id": "outcome",
+        "title": "Search, listen, compose, and save in one deployed flow",
+        "paragraphs": [
+          "Chorus connects music search, audio preview, reactive 3D rendering, message editing, and vertical PNG export in a publicly deployed service.",
+          "The implementation addresses browser-specific playback, sharing, and saving behavior alongside the visual experience."
+        ]
+      }
+    ]
   },
+
 };

@@ -4,7 +4,7 @@ title: "점주로"
 titleKo: "점주로"
 group: team
 featured: false
-category: "Team Product · Monorepo"
+category: "Team Product · Production"
 badge: "pnpm Monorepo"
 year: "2026"
 role: "프론트엔드 개발자"
@@ -14,8 +14,8 @@ thesis: "사용자 기능과 관리자 도구를 같은 팀 코드베이스에�
 responsibility: "알림·인증 재발급 BFF, 관리자 검색·댓글 삭제·복구, 공통 UI와 CI 정리, 게시글 에디터 개선"
 focus: ["BFF integration", "Admin workflow", "Shared UI", "Editor UX"]
 evidence:
-  - { val: "BFF", label: "알림·인증 재발급에 한정한 도입" }
-  - { val: "Admin", label: "검색·삭제·복구와 상태 처리" }
+  - { val: "BFF", label: "알림·인증 재발급 요청 경로", detail: "운영 배포 코드에 반영" }
+  - { val: "Admin", label: "검색·삭제·복구와 상태 처리", detail: "consumer·admin 배포 이력" }
   - { val: "Editor", label: "Tiptap 글쓰기 경험" }
 metrics: []
 callouts: []
@@ -40,9 +40,9 @@ tech:
 
 ## 선택한 방법
 
-### 알림과 인증 재발급에 한정한 BFF
+### 알림과 인증 재발급의 요청 경계
 
-Next.js Route Handler 기반 프록시를 추가했습니다. 인증 쿠키와 Authorization을 전달하고 백엔드의 Set-Cookie를 응답에 반영했습니다. 브라우저 EventSource가 인증 헤더를 직접 넣을 수 없는 조건도 프록시에서 처리했습니다. 전면적인 서버 구조 교체가 아니라 알림과 인증 재발급에 범위를 한정한 도입입니다.
+Next.js Route Handler 기반 프록시를 알림과 인증 재발급 경로에 도입했습니다. 인증 쿠키와 Authorization을 전달하고 백엔드의 Set-Cookie를 응답에 반영했습니다. 브라우저 EventSource가 인증 헤더를 직접 넣을 수 없는 조건은 같은 출처의 프록시에서 처리했습니다. 기존 API 연결을 유지하면서 요청 경계가 필요한 흐름부터 적용했습니다.
 
 ### 관리자 검색과 삭제·복구
 
@@ -52,10 +52,12 @@ Next.js Route Handler 기반 프록시를 추가했습니다. 인증 쿠키와 A
 
 기존 Markdown 입력기를 Tiptap 기반 에디터로 교체했습니다. 서식, 링크, 색상과 이미지 업로드를 작성 흐름에 연결하고 팝오버의 외부 클릭·Escape 닫기를 처리했습니다. 렌더링 쪽에는 허용된 색상 표현과 sanitization을 연결했습니다.
 
-### 팀 작업 안에서의 담당 범위
+### 사용자 화면의 렌더링과 인증 상태
 
-다른 기여자의 소셜 로그인, 인증 상태와 배포 관련 변경도 같은 저장소에 병합되어 있습니다. 저는 위 PR의 BFF, 관리자 상태 처리, 공통 UI·검증 흐름과 에디터 변경을 담당했습니다. 팀이 개발한 인증과 배포 기반 위에서 사용자 기능과 관리자 도구를 개선했습니다.
+공개 화면의 렌더링 비용을 줄이고 홈의 초기 hydration 작업과 광고 배너의 hydration 동작을 보완했습니다. 로그아웃에서는 서버 요청에 필요한 토큰을 유지한 채 종료 처리를 마친 뒤 클라이언트 세션을 정리하도록 순서를 조정했습니다. 사용자가 보는 상태와 아직 진행 중인 인증 요청이 어긋나지 않도록 한 작업입니다.
 
 ## 확인한 결과
 
-위 변경들은 develop 브랜치에 병합되었습니다. 인증과 알림의 요청 경계를 정리하고, 관리자 검색·삭제·복구와 게시글 작성 흐름을 개선했습니다. 공통 UI와 Storybook 예제를 함께 갱신해 사용자 화면과 관리자 도구에서 변경을 이어갈 수 있도록 했습니다.
+알림·인증 BFF와 관리자 도구 개선은 develop에서 main으로 승격된 뒤 consumer와 admin의 운영 배포에 반영됐습니다. 사용자 화면의 렌더링·로그아웃 개선도 같은 운영 배포 코드에 포함되어 있습니다.
+
+이후 게시글 에디터를 확장하고 공통 UI와 Storybook 예제를 함께 갱신했습니다. 팀의 소셜 로그인·배포 기반과 협업하면서, 사용자 기능부터 관리자 운영 도구까지 제품의 양쪽 흐름을 개선한 경험입니다.

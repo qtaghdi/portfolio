@@ -6,6 +6,7 @@ import Footer from './Footer.astro';
 import { copy, localePath, projectPath, type Locale } from '../i18n';
 import { projectEn, projectKey } from '../i18n/projects';
 import ProjectVisual from './ProjectVisual.astro';
+import ProjectText from './ProjectText.astro';
 interface Props { locale: Locale; project: CollectionEntry<'projects'>; }
 const { locale, project } = Astro.props;
 const { Content } = await project.render();
@@ -53,11 +54,11 @@ const screenCaptions: Record<string, { ko: string; en: string }> = {
         {locale === 'ko' ? <div class="mdx-content"><Content /></div> : translation.sections.map((section) => (
           <section id={section.id} class="content-section">
             <h2>{section.title}</h2>
-            {section.paragraphs.map((paragraph) => <p>{paragraph}</p>)}
+            {section.paragraphs.map((paragraph) => <p><ProjectText text={paragraph} references={data.traceLinks} /></p>)}
             {section.subsections?.map((subsection) => <div class="case-subsection">
               <h3>{subsection.title}</h3>
-              {subsection.paragraphs.map((paragraph) => <p>{paragraph}</p>)}
-              {subsection.items && <ul>{subsection.items.map((item) => <li>{item}</li>)}</ul>}
+              {subsection.paragraphs.map((paragraph) => <p><ProjectText text={paragraph} references={data.traceLinks} /></p>)}
+              {subsection.items && <ul>{subsection.items.map((item) => <li><ProjectText text={item} references={data.traceLinks} /></li>)}</ul>}
             </div>)}
             {section.links && <div class="project-links">{section.links.map((link) => <a href={link.href} target="_blank" rel="noopener noreferrer">{link.label}</a>)}</div>}
           </section>
@@ -69,7 +70,7 @@ const screenCaptions: Record<string, { ko: string; en: string }> = {
             {data.github && <a href={data.github} target="_blank" rel="noopener noreferrer">{dictionary.github}</a>}
             {data.traceLinks.map((link) => <a href={link.href} target="_blank" rel="noopener noreferrer">{locale === 'ko' ? link.label : link.labelEn}</a>)}
           </div>
-          {data.evidence.length > 0 && <dl class="evidence">{data.evidence.map((item) => <div><dt>{item.val}</dt><dd>{item.label}{item.detail && <small>{item.detail}</small>}</dd></div>)}</dl>}
+          {data.evidence.length > 0 && <dl class="evidence">{data.evidence.map((item) => <div><dt>{item.val}</dt><dd><ProjectText text={item.label} references={data.traceLinks} />{item.detail && <small><ProjectText text={item.detail} references={data.traceLinks} /></small>}</dd></div>)}</dl>}
           {hasEvidenceScreen && <figure class="screen-evidence">
             <div id="project-visual" class:list={['case-visual', { 'mobile-screen': key === 'intranet' }]}><ProjectVisual projectKey={key} locale={locale} variant="detail" /></div>
             <figcaption>{screenCaptions[key][locale]}</figcaption>
