@@ -1,0 +1,837 @@
+{
+  "date": "2026-10-29",
+  "portfolioBase": "15c046a",
+  "method": "Scoped authorship and changed-file review at fixed remote refs. Not exhaustive production verification.",
+  "repositories": [
+    {
+      "key": "notiiv",
+      "repository": "Bigtablet/bigtablet-notiiv-monorepo-web",
+      "status": "cached-ref-only",
+      "refs": {
+        "main": "7a6b140d7f3089cc94a8c1d0d7637c96a3a5cfe4",
+        "develop": "7af0d3420b40e8c28f42136796a3913d2625e3d3"
+      },
+      "representativeAuthoredCommits": [
+        {
+          "sha": "1edef5edac15847a15eda1364b1e3b2403ecf846",
+          "author": "Engy Park",
+          "date": "2026-07-30",
+          "subject": "fix: reject external targets in the BFF redirect helper",
+          "reachableFrom": [
+            "main",
+            "develop"
+          ],
+          "changedFiles": [
+            "apps/owner/src/__tests__/app/api/bff.utils.test.ts",
+            "apps/owner/src/app/api/[...path]/utils.ts"
+          ]
+        }
+      ],
+      "conclusion": "SSO 403. Cached remote ref only; not verified as current. Existing capture retained."
+    },
+    {
+      "key": "design-system",
+      "repository": "Bigtablet/bigtablet-design-system",
+      "status": "fresh-fetch",
+      "refs": {
+        "main": "07e7a60f52615f20e8a501690168413580423d02",
+        "develop": "c1f2fd4009a6d0d2f11f137e54c7ea0c4157992e"
+      },
+      "representativeAuthoredCommits": [
+        {
+          "sha": "3a9c75010f1f0aeae551e2127e7c4b5f1e7a355e",
+          "author": "박상민",
+          "date": "2026-10-23",
+          "subject": "feat: ship per-component esm modules so each component brings only its own css",
+          "reachableFrom": [
+            "main",
+            "develop"
+          ],
+          "changedFiles": [
+            "package.json",
+            "scripts/build-modules.mjs",
+            "tsup.config.ts"
+          ]
+        },
+        {
+          "sha": "32972ad735ff921c2bfc1fa84867cfb50dd1dc96",
+          "author": "박상민",
+          "date": "2026-10-23",
+          "subject": "refactor: replace react-spring overlay motion with css presence transitions",
+          "reachableFrom": [
+            "main",
+            "develop"
+          ],
+          "changedFiles": [
+            ".storybook/vitest.setup.ts",
+            "package.json",
+            "pnpm-lock.yaml",
+            "pnpm-workspace.yaml",
+            "scripts/check-overlay-geometry.py",
+            "src/index.ts",
+            "src/stories/foundation/colors.stories.tsx",
+            "src/styles/motion/_index.scss",
+            "src/test/browser-setup.ts",
+            "src/test/setup.ts",
+            "src/test/stub-animation.ts",
+            "src/ui/feedback/alert/alert.test.tsx",
+            "src/ui/feedback/alert/index.tsx",
+            "src/ui/feedback/alert/style.scss",
+            "src/ui/feedback/toast/index.tsx"
+          ]
+        },
+        {
+          "sha": "1e66a69c76fddd8651e3d3518f8017ac84d75f6b",
+          "author": "박상민",
+          "date": "2026-10-27",
+          "subject": "feat: add visual regression tests for core components in the playwright image",
+          "reachableFrom": [
+            "main",
+            "develop"
+          ],
+          "changedFiles": [
+            ".github/workflows/ci.yml",
+            ".gitignore",
+            "CLAUDE.md",
+            "docs/TESTING.md",
+            "package.json",
+            "scripts/accept-visual.sh",
+            "src/test/components.visual.test.tsx",
+            "src/test/visual-setup.ts",
+            "vitest.config.ts"
+          ]
+        }
+      ],
+      "conclusion": "Verified authorship and changes for ESM/CSS distribution, CSS motion, and October 27 visual regression checks. Added CI baseline images with historical labels."
+    },
+    {
+      "key": "homepage",
+      "repository": "Bigtablet/bigtablet-homepage-web",
+      "status": "fresh-fetch",
+      "refs": {
+        "main": "2b5b365cf566ad8c9aaa9180a3da97821a91c6dd",
+        "develop": "b575d3876776fb9d321cf6731856a84736cab383"
+      },
+      "representativeAuthoredCommits": [
+        {
+          "sha": "08d0f567e70edb9388cbb9a1b7eb4ef934401720",
+          "author": "Engy Park",
+          "date": "2026-05-07",
+          "subject": "fix: server components and full i18n coverage",
+          "reachableFrom": [
+            "main",
+            "develop"
+          ],
+          "changedFiles": [
+            "messages/en.json",
+            "messages/ko.json",
+            "src/app/(i18n)/about/[id]/error.tsx",
+            "src/app/(i18n)/about/page.tsx",
+            "src/app/(i18n)/blog/[idx]/client.tsx",
+            "src/app/(i18n)/blog/[idx]/error.tsx",
+            "src/app/(i18n)/main/page.tsx",
+            "src/app/(i18n)/recruit/[idx]/client.tsx",
+            "src/app/(i18n)/recruit/[idx]/error.tsx",
+            "src/app/(i18n)/recruit/page-client.tsx",
+            "src/app/error.module.scss",
+            "src/app/error.tsx",
+            "src/app/not-found.module.scss",
+            "src/app/not-found.tsx",
+            "src/shared/ui/error-fallback/index.tsx"
+          ]
+        },
+        {
+          "sha": "cae02df0c5afa0955cf1488c27b4fafe14fcb33f",
+          "author": "Engy Park",
+          "date": "2026-06-23",
+          "subject": "fix: scope history animation with gsap.context for full cleanup",
+          "reachableFrom": [
+            "main",
+            "develop"
+          ],
+          "changedFiles": [
+            "src/widgets/about/history/index.tsx"
+          ]
+        },
+        {
+          "sha": "2d20f56f2d1b35d8f860832151527702dc411297",
+          "author": "Engy Park",
+          "date": "2026-06-30",
+          "subject": "feat: temporarily serve static design home at / (director request)",
+          "reachableFrom": [
+            "main",
+            "develop"
+          ],
+          "changedFiles": [
+            "biome.json",
+            "public/home-temp.html",
+            "src/proxy.ts"
+          ]
+        }
+      ],
+      "conclusion": "Verified rendering, i18n, and animation cleanup. June 30 static-home replacement means current public design differs from the historical renewal case. Added this distinction instead of claiming the current design as authored work."
+    },
+    {
+      "key": "intranet",
+      "repository": "Bigtablet/bigtablet-intranet-app",
+      "status": "SSO-blocked",
+      "conclusion": "SSO 403 prevented clone. Previous evidence and capture retained; excluded from fresh Git comparison."
+    },
+    {
+      "key": "document-workspace",
+      "repository": "qtaghdi/document-workspace",
+      "status": "fresh-fetch",
+      "refs": {
+        "main": "6251b78f479cc3ec588fb9c9a6e65a6173c3ccbe"
+      },
+      "representativeAuthoredCommits": [
+        {
+          "sha": "78caeda6d8f3ec225ddeb9cae8548d63bedcc8c5",
+          "author": "박상민",
+          "date": "2026-10-20",
+          "subject": "fix(xlsx): preserve validation display attributes",
+          "reachableFrom": [
+            "main"
+          ],
+          "changedFiles": [
+            "CHANGELOG.md",
+            "docs/architecture.md",
+            "docs/format-support.md",
+            "docs/release-evidence/xlsx-native-excel-template.md",
+            "docs/xlsx-native-excel-verification.md",
+            "internal/formats/xlsx/session.go",
+            "internal/formats/xlsx/types.go",
+            "internal/formats/xlsx/validation_preservation.go",
+            "internal/formats/xlsx/validation_preservation_test.go",
+            "testdata/xlsx/compatibility/README.md"
+          ]
+        },
+        {
+          "sha": "6c740d6c4a7fd69060e1bc4d11b8f8a2f1e81eda",
+          "author": "박상민",
+          "date": "2026-10-16",
+          "subject": "feat(mcp): open browser editor and control alerts",
+          "reachableFrom": [
+            "main"
+          ],
+          "changedFiles": [
+            ".agents/skills/document-xlsx/SKILL.md",
+            "CHANGELOG.md",
+            "apps/web-editor/src/ui/app-view.ts",
+            "apps/web-editor/tests/history-controls.test.mjs",
+            "apps/web-editor/tests/ui-shell.test.mjs",
+            "docs/architecture.md",
+            "docs/format-support.md",
+            "docs/getting-started.md",
+            "docs/host-compatibility.md",
+            "docs/product-plan.md",
+            "docs/product-spec.md",
+            "internal/hostinstall/assets/document-xlsx/SKILL.md",
+            "internal/transport/httpapi/mcp.go",
+            "internal/transport/httpapi/server_test.go",
+            "internal/transport/httpapi/static/index.html"
+          ]
+        }
+      ],
+      "conclusion": "Current README still says private local XLSX alpha. Inspected validation display-attribute preservation and browser-control follow-ups. Existing October 12 performance records were not rerun."
+    },
+    {
+      "key": "boundra",
+      "repository": "qtaghdi/boundra",
+      "status": "fresh-fetch",
+      "refs": {
+        "main": "a0d82ec61b7c1eef35ae938b601b3f3ff09b367d"
+      },
+      "representativeAuthoredCommits": [
+        {
+          "sha": "59940b3b17c216fe02c216be6d2d747c60bc848b",
+          "author": "Engy Park",
+          "date": "2026-09-14",
+          "subject": "feat(core): support nested domain discovery",
+          "reachableFrom": [
+            "main"
+          ],
+          "changedFiles": [
+            "crates/cli/src/cli.rs",
+            "crates/cli/src/commands/add-dependency.rs",
+            "crates/cli/src/commands/check-boundaries.rs",
+            "crates/cli/src/commands/create-domain.rs",
+            "crates/cli/src/commands/generate.rs",
+            "crates/cli/src/parsing.rs",
+            "crates/cli/tests/check-boundaries.rs",
+            "crates/core/src/lib.rs",
+            "crates/core/tests/config-conformance.rs",
+            "crates/rules/src/lib.rs",
+            "docs/adr/0011-nested-domain-discovery.md",
+            "docs/architecture.md",
+            "docs/boundary-rules.md",
+            "docs/cli-spec-v1.md",
+            "docs/domain-manifest-spec.md"
+          ]
+        },
+        {
+          "sha": "c73d99a5ae782495591efad0f0bc3ffa35dd4603",
+          "author": "Engy Park",
+          "date": "2026-09-14",
+          "subject": "fix(cli): harden nested domain paths",
+          "reachableFrom": [
+            "main"
+          ],
+          "changedFiles": [
+            "crates/cli/src/commands/create-domain.rs",
+            "crates/cli/tests/check-boundaries.rs",
+            "crates/core/src/lib.rs",
+            "docs/boundary-rules.md",
+            "docs/cli-spec-v1.md",
+            "docs/domain-manifest-spec.md"
+          ]
+        },
+        {
+          "sha": "7d78526249be79435b47f88d58a302098418ae27",
+          "author": "Engy Park",
+          "date": "2026-09-14",
+          "subject": "fix(core): resolve package import aliases",
+          "reachableFrom": [
+            "main"
+          ],
+          "changedFiles": [
+            "crates/cli/tests/check-boundaries.rs",
+            "crates/core/src/lib.rs",
+            "crates/core/tests/config-conformance.rs",
+            "crates/rules/src/lib.rs",
+            "docs/cli-spec-v1.md",
+            "docs/config-spec.md",
+            "docs/next-steps.md"
+          ]
+        }
+      ],
+      "conclusion": "Inspected v0.6.0 nested-domain discovery, path validation, and package-import alias resolution. Added the feature scope while retaining July performance figures as historical."
+    },
+    {
+      "key": "jeomjuro",
+      "repository": "winwin1010/winwin_front04",
+      "status": "fresh-fetch",
+      "refs": {
+        "main": "ec1b670d1795c71f2ca6ed6236bd1c2e876c714a",
+        "develop": "af67b6f8afe766ca748ec54b2d339487e32e0d2b"
+      },
+      "representativeAuthoredCommits": [
+        {
+          "sha": "c76035f14a24f7b7a8124d3c15dc0ac81f90641e",
+          "author": "Engy Park",
+          "date": "2026-07-08",
+          "subject": "fix(consumer): address wysiwyg editor review",
+          "reachableFrom": [
+            "develop"
+          ],
+          "changedFiles": [
+            "apps/consumer/src/widgets/community/ui/wysiwyg-editor/index.tsx",
+            "apps/consumer/src/widgets/community/ui/wysiwyg-editor/tiptap-editor.tsx"
+          ]
+        },
+        {
+          "sha": "21fe44371251dc2cee5bd87a02089332948bed6f",
+          "author": "Engy Park",
+          "date": "2026-06-22",
+          "subject": "fix(consumer): apply nonce to inline metadata script",
+          "reachableFrom": [
+            "main",
+            "develop"
+          ],
+          "changedFiles": [
+            "apps/consumer/proxy.ts",
+            "apps/consumer/src/app/layout.tsx"
+          ]
+        }
+      ],
+      "conclusion": "Reviewed main and develop separately. Editor follow-up is on develop; merging there is not proof of production deployment. Existing attribution boundary retained."
+    },
+    {
+      "key": "marker",
+      "repository": "highthon-12/marker-web",
+      "status": "fresh-fetch",
+      "refs": {
+        "main": "c18741c51108af797b30d5c857a84436598f5e63"
+      },
+      "representativeAuthoredCommits": [
+        {
+          "sha": "b75c3d908a93faa85d887a7ce4288a397bab6d74",
+          "author": "Engy Park",
+          "date": "2026-02-21",
+          "subject": "Create API.md",
+          "reachableFrom": [
+            "main"
+          ],
+          "changedFiles": []
+        },
+        {
+          "sha": "c18741c51108af797b30d5c857a84436598f5e63",
+          "author": "Engy Park",
+          "date": "2026-02-22",
+          "subject": "c",
+          "reachableFrom": [
+            "main"
+          ],
+          "changedFiles": [
+            "index.html",
+            "public/manifest.json"
+          ]
+        }
+      ],
+      "conclusion": "Authored commit messages are weak evidence; inspected changed files without treating commit totals as impact. Award remains prior owner-confirmed evidence. Map environment not launched."
+    },
+    {
+      "key": "echo",
+      "repository": "Team-JackOLantern/echo-app",
+      "status": "fresh-fetch",
+      "refs": {
+        "main": "890bd7ff9d47ed726bf89dac803290701abb9eb3"
+      },
+      "representativeAuthoredCommits": [
+        {
+          "sha": "890bd7ff9d47ed726bf89dac803290701abb9eb3",
+          "author": "박상민",
+          "date": "2025-08-03",
+          "subject": "feat: group",
+          "reachableFrom": [
+            "main"
+          ],
+          "changedFiles": [
+            "api/group/group.ts",
+            "api/main/main.ts",
+            "app/(tabs)/group.tsx",
+            "app/(tabs)/plus.tsx",
+            "components/addKeyword.tsx",
+            "components/groupDown.tsx",
+            "hooks/useCreateGroup.ts"
+          ]
+        },
+        {
+          "sha": "d55822a91209f1484e8999f736f0639314ce3643",
+          "author": "박상민",
+          "date": "2025-08-03",
+          "subject": "feat: create group",
+          "reachableFrom": [
+            "main"
+          ],
+          "changedFiles": [
+            "api/group/group.ts",
+            "app/(tabs)/_layout.tsx",
+            "app/(tabs)/create.tsx",
+            "app/create.tsx",
+            "components/group/addKeywordModal.tsx",
+            "components/group/bettingSection.tsx",
+            "components/group/dropdown.tsx",
+            "components/group/keywordlist.tsx",
+            "components/group/podium.tsx",
+            "components/group/userList.tsx",
+            "hooks/useCreateGroup.ts",
+            "hooks/useGroupState.ts",
+            "package.json",
+            "pnpm-lock.yaml",
+            "style/group.style.ts"
+          ]
+        }
+      ],
+      "conclusion": "Inspected authored group UI and creation changes. Native app and voice server not rerun."
+    },
+    {
+      "key": "rust-with-typescript",
+      "repository": "qtaghdi/rust-with-typescript",
+      "status": "fresh-fetch",
+      "refs": {
+        "main": "9f9d96ac9d35ae15118e3e1cfc8e6313aa90e1b7",
+        "develop": "a120ac498b3144182f9bf0457b21855629d9a2c4"
+      },
+      "representativeAuthoredCommits": [
+        {
+          "sha": "23386d4e70b02a4b24417b4913ba4b17350ba442",
+          "author": "Engy Park",
+          "date": "2026-03-13",
+          "subject": "fix(docs): correct chapter numbers in frontmatter to match sidebar",
+          "reachableFrom": [
+            "main",
+            "develop"
+          ],
+          "changedFiles": [
+            "src/content/docs/ch11-testing.md",
+            "src/content/docs/ch4-practical.md",
+            "src/content/docs/ch5-roadmap.md",
+            "src/content/docs/ko/ch11-testing.md",
+            "src/content/docs/ko/ch4-practical.md",
+            "src/content/docs/ko/ch5-roadmap.md"
+          ]
+        },
+        {
+          "sha": "762b934dd894f8c74d341e7fdb64d8e3afa473ab",
+          "author": "Engy Park",
+          "date": "2026-03-11",
+          "subject": "feat(seo): add sitemap, OG image, meta tags, robots.txt",
+          "reachableFrom": [
+            "main",
+            "develop"
+          ],
+          "changedFiles": [
+            "astro.config.mjs",
+            "bun.lock",
+            "package.json",
+            "public/og-image.png",
+            "public/robots.txt",
+            "scripts/generate-og.mjs",
+            "src/content/docs/ch1-mental-model.md",
+            "src/content/docs/ch2-syntax.md",
+            "src/content/docs/ch3-ownership.md",
+            "src/content/docs/ch6-enums.md",
+            "src/content/docs/ch7-collections.md",
+            "src/content/docs/ch8-iterators.md",
+            "src/content/docs/ch9-traits.md",
+            "src/content/docs/index.mdx",
+            "src/content/docs/ko/index.mdx"
+          ]
+        }
+      ],
+      "conclusion": "Verified chapter numbering and SEO changes. Captured public Korean chapter and English home. Execution sandbox not reverified."
+    },
+    {
+      "key": "chorus",
+      "repository": "qtaghdi/chorus",
+      "status": "fresh-fetch",
+      "refs": {
+        "main": "232169f21830402f6e0e5dfabee7b8b16ed6ed08"
+      },
+      "representativeAuthoredCommits": [
+        {
+          "sha": "232169f21830402f6e0e5dfabee7b8b16ed6ed08",
+          "author": "상만",
+          "date": "2026-01-14",
+          "subject": "fix: mobile and desktop image download",
+          "reachableFrom": [
+            "main"
+          ],
+          "changedFiles": [
+            "src/lib/logic/StudioController.svelte.ts"
+          ]
+        },
+        {
+          "sha": "36e118a06e74c7fd8d051cf339df5edcd31b4001",
+          "author": "상만",
+          "date": "2026-01-13",
+          "subject": "fix: mobile play bug",
+          "reachableFrom": [
+            "main"
+          ],
+          "changedFiles": [
+            "src/lib/components/section/Search.svelte",
+            "src/lib/logic/StudioController.svelte.ts"
+          ]
+        }
+      ],
+      "conclusion": "Verified mobile playback and image-download changes. Captured public search entry and original local 3D UI with demo metadata/artwork. Search API returned no results; no API/audio verification claimed."
+    },
+    {
+      "key": "owkr",
+      "repository": "Overwatch-KR/owkr-balance",
+      "status": "fresh-fetch",
+      "refs": {
+        "main": "91d786313399dad137b16efba21ad91c7388e05a"
+      },
+      "representativeAuthoredCommits": [
+        {
+          "sha": "6208942e48f44c32fb9c3b6ea24d201aff0fc523",
+          "author": "Engy Park",
+          "date": "2026-09-15",
+          "subject": "feat(collaboration): show live editor presence",
+          "reachableFrom": [
+            "main"
+          ],
+          "changedFiles": [
+            "CHANGELOG.md",
+            "api/_lib/match-live-store.test.ts",
+            "api/_lib/match-live-store.ts",
+            "api/match-shares/index.ts",
+            "domains/balance/shared/match-live-share.ts",
+            "domains/balance/shared/public.ts",
+            "src/App.tsx",
+            "src/components/layout/app-header.test.tsx",
+            "src/components/layout/app-header.tsx",
+            "src/components/layout/app-navigation-shell.test.tsx",
+            "src/components/layout/app-navigation-shell.tsx",
+            "src/components/match/match-collaboration-activity.tsx",
+            "src/components/match/match-result-panel.test.tsx",
+            "src/components/match/match-result-panel.tsx",
+            "src/components/match/match-sharing-controls.test.tsx"
+          ]
+        },
+        {
+          "sha": "7fb3cf75487162d436843888c0dcafe5e8249060",
+          "author": "Engy Park",
+          "date": "2026-09-14",
+          "subject": "fix(collaboration): restore resilient live sharing",
+          "reachableFrom": [
+            "main"
+          ],
+          "changedFiles": [
+            "src/App.tsx",
+            "src/components/match/match-live-controls.tsx",
+            "src/components/match/match-share-controls.tsx",
+            "src/components/match/match-sharing-controls.test.tsx",
+            "src/hooks/use-match-live-share.ts",
+            "src/utils/match-live-polling.test.ts",
+            "src/utils/match-live-polling.ts",
+            "src/utils/storage/index.ts"
+          ]
+        }
+      ],
+      "conclusion": "Verified collaboration and presence work against current source. Ran actual local team assignment with ten synthetic participants and browser-local auth/user-sheet fixtures. No production writes."
+    },
+    {
+      "key": "owkr-exam",
+      "repository": "Overwatch-KR/owkr-exam",
+      "status": "fresh-fetch",
+      "refs": {
+        "main": "c0e25a845e4dc6976643612cc8ff14f95edf78cf"
+      },
+      "representativeAuthoredCommits": [
+        {
+          "sha": "bc104e783813ad11263244d9a5fa912d575d6f7e",
+          "author": "Engy Park",
+          "date": "2026-10-20",
+          "subject": "fix(exam): 답안 작성 중 완료로 오인되는 안내 수정",
+          "reachableFrom": [
+            "main"
+          ],
+          "changedFiles": [
+            "src/routes/exam/+page.svelte"
+          ]
+        },
+        {
+          "sha": "0a38521f542409a2a5efa813209425e1ae8df188",
+          "author": "박상민",
+          "date": "2026-10-20",
+          "subject": "feat(exam): 응시자 시간 제어와 연장 기록을 서버에서 관리",
+          "reachableFrom": [
+            "main"
+          ],
+          "changedFiles": [
+            "drizzle/0007_gifted_big_bertha.sql",
+            "drizzle/meta/0007_snapshot.json",
+            "drizzle/meta/_journal.json",
+            "package.json",
+            "src/lib/domains/admin/server/actions/attempt-actions.ts",
+            "src/lib/domains/exam/client/mutations/control-exam-time.ts",
+            "src/lib/domains/exam/client/public.ts",
+            "src/lib/domains/exam/domain.json",
+            "src/lib/domains/exam/server/public.ts",
+            "src/lib/domains/exam/server/use-cases/control-exam-time.ts",
+            "src/lib/domains/exam/server/use-cases/get-exam-status.ts",
+            "src/lib/domains/exam/server/use-cases/save-answer.ts",
+            "src/lib/domains/exam/server/use-cases/start-exam.ts",
+            "src/lib/domains/exam/server/use-cases/submit-exam.ts",
+            "src/lib/domains/exam/shared/contracts/control-exam-time.ts"
+          ]
+        }
+      ],
+      "conclusion": "Inspected answer-state and server time-control changes. No live exam or production login performed."
+    },
+    {
+      "key": "owkr-gather-bot",
+      "repository": "Overwatch-KR/owkr-gather-bot",
+      "status": "fresh-fetch",
+      "refs": {
+        "main": "db64aba4889ec1b8e94c8494a4ce3677a10c644e"
+      },
+      "representativeAuthoredCommits": [
+        {
+          "sha": "ae880a7ef65c2d15850fca727e456711b0f0a62f",
+          "author": "Engy Park",
+          "date": "2026-10-29",
+          "subject": "test: verify tier erasure across backup recovery",
+          "reachableFrom": [
+            "main"
+          ],
+          "changedFiles": [
+            "README.md",
+            "docs/README.md",
+            "docs/deletion-request-verification.md",
+            "docs/discord-e2e.md",
+            "tests/test_erasure_recovery.py"
+          ]
+        },
+        {
+          "sha": "b64e749c1c12dbe35e68aba0baac499a3a0b46d6",
+          "author": "Engy Park",
+          "date": "2026-10-29",
+          "subject": "docs: record live backup restore verification",
+          "reachableFrom": [
+            "main"
+          ],
+          "changedFiles": [
+            "docs/deletion-request-verification.md"
+          ]
+        }
+      ],
+      "conclusion": "Inspected October 29 erasure-recovery tests and live-backup verification record. Added explicit manual reapplication requirement; no automatic replay claimed. Tests/production procedures not rerun."
+    },
+    {
+      "key": "owkr-docs",
+      "repository": "Overwatch-KR/owkr-docs",
+      "status": "fresh-fetch",
+      "refs": {
+        "main": "e5e06c08015c2d81460e33c9027116fd6d9b9354"
+      },
+      "representativeAuthoredCommits": [
+        {
+          "sha": "2df38a92e641de3ef00bece2120e92d1d3eac282",
+          "author": "Engy Park",
+          "date": "2026-10-29",
+          "subject": "docs: preserve original privacy revision publication date",
+          "reachableFrom": [
+            "main"
+          ],
+          "changedFiles": [
+            "src/content/policy-revisions/privacy-before-transfer-review.md"
+          ]
+        },
+        {
+          "sha": "ca2a955c7eebd4a396591d8fb718a00fd6b59744",
+          "author": "Engy Park",
+          "date": "2026-10-29",
+          "subject": "docs: record production backup verification results",
+          "reachableFrom": [
+            "main"
+          ],
+          "changedFiles": [
+            "docs/gather-bot/README.md",
+            "docs/gather-bot/review-2026-10-28.md"
+          ]
+        }
+      ],
+      "conclusion": "Inspected policy/backup documentation changes and captured the public guide."
+    },
+    {
+      "key": "kivra",
+      "repository": "Kivra-App/Kivra",
+      "status": "fresh-fetch",
+      "refs": {
+        "main": "1ee244aac2bc512e157b941e8e6e5a0e816acd12"
+      },
+      "representativeAuthoredCommits": [
+        {
+          "sha": "87ad53be7179c6c767dfcb4d1ff0bf343dee3f47",
+          "author": "Engy Park",
+          "date": "2026-06-25",
+          "subject": "feat: add captured run protocol package",
+          "reachableFrom": [
+            "main"
+          ],
+          "changedFiles": [
+            "README.md",
+            "apps/desktop/native/src/lib.rs",
+            "docs/architecture.md",
+            "package.json",
+            "packages/protocol/README.md",
+            "packages/protocol/fixtures/captured-run/end.json",
+            "packages/protocol/fixtures/captured-run/events.jsonl",
+            "packages/protocol/fixtures/captured-run/start.json",
+            "packages/protocol/package.json",
+            "packages/protocol/schemas/captured-run-end.schema.json",
+            "packages/protocol/schemas/captured-run-event.schema.json",
+            "packages/protocol/schemas/captured-run-start.schema.json",
+            "packages/protocol/src/capture.ts",
+            "packages/protocol/src/index.ts",
+            "plugins/jetbrains/src/main/kotlin/ai/kivra/jetbrains/KivraCapturedRunWriter.kt"
+          ]
+        },
+        {
+          "sha": "7c9b5f66c48246669069d5b71134fd64fa5b0b17",
+          "author": "Engy Park",
+          "date": "2026-07-08",
+          "subject": "refactor: split desktop renderer modules",
+          "reachableFrom": [
+            "main"
+          ],
+          "changedFiles": [
+            "apps/desktop/renderer/core/supabase/sync-mappers.ts",
+            "apps/desktop/renderer/core/supabase/sync-service.ts",
+            "apps/desktop/renderer/features/project/components/code-node-detail.tsx",
+            "apps/desktop/renderer/features/project/components/code-node-graph-button.tsx",
+            "apps/desktop/renderer/features/project/components/code-node-outline.tsx",
+            "apps/desktop/renderer/features/project/components/code-node-viewer-utils.ts",
+            "apps/desktop/renderer/features/project/components/code-node-viewer.tsx",
+            "apps/desktop/renderer/features/project/components/code-viewer.tsx",
+            "apps/desktop/renderer/features/project/components/github-import-states.tsx",
+            "apps/desktop/renderer/features/project/components/github-project-import.tsx",
+            "apps/desktop/renderer/features/project/components/github-project-memory-banner.tsx",
+            "apps/desktop/renderer/features/project/components/github-repository-row.tsx",
+            "apps/desktop/renderer/features/project/components/markdown-preview.tsx",
+            "apps/desktop/renderer/features/project/components/project-detail-content.tsx",
+            "apps/desktop/renderer/features/project/components/project-detail-header.tsx"
+          ]
+        }
+      ],
+      "conclusion": "Inspected authored capture protocol and desktop module separation. Prototype status retained; no native capture claimed."
+    },
+    {
+      "key": "apple-music-discord-presence",
+      "repository": "qtaghdi/apple-music-discord-presence",
+      "status": "fresh-fetch",
+      "refs": {
+        "main": "81cc2f87a5708e8f71f1bfd70635f25a6a63a489"
+      },
+      "representativeAuthoredCommits": [
+        {
+          "sha": "317967ac889f11c56a848d855be33d0c2625ff26",
+          "author": "상만",
+          "date": "2026-10-25",
+          "subject": "Fix Windows app icons and validate installer files",
+          "reachableFrom": [
+            "main"
+          ],
+          "changedFiles": [
+            "CHANGELOG.md",
+            "README.ko.md",
+            "README.md",
+            "packaging/windows/Install.ps1",
+            "packaging/windows/README.txt",
+            "packaging/windows/Start.ps1",
+            "settings/assets/brand-mark.ico"
+          ]
+        },
+        {
+          "sha": "6056c99961fd77b120f63d509152ee35297cffc8",
+          "author": "Engy Park",
+          "date": "2026-10-24",
+          "subject": "Release v0.7.0 with Korean documentation and web interfaces",
+          "reachableFrom": [
+            "main"
+          ],
+          "changedFiles": [
+            "CHANGELOG.md",
+            "README.ko.md",
+            "README.md",
+            "package-lock.json",
+            "package.json",
+            "releases/v0.7.0.md",
+            "settings/app.js",
+            "settings/i18n.js",
+            "settings/index.html",
+            "settings/styles.css",
+            "site/app.js",
+            "site/i18n.js",
+            "site/index.html",
+            "site/styles.css",
+            "src/settings-server.ts"
+          ]
+        }
+      ],
+      "conclusion": "Verified 0.7.0 and Windows icon/installer changes. Original Discord capture retained."
+    }
+  ],
+  "localFollowup": {
+    "project": "chorus",
+    "base": "232169f",
+    "patch": "chorus-repair/catalog-fallback.patch",
+    "verification": "Real API search and selected-track lookup, advancing playback clock, custom message, and downloaded PNG checked in local app. Search capture replays the recorded successful API response.",
+    "published": false
+  }
+}

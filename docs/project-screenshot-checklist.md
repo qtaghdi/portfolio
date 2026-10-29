@@ -1,6 +1,8 @@
 # Project screenshot checklist
 
-검토 기준일: 2026-08-25 (Asia/Seoul)
+검토 기준일: 2026-10-29 (Asia/Seoul)
+
+이번 Git 대조와 촬영 출처는 [최신 검토 기록](git-comparison-2026-10-29.md)에 있다. 신규 이미지 9장을 연결했으며, 공개 화면 촬영·로컬 데모·과거 CI 기준 이미지를 캡션으로 구분한다.
 
 포트폴리오 상세 페이지에 실제 제품 화면을 추가하기 위한 준비 목록이다. 스크린샷은 기능 설명을 반복하기보다 프로젝트의 범위와 완성도를 증명하는 화면을 우선한다.
 
@@ -33,12 +35,14 @@
 - [x] Storybook 전체 화면
   - 현재 파일: `public/projects/design-system/storybook-overview.png`
   - 현재 상태: 로컬 Storybook의 Introduction 화면을 원본 크기로 캡처해 연결 완료
-- [ ] 디자인 토큰과 컴포넌트 상태가 함께 보이는 화면
-  - 제안 경로: `public/projects/design-system/tokens-components.png`
+- [x] 디자인 토큰과 적용 예시가 함께 보이는 화면
+  - 현재 파일: `public/projects/design-system/tokens-components.png`
+  - 공개 Storybook의 Semantic Colors 화면을 촬영해 연결했다.
 - [ ] Sidebar와 BottomNav의 반응형 비교
   - 제안 경로: `public/projects/design-system/responsive-navigation.png`
-- [ ] Dark theme 화면 (선택)
-  - 제안 경로: `public/projects/design-system/dark-theme.png`
+- [x] 라이트·다크 테마의 Button 상태
+  - 현재 파일: `public/projects/design-system/button-light-reference.png`, `button-dark-reference.png`
+  - 2026-10-27 CI 기준 이미지를 원본 그대로 연결했다. 새 테스트 실행 결과는 아니다.
 
 ### Jeomjuro
 
@@ -72,15 +76,20 @@
 
 ### Chorus
 
-- [ ] 음악 검색과 3D 바이닐 화면
-  - 제안 경로: `public/projects/chorus/vinyl.png`
-- [ ] 최종 공유 이미지
-  - 제안 경로: `public/projects/chorus/export.png`
+- [x] 음악 검색 진입과 3D 바이닐 화면
+  - 현재 파일: `public/projects/chorus/search.png`, `vinyl.png`
+  - 최신 화면은 지역 카탈로그 대체 조회를 수정한 로컬 앱이다. 검색 화면은 성공한 실제 API 응답 기록을 사용하고, 편집기는 실제 곡 정보를 조회해 촬영했다. 로컬에서 미리 듣기와 PNG 다운로드까지 확인했다.
+- [x] 최종 공유 이미지
+  - 현재 파일: `public/projects/chorus/export.png`
+  - 지역 카탈로그 대체 조회를 수정한 로컬 앱에서 실제 곡을 선택하고 저장한 PNG 원본이다. 공개 서비스의 배포 상태와는 구분한다.
 
 ### OWKR Balance
 
-- [ ] 팀 배정 결과 화면
-  - 제안 경로: `public/projects/owkr/team-result.png`
+- [x] 팀 배정 결과 화면
+  - 현재 파일: `public/projects/owkr/team-result.png`
+  - 로컬 앱에 가상 참가자 10명을 입력하고 실제 팀 배정을 실행했다.
+- [x] 공개 운영 가이드
+  - 현재 파일: `public/projects/owkr/operations-guide.png`
 - [ ] 선수 교체 또는 운영 흐름 화면 (선택)
   - 제안 경로: `public/projects/owkr/operator-flow.png`
 - Discord 닉네임과 개인 메모는 반드시 익명 처리한다.
@@ -114,13 +123,15 @@
 
 ### Rust with TypeScript
 
-문서와 브라우저 실행 결과가 한 화면에 보이는 캡처가 있다면 선택적으로 추가한다.
+- [x] 한국어 Ownership·Borrowing 챕터와 영어 홈
+  - 현재 파일: `public/projects/rust-with-typescript/ownership.png`, `home.png`
+  - 공개 문서를 촬영했다. 코드 실행 결과의 검증은 포함하지 않는다.
 
 ## Integration status
 
 스크린샷 파일이 추가되면 아래 항목을 함께 처리한다.
 
-1. `ProjectVisual.astro` 또는 프로젝트 MDX에서 이미지 경로를 연결한다.
+1. `project-screens.ts`에 출처·크기·국문·영문 캡션을 등록하고, MDX 본문의 관련 문단에 `ProjectScreenshot`을 배치한다. 영문은 같은 설명 위치에 연결한다.
 2. 한국어와 영어 대체 텍스트를 작성한다.
 3. 데스크톱과 모바일에서 잘리지 않는지 확인한다.
 4. 이미지 용량을 최적화한다.

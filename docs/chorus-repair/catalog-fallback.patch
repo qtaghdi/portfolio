@@ -1,0 +1,320 @@
+diff --git a/src/lib/components/section/Search.svelte b/src/lib/components/section/Search.svelte
+index b0e397f..b51c166 100644
+--- a/src/lib/components/section/Search.svelte
++++ b/src/lib/components/section/Search.svelte
+@@ -104,6 +104,10 @@
+         >
+             {#if controller.isLoading && controller.searchResults.length === 0}
+                 <p class="text-white/40 text-center py-20">불러오는 중…</p>
++            {:else if controller.errorMessage}
++                <p role="alert" class="text-white/70 text-center py-20">{controller.errorMessage}</p>
++            {:else if controller.searchResults.length === 0}
++                <p role="status" class="text-white/60 text-center py-20">검색 결과가 없어요. 다른 제목이나 가수로 검색해 보세요.</p>
+             {:else}
+                 <div class="space-y-3">
+                     {#each controller.searchResults as track (track.id)}
+@@ -139,4 +143,4 @@
+     .mask-image-gradient {
+         mask-image: linear-gradient(to bottom, black 95%, transparent);
+     }
+-</style>
+\ No newline at end of file
++</style>
+diff --git a/src/lib/components/section/Studio.svelte b/src/lib/components/section/Studio.svelte
+index 5cc6793..0193fe8 100644
+--- a/src/lib/components/section/Studio.svelte
++++ b/src/lib/components/section/Studio.svelte
+@@ -133,7 +133,7 @@
+                         <span class="text-[10px] text-white/60 font-mono w-8 text-left">{controller.durationStr}</span>
+                     </div>
+                     <div class="flex justify-center">
+-                        <button onclick={() => controller.toggleAudio()} class="w-14 h-14 rounded-full bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center hover:bg-white/20 transition-all active:scale-95 text-white">
++                        <button aria-label={controller.isPlaying ? '일시정지' : '미리 듣기 재생'} onclick={() => controller.toggleAudio()} class="w-14 h-14 rounded-full bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center hover:bg-white/20 transition-all active:scale-95 text-white">
+                             {#if controller.isPlaying}
+                                 <div class="scale-110"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6"><path fill-rule="evenodd" d="M6.75 5.25a.75.75 0 01.75-.75H9a.75.75 0 01.75.75v13.5a.75.75 0 01-.75.75H7.5a.75.75 0 01-.75-.75V5.25zm7.5 0A.75.75 0 0115 4.5h1.5a.75.75 0 01.75.75v13.5a.75.75 0 01-.75.75H15a.75.75 0 01-.75-.75V5.25z" clip-rule="evenodd"/></svg></div>
+                             {:else}
+diff --git a/src/lib/logic/SearchController.svelte.ts b/src/lib/logic/SearchController.svelte.ts
+index 01042a7..5ecc7ab 100644
+--- a/src/lib/logic/SearchController.svelte.ts
++++ b/src/lib/logic/SearchController.svelte.ts
+@@ -56,6 +56,7 @@ export class SearchController {
+      * @description 검색 API 요청 진행 여부
+      */
+     isLoading = $state(false);
++    errorMessage = $state('');
+ 
+     /**
+      * @description 현재 화면에 렌더링 중인 검색 결과 목록
+@@ -117,6 +118,7 @@ export class SearchController {
+ 
+         this.triggerHaptic();
+         this.isLoading = true;
++        this.errorMessage = '';
+         this.isResultMode = true;
+ 
+         this.searchResults = [];
+@@ -138,6 +140,7 @@ export class SearchController {
+             this.#sliceNextPage();
+         } catch (error) {
+             console.error('Search API Error:', error);
++            this.errorMessage = '검색을 불러오지 못했어요. 잠시 후 다시 검색해 주세요.';
+             this.searchResults = [];
+             this.hasMore = false;
+         } finally {
+@@ -207,4 +210,4 @@ export class SearchController {
+             this.search();
+         }
+     }
+-}
+\ No newline at end of file
++}
+diff --git a/src/lib/server/itunes.ts b/src/lib/server/itunes.ts
+new file mode 100644
+index 0000000..62bb8fc
+--- /dev/null
++++ b/src/lib/server/itunes.ts
+@@ -0,0 +1,34 @@
++export interface ITunesTrack {
++    trackId: number;
++    trackName: string;
++    artistName: string;
++    artworkUrl100?: string;
++    collectionName?: string;
++    previewUrl?: string;
++}
++
++/** @description Try the preferred music catalog, then another region for missing tracks. */
++export async function lookupCatalog(fetcher: typeof fetch, endpoint: 'search' | 'lookup', params: Record<string, string>): Promise<ITunesTrack[]> {
++    let completed = false;
++    for (const country of ['KR', 'US']) {
++        try {
++            const url = new URL(`https://itunes.apple.com/${endpoint}`);
++            url.search = new URLSearchParams({ ...params, country }).toString();
++            const response = await fetcher(url, { signal: AbortSignal.timeout(8000) });
++            if (!response.ok) continue;
++            const data = await response.json();
++            if (!Array.isArray(data.results)) continue;
++            completed = true;
++            const tracks = data.results.filter((track: ITunesTrack) => Number.isSafeInteger(track.trackId) && typeof track.trackName === 'string');
++            if (tracks.length) return tracks;
++        } catch { continue; }
++    }
++    if (!completed) throw new Error('Music catalogs are unavailable');
++    return [];
++}
++
++export function toTrack(track: ITunesTrack) {
++    return { id: track.trackId, title: track.trackName, artist: track.artistName,
++        cover: track.artworkUrl100?.replace(/\/\d+x\d+[^/]*\.jpg/, '/1000x1000bb.jpg'),
++        album: track.collectionName, audio: track.previewUrl };
++}
+diff --git a/src/routes/api/search/+server.ts b/src/routes/api/search/+server.ts
+index 561c9a8..9478a2b 100644
+--- a/src/routes/api/search/+server.ts
++++ b/src/routes/api/search/+server.ts
+@@ -1,85 +1,15 @@
+ import { json } from '@sveltejs/kit';
++import { lookupCatalog, toTrack } from '$lib/server/itunes';
+ import type { RequestHandler } from './$types';
+ 
+-/**
+- * @description iTunes Search API를 통해 트랙을 검색하는 서버 사이드 GET 핸들러입니다.
+- * * 클라이언트 사이드 페이지네이션(Client-side Pagination)을 지원하기 위해,
+- * 요청 시 오프셋을 사용하지 않고 내부적으로 최대 허용치인 200개의 데이터를 한 번에 가져옵니다.
+- * 이를 통해 클라이언트는 추가 네트워크 요청 없이 즉각적인 "더 보기" 기능을 구현할 수 있습니다.
+- *
+- * @param {Object} event - SvelteKit 요청 이벤트 객체
+- * @param {URL} event.url - 요청 URL 객체. 쿼리 파라미터 'q'(검색어)를 포함합니다.
+- * @returns {Promise<Response>}
+- * - 성공 시: 포맷팅된 트랙 리스트(`Track[]`)를 담은 JSON 응답 (200 OK)
+- * - 실패 시: 에러 메시지를 담은 JSON 응답 (400 Bad Request, 404 Not Found, 500 Internal Server Error)
+- */
+-export const GET: RequestHandler = async ({ url }) => {
+-    const query = url.searchParams.get('q');
+-
+-    /**
+-     * @constant {number} LIMIT
+-     * @description iTunes API에서 한 번에 가져올 최대 아이템 개수입니다.
+-     * 클라이언트에서 데이터를 잘라서 보여주기 위해(Slicing) 최대치인 200으로 고정합니다.
+-     */
+-    const LIMIT = 200;
+-
+-    // 검색어 유효성 검사
+-    if (!query) {
+-        return json({ error: 'No query provided' }, { status: 400 });
+-    }
+-
++/** @description Return music search results, including a successful empty list. */
++export const GET: RequestHandler = async ({ url, fetch }) => {
++    const query = url.searchParams.get('q')?.trim();
++    if (!query) return json({ error: 'No query provided' }, { status: 400 });
+     try {
+-        /**
+-         * @description iTunes API 요청 URL 구성
+-         * - entity=song: 노래 검색으로 제한
+-         * - country=KR: 한국 스토어 기준
+-         * - limit=200: 최대 개수 요청
+-         */
+-        const apiUrl = `https://itunes.apple.com/search?term=${encodeURIComponent(query)}&entity=song&limit=${LIMIT}&country=KR`;
+-
+-        const res = await fetch(apiUrl, {
+-            headers: {
+-                // iTunes API의 403 Forbidden 에러 방지를 위한 User-Agent 설정
+-                'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
+-            }
+-        });
+-
+-        if (!res.ok) {
+-            throw new Error(`iTunes API status: ${res.status}`);
+-        }
+-
+-        const data = await res.json();
+-
+-        // 검색 결과가 없는 경우 처리
+-        if (!data.results || data.resultCount === 0) {
+-            return json({ error: 'No track found' }, { status: 404 });
+-        }
+-
+-        /**
+-         * @description 원본 API 응답 데이터를 클라이언트에서 사용하기 편한 구조로 매핑합니다.
+-         * 특히, 앨범 커버 이미지를 고해상도(1000x1000)로 변환하는 로직이 포함됩니다.
+-         */
+-        const tracks = (data.results || []).map((track: any) => {
+-            // 100x100 저화질 이미지를 1000x1000 고화질로 URL 변환
+-            let highResCover = track.artworkUrl100;
+-            if (highResCover) {
+-                highResCover = highResCover.replace(/\/\d+x\d+[^/]*\.jpg/, '/1000x1000bb.jpg');
+-            }
+-
+-            return {
+-                id: track.trackId,
+-                title: track.trackName,
+-                artist: track.artistName,
+-                cover: highResCover,
+-                album: track.collectionName,
+-                audio: track.previewUrl
+-            };
+-        });
+-
+-        return json(tracks);
+-
+-    } catch (error) {
+-        console.error('SERVER ERROR:', error);
+-        return json({ error: 'Internal Server Error' }, { status: 500 });
++        const tracks = await lookupCatalog(fetch, 'search', { term: query, entity: 'song', limit: '200' });
++        return json(tracks.map(toTrack));
++    } catch {
++        return json({ error: 'Music search is temporarily unavailable' }, { status: 502 });
+     }
+-};
+\ No newline at end of file
++};
+diff --git a/src/routes/track/[id]/+page.server.ts b/src/routes/track/[id]/+page.server.ts
+index 4ac87fc..a1371db 100644
+--- a/src/routes/track/[id]/+page.server.ts
++++ b/src/routes/track/[id]/+page.server.ts
+@@ -1,60 +1,14 @@
+ import { error } from '@sveltejs/kit';
++import { lookupCatalog, toTrack } from '$lib/server/itunes';
+ import type { PageServerLoad } from './$types';
+ 
+-/**
+- * Server-side load function for the track detail page.
+- * Fetches specific track metadata using the iTunes Lookup API based on the route parameter 'id'.
+- * * @param {Object} context - The SvelteKit load context.
+- * @param {Object} context.params - Route parameters (contains 'id').
+- * @param {Function} context.fetch - The fetch function (native or SvelteKit enhanced).
+- * @returns {Promise<{ track: any }>} The formatted track data to be passed to the page component.
+- * @throws {Error} 404 if track is not found, or 500 for server errors.
+- */
++/** @description Resolve selected tracks using the same catalogs as music search. */
+ export const load: PageServerLoad = async ({ params, fetch }) => {
+-    const { id } = params;
+-
+-    if (!id) {
+-        throw error(400, 'Track ID is missing');
+-    }
+-
+-    try {
+-        // Use iTunes Lookup API to find a specific song by ID
+-        const res = await fetch(`https://itunes.apple.com/lookup?id=${id}&country=KR`);
+-
+-        if (!res.ok) {
+-            throw new Error(`iTunes Lookup API Error: ${res.status}`);
+-        }
+-
+-        const data = await res.json();
+-
+-        if (!data.results || data.results.length === 0) {
+-            throw error(404, 'Track not found');
+-        }
+-
+-        const track = data.results[0];
+-
+-        // Process high-resolution artwork
+-        let highResCover = track.artworkUrl100;
+-        if (highResCover) {
+-            highResCover = highResCover.replace(/\/\d+x\d+[^/]*\.jpg/, '/1000x1000bb.jpg');
+-        }
+-
+-        // Return the structured track data
+-        return {
+-            track: {
+-                id: track.trackId,
+-                title: track.trackName,
+-                artist: track.artistName,
+-                cover: highResCover,
+-                album: track.collectionName,
+-                audio: track.previewUrl
+-            }
+-        };
+-
+-    } catch (err: any) {
+-        console.error('Track Load Error:', err);
+-        // If it's already a SvelteKit error, rethrow it
+-        if (err?.status) throw err;
+-        throw error(500, 'Failed to load track data');
+-    }
+-};
+\ No newline at end of file
++    if (!/^\d+$/.test(params.id)) error(400, 'Invalid track ID');
++    let tracks;
++    try { tracks = await lookupCatalog(fetch, 'lookup', { id: params.id, entity: 'song' }); }
++    catch { error(502, 'Music lookup is temporarily unavailable'); }
++    const track = tracks.find((track) => String(track.trackId) === params.id);
++    if (!track) error(404, 'Track not found');
++    return { track: toTrack(track) };
++};
+diff --git a/tests/itunes.test.ts b/tests/itunes.test.ts
+new file mode 100644
+index 0000000..a379bc0
+--- /dev/null
++++ b/tests/itunes.test.ts
+@@ -0,0 +1,27 @@
++import { test } from 'node:test';
++import assert from 'node:assert/strict';
++const { lookupCatalog } = await import(new URL('../src/lib/server/itunes.ts', import.meta.url).href);
++const track = { trackId: 123, trackName: 'Example', artistName: 'Artist' };
++test('search and lookup fall back from an empty Korean catalog to US', async () => {
++    for (const endpoint of ['search', 'lookup'] as const) {
++        const countries: string[] = [];
++        const fetcher = (async (input: URL) => {
++            const country = input.searchParams.get('country')!; countries.push(country);
++            return Response.json({ results: country === 'US' ? [track] : [] });
++        }) as typeof fetch;
++        assert.deepEqual(await lookupCatalog(fetcher, endpoint, { term: 'Example' }), [track]);
++        assert.deepEqual(countries, ['KR', 'US']);
++    }
++});
++test('successful empty searches differ from unavailable catalogs', async () => {
++    const empty = (async () => Response.json({ results: [] })) as typeof fetch;
++    assert.deepEqual(await lookupCatalog(empty, 'search', { term: 'Missing' }), []);
++    const unavailable = (async () => new Response('', { status: 503 })) as typeof fetch;
++    await assert.rejects(lookupCatalog(unavailable, 'search', { term: 'Example' }), /unavailable/);
++});
++test('usable Korean results do not query another region', async () => {
++    let calls = 0;
++    const fetcher = (async () => { calls++; return Response.json({ results: [track] }); }) as typeof fetch;
++    assert.deepEqual(await lookupCatalog(fetcher, 'search', { term: 'Example' }), [track]);
++    assert.equal(calls, 1);
++});
