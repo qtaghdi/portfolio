@@ -14,9 +14,8 @@ thesis: "낯선 언어를 익숙한 멘탈 모델에서 출발해 배우게 만�
 responsibility: "콘텐츠 구조, KO·EN 문서, 브라우저 예제 실행 흐름"
 focus: ["Developer education", "Rust", "Bilingual docs", "Browser runner"]
 evidence:
-  - { val: "14 chapters", label: "TypeScript와 Rust 비교 학습", detail: "한국어·영어 콘텐츠" }
-  - { val: "SHA-256", label: "문서 예제 실행 허용 목록" }
-  - { val: "Workers + Axum", label: "문서와 실행 서버 분리" }
+  - {"val": "학습 문서", "label": "TypeScript와 Rust 코드를 나란히 비교하며 개념을 학습"}
+  - {"val": "예제 실행", "label": "문서에 포함된 Rust 코드를 실행하고 출력과 컴파일 오류를 확인"}
 traceLinks:
   - {"label": "예제 검증·실행 API", "labelEn": "Example validation and execution API", "href": "https://github.com/qtaghdi/rust-with-typescript/blob/main/src/pages/api/run-rust.ts"}
   - {"label": "Rust 실행 서버", "labelEn": "Rust execution server", "href": "https://github.com/qtaghdi/rust-with-typescript/blob/main/sandbox-runner/src/main.rs"}
@@ -28,6 +27,7 @@ link: "https://rust-with-typescript.qtaghdi.workers.dev/"
 github: "https://github.com/qtaghdi/rust-with-typescript"
 ---
 
+
 ## TypeScript 개발자를 위한 Rust 학습
 
 TypeScript 개발자가 Rust를 배울 때는 새로운 문법보다 소유권, borrowing과 lifetime을 기존의 사고방식과 연결하는 일이 어려웠습니다.<br />
@@ -35,11 +35,13 @@ TypeScript 개발자가 Rust를 배울 때는 새로운 문법보다 소유권, 
 
 브라우저에서 코드를 실행하게 하면 문서 사이트가 실행 서버의 진입점이 됩니다. 학습용 예제를 편하게 실행하는 경험과 서버에 들어오는 요청을 제한하는 경계를 함께 설계해야 했습니다.
 
+
 ## 설명과 코드 실행을 함께 설계하기
 
 ### 14개 챕터를 TypeScript의 개념에서 시작
 
 Astro와 Starlight로 한국어·영어 문서를 구성했습니다. 각 챕터에 TypeScript와 Rust 예제를 나란히 배치하고, 소유권·borrowing, enum과 pattern matching, trait, 오류 처리와 비동기를 단계적으로 연결했습니다. 문법을 번역하는 대신 같은 문제를 두 타입 시스템에서 어떻게 표현하는지 비교하도록 했습니다.
+
 
 ### 문서 화면과 Rust 실행 서버를 분리
 

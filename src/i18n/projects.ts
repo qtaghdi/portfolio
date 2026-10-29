@@ -3,6 +3,7 @@ export interface ProjectSection {
   title: string;
   paragraphs: string[];
   links?: { label: string; href: string }[];
+  notes?: { title: string; paragraphs: string[] };
   subsections?: { title: string; paragraphs: string[]; items?: string[] }[];
 }
 
@@ -32,9 +33,14 @@ export const projectEn: Record<string, ProjectTranslation> = {
     focus: ['Native integration', 'Connection recovery', 'Local settings', 'Desktop distribution'],
     summary: 'A personal macOS and Windows tool connecting Apple Music playback to Discord activity, including native metadata, reconnection, settings UI, and installable packages.',
     evidence: [
-      { val: 'macOS + Windows', label: 'Platform collectors and a shared playback model' },
-      { val: 'Local IPC', label: 'Unix sockets and Windows named pipes' },
-      { val: 'v0.8.0', label: 'Published installation ZIPs for both platforms', detail: 'Released October 25, 2026' },
+      {
+        "val": "Music presence",
+        "label": "Show the current Apple Music track, album, and playback time on a Discord profile"
+      },
+      {
+        "val": "Display settings",
+        "label": "Choose which music information to share and how it appears through local settings"
+      }
     ],
     sections: [
       {
@@ -91,7 +97,7 @@ export const projectEn: Record<string, ProjectTranslation> = {
         id: 'outcome',
         title: 'A published desktop tool with visible implementation evidence',
         paragraphs: [
-          'The v0.8.0 release provides installation ZIPs for macOS Apple Silicon and Windows x64. The product site and settings interface support Korean and English. The capture below shows track information, artwork, and progress in Discord on macOS.',
+          'The v0.8.0 release provides installation ZIPs for macOS Apple Silicon and Windows x64. The product site and settings interface support Korean and English. The capture in the sharing section shows track information, artwork, and progress in Discord on macOS.',
           'Tests cover activity formatting, timestamps, IPC frames and paths, artwork matching, and local settings boundaries. The project connects native integration, recovery, settings UI, and installation and release workflows in one local tool.',
         ],
       },
@@ -111,18 +117,14 @@ export const projectEn: Record<string, ProjectTranslation> = {
     ],
     "summary": "Maintained shared frontend infrastructure and improved operational interfaces, authentication, sharing, and webview behavior across four apps and 13 shared packages.",
     "evidence": [
-        {
-            "val": "4 Frontend Apps",
-            "label": "One product monorepo"
-        },
-        {
-            "val": "13 packages",
-            "label": "Shared API, Query, Schema, and UI foundation"
-        },
-        {
-            "val": "Shared BFF",
-            "label": "Shared request validation, authentication, and refresh"
-        }
+      {
+        "val": "Product operations",
+        "label": "Connects admin, owner, service status, and customer support interfaces"
+      },
+      {
+        "val": "Shared foundation",
+        "label": "Handles authentication, API requests, and sharing consistently across apps"
+      }
     ],
     "sections": [
         {
@@ -204,18 +206,14 @@ export const projectEn: Record<string, ProjectTranslation> = {
     ],
     "summary": "Changed distribution so component dependencies bring their own CSS, separated overlay lifetime from CSS motion, and updated migration guidance and consuming apps.",
     "evidence": [
-        {
-            "val": "ESM + CSS",
-            "label": "Per-component distribution"
-        },
-        {
-            "val": "4 apps",
-            "label": "Package dependencies in the Notiiv monorepo"
-        },
-        {
-            "val": "CSS motion",
-            "label": "Removed the react-spring runtime dependency"
-        }
+      {
+        "val": "Product UI",
+        "label": "Shared components and styles used by the four Notiiv apps"
+      },
+      {
+        "val": "Storybook",
+        "label": "Browse component states, design tokens, and usage examples"
+      }
     ],
     "sections": [
         {
@@ -264,7 +262,8 @@ export const projectEn: Record<string, ProjectTranslation> = {
                     "title": "Checks and implementation evidence",
                     "paragraphs": [
                         "Authored changes establish the output modules, rewritten imports, pure re-export barrel, and guards for unsupported exports and watch rebuilds. Presence tests cover immediate mount, no-animation removal, exit completion, interrupted exit, and callbacks for an overlay that never opened.",
-                        "Migration documentation records consumer CSS and theme requirements. Four Notiiv apps reference the package. The result is a dependency-aligned distribution model with CSS-driven overlay motion."
+                        "Migration documentation records consumer CSS and theme requirements. Four Notiiv apps reference the package. The result is a dependency-aligned distribution model with CSS-driven overlay motion.",
+                        "On October 27, 2026, I added light and dark visual regression checks for core components in the CI Playwright environment. Failures retain actual, diff, and candidate baseline images; intended updates import baselines from that CI run. The Button captures below are the committed CI baselines."
                     ]
                 }
             ],
@@ -300,16 +299,12 @@ export const projectEn: Record<string, ProjectTranslation> = {
     "summary": "Improved mail caching, notification destinations, batch-action feedback, and training resume in the company’s Flutter mobile app.",
     "evidence": [
       {
-        "val": "Flutter",
-        "label": "iOS and Android app"
+        "val": "Mobile work",
+        "label": "Access internal mail, approvals, and schedules on mobile"
       },
       {
-        "val": "BLoC + SQLite",
-        "label": "State and cache-then-network reads"
-      },
-      {
-        "val": "SSE + FCM",
-        "label": "Real-time updates and push destinations"
+        "val": "Notifications",
+        "label": "Open the relevant work item directly from a notification"
       }
     ],
     "sections": [
@@ -369,112 +364,98 @@ export const projectEn: Record<string, ProjectTranslation> = {
     "thesis": "One authoritative document state for human and AI edits",
     "responsibility": "Product design, Go XLSX adapter, MCP transport, Univer editor, revision, history, persistence, and verification",
     "focus": [
-        "Human-AI collaboration",
-        "Revision conflicts",
-        "XLSX fidelity",
-        "Recovery"
+      "Human-AI collaboration",
+      "Revision conflicts",
+      "XLSX fidelity",
+      "Recovery"
     ],
     "summary": "Built a local XLSX workspace connecting human and AI edits through revisioned commits, durable history, atomic persistence, and bounded range loading.",
     "evidence": [
-        {
-            "val": "400K cells",
-            "label": "Release profile workbook",
-            "detail": "4 sheets · 1,000 by 100"
-        },
-        {
-            "val": "287.74 ms",
-            "label": "Recorded 1,000-cell batch commit",
-            "detail": "2026-10-12 · darwin-arm64 · Go 1.25"
-        },
-        {
-            "val": "X-01 to X-06",
-            "label": "Recorded automated safety gates",
-            "detail": "Local atomicity, recovery, and history"
-        }
+      {
+        "val": "Document collaboration",
+        "label": "People and AI edit cells, formulas, and styles in the same XLSX workbook"
+      },
+      {
+        "val": "Change management",
+        "label": "Inspect edit history, undo or redo changes, and save the workbook"
+      }
     ],
     "sections": [
-        {
-            "id": "problem",
-            "title": "Two editors still need one definition of saved state",
+      {
+        "id": "problem",
+        "title": "Two editors still need one definition of saved state",
+        "paragraphs": [
+          "I independently designed and implemented the product, XLSX adapter, transports, editor, and recovery model as a local XLSX alpha.",
+          "If a person and an AI both read revision 12, accepting both writes without a revision boundary can lose the earlier change. A successful save followed by a lost response is different: automatically retrying a row insertion can duplicate it, and a higher server revision does not identify which request succeeded.",
+          "A workbook is more than displayed cell values. A small edit must not silently discard formulas, validation, or charts. The UI engine cannot be assumed to own the original document state."
+        ]
+      },
+      {
+        "id": "decisions",
+        "title": "Keep format preservation and commit authority on the server",
+        "paragraphs": [],
+        "subsections": [
+          {
+            "title": "Choose a UI engine behind a replaceable boundary",
             "paragraphs": [
-                "I independently designed and implemented the product, XLSX adapter, transports, editor, and recovery model as a local XLSX alpha.",
-                "If a person and an AI both read revision 12, accepting both writes without a revision boundary can lose the earlier change. A successful save followed by a lost response is different: automatically retrying a row insertion can duplicate it, and a higher server revision does not identify which request succeeded.",
-                "A workbook is more than displayed cell values. A small edit must not silently discard formulas, validation, or charts. The UI engine cannot be assumed to own the original document state."
+              "The recorded ADR compares Univer, ONLYOFFICE, and a custom engine. A custom grid would require selection, keyboard, clipboard, and formula UI work. ONLYOFFICE offers broad editing but introduces frame and deployment considerations for an embedded MCP App.",
+              "I chose Univer OSS behind SpreadsheetEngine for direct range control and embedding, while the Go adapter owns validated operations, revisions, conflicts, and persistence. This preserves a path to replace the UI engine, at the cost of maintaining compatibility mapping and verification."
             ]
-        },
-        {
-            "id": "decisions",
-            "title": "Keep format preservation and commit authority on the server",
-            "paragraphs": [],
-            "subsections": [
-                {
-                    "title": "Choose a UI engine behind a replaceable boundary",
-                    "paragraphs": [
-                        "The recorded ADR compares Univer, ONLYOFFICE, and a custom engine. A custom grid would require selection, keyboard, clipboard, and formula UI work. ONLYOFFICE offers broad editing but introduces frame and deployment considerations for an embedded MCP App.",
-                        "I chose Univer OSS behind SpreadsheetEngine for direct range control and embedding, while the Go adapter owns validated operations, revisions, conflicts, and persistence. This preserves a path to replace the UI engine, at the cost of maintaining compatibility mapping and verification."
-                    ]
-                },
-                {
-                    "title": "Reject stale writes rather than guessing a merge",
-                    "paragraphs": [
-                        "Browser and AI writes carry an actor, base revision, and operations through one commit path. Of two requests based on revision 12, the first saves revision 13 and the second receives a conflict. A whole batch is validated before candidate mutation.",
-                        "Structural edits such as row insertion and merges make blind replay unsafe. This coarse boundary may reject simultaneous edits to different cells, but keeps the source state explicit. Finer automatic merging requires additional semantic rules."
-                    ]
-                },
-                {
-                    "title": "Separate persistence failure from an uncertain response",
-                    "paragraphs": [
-                        "A candidate workbook is written to a temporary file in the same directory and atomically replaces the original. Failure during preparation, writing, sync, close, or replacement preserves the previous authoritative state. If the workbook commits but the history manifest cannot finalize, pending history is reconciled before another write.",
-                        "On an uncertain write response or event resync, the browser pauses its queue, checks the server snapshot, and presents draft and recovery state instead of replaying writes. SSE replay gaps and session mismatch also require resynchronization.",
-                        "Source hashes and a cooperative writer lock detect external changes, but do not eliminate an uncooperative writer racing between the last check and replacement."
-                    ]
-                },
-                {
-                    "title": "Make undo a new server revision",
-                    "paragraphs": [
-                        "Undo and redo restore content through a new revision instead of moving the revision counter backward. Disk snapshots and a manifest recover bounded history after restart. Snapshot count and size limits separate unavailable history from a failed document commit."
-                    ]
-                },
-                {
-                    "title": "Bound reads and defer unproven abstractions",
-                    "paragraphs": [
-                        "The browser loads viewport ranges incrementally; MCP reads metadata and needed ranges. Browser and MCP credentials are separate, with a single-use fallback URL expiring after two minutes.",
-                        "Format rules remain in the XLSX adapter. A shared multi-format abstraction is deferred until a second real adapter demonstrates it. Formulas are stored but not calculated by the server, and browser previews are distinguished from source cached results."
-                    ]
-                }
-            ]
-        },
-        {
-            "id": "outcome",
-            "title": "Recorded evidence for failure behavior and performance",
+          },
+          {
+            "title": "Reject stale writes rather than guessing a merge",
             "paragraphs": [
-                "Human and AI changes, conflicts, persistence, and history now follow one server-owned document state."
-            ],
-            "subsections": [
-                {
-                    "title": "Automated safety evidence",
-                    "paragraphs": [
-                        "The 2026-10-12 report records X-01 through X-06 passing, with race-enabled Go checks and separate browser recovery tests."
-                    ],
-                    "items": [
-                        "Input boundaries, atomic batches, and exactly one commit from competing same-revision writes.",
-                        "Persistence rollback, pending history recovery, external replacement, and stale sessions.",
-                        "Replay gaps, slow subscribers, lost-response protection against duplicate structural edits, and session resync.",
-                        "Durable undo and redo, restart recovery, bounded history, and monotonic revisions."
-                    ]
-                },
-                {
-                    "title": "Performance in its recorded environment",
-                    "paragraphs": [
-                        "The 2026-10-12 release profile used a synthetic 400,000-cell workbook across four sheets on darwin/arm64, Go 1.25.0, and Excelize 2.11.0. Recorded times were 757.79 ms to open, 7.81 ms for a 10,000-cell read, 336.87 ms for one-cell commit, and 287.74 ms for a 1,000-cell commit.",
-                        "The values were recorded on 2026-10-12 using the same synthetic workbook and environment. This workload serves as a release regression baseline."
-                    ]
-                }
+              "Browser and AI writes carry an actor, base revision, and operations through one commit path. Of two requests based on revision 12, the first saves revision 13 and the second receives a conflict. A whole batch is validated before candidate mutation.",
+              "Structural edits such as row insertion and merges make blind replay unsafe. This coarse boundary may reject simultaneous edits to different cells, but keeps the source state explicit. Finer automatic merging requires additional semantic rules."
             ]
+          },
+          {
+            "title": "Separate persistence failure from an uncertain response",
+            "paragraphs": [
+              "A candidate workbook is written to a temporary file in the same directory and atomically replaces the original. Failure during preparation, writing, sync, close, or replacement preserves the previous authoritative state. If the workbook commits but the history manifest cannot finalize, pending history is reconciled before another write.",
+              "On an uncertain write response or event resync, the browser pauses its queue, checks the server snapshot, and presents draft and recovery state instead of replaying writes. SSE replay gaps and session mismatch also require resynchronization.",
+              "Source hashes and a cooperative writer lock detect external changes, but do not eliminate an uncooperative writer racing between the last check and replacement."
+            ]
+          },
+          {
+            "title": "Make undo a new server revision",
+            "paragraphs": [
+              "Undo and redo restore content through a new revision instead of moving the revision counter backward. Disk snapshots and a manifest recover bounded history after restart. Snapshot count and size limits separate unavailable history from a failed document commit."
+            ]
+          },
+          {
+            "title": "Bound reads and defer unproven abstractions",
+            "paragraphs": [
+              "The browser loads viewport ranges incrementally; MCP reads metadata and needed ranges. Browser and MCP credentials are separate, with a single-use fallback URL expiring after two minutes.",
+              "Format rules remain in the XLSX adapter. A shared multi-format abstraction is deferred until a second real adapter demonstrates it. Formulas are stored but not calculated by the server, and browser previews are distinguished from source cached results."
+            ]
+          }
+        ]
+      },
+      {
+        "id": "outcome",
+        "title": "One editing path for changes, saving, and recovery",
+        "paragraphs": [
+          "People and AI edit through the same authoritative state. Automated checks cover partial writes, stale revisions, persistence failures, and connection recovery. A recorded 400,000-cell workload provides a repeatable performance baseline. The project is a private local XLSX alpha; source and installation packages are not publicly distributed."
+        ],
+        "notes": {
+          "title": "Safety checks and benchmark conditions",
+          "paragraphs": [
+            "Automated safety evidence",
+            "The 2026-10-12 report records X-01 through X-06 passing, with race-enabled Go checks and separate browser recovery tests.",
+            "Input boundaries, atomic batches, and exactly one commit from competing same-revision writes.",
+            "Persistence rollback, pending history recovery, external replacement, and stale sessions.",
+            "Replay gaps, slow subscribers, lost-response protection against duplicate structural edits, and session resync.",
+            "Durable undo and redo, restart recovery, bounded history, and monotonic revisions.",
+            "Performance in its recorded environment",
+            "The 2026-10-12 release profile used a synthetic 400,000-cell workbook across four sheets on darwin/arm64, Go 1.25.0, and Excelize 2.11.0. Recorded times were 757.79 ms to open, 7.81 ms for a 10,000-cell read, 336.87 ms for one-cell commit, and 287.74 ms for a 1,000-cell commit.",
+            "The values were recorded on 2026-10-12 using the same synthetic workbook and environment. This workload serves as a release regression baseline."
+          ]
         }
+      }
     ]
-},
-  boundra: {
+  },
+  'boundra': {
     "category": "Open Source · Developer Tool",
     "badge": "Public Preview",
     "role": "Creator",
@@ -489,17 +470,12 @@ export const projectEn: Record<string, ProjectTranslation> = {
     "summary": "A published Rust CLI and TypeScript runtime connecting BR-001 through BR-006 architecture checks with Zod contracts, scaffolding, and Vite feedback.",
     "evidence": [
       {
-        "val": "6 rules",
-        "label": "BR-001 through BR-006"
+        "val": "Boundary checks",
+        "label": "Check import rules between domains and execution environments in TypeScript projects"
       },
       {
-        "val": "10K files",
-        "label": "Synthetic TypeScript workspace"
-      },
-      {
-        "val": "164.20 ms",
-        "label": "Recorded warm median",
-        "detail": "2026-07-03 · darwin-arm64 · Node 24.14.0"
+        "val": "Developer workflow",
+        "label": "Use CLI diagnostics and Vite feedback to locate and fix boundary violations"
       }
     ],
     "sections": [
@@ -536,18 +512,24 @@ export const projectEn: Record<string, ProjectTranslation> = {
           {
             "title": "Distribute an installable tool",
             "paragraphs": [
-              "The NPM launcher retrieves a platform-specific native CLI and verifies its checksum. Scaffolding, resource generation, checks, and Vite feedback are part of the tool flow, with native binaries published through GitHub Releases."
+              "The NPM launcher retrieves a platform-specific native CLI and verifies its checksum. Scaffolding, resource generation, checks, and Vite feedback are part of the tool flow, with native binaries published through GitHub Releases.",
+              "Version 0.6.0 extends discovery to nested domains, resolves package import aliases, and hardens nested-domain path validation."
             ]
           }
         ]
       },
       {
         "id": "outcome",
-        "title": "A published tool with a recorded regression baseline",
+        "title": "An installable developer tool",
         "paragraphs": [
-          "Boundra connects the rule documentation, analyzer, runtime contracts, scaffolding, and development feedback in a public NPM package.",
-          "The July 3, 2026 benchmark recorded 163.32 ms cold and a 164.20 ms warm median for the 10,000-file fixture on darwin-arm64 with Node 24.14.0. The recorded environment and fixture make this workload a repeatable release regression baseline."
-        ]
+          "Boundra brings declared architecture rules, static analysis, runtime contracts, and Vite feedback into one NPM tool. Developers can locate boundary violations while working and follow actionable diagnostics."
+        ],
+        "notes": {
+          "title": "Benchmark conditions and recorded results",
+          "paragraphs": [
+            "The July 3, 2026 benchmark recorded 163.32 ms cold and a 164.20 ms warm median for the 10,000-file fixture on darwin-arm64 with Node 24.14.0. The recorded environment and fixture make this workload a repeatable release regression baseline."
+          ]
+        }
       }
     ]
   },
@@ -558,84 +540,109 @@ export const projectEn: Record<string, ProjectTranslation> = {
     "thesis": "Tools for match setup, admin exams, recruitment, and community guidance",
     "responsibility": "Match collaboration, revision conflicts and editor presence; exam improvements; recruitment bot and operations documentation",
     "focus": [
-        "Collaborative editing",
-        "Exam workflow",
-        "Session recovery",
-        "Operations docs"
+      "Collaborative editing",
+      "Exam workflow",
+      "Session recovery",
+      "Operations docs"
     ],
     "summary": "A community tooling case covering the collaborative OWKR Match project, an admin exam app, a Discord recruitment bot, and operations documentation.",
     "evidence": [
-        {
-            "val": "Match",
-            "label": "Used by community operators"
-        },
-        {
-            "val": "Exam",
-            "label": "Implemented and deployed"
-        },
-        {
-            "val": "Gather Bot",
-            "label": "Test-server pilot deployment"
-        }
+      {
+        "val": "OWKR Match",
+        "label": "Operators edit participant rosters together, assign teams, and share results"
+      },
+      {
+        "val": "OWKR Exam",
+        "label": "A web tool for admin selection exams, answer submission, and grading"
+      },
+      {
+        "val": "시간을달리는소녀",
+        "label": "A Discord bot for match recruitment, sign-ups, tier collection, and lobby guidance"
+      },
+      {
+        "val": "OWKR Docs",
+        "label": "Rules, participation instructions, and bot guidance for players and operators"
+      }
     ],
     "sections": [
-        {
-            "id": "problem",
-            "title": "Community operations across several tools",
-            "paragraphs": [
-                "Community matches require participant identification, team setup, recruitment, admin exams, and shared guidance. I worked across these tools with other contributors, focusing on state changes that operators need to trust."
-            ]
-        },
-        {
-            "id": "identity",
-            "title": "Participant identity and roster sharing",
-            "paragraphs": [
-                "Match PR #5 replaced mutable names with Discord IDs and added an explicit review step for linking new and existing players. Missing display names preserve existing information.",
-                "PR #9 stores Discord IDs and exact team positions for 24 hours. Loading a share refreshes tiers from the user sheet while preserving placement. PR #23 separates collaborative editing from sending a completed result."
-            ]
-        },
-        {
-            "id": "decisions",
-            "title": "Preventing lost edits between operators",
-            "paragraphs": [
-                "Match PR #10 uses a shared revision and an atomic Redis Lua comparison and update. Stale writes return a conflict with the current roster, rather than silently overwriting another operator.",
-                "Polling avoids replacing unsent local changes. PR #17 adds editor presence through the existing response, while revision checks remain responsible for write correctness."
-            ]
-        },
-        {
-            "id": "exam",
-            "title": "Preserving answers through saving and submission",
-            "paragraphs": [
-                "Exam PR #2 adds save status and retries, waits for pending saves before manual submission, and locks inputs during submission. Admin editing pins the revision at edit start and restores drafts after conflicts. Score bounds are checked in both the UI and server.",
-                "PR #3 adds unanswered and review filters, persistent time and save status, and navigation to ungraded questions. PR #4 manages pause, resume, and extensions on the server; PR #5 separates test attempts."
-            ]
-        },
-        {
-            "id": "recruitment",
-            "title": "Concurrent recruitment and recoverable cancellation",
-            "paragraphs": [
-                "Gather Bot PR #14 reserves two voice lobbies, including sessions still being created. Duplicate requests reuse a session, and cancellation or failure releases only its own reservation.",
-                "PR #17 drains queued reactions and writes before deciding whether initial recruitment missed its deadline. It distinguishes later departures from incomplete recruitment. Confirmed announcement deletion triggers cancellation; failed message cleanup remains retryable after restart."
-            ]
-        },
-        {
-            "id": "operations",
-            "title": "Operating schedules, backups, and retention",
-            "paragraphs": [
-                "PR #10 coordinates operating hours and backups through a shared lock. The container stops normally outside pilot hours while the VM and persistent disk remain available.",
-                "PR #18 implements approved seven-day backup and maximum thirty-day log retention. Backup cleanup previews by default and aborts before deletion if creation records are invalid. Policies and cancellation rules are maintained alongside implementation in OWKR Docs."
-            ]
-        },
-        {
-            "id": "outcome",
-            "title": "Deployment and verification scope",
-            "paragraphs": [
-                "Match is used by community operators; Exam and the guide are deployed. Gather Bot has a test-server pilot deployment. The October 28, 2026 record covers restart recovery for simultaneous sessions, deadline cancellation, and cancellation after announcement deletion.",
-                "That bot check had zero real participants. The tenth reaction and departures after recruitment were covered by automated tests, not a ten-person end-to-end exercise. Exam checks used test data and did not cover the complete production Discord login flow."
-            ]
+      {
+        "id": "problem",
+        "title": "Community tools built around operator workflows",
+        "paragraphs": [
+          "OWKR operators manage participant rosters, team setup, admin selection exams, and Discord recruitment. I worked with other contributors on Match and on the connected exam, bot, and documentation workflows.",
+          "My focus was reliable participant identity and preserving edits and answers when several people work at the same time."
+        ]
+      },
+      {
+        "id": "identity",
+        "title": "From participant identity to team setup and sharing",
+        "paragraphs": [
+          "Discord IDs link players to the user sheet even when names change or overlap. Operators review new participants and ambiguous matches before applying them; missing display names preserve existing data.",
+          "Operators can edit a roster together or send a completed team result. Shares retain participant IDs and team positions, while loading refreshes tiers from the user sheet."
+        ]
+      },
+      {
+        "id": "decisions",
+        "title": "Preserving edits between operators",
+        "paragraphs": [
+          "Two operators saving the same roster could overwrite each other. A shared revision and atomic Redis Lua comparison and update reject stale writes with the latest roster.",
+          "The client keeps unsent edits separate from polling responses. After a conflict it shows the current roster and asks the operator to reapply the intended change. Editor presence is delivered through the same read flow."
+        ],
+        "notes": {
+          "title": "Collaboration implementation and checks",
+          "paragraphs": [
+            "Sessions store participant IDs, order, and team positions. Validation rejects duplicate IDs and incomplete placements. Polling distinguishes pending edits from read responses and skips unnecessary background-tab requests.",
+            "PR #10 tests revision increments and stale-write rejection with a Redis test double; this is separate from live Redis concurrency testing. PR #17 adds editor presence."
+          ]
         }
+      },
+      {
+        "id": "exam",
+        "title": "Keeping answers through saving, submission, and grading",
+        "paragraphs": [
+          "Candidates see remaining time and save status and can retry a failed save. Submission waits for pending saves and locks input so the answer cannot change halfway through.",
+          "Operators navigate unanswered, review, and ungraded questions and control pause, resume, and time extensions. Admin edits pin the initial revision and restore drafts after conflicts. Test attempts are separated from regular administration."
+        ]
+      },
+      {
+        "id": "recruitment",
+        "title": "Recruitment and lobby guidance with 시간을달리는소녀",
+        "paragraphs": [
+          "The Discord bot keeps participant data separate for each recruitment message and reserves two voice lobbies without overlap. Reservations include sessions still being created; failure or cancellation releases only that session.",
+          "Incomplete recruitment at the deadline or confirmed deletion of its announcement cancels the match. Failed message cleanup is recorded for retry after restart, keeping cancellation scoped to the right session."
+        ]
+      },
+      {
+        "id": "operations",
+        "title": "Connecting guidance, backups, and recovery",
+        "paragraphs": [
+          "OWKR Docs brings match rules, participation instructions, and bot guidance together. Recruitment and cancellation instructions follow the behavior of the tools.",
+          "Operating schedules and backups share a lock, while retention rules drive backup and log cleanup. Restoring an old backup requires reapplying deletion requests before reconnecting the bot."
+        ],
+        "notes": {
+          "title": "Backup and deletion verification scope",
+          "paragraphs": [
+            "Cleanup previews by default and aborts before deletion when creation records are invalid. It does not follow links or unrelated files.",
+            "PR #19 records isolated erasure and restore checks; PR #20 records a live backup inspection. Deletion requests are not replayed automatically and require the request-ledger procedure."
+          ]
+        }
+      },
+      {
+        "id": "outcome",
+        "title": "Use and contribution",
+        "paragraphs": [
+          "Match is used by community operators to edit rosters, assign teams, and share results. Exam supports admin selection and OWKR Docs provides rules and instructions. 시간을달리는소녀 remains a test-server pilot.",
+          "My contributions connect participant identity, collaborative editing, answer saving and grading, and recruitment recovery. They keep displayed state aligned with stored state and let operators continue after interruptions."
+        ],
+        "notes": {
+          "title": "Usage and test conditions",
+          "paragraphs": [
+            "The October 28, 2026 bot pilot check used no real participants and covered recovery and cancellation procedures. The tenth reaction and departures after recruitment are automated-test scenarios, not a ten-person live exercise. Exam checks used test answers and did not cover the full production Discord login flow."
+          ]
+        }
+      }
     ]
-},
+  },
   jeomjuro: {
     "category": "Team Product · Production",
     "role": "Frontend Engineer",
@@ -650,18 +657,12 @@ export const projectEn: Record<string, ProjectTranslation> = {
     "summary": "Improved notification and refresh boundaries, admin workflows, shared UI, and consumer behavior in a community product with production deployments.",
     "evidence": [
       {
-        "val": "BFF",
-        "label": "Notification and token refresh routes",
-        "detail": "Included in production code"
+        "val": "Community",
+        "label": "Interfaces for prospective and current store owners to write posts and exchange information"
       },
       {
-        "val": "Admin",
-        "label": "Search, deletion, restoration, and state",
-        "detail": "Consumer and admin deployment history"
-      },
-      {
-        "val": "Editor",
-        "label": "Tiptap writing experience"
+        "val": "Moderation",
+        "label": "Admin interfaces for searching posts and performing deletion and restoration"
       }
     ],
     "sections": [
@@ -731,9 +732,8 @@ export const projectEn: Record<string, ProjectTranslation> = {
     "summary": "A collaborative map app for recording and exploring emotions attached to places, awarded the 12th Highthon Grand Prize.",
     "evidence": [
       {
-        "val": "Grand Prize",
-        "label": "12th Highthon",
-        "detail": "2026"
+        "val": "Emotion map",
+        "label": "Record emotions, stories, and photos at places and explore other entries on a map"
       }
     ],
     "sections": [
@@ -801,17 +801,12 @@ export const projectEn: Record<string, ProjectTranslation> = {
     "summary": "A deployed bilingual Rust guide with 14 chapters, paired TypeScript examples, and a browser runner restricted to documented code.",
     "evidence": [
       {
-        "val": "14 chapters",
-        "label": "TypeScript and Rust comparisons",
-        "detail": "Korean and English"
+        "val": "Learning guide",
+        "label": "Learn concepts by comparing TypeScript and Rust examples side by side"
       },
       {
-        "val": "SHA-256",
-        "label": "Documented-example execution allowlist"
-      },
-      {
-        "val": "Workers + Axum",
-        "label": "Separate documentation and execution services"
+        "val": "Runnable examples",
+        "label": "Run documented Rust examples and inspect output and compiler errors"
       }
     ],
     "sections": [
@@ -879,14 +874,12 @@ export const projectEn: Record<string, ProjectTranslation> = {
     "summary": "A collaborative local-first desktop tool connecting project execution context across a Tauri app, terminal, VS Code, and JetBrains.",
     "evidence": [
       {
-        "val": "Capture",
-        "label": "Execution capture flow",
-        "detail": "PR #1"
+        "val": "Run history",
+        "label": "Collect terminal and IDE runs, errors, and resolution notes by project"
       },
       {
-        "val": "Modules",
-        "label": "Rust and renderer responsibility split",
-        "detail": "PR #4"
+        "val": "Local workspace",
+        "label": "Find previous execution context in a desktop app while working on the next task"
       }
     ],
     "sections": [
@@ -934,6 +927,7 @@ export const projectEn: Record<string, ProjectTranslation> = {
     ]
   },
   homepage: {
+    evidence: [{ val: 'Company website', label: 'Introduces company technology and products and directs visitors to inquiries' }],
     "title": "Bigtablet Homepage Renewal",
     "category": "Company · Public Website",
     "role": "Frontend Engineer",
@@ -992,7 +986,8 @@ export const projectEn: Record<string, ProjectTranslation> = {
         "title": "Concrete changes to rendering, language, and motion",
         "paragraphs": [
           "Static page composition moved to server rendering while interactive areas retained client behavior. Localization now includes error, retry, and return actions.",
-          "History animations clean up on transitions and support reduced-motion preferences. Public commits show the authored changes to these rendering and interaction boundaries."
+          "History animations clean up on transitions and support reduced-motion preferences. Public commits show the authored changes to these rendering and interaction boundaries.",
+          "This case describes the earlier Next.js renewal and maintenance work. A June 30, 2026 follow-up changed the root to a temporary static home, so the current public design should not be treated as a screenshot of that implementation."
         ]
       }
     ]
@@ -1012,17 +1007,12 @@ export const projectEn: Record<string, ProjectTranslation> = {
     "summary": "An Expo hackathon app connecting voice-detection feedback, group management, and statistics interfaces, awarded the 11th Highthon Excellence Prize.",
     "evidence": [
       {
-        "val": "Excellence Prize",
-        "label": "11th Highthon",
-        "detail": "2025"
+        "val": "Voice feedback",
+        "label": "Review detected language during recording and reflect on language habits"
       },
       {
-        "val": "WebSocket",
-        "label": "Connection and detection-result states"
-      },
-      {
-        "val": "Web Audio",
-        "label": "Browser audio capture and transmission"
+        "val": "Groups and statistics",
+        "label": "Create or join groups and review detection results through statistics"
       }
     ],
     "sections": [
@@ -1086,16 +1076,12 @@ export const projectEn: Record<string, ProjectTranslation> = {
     "summary": "A deployed music-card maker connecting iTunes search, audio preview, reactive 3D vinyl, and vertical image export.",
     "evidence": [
       {
-        "val": "Live",
-        "label": "Public service deployment"
+        "val": "Music cards",
+        "label": "Choose a track and add a message to create a 3D vinyl card"
       },
       {
-        "val": "Web Audio",
-        "label": "Gesture-driven playback and visualization"
-      },
-      {
-        "val": "PNG",
-        "label": "Capture WebGL and card content together"
+        "val": "Sharing",
+        "label": "Save the finished card as a portrait image or share its link"
       }
     ],
     "sections": [
@@ -1136,10 +1122,10 @@ export const projectEn: Record<string, ProjectTranslation> = {
       },
       {
         "id": "outcome",
-        "title": "Search, listen, compose, and save in one deployed flow",
+        "title": "From a selected track to a shareable card",
         "paragraphs": [
-          "Chorus connects music search, audio preview, reactive 3D rendering, message editing, and vertical PNG export in a publicly deployed service.",
-          "The implementation addresses browser-specific playback, sharing, and saving behavior alongside the visual experience."
+          "Chorus connects music search, audio preview, reactive 3D rendering, message editing, and vertical PNG export in one creation flow.",
+          "The implementation connects track selection, playback, message editing, and image saving while accounting for browser differences."
         ]
       }
     ]

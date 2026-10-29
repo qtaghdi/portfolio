@@ -11,7 +11,8 @@ accentColor: teal
 summary: "Bigtablet 공식 홈페이지의 브랜드 경험, 다국어 콘텐츠, 반응형 UI, 인터랙션, 배포/운영 품질을 개선한 웹 프로젝트"
 focus: ["Brand experience", "i18n", "SEO", "Delivery"]
 responsibility: "다국어 콘텐츠, 반응형 화면, SEO와 배포 품질 유지보수"
-evidence: []
+evidence:
+  - {"val": "공식 홈페이지", "label": "방문자에게 회사의 기술과 제품을 소개하고 문의 경로를 안내"}
 traceLinks:
   - {"label": "서버 컴포넌트·다국어 적용", "labelEn": "Server components and localization", "href": "https://github.com/Bigtablet/bigtablet-homepage-web/commit/08d0f567e70edb9388cbb9a1b7eb4ef934401720"}
   - {"label": "GSAP 정리 범위 개선", "labelEn": "GSAP cleanup change", "href": "https://github.com/Bigtablet/bigtablet-homepage-web/commit/cae02df0c5afa0955cf1488c27b4fafe14fcb33f"}
@@ -50,6 +51,8 @@ next-intl 메시지에 오류, 재시도와 목록 복귀 문구를 포함했습
 페이지 메타데이터, sitemap·robots와 정적 자산 경로를 관리했습니다. 다국어 문구와 링크, 반응형 화면을 수정할 때 빌드·검증 흐름과 배포 브랜치도 함께 확인했습니다.
 
 ## 개편 이후 달라진 점
+
+이 사례는 당시 Next.js 기반 홈페이지의 리뉴얼과 유지보수 작업입니다. 저장소에는 2026년 6월 30일 루트를 임시 정적 메인으로 전환한 후속 변경이 있고, 현재 공개 사이트의 전체 디자인이 아래 구현 사례와 같다는 뜻은 아닙니다.
 
 공식 홈페이지의 정적 구성은 서버에서 처리하고, 실제 상호작용이 필요한 영역은 클라이언트에 남기는 구조로 정리했습니다. 다국어 적용 범위는 본문에서 오류·재시도·복귀 동작까지 확장됐습니다.
 

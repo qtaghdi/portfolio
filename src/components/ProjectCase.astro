@@ -60,16 +60,20 @@ const screenCaptions: Record<string, { ko: string; en: string }> = {
               {subsection.items && <ul>{subsection.items.map((item) => <li><ProjectText text={item} references={data.traceLinks} /></li>)}</ul>}
             </div>)}
             {section.links && <div class="project-links">{section.links.map((link) => <a href={link.href} target="_blank" rel="noopener noreferrer">{link.label}</a>)}</div>}
+            {section.notes && <details class="case-notes">
+              <summary>{section.notes.title}</summary>
+              {section.notes.paragraphs.map((paragraph) => <p><ProjectText text={paragraph} references={data.traceLinks} /></p>)}
+            </details>}
           </section>
         ))}
         <section id="trace" class="trace-section">
           <h2>{dictionary.trace}</h2>
+          {data.evidence.length > 0 && <dl class="resource-usage">{data.evidence.map((item) => <div><dt>{item.val}</dt><dd><ProjectText text={item.label} references={data.traceLinks} />{item.detail && <small><ProjectText text={item.detail} references={data.traceLinks} /></small>}</dd></div>)}</dl>}
           <div class="project-links">
             {data.link && <a href={data.link} target="_blank" rel="noopener noreferrer">{dictionary.live}</a>}
             {data.github && <a href={data.github} target="_blank" rel="noopener noreferrer">{dictionary.github}</a>}
             {data.traceLinks.map((link) => <a href={link.href} target="_blank" rel="noopener noreferrer">{locale === 'ko' ? link.label : link.labelEn}</a>)}
           </div>
-          {data.evidence.length > 0 && <dl class="evidence">{data.evidence.map((item) => <div><dt>{item.val}</dt><dd><ProjectText text={item.label} references={data.traceLinks} />{item.detail && <small><ProjectText text={item.detail} references={data.traceLinks} /></small>}</dd></div>)}</dl>}
           {hasEvidenceScreen && <figure class="screen-evidence">
             <div id="project-visual" class:list={['case-visual', { 'mobile-screen': key === 'intranet', 'presence-screen': key === 'apple-music-discord-presence' }]}><ProjectVisual projectKey={key} locale={locale} variant="detail" /></div>
             <figcaption>{screenCaptions[key][locale]}</figcaption>
@@ -112,11 +116,16 @@ const screenCaptions: Record<string, { ko: string; en: string }> = {
   .case-content :global(.mdx-content hr) { margin: 32px 0; border: 0; border-top: 1px solid $line; }
   .case-content :global(.mdx-content blockquote) { padding-left: 20px; border-left: 2px solid $line; }
   .trace-section { margin-top: 56px; }
+  .case-content :global(.case-notes) { margin: 24px 0 32px; padding: 16px 20px; border: 1px solid $line; background: $black-soft; }
+  .case-content :global(.case-notes summary) { cursor: pointer; color: $silver-bright; font-size: 14px; font-weight: 500; line-height: 1.7; }
+  .case-content :global(.case-notes p), .case-content :global(.case-notes ul) { margin-top: 16px; color: $silver; font-size: 15px; line-height: 1.85; overflow-wrap: anywhere; }
+  .case-content :global(.case-notes ul) { padding-left: 20px; }
+  .case-content :global(.case-notes summary:focus-visible) { outline: 2px solid $accent; outline-offset: 4px; }
   .project-links { display: flex; flex-wrap: wrap; gap: 8px 24px; }
   .project-links a { display: inline-flex; align-items: center; min-height: 44px; font-size: 15px; }
-  .evidence { margin-top: 24px; border-top: 1px solid $line; }
-  .evidence > div { display: grid; grid-template-columns: 150px minmax(0,1fr); gap: 20px; padding: 16px 0; border-bottom: 1px solid $line; }
-  .evidence dt { color: $silver-bright; font-size: 15px; }.evidence small { display: block; color: $gunmetal; font-size: 13px; }
+  .resource-usage { margin: 24px 0; border-top: 1px solid $line; }
+  .resource-usage > div { display: grid; grid-template-columns: 150px minmax(0,1fr); gap: 20px; padding: 16px 0; border-bottom: 1px solid $line; }
+  .resource-usage dt { color: $silver-bright; font-size: 15px; }.resource-usage small { display: block; color: $gunmetal; font-size: 13px; }
   .screen-evidence { margin: 32px 0 0; }.case-visual { height: 440px; border: 1px solid $line; overflow: hidden; }.case-visual.mobile-screen { max-width: 390px; height: 788px; }
   .case-visual.presence-screen { height: auto; aspect-ratio: 828 / 340; }
   figcaption { margin-top: 14px; color: $gunmetal; font-size: 13px; line-height: 1.8; }
@@ -125,6 +134,6 @@ const screenCaptions: Record<string, { ko: string; en: string }> = {
   @media (max-width: 680px) {
     .project-page { padding-top: 68px; }.project-hero { padding-top: 24px; padding-bottom: 28px; }h1 { font-size: 32px; margin-top: 20px; }.thesis { font-size: 20px; }.project-meta { margin-top: 28px; }.project-meta > div { grid-template-columns: 48px minmax(0,1fr); gap: 16px; }dt,dd { font-size: 14px; }
     .case-layout { padding-top: 24px; }.content-section h2, .trace-section h2, .case-content :global(.mdx-content > h2) { font-size: 24px; }.case-subsection h3, .case-content :global(.mdx-content > h3) { font-size: 19px; }.content-section p, .case-subsection ul, .case-content :global(.mdx-content > p), .case-content :global(.mdx-content > ul), .case-content :global(.mdx-content > ol) { font-size: 16px; }
-    .evidence > div { grid-template-columns: 110px minmax(0,1fr); gap: 16px; }.case-visual { height: 300px; }.case-visual.mobile-screen { height: auto; aspect-ratio: 390 / 788; }.next-project { align-items: start; flex-direction: column; gap: 8px; margin-top: 48px; }
+    .resource-usage > div { grid-template-columns: 110px minmax(0,1fr); gap: 16px; }.case-visual { height: 300px; }.case-visual.mobile-screen { height: auto; aspect-ratio: 390 / 788; }.next-project { align-items: start; flex-direction: column; gap: 8px; margin-top: 48px; }
   }
 </style>

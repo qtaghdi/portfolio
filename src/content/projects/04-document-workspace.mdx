@@ -18,9 +18,8 @@ focus:
   - "MCP Apps"
 summary: "사람과 AI가 같은 XLSX 세션을 편집하면서 변경 충돌, undo·redo, 원자적 저장과 대용량 시트 로딩을 안전하게 처리하는 MCP 기반 문서 워크스페이스를 만들었습니다."
 evidence:
-  - { val: "400K cells", label: "release profile workbook", detail: "4 sheets · 1000 by 100" }
-  - { val: "287.74 ms", label: "1,000-cell batch commit", detail: "darwin-arm64 · Go 1.25" }
-  - { val: "X-01 to X-06", label: "automated safety gates", detail: "atomicity · recovery · history" }
+  - {"val": "문서 공동 편집", "label": "사람과 AI가 같은 XLSX 문서의 셀·수식·스타일을 함께 편집"}
+  - {"val": "변경 관리", "label": "문서의 수정 이력을 확인하고 실행 취소·다시 실행·저장을 수행"}
 metrics: []
 callouts:
   - icon: "01"
@@ -37,6 +36,7 @@ callouts:
     body: "호환성 corpus, race detector 기반 안전성 gate와 40만 셀 release profile을 기록해 기능 보존과 성능 회귀를 같은 릴리즈 기준으로 확인합니다."
 tech: ["Go", "TypeScript", "Excelize", "Univer", "Vite", "MCP", "SSE"]
 ---
+
 
 ## AI와 사용자가 함께 문서를 편집하려면
 
@@ -56,6 +56,7 @@ XLSX 저장에는 별도의 보존 문제가 있습니다. 셀 값 하나를 바
 엔진 결정 문서에서는 Univer, ONLYOFFICE와 자체 구현을 비교했습니다. 직접 그리드를 만들면 선택, 키보드, clipboard와 수식 UI까지 유지해야 합니다. ONLYOFFICE는 편집 기능이 넓지만 MCP App에 포함할 때 중첩 frame과 배포 조건을 검토해야 했습니다. 셀·범위 작업을 코드로 제어하고 앱 안에 직접 포함할 수 있는 Univer OSS를 UI 엔진으로 선택했습니다.
 
 대신 Univer를 XLSX 원본의 저장 주체로 두지 않았습니다. `SpreadsheetEngine` 경계 뒤에서 렌더링과 입력을 담당하게 하고, Go adapter가 검증된 작업, revision, 충돌과 저장을 소유합니다. 편집기 엔진을 바꿔도 문서 저장 규칙을 다시 작성하지 않도록 한 경계입니다. 고급 기능의 표시와 원본 보존을 직접 연결하고 검증해야 한다는 비용은 남습니다.
+
 
 ### 2. 동시 쓰기는 병합을 추측하지 않고 충돌로 반환
 
@@ -83,7 +84,12 @@ Univer 편집기는 viewport에 필요한 제한 범위부터 읽고 스크롤�
 
 XLSX의 형식 규칙은 adapter에 둡니다. DOCX·PPTX·PDF도 같은 모델에 바로 끼워 넣기보다, 두 번째 실제 adapter에서 공통 계약이 확인된 뒤 추상화하도록 정했습니다. 수식은 저장하지만 서버가 계산하지 않고, 브라우저 계산 결과도 원본의 계산값과 구분합니다.
 
-## 회귀 검증과 성능 기록
+## 저장과 복구를 같은 기준으로 검증
+
+동시 쓰기의 부분 반영, 저장 실패와 연결 끊김을 자동 검사로 다뤘습니다. 40만 셀 통합 문서를 사용한 성능 기록도 남겨 기능 보존과 처리 시간을 같은 조건에서 비교할 수 있게 했습니다.
+
+<details class="case-notes">
+<summary>안전성 검사와 성능 측정 조건</summary>
 
 ### 실패 조건을 자동 검사로 남김
 
@@ -100,4 +106,9 @@ XLSX의 형식 규칙은 adapter에 둡니다. DOCX·PPTX·PDF도 같은 모델�
 
 이 값은 2026-10-12에 동일한 합성 workbook과 환경에서 기록한 결과입니다. 해당 workload를 릴리즈 회귀 기준으로 사용합니다.
 
+
+</details>
+
 이 프로젝트에서 구현한 것은 사람과 AI의 입력 화면뿐 아니라 **충돌, 저장, 이력과 복구가 같은 서버 상태를 기준으로 동작하는 편집 경로**입니다. 원본을 보존하는 저장 규칙과 실패 후 복구 절차를 먼저 정하고, 그 기준에 맞춰 편집 기능을 구현했습니다.
+
+개인용 로컬 XLSX 알파로 개발하고 있으며, 공개 소스나 설치 파일은 제공하지 않습니다.

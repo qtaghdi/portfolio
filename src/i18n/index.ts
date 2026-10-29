@@ -46,7 +46,7 @@ export const copy = {
     },
     detail: {
       back: '작업 목록', role: '역할', focus: '집중한 영역', stack: '기술',
-      index: '목차', problem: '문제', decisions: '선택한 방법', outcome: '성과와 배운 점', trace: '근거',
+      index: '목차', problem: '문제', decisions: '선택한 방법', outcome: '성과와 배운 점', trace: '관련 자료 및 링크',
       live: '사이트', github: 'GitHub', next: '다음 작업',
     },
     meta: {
@@ -91,7 +91,7 @@ export const copy = {
     },
     detail: {
       back: 'All work', role: 'Role', focus: 'Focus', stack: 'Stack',
-      index: 'Index', problem: 'Problem', decisions: 'Decisions', outcome: 'Outcome', trace: 'Trace',
+      index: 'Index', problem: 'Problem', decisions: 'Decisions', outcome: 'Outcome', trace: 'Resources and links',
       live: 'Live site', github: 'GitHub', next: 'Next work',
     },
     meta: {

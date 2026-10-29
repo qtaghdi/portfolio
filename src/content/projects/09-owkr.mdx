@@ -3,7 +3,7 @@ order: 6
 title: "OWKR Community Tools"
 titleKo: "OWKR 커뮤니티 운영 도구"
 group: team
-featured: false
+featured: true
 category: "Community · Collaboration"
 year: "2026"
 role: "개발 기여자"
@@ -13,17 +13,20 @@ responsibility: "참가자 식별과 공동 편집, 시험 저장·채점 흐름
 focus: ["Collaborative editing", "Exam workflow", "Session recovery", "Operations docs"]
 summary: "참가자 식별과 공동 편집 충돌, 답안 저장 실패, 동시 모집과 재시작 복구까지 커뮤니티 운영에서 생기는 문제를 해결한 사례입니다."
 evidence:
-  - { val: "Match", label: "운영진 내부 사용", detail: "팀 편성과 결과 공유" }
-  - { val: "Exam", label: "관리자 시험 웹 구현·배포" }
-  - { val: "Gather Bot", label: "테스트 서버 파일럿 배포" }
+  - {"val": "OWKR Match", "label": "운영진이 참가 명단을 함께 편집하고 팀을 편성해 결과를 공유"}
+  - {"val": "OWKR Exam", "label": "운영진 선발 시험의 응시·답안 제출·채점에 사용하는 웹 도구"}
+  - {"val": "시간을달리는소녀", "label": "Discord에서 내전 모집·참가 신청·티어 수집·대기실 안내를 처리"}
+  - {"val": "OWKR Docs", "label": "참가자와 운영진이 내전 규칙·참가 방법·봇 이용 안내를 확인"}
 traceLinks:
+  - { label: "티어 삭제와 복원 검증 PR #19", labelEn: "Tier erasure and recovery PR #19", href: "https://github.com/Overwatch-KR/owkr-gather-bot/pull/19" }
+  - { label: "실제 백업 복원 점검 PR #20", labelEn: "Live backup restore record PR #20", href: "https://github.com/Overwatch-KR/owkr-gather-bot/pull/20" }
   - { label: "Match 공동 편집 PR #10", labelEn: "Match collaboration PR #10", href: "https://github.com/Overwatch-KR/owkr-balance/pull/10" }
   - { label: "접속자 표시 PR #17", labelEn: "Editor presence PR #17", href: "https://github.com/Overwatch-KR/owkr-balance/pull/17" }
   - { label: "시험 시간 제어 PR #4", labelEn: "Exam time controls PR #4", href: "https://github.com/Overwatch-KR/owkr-exam/pull/4" }
   - { label: "테스트 응시 분리 PR #5", labelEn: "Test attempt separation PR #5", href: "https://github.com/Overwatch-KR/owkr-exam/pull/5" }
   - { label: "관리자 시험 웹", labelEn: "Admin exam site", href: "https://owkr-exam.vercel.app/" }
   - { label: "운영 가이드", labelEn: "Operations guide", href: "https://overwatch-kr.github.io/owkr-docs/" }
-  - { label: "Gather Bot 저장소", labelEn: "Gather Bot repository", href: "https://github.com/Overwatch-KR/owkr-gather-bot" }
+  - { label: "시간을달리는소녀 저장소", labelEn: "시간을달리는소녀 repository", href: "https://github.com/Overwatch-KR/owkr-gather-bot" }
   - { label: "운영 문서 저장소", labelEn: "Operations docs repository", href: "https://github.com/Overwatch-KR/owkr-docs" }
 metrics: []
 callouts: []
@@ -32,72 +35,72 @@ github: "https://github.com/Overwatch-KR/owkr-balance"
 link: "https://owkr-internal-balance.vercel.app/"
 ---
 
-## 커뮤니티 운영에 필요한 도구들
 
-내전 운영에는 참가자 확인과 팀 편성뿐 아니라 운영진 선발 시험, 모집과 대기열 관리, 규정 안내가 필요했습니다. 운영자가 여러 명이면 같은 명단을 동시에 고치거나, 시험과 모집 도중 상태가 달라지는 상황도 다뤄야 했습니다.
+## 여러 운영자가 함께 쓰는 커뮤니티 도구
 
-## 참가자 식별과 명단 공유
+OWKR 운영진은 참가 명단을 확인하고 팀을 편성하는 한편, 운영진 선발 시험과 Discord 모집도 관리합니다. 저는 다른 기여자와 함께 Match를 개선하고, 시험 웹·시간을달리는소녀·운영 가이드를 연결하는 작업에 참여했습니다.
 
-이름이나 배틀태그는 변경되거나 중복될 수 있어 기존 참가자와 잘못 연결될 수 있었습니다. [Match PR #5](https://github.com/Overwatch-KR/owkr-balance/pull/5)에서 Discord ID를 기준으로 입력·파싱·사용자 시트를 연결하고, 신규 참가자와 기존 사용자의 연결을 운영자가 검토하도록 만들었습니다. 표시 이름이 없을 때도 기존 정보는 보존합니다.
+핵심은 화면을 늘리는 것보다 **같은 참가자를 정확히 식별하고, 여러 사람이 작업해도 변경과 답안을 잃지 않게 하는 것**이었습니다.
 
-[PR #9](https://github.com/Overwatch-KR/owkr-balance/pull/9)의 결과 공유에는 Discord ID와 정확한 팀·역할 위치만 24시간 저장합니다. 불러올 때 최신 사용자 시트로 티어를 다시 읽고 균형 지표를 계산해, 오래된 티어를 복제하지 않으면서 편성 결과는 유지하도록 했습니다. [PR #23](https://github.com/Overwatch-KR/owkr-balance/pull/23)에서는 ‘함께 편집’과 ‘결과만 보내기’를 나눠 운영자가 원하는 공유 방식을 선택하도록 정리했습니다.
+## 참가자 확인부터 팀 편성과 공유까지
+
+이름이 바뀌거나 같은 이름을 쓰는 참가자를 잘못 연결하지 않도록 Discord ID를 기준으로 명단과 유저 시트를 연결했습니다. 신규 참가자와 중복 후보는 운영자가 확인한 뒤 반영하고, 표시 이름이 없어도 기존 정보는 유지합니다.
+
+운영자는 명단을 함께 편집하거나 확정한 팀 결과만 전달할 수 있습니다. 공유 데이터에는 참가자 식별자와 팀 위치를 저장하고, 불러올 때 최신 티어를 다시 읽어 오래된 정보를 복제하지 않도록 했습니다.
+
 
 ## 동시에 편집해도 변경을 잃지 않도록
 
-### 두 운영자가 같은 명단을 바꿀 때
+두 운영자가 같은 명단을 고치면 나중 저장이 먼저 저장한 내용을 덮어쓸 수 있습니다. 공동 편집에 revision을 두고, Redis의 비교와 갱신을 하나의 Lua 연산으로 처리했습니다. 기준 revision이 달라진 저장은 최신 명단과 함께 충돌로 반환합니다.
 
-[PR #10](https://github.com/Overwatch-KR/owkr-balance/pull/10)에서 공동 편집을 구현했습니다. 예를 들어 두 운영자가 같은 명단을 열고 한 명은 참가자를 추가하고 다른 한 명은 팀 위치를 바꾸면, 마지막 저장으로 전체 상태를 교체하는 방식은 먼저 저장한 변경을 잃게 할 수 있습니다. 화면에 다른 사람의 변경을 빨리 표시하는 일과 서버에서 덮어쓰기를 막는 일은 별도의 문제였습니다.
+클라이언트는 아직 보내지 않은 변경을 조회 결과로 덮지 않습니다. 충돌 시에는 최신 명단과 안내를 보여주고, 필요한 수정을 다시 적용하도록 했습니다. 다른 운영자의 접속 상태도 같은 조회 흐름에서 확인할 수 있습니다.
 
-공유 명단에 revision을 두고 Redis의 비교와 갱신을 Lua로 한 번에 처리했습니다. 서버가 값을 읽은 뒤 별도 요청으로 저장하면 두 요청이 같은 revision 검사를 모두 통과할 수 있기 때문입니다. 기대 revision이 맞으면 다음 revision으로 저장하고, 맞지 않으면 최신 상태가 포함된 conflict를 반환합니다.
+<details class="case-notes">
+<summary>공동 편집의 구현과 검증</summary>
 
-[PR #10](https://github.com/Overwatch-KR/owkr-balance/pull/10)의 클라이언트는 충돌 시 서버의 최신 명단을 반영하고, 다른 운영자가 먼저 수정했으므로 필요한 변경을 다시 적용하라고 안내합니다. 명단과 팀 위치를 하나의 revision으로 검증해 참가자와 배치가 일관된 상태로 저장되도록 했습니다.
+공유 세션은 Discord ID·참가 순서·팀 위치를 중심으로 구성하고, 중복 ID와 불완전한 팀 위치를 거부합니다. 화면 동기화는 polling을 사용하며 저장 중인 변경과 조회 응답을 구분하고 숨겨진 탭의 불필요한 조회를 줄였습니다.
 
-### Match: 공유할 데이터와 갱신 방식을 제한
+저장소 테스트는 revision 증가와 stale 저장의 거절을 확인합니다. Redis 테스트 대역을 사용하는 검사이며, 실제 Redis의 동시 요청 부하 검증과는 구분합니다. 구현은 [공동 편집 PR #10](https://github.com/Overwatch-KR/owkr-balance/pull/10)과 [접속자 표시 PR #17](https://github.com/Overwatch-KR/owkr-balance/pull/17)에 있습니다.
 
-공유 세션에는 Discord ID, 참가 순서와 선택적인 팀 위치를 저장하고, 표시할 배틀태그와 역할별 티어는 유저 시트에서 읽어 복원합니다. 참가자의 상세 정보를 세션마다 복제하면 유저 시트 수정 후 서로 다른 티어를 보게 될 수 있어, 식별자와 배치를 중심으로 계약을 정리했습니다. Discord ID가 없거나 중복된 참가자, 불완전한 팀 위치는 검증에서 거부합니다.
+</details>
 
-이 공동 편집은 WebSocket이 아닌 polling으로 구현했습니다. [PR #10](https://github.com/Overwatch-KR/owkr-balance/pull/10)에서는 짧은 주기의 조회와 로컬 변경 전송을 구분하고, 저장 중이거나 아직 보내지 않은 변경이 있으면 조회로 화면을 덮지 않도록 했습니다. 숨겨진 탭의 polling도 건너뜁니다. 이후 [PR #17](https://github.com/Overwatch-KR/owkr-balance/pull/17)에서는 기존 응답에 접속자와 최근 변경 정보를 추가하고, 인증된 작업자 정보와 만료 시간을 사용했습니다.
+## 답안 저장부터 제출과 채점까지
 
-기존 조회 경로 안에서 접속자와 최근 변경을 함께 전달하고, 최종 저장은 revision 검사로 검증합니다. 화면의 공동 작업 안내와 서버의 저장 규칙을 분리해 구성했습니다.
+응시자는 남은 시간과 저장 상태를 보며 답안을 작성하고, 저장에 실패하면 재시도할 수 있습니다. 제출은 진행 중인 저장을 확인한 뒤 처리하고, 제출 중에는 입력을 잠가 답안이 바뀌지 않도록 했습니다.
 
-### Match: 테스트와 협업 범위
+운영자는 미응답·검토·미채점 문항으로 이동하고 시험의 정지·재개·시간 연장을 관리합니다. 관리자 편집의 충돌 기준은 수정 시작 시 고정하고, 충돌 후에는 초안을 복원할 수 있게 했습니다. 테스트 응시는 일반 관리 현황에서 분리했습니다.
 
-공동 편집 API는 기존 스냅샷 공유와 같은 Vercel Function 안에서 mode로 구분했습니다. Hobby 플랜의 함수 수 제한을 맞추면서도 기존 공유 코드는 그대로 동작하도록 배포 단위를 정리했습니다.
+## 시간을달리는소녀로 모집과 대기실 안내
 
-[PR #10](https://github.com/Overwatch-KR/owkr-balance/pull/10)의 저장소 테스트는 정상 갱신 뒤 revision 증가와 stale 저장의 conflict 응답을 확인합니다. 계약 테스트에는 참가·대기 순서와 팀 위치 보존, 중복 ID와 일부만 채워진 팀 위치 거절이 포함됩니다.
+Discord에서 같은 시각의 내전 두 개를 모집할 수 있도록 모집 메시지별 참가 정보를 나누고, 두 대기실의 예약이 겹치지 않게 했습니다. 생성 중인 내전도 예약에 포함하며 실패나 취소는 자신의 예약만 해제합니다.
 
-Match는 다른 기여자와 함께 개발했습니다. 위 PR은 제가 담당한 참가자 식별, 결과 공유, 공동 편집과 운영 화면의 변경 범위를 보여줍니다.
+모집이 마감 시각까지 완료되지 않거나 원본 공지가 삭제되면 해당 내전을 취소하고 안내를 정리합니다. 전송에 실패한 정리 작업은 재시작 뒤 다시 처리하도록 기록해, 취소된 내전이 남거나 다른 모집에 영향을 주지 않게 했습니다.
 
-## 답안 저장부터 채점까지 끊기지 않는 시험
+## 운영 가이드와 복구 절차까지 연결
 
-응시자가 답안 저장 여부를 알기 어렵고, 저장 실패 후 다시 입력해야 하는 문제가 있었습니다. [Exam PR #2](https://github.com/Overwatch-KR/owkr-exam/pull/2)에서 저장 상태와 재시도를 제공하고, 수동 제출은 진행 중인 저장 요청을 확인한 뒤 처리하도록 했습니다. 제출 중에는 입력을 잠가 저장과 제출 사이에 답안이 달라지는 상황을 막았습니다.
+내전 규칙과 참가 방법, 봇 안내는 OWKR Docs에 모았습니다. 참가자와 운영자가 같은 안내를 확인하도록 모집·취소 규칙과 실제 도구의 동작을 함께 정리했습니다.
 
-관리자 편집에서는 수정 시작 시 revision을 고정했습니다. 이후 최신 조회가 도착해도 충돌 검사의 기준이 바뀌지 않도록 하고, 충돌 후 초안을 복원하도록 했습니다. 채점 점수는 문항 배점을 넘지 않도록 화면과 서버에서 함께 검사합니다.
+운영 시간 조정, 백업과 재시작이 경합하지 않게 잠금을 공유하고, 백업·로그 보관 기한을 정리 작업에 연결했습니다. 삭제 요청이 들어온 뒤 과거 백업을 복원하는 경우에는 요청을 다시 적용한 후 봇을 연결하도록 절차를 남겼습니다.
 
-긴 문제를 읽다가 상태 확인과 문항 이동을 위해 반복해서 스크롤하는 문제는 [PR #3](https://github.com/Overwatch-KR/owkr-exam/pull/3)에서 다뤘습니다. 남은 시간과 저장 상태를 고정하고, 미응답·검토 필터와 제출 확인창에서 문항으로 돌아가는 흐름을 추가했습니다. 관리자에게는 응시자 검색과 미채점 문항 이동을 제공했습니다.
 
-[PR #4](https://github.com/Overwatch-KR/owkr-exam/pull/4)에서는 정지·재개·시간 연장을 서버 상태로 관리하고, [PR #5](https://github.com/Overwatch-KR/owkr-exam/pull/5)에서는 테스트 응시를 일반 관리 현황에서 분리했습니다.
+<details class="case-notes">
+<summary>백업·삭제 요청의 검증 범위</summary>
 
-## 동시 모집과 취소를 안전하게 처리하는 봇
+백업 정리는 미리보기와 실제 적용을 구분하고, 생성 기록이 잘못됐으면 삭제 전에 중단합니다. 링크와 관계없는 파일은 정리 대상으로 따라가지 않습니다.
 
-같은 시각의 내전 두 개를 열려고 해도 기존 중복 검사에서 생성이 거부됐습니다. [Gather Bot PR #14](https://github.com/Overwatch-KR/owkr-gather-bot/pull/14)에서는 모집 메시지별 참가 정보를 유지하면서 대기실1·2를 예약하도록 바꿨습니다. 생성 준비 중인 내전도 잠금 안에서 예약에 포함하고, 두 대기실이 모두 예약됐으면 공지를 보내기 전에 거절합니다. 재시도는 기존 내전에 연결하며, 실패나 취소는 자신의 예약만 해제합니다.
+[삭제·복원 검사 PR #19](https://github.com/Overwatch-KR/owkr-gather-bot/pull/19)와 [실제 백업 점검 PR #20](https://github.com/Overwatch-KR/owkr-gather-bot/pull/20)에 격리 테스트와 운영 점검을 구분해 기록했습니다. 삭제 요청을 자동으로 재적용하는 기능은 없으므로 요청 대장에 따른 수동 절차가 필요합니다.
 
-[PR #17](https://github.com/Overwatch-KR/owkr-gather-bot/pull/17)에서는 지정 시각까지 최초 모집이 완료되지 않은 내전을 자동 취소하도록 했습니다. 마감 직전 접수된 반응을 놓치지 않도록 큐와 저장 작업을 비운 뒤 판단하고, 모집 완료 후 이탈은 미완료 모집과 구분했습니다.
+</details>
 
-공지 삭제도 취소와 연결하되, 접근 실패를 삭제로 오해하지 않도록 확실한 NotFound만 근거로 사용합니다. DB 취소와 메시지 정리 작업을 함께 기록해 전송 실패 후에도 재시도할 수 있게 했습니다. 중단 뒤 복구 시에는 미처리된 마감 취소부터 확인합니다.
+## 실제 사용과 맡은 역할
 
-## 배포 이후의 복구와 보관까지
+Match는 운영진의 명단 편집·팀 편성·결과 공유에 사용합니다. Exam은 운영진 선발 시험을 위한 웹 도구이고, OWKR Docs는 규정과 이용 안내의 진입점입니다. 시간을달리는소녀는 테스트 서버의 파일럿 단계입니다.
 
-[PR #10](https://github.com/Overwatch-KR/owkr-gather-bot/pull/10)에서는 파일럿 운영 시간과 백업 작업이 같은 잠금을 사용하도록 해, 종료·재시작과 백업이 경합하지 않도록 했습니다. 운영 시간 밖에는 컨테이너를 정상 종료하고 VM과 영구 디스크는 유지합니다.
+저는 참가자 식별과 공동 편집, 답안 저장·채점, 모집의 예약·취소·복구를 담당했습니다. 사용자에게 보이는 상태와 서버가 저장하는 상태를 맞추고, 작업이 중단된 뒤에도 이어갈 수 있는 흐름을 만드는 데 집중했습니다.
 
-[PR #18](https://github.com/Overwatch-KR/owkr-gather-bot/pull/18)에서는 승인된 백업 7일·운영 로그 최대 30일 보관 기준을 실제 정리 작업으로 연결했습니다. 백업은 기본 미리보기와 명시적 적용을 구분하고, 생성 기록에 오류가 있으면 삭제 전에 전체 계획을 중단합니다. 링크나 관계없는 파일은 따라가지 않습니다.
+<details class="case-notes">
+<summary>사용 범위와 테스트 조건</summary>
 
-운영 문서는 별도의 부록이 아니라 동작을 설명하는 진입점으로 관리했습니다. [OWKR Docs](https://github.com/Overwatch-KR/owkr-docs)로 정책 원본을 모으고, 모집 미완료와 공지 삭제에 따른 취소 규칙도 봇 구현과 함께 반영했습니다.
+봇의 2026-10-28 파일럿 점검은 실참가자 없이 복구와 취소 절차를 확인했습니다. 10번째 참가와 모집 완료 후 이탈은 자동 테스트로 다뤘으며, 실제 10명 참가 환경의 전체 검증은 아닙니다. Exam은 검사용 답안의 저장·제출·채점을 확인한 범위로, 운영 Discord 로그인부터의 전체 흐름과 구분합니다.
 
-## 실제 적용과 검증 범위
-
-Match는 운영진의 팀 편성과 결과 공유에 사용하며, Exam과 운영 가이드는 배포되어 있습니다. Gather Bot은 테스트 서버에 파일럿 배포했습니다. 2026년 10월 28일 검증 기록에는 같은 시각의 두 내전 복구, 지정 시각의 미완료 모집 취소, 원본 공지 삭제에 따른 취소가 남아 있습니다.
-
-해당 봇 검증의 실제 참가자는 0명이었습니다. 10번째 참가 반응과 모집 완료 후 이탈 같은 경계는 자동 테스트로 확인했으며, 실제 10명 참가 환경의 전체 흐름을 검증한 것으로 표현하지 않습니다. Exam도 검사용 데이터의 저장 실패·재시도·제출·채점을 확인한 범위이며, 운영 Discord 로그인 이후의 전체 흐름은 PR 검증 범위에 포함되지 않습니다.
-
-이 프로젝트에서 맡은 일은 화면을 추가하는 데서 끝나지 않았습니다. 누가 같은 참가자인지, 어떤 변경을 저장해도 되는지, 취소 이후 무엇을 정리하고 복구해야 하는지를 코드와 운영 문서에 함께 담았습니다.
+</details>

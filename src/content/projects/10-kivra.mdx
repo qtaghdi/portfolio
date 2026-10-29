@@ -13,8 +13,8 @@ responsibility: "실행 기록 수집 계약과 터미널·IDE 연결, 데스크
 focus: ["Tauri", "Developer memory", "IDE protocol", "Local-first"]
 summary: "터미널 실행, 오류와 해결 노트를 프로젝트별 기억으로 남기고 VS Code·JetBrains에서 같은 맥락에 접근하는 로컬 중심 개발자 메모리 도구입니다."
 evidence:
-  - { val: "Capture", label: "실행 기록 수집 흐름", detail: "PR #1" }
-  - { val: "Modules", label: "Rust·렌더러 책임 분리", detail: "PR #4" }
+  - {"val": "실행 기록", "label": "터미널과 IDE의 실행·오류·해결 노트를 프로젝트별로 모아 확인"}
+  - {"val": "로컬 작업 공간", "label": "데스크톱 앱에서 이전 실행 맥락을 찾아 다음 개발 작업에 참고"}
 traceLinks:
   - { label: "실행 기록 수집 PR #1", labelEn: "Capture flow PR #1", href: "https://github.com/Kivra-App/Kivra/pull/1" }
   - { label: "모듈 분리 PR #4", labelEn: "Module split PR #4", href: "https://github.com/Kivra-App/Kivra/pull/4" }
@@ -42,9 +42,9 @@ VS Code와 JetBrains 통합도 같은 수집 흐름을 사용하도록 변경했
 
 [PR #4](https://github.com/Kivra-App/Kivra/pull/4)에서는 커진 Rust 진입점의 인증, 기록 수집, 프로젝트와 통합 책임을 모듈로 분리했습니다. 렌더러의 컴포넌트, 서비스와 설정도 나눴습니다. 기존 동작을 유지하면서 인증, 기록 수집과 편집기 통합을 각각 수정할 수 있는 경계로 정리했습니다.
 
-### 같은 흐름을 함께 개선한 기록
+### 수집과 저장을 잇는 공통 계약
 
-다른 기여자는 [PR #2](https://github.com/Kivra-App/Kivra/pull/2)에서 중앙 실행 기록 저장 경로를 적용하고 VS Code 테스트와 진단 도구를 수정했습니다. 제 수집 흐름 구현 이후 같은 통합 경계를 함께 개선한 기록입니다. 실행 기록의 생성부터 저장 경로와 진단까지 같은 수집 흐름을 함께 다듬었습니다.
+다른 기여자는 [PR #2](https://github.com/Kivra-App/Kivra/pull/2)에서 중앙 실행 기록 저장 경로를 적용하고 VS Code 테스트와 진단 도구를 수정했습니다. 수집 형식과 저장 경로를 공통 계약으로 연결하면서 각 통합을 함께 개선했습니다.
 
 ## 하나의 목록으로 이어지는 실행 기록
 

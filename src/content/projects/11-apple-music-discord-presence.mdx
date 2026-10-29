@@ -14,9 +14,8 @@ responsibility: "OS별 재생 정보 수집, Discord IPC, 상태·이미지 동�
 focus: ["Native integration", "Connection recovery", "Local settings", "Desktop distribution"]
 summary: "Apple Music 재생 정보를 Discord 활동으로 연결하는 macOS·Windows용 개인 개발 도구입니다. OS별 정보 수집, 연결 복구, 설정 UI와 설치 패키지까지 구현했습니다."
 evidence:
-  - { val: "macOS + Windows", label: "OS별 수집 경로와 공통 상태 모델" }
-  - { val: "Local IPC", label: "Unix socket · Windows named pipe" }
-  - { val: "v0.8.0", label: "두 플랫폼의 설치형 ZIP 공개", detail: "2026-10-25 릴리스" }
+  - {"val": "음악 활동 공유", "label": "Apple Music에서 듣는 곡과 앨범·재생 시간을 Discord 프로필에 표시"}
+  - {"val": "표시 설정", "label": "로컬 설정 화면에서 공개할 음악 정보와 표시 방식을 선택"}
 traceLinks:
   - { label: "v0.8.0 릴리스와 설치 파일", labelEn: "v0.8.0 release and installers", href: "https://github.com/qtaghdi/apple-music-discord-presence/releases/tag/v0.8.0" }
   - { label: "OS별 메타데이터 연결", labelEn: "Platform metadata integration", href: "https://github.com/qtaghdi/apple-music-discord-presence/blob/main/src/music.ts" }
@@ -31,12 +30,14 @@ link: "https://qtaghdi.github.io/apple-music-discord-presence/"
 github: "https://github.com/qtaghdi/apple-music-discord-presence"
 ---
 
+
 ## 듣고 있는 음악을 Discord에 공유하기
 
 Apple Music에서 듣는 곡과 앨범, 재생 진행 상황을 Discord 활동에 표시하려고 만든 개인 프로젝트입니다.<br />
 재생 정보는 운영체제가 제공하고, 표시할 활동은 Discord의 로컬 연결을 통해 전달해야 했습니다. 각 앱이 시작·종료되는 순서와 네트워크의 앨범 이미지 조회까지 서로 다른 수명을 가집니다.
 
 곡 제목을 한 번 전달하는 것만으로는 충분하지 않았습니다. 곡을 바꾸거나 재생 위치를 이동했을 때 이전 정보가 남지 않아야 하고, Discord를 재시작하면 현재 곡을 다시 전달해야 했습니다. 사용자는 Node.js 설치나 개발자용 앱 설정 없이 도구를 시작할 수 있어야 했습니다.
+
 
 ## 재생 상태 연동과 연결 복구
 
@@ -72,6 +73,6 @@ macOS 메뉴바와 Windows 트레이에서 설정, 연결 상태, 재연결, 로
 
 ## 설치 패키지 공개와 동작 검증
 
-macOS Apple Silicon과 Windows x64용 설치 패키지를 공개했고, v0.8.0 릴리스에서 두 플랫폼의 다운로드 파일을 확인할 수 있습니다. 제품 안내 사이트와 설정 화면은 한국어·영어를 지원합니다. 아래에는 macOS에서 Discord 활동에 곡·앨범 이미지·재생 진행 상태가 표시된 실제 화면을 담았습니다.
+macOS Apple Silicon과 Windows x64용 설치 패키지를 공개했고, v0.8.0 릴리스에서 두 플랫폼의 다운로드 파일을 확인할 수 있습니다. 제품 안내 사이트와 설정 화면은 한국어·영어를 지원합니다. macOS의 실제 Discord 표시 화면은 앞의 음악 공유 흐름에 함께 담았습니다.
 
 재생 상태 포맷, 타임스탬프, IPC 프레임과 연결 경로, 이미지 검색과 설정 저장 경계를 테스트로 남겼습니다. 사용자가 패키지를 설치한 뒤 재생 상태를 공유하고, 연결이 끊기면 복구하며, 설정과 종료까지 관리할 수 있도록 구성했습니다.
