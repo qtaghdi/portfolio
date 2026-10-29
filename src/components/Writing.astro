@@ -3,6 +3,11 @@ import type { Locale } from '../i18n';
 interface Props { locale: Locale; }
 const { locale } = Astro.props;
 const ko = locale === 'ko';
+const posts = [
+  { slug: 'AI-시대에-오히려-사이드-프로젝트가-중요한-이유', title: 'AI 시대에 오히려 사이드 프로젝트가 중요한 이유', summary: ko ? '사이드 프로젝트의 가치를 이야기한 글로, SYDE 블로그 협업 제안의 계기가 됐습니다.' : 'A post on the value of side projects that led to an invitation to collaborate with SYDE.', likes: 33, comments: 4 },
+  { slug: '개발이-재미없어지는-이유', title: '개발이 재미없어지는 이유', summary: ko ? '개발의 결과보다 과정을 좋아했던 개발자의 시선으로 쓴 글입니다.' : 'A reflection from a developer who enjoyed the process of building more than the result.', likes: 60, comments: 13 },
+  { slug: '4천-명-규모의-오버워치-내전을-관리해보며', title: '4천 명 규모의 오버워치 내전을 관리해보며', summary: ko ? 'OWKR 커뮤니티의 내전 운영 경험을 소개한 글입니다.' : 'Writing about organizing community matches at OWKR.', likes: 13, comments: 2 },
+];
 ---
 <section id="writing" class="writing-section">
   <div class="shell writing-grid">
@@ -11,17 +16,26 @@ const ko = locale === 'ko';
       <h3>{ko ? '경험을 글로 나누고, 새로운 연결로 이어갑니다.' : 'Sharing experiences through writing and community.'}</h3>
       <div class="activity">
         <a href="https://velog.io/@qtaghdi/posts" target="_blank" rel="noopener noreferrer">Velog ↗</a>
-        <p>{ko ? '개발 경험과 사이드 프로젝트에 대한 생각을 기록합니다. 글을 읽은 플랫폼 운영자들의 연락을 받아 콘텐츠 협업과 앰버서더 참여로 활동을 넓히고 있습니다.' : 'I write about development and side projects. Invitations from platform founders who read my posts have led to content collaborations and an ambassador role.'}</p>
+        <p>{(ko ? '개발 경험과 사이드 프로젝트에 대한 생각을 기록합니다.\n글을 읽은 플랫폼 운영자들의 연락을 받아 콘텐츠 협업과 앰버서더 참여로 활동을 넓히고 있습니다.' : 'I write about development and side projects.\nInvitations from platform founders who read my posts have led to content collaborations and an ambassador role.').split('\n').map((line, index) => <Fragment>{index > 0 && <br />}{line}</Fragment>)}</p>
+      </div>
+      <div class="featured-posts">
+        <h4>{ko ? '대표 글' : 'Selected writing'}</h4>
+        <ul>{posts.map((post) => <li>
+          <a class="post-title" href={`https://velog.io/@qtaghdi/${encodeURIComponent(post.slug)}`} target="_blank" rel="noopener noreferrer">{post.title} ↗</a>
+          <p>{post.summary}</p>
+          <small>{ko ? `좋아요 ${post.likes} · 댓글 ${post.comments}` : `${post.likes} likes · ${post.comments} comments`}</small>
+        </li>)}</ul>
+        <p class="stats-date">{ko ? '2026.10.29 공개 글 목록 기준' : 'Public post listing as of Oct 29, 2026'}</p>
       </div>
       <div class="activity">
         <a href="https://www.rilog.kr/feeds" target="_blank" rel="noopener noreferrer">Rilog ↗</a>
         <span>{ko ? '앰버서더 참여' : 'Ambassador'}</span>
-        <p>{ko ? '글의 주제와 전달 방식에 관심을 가진 Rilog 운영팀의 앰버서더 제안을 수락했습니다. 벨로그에 작성하는 새 글을 원문 수정 없이 Rilog에도 소개하는 방식으로 참여합니다.' : 'I accepted an ambassador invitation from the Rilog team, who appreciated the topics and clarity of my writing. The collaboration allows new Velog posts to be shared on Rilog without altering the originals.'}</p>
+        <p>{(ko ? '글의 주제와 전달 방식에 관심을 가진 Rilog 운영팀의 앰버서더 제안을 수락했습니다.\n벨로그에 작성하는 새 글을 원문 수정 없이 Rilog에도 소개하는 방식으로 참여합니다.' : 'I accepted an ambassador invitation from the Rilog team, who appreciated the topics and clarity of my writing.\nThe collaboration allows new Velog posts to be shared on Rilog without altering the originals.').split('\n').map((line, index) => <Fragment>{index > 0 && <br />}{line}</Fragment>)}</p>
       </div>
       <div class="activity">
         <a href="https://syde.kr/" target="_blank" rel="noopener noreferrer">SYDE ↗</a>
         <span>{ko ? '블로그 콘텐츠 협업' : 'Blog collaboration'}</span>
-        <p>{ko ? '「AI 시대에 오히려 사이드 프로젝트가 중요한 이유」를 읽은 SYDE 운영자의 블로그 협업 제안을 수락했습니다. 사이드 프로젝트 커뮤니티에 원문 링크와 함께 글을 공유하는 협업입니다.' : 'After reading my post about why side projects matter in the AI era, the SYDE founder invited me to collaborate on its blog. I accepted the invitation to share writing with links to the original posts.'}</p>
+        <p>{(ko ? '「AI 시대에 오히려 사이드 프로젝트가 중요한 이유」를 읽은 SYDE 운영자의 블로그 협업 제안을 수락했습니다.\n사이드 프로젝트 커뮤니티에 원문 링크와 함께 글을 공유하는 협업입니다.' : 'After reading my post about why side projects matter in the AI era, the SYDE founder invited me to collaborate on its blog.\nI accepted the invitation to share writing with links to the original posts.').split('\n').map((line, index) => <Fragment>{index > 0 && <br />}{line}</Fragment>)}</p>
       </div>
     </div>
   </div>
@@ -32,6 +46,14 @@ const ko = locale === 'ko';
   .writing-grid { display: grid; grid-template-columns: 180px minmax(0,1fr); gap: 48px; }
   h2 { font-size: 17px; font-weight: 500; padding-top: 7px; }
   h3 { font-size: 32px; line-height: 1.45; letter-spacing: -.035em; word-break: keep-all; margin-bottom: 32px; }
+  ul { list-style: none; padding: 0; }
+  .featured-posts { padding-bottom: 24px; }
+  h4 { font-size: 14px; color: $gunmetal; margin-bottom: 12px; }
+  li { padding: 16px 0; }
+  .post-title { font-size: 17px; line-height: 1.6; }
+  li p { font-size: 15px; margin-top: 2px; }
+  small, .stats-date { color: $gunmetal; font-size: 13px; line-height: 1.8; }
+  small { display: block; margin-top: 6px; }
   .activity { padding: 24px 0; border-top: 1px solid $line; }
   a { color: $accent; font-size: 20px; display: inline-flex; align-items: center; min-height: 44px; }
   span { display: inline-block; color: $silver; font-size: 13px; margin-left: 16px; }
