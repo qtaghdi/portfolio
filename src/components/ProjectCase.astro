@@ -92,9 +92,9 @@ const chapters = locale === 'ko'
   .project-meta { display: grid; gap: 14px; margin-top: 40px; }
   .project-meta > div { display: grid; grid-template-columns: 88px minmax(0,1fr); gap: 24px; }
   dt { color: $silver; }dd { color: $silver; font-size: 15px; line-height: 1.8; overflow-wrap: anywhere; }
-  .case-layout { display: grid; grid-template-columns: minmax(0,760px); justify-content: center; gap: 48px; padding-top: 48px; }
+  .case-layout { display: grid; grid-template-columns: 220px minmax(0,760px); justify-content: center; align-items: start; gap: 48px; padding-top: 48px; }
   .case-content { min-width: 0; }
-  .content-section, .trace-section, .case-content :global(.mdx-content > h2) { scroll-margin-top: 108px; }
+  .content-section, .trace-section, .case-content :global(.mdx-content > h2) { scroll-margin-top: 8px; }
   .content-section { margin-bottom: 56px; }
   .content-section h2, .trace-section h2, .case-content :global(.mdx-content > h2) { margin-bottom: 20px; font-size: 26px; font-weight: 600; line-height: 1.5; letter-spacing: -.03em; }
   .case-content :global(.mdx-content > h2:not(:first-child)) { margin-top: 56px; }
@@ -126,8 +126,9 @@ const chapters = locale === 'ko'
   .case-visual.presence-screen { height: auto; aspect-ratio: 828 / 340; }
   figcaption { margin-top: 14px; color: $gunmetal; font-size: 13px; line-height: 1.8; }
   .next-project { display: flex; align-items: center; justify-content: space-between; gap: 24px; padding: 32px 0; margin-top: 72px; border-top: 1px solid $line; }.next-project span { color: $gunmetal; font-size: 14px; }.next-project a { display: flex; align-items: center; gap: 12px; min-height: 44px; color: $accent; font-size: 18px; }
-  @media (max-width: 760px) { .case-layout { padding-right: 40px; } }
+  @media (max-width: 960px) { .case-layout { grid-template-columns: minmax(0,760px); gap: 32px; }.content-section, .trace-section, .case-content :global(.mdx-content > h2) { scroll-margin-top: 76px; } }
   @media (max-width: 680px) {
+    .content-section, .trace-section, .case-content :global(.mdx-content > h2) { scroll-margin-top: 68px; }
     .project-page { padding-top: 68px; }.project-hero { padding-top: 24px; padding-bottom: 28px; }h1 { font-size: 32px; margin-top: 20px; }.thesis { font-size: 20px; }.project-meta { margin-top: 28px; }.project-meta > div { grid-template-columns: 48px minmax(0,1fr); gap: 16px; }dt,dd { font-size: 14px; }
     .case-layout { padding-top: 24px; }.content-section h2, .trace-section h2, .case-content :global(.mdx-content > h2) { font-size: 24px; }.case-subsection h3, .case-content :global(.mdx-content > h3) { font-size: 19px; }.content-section p, .case-subsection ul, .case-content :global(.mdx-content > p), .case-content :global(.mdx-content > ul), .case-content :global(.mdx-content > ol) { font-size: 16px; }
     .resource-usage > div { grid-template-columns: 110px minmax(0,1fr); gap: 16px; }.case-visual { height: 300px; }.case-visual.mobile-screen { height: auto; aspect-ratio: 390 / 788; }.next-project { align-items: start; flex-direction: column; gap: 8px; margin-top: 48px; }

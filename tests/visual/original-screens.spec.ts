@@ -153,3 +153,32 @@ test('layouts stay within narrow and desktop viewports', async ({ page }, testIn
     }
   }
 });
+
+test('text contents follow the article and highlight the current section', async ({ page }, testInfo) => {
+  for (const prefix of ['', '/en']) {
+    await page.goto(`${prefix}/projects/owkr/`);
+    await page.addStyleTag({ content: 'html { scroll-behavior: auto !important; }' });
+    const rail = page.locator('.section-rail');
+    const links = rail.locator('a');
+    await expect(rail).toHaveCSS('position', 'sticky');
+    await expect(rail.locator('i')).toHaveCount(0);
+    const next = links.nth(1);
+    await next.click();
+    await expect(next).toHaveAttribute('aria-current', 'location');
+    await expect(rail.locator('[aria-current]')).toHaveCount(1);
+    await page.evaluate(() => window.scrollBy(0, 240));
+    await expect.poll(() => rail.evaluate((node) => Math.round(node.getBoundingClientRect().top))).toBe(testInfo.project.name === 'mobile' ? 68 : 108);
+    const later = links.nth(2);
+    const id = decodeURIComponent((await later.getAttribute('href'))!.slice(1));
+    await page.evaluate((id) => {
+      const node = document.getElementById(id)!;
+      window.scrollBy(0, node.getBoundingClientRect().top - 100);
+    }, id);
+    await expect(later).toHaveAttribute('aria-current', 'location');
+    await page.evaluate(() => window.scrollTo(0, document.documentElement.scrollHeight));
+    await expect(links.last()).toHaveAttribute('aria-current', 'location');
+    const bounds = await rail.evaluate((node) => ({ rail: node.getBoundingClientRect().bottom, container: node.closest('.case-layout')!.getBoundingClientRect().bottom }));
+    expect(bounds.rail).toBeLessThanOrEqual(bounds.container + 1);
+    expect(await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth)).toBeLessThanOrEqual(1);
+  }
+});
