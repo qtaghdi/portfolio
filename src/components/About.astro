@@ -8,9 +8,9 @@ const ko = locale === 'ko';
   <div class="shell section-grid">
     <h2>{ko ? '소개' : 'About'}</h2>
     <div class="about-copy">
-      <h3>{ko ? '제품 화면과 공통 UI를 만듭니다.' : 'I build product interfaces and shared UI.'}</h3>
-      <p>{ko ? 'Bigtablet에서 웹 서비스와 사내 디자인 시스템을 개발하고 있습니다.' : 'At Bigtablet, I develop web services and the design system.'}</p>
-      <p>{ko ? '반복되는 구현을 공통 코드로 정리하고, 변경 이후의 동작을 테스트로 확인합니다.' : 'I consolidate repeated implementations into shared code and verify changes with tests.'}</p>
+      <h3>{ko ? '반복되는 문제를 함께 고칠 수 있도록.' : 'Making recurring problems easier to solve together.'}</h3>
+      <p>{ko ? '여러 화면에서 반복되는 인증과 API 처리를 공통 코드로 정리합니다.' : 'I bring repeated authentication and API logic into shared code.'}</p>
+      <p>{ko ? '화면을 만드는 데서 끝내지 않고, 저장 실패나 연결 끊김 이후에도 사용자가 작업을 이어갈 수 있도록 만듭니다.' : 'Beyond building interfaces, I help users continue their work after failed saves or lost connections.'}</p>
       <dl>
         <div><dt>{ko ? '경력' : 'Experience'}</dt><dd>Bigtablet · Frontend Engineer<small>2025.09 - {ko ? '현재' : 'Present'}</small></dd></div>
         <div><dt>{ko ? '주요 기술' : 'Technologies'}</dt><dd>TypeScript, React, Next.js, SCSS</dd></div>
@@ -20,14 +20,14 @@ const ko = locale === 'ko';
 </section>
 <style lang="scss">
   @use '../styles/tokens' as *;
-  .about-section { padding: 88px 0; border-top: 1px solid $line; }
+  .about-section { padding: 56px 0 72px; border-top: 1px solid $line; }
   .section-grid { display: grid; grid-template-columns: 180px minmax(0,1fr); gap: 48px; }
   h2 { padding-top: 7px; font-size: 17px; font-weight: 500; }
-  h3 { margin-bottom: 26px; font-size: 32px; font-weight: 600; letter-spacing: -.035em; line-height: 1.45; word-break: keep-all; }
+  h3 { margin-bottom: 20px; font-size: 32px; font-weight: 600; letter-spacing: -.035em; line-height: 1.45; word-break: keep-all; }
   p { color: $silver; font-size: 17px; line-height: 1.9; word-break: keep-all; }
   p + p { margin-top: 8px; }
-  dl { margin-top: 48px; border-top: 1px solid $line; }
+  dl { margin-top: 32px; border-top: 1px solid $line; }
   dl > div { display: grid; grid-template-columns: 160px minmax(0,1fr); gap: 24px; padding: 24px 0; border-bottom: 1px solid $line; }
   dt { color: $silver; } dd { font-size: 17px; } small { display: block; margin-top: 6px; color: $gunmetal; font-size: 14px; }
-  @media (max-width: 680px) { .about-section { padding: 56px 0; }.section-grid { grid-template-columns: 1fr; gap: 24px; }h2 { padding: 0; font-size: 15px; }h3 { font-size: 26px; margin-bottom: 20px; }p { font-size: 16px; }dl { margin-top: 32px; }dl > div { grid-template-columns: 80px minmax(0,1fr); gap: 16px; padding: 20px 0; }dt, dd { font-size: 14px; } }
+  @media (max-width: 680px) { .about-section { padding: 36px 0 48px; }.section-grid { grid-template-columns: 1fr; gap: 24px; }h2 { padding: 0; font-size: 15px; }h3 { font-size: 26px; margin-bottom: 20px; }p { font-size: 16px; }dl { margin-top: 32px; }dl > div { grid-template-columns: 80px minmax(0,1fr); gap: 16px; padding: 20px 0; }dt, dd { font-size: 14px; } }
 </style>

@@ -15,7 +15,7 @@ export const copy = {
     hero: {
       eyebrow: 'Frontend Engineer · Daegu, Korea',
       lines: ['프론트엔드 개발자', '박상민입니다.'],
-      description: '제품 화면과 공통 UI 라이브러리를 만듭니다. Bigtablet에서 웹 서비스와 디자인 시스템을 개발하고 있습니다.',
+      description: 'Bigtablet에서 웹 서비스와 디자인 시스템을 개발하고 있습니다.',
       cta: '작업 보기',
     },
     selected: {
@@ -60,7 +60,7 @@ export const copy = {
     hero: {
       eyebrow: 'Frontend Engineer · Daegu, Korea',
       lines: ['Frontend engineer', 'Park Sangmin.'],
-      description: 'I build product interfaces and shared UI libraries. At Bigtablet, I work on web services and the design system.',
+      description: 'At Bigtablet, I develop web services and the design system.',
       cta: 'Selected work',
     },
     selected: {

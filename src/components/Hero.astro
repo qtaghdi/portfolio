@@ -21,7 +21,7 @@ const profile = await getGitHubProfile();
 </section>
 <style lang="scss">
   @use '../styles/tokens' as *;
-  .hero { padding: 204px 0 100px; }
+  .hero { padding: 180px 0 64px; }
   .hero-heading { display: flex; align-items: center; gap: 40px; }
   .profile-avatar { width: 112px; height: 112px; flex: 0 0 auto; object-fit: cover; border-radius: 50%; background: $black-soft; }
   h1 { font-size: 56px; font-weight: 600; line-height: 1.35; letter-spacing: -.045em; }
@@ -31,7 +31,7 @@ const profile = await getGitHubProfile();
   .hero-actions a { display: inline-flex; align-items: center; min-height: 44px; color: $accent; font-size: 16px; text-decoration: underline; text-underline-offset: 5px; }
   .hero-actions a:hover { color: $accent-dark; }
   @media (max-width: 680px) {
-    .hero { padding: 132px 0 72px; }
+    .hero { padding: 132px 0 44px; }
     .hero-heading { gap: 16px; }
     .profile-avatar { width: clamp(48px, 14vw, 72px); height: clamp(48px, 14vw, 72px); }
     h1 { font-size: clamp(24px, 6.1vw, 36px); line-height: 1.4; }
