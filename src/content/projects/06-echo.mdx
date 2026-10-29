@@ -21,25 +21,15 @@ traceLinks:
   - {"label": "그룹 화면 구현", "labelEn": "Group interface", "href": "https://github.com/Team-JackOLantern/echo-app/blob/main/app/(tabs)/group.tsx"}
 metrics: []
 callouts: []
-tech:
-  - "Expo"
-  - "React Native"
-  - "TypeScript"
-  - "Expo Router"
-  - "expo-av"
-  - "WebSocket"
-  - "Axios"
-  - "React Native Animated"
-  - "React Native SVG"
-  - "React Native Paper"
-  - "Expo Haptics"
+tech: ["TypeScript", "React Native", "Expo", "Expo Router", "expo-av", "WebSocket", "React Native SVG"]
 github: "https://github.com/Team-JackOLantern/echo-app"
 
 ---
 
 ## 실시간 음성 감지를 앱으로 연결하기
 
-음성에서 감지한 욕설을 사용자가 바로 인지하고, 그룹과 통계 화면에서 언어 사용 습관을 살펴보는 해커톤 앱을 개발했습니다. 제 담당은 Expo 기반 화면과 그룹 기능 연결, WebSocket 상태와 오디오 리소스 처리였습니다.
+음성에서 감지한 욕설을 사용자가 바로 인지하고, 그룹과 통계 화면에서 언어 사용 습관을 살펴보는 해커톤 앱을 개발했습니다.<br />
+제 담당은 Expo 기반 화면과 그룹 기능 연결, WebSocket 상태와 오디오 리소스 처리였습니다.
 
 마이크 권한, 서버 연결과 녹음 상태는 서로 다른 시점에 바뀝니다. 연결이 끊겼는데 화면은 녹음 중으로 남거나, 중지한 뒤에도 마이크와 전송 작업이 계속 실행되지 않도록 시작·중지·정리 순서를 구성해야 했습니다.
 
@@ -67,4 +57,4 @@ WebSocket의 연결 타임아웃과 오류, 정상 종료와 비정상 종료를
 
 음성 감지 결과 표시, 연결·녹음 상태, 그룹 관리와 통계 인터페이스를 하나의 앱 흐름으로 연결했고, 제11회 하이톤에서 우수상을 수상했습니다.
 
-짧은 개발 기간에 화면을 구성하면서도 마이크 권한, 연결 종료와 리소스 정리처럼 실시간 인터페이스의 실행 순서를 함께 다룬 경험입니다.
+해커톤 기간 안에 주요 화면을 구현하고, 녹음을 멈추거나 연결이 끊겼을 때 마이크와 전송 작업이 함께 정리되도록 했습니다.

@@ -23,22 +23,15 @@ traceLinks:
   - {"label": "배포·릴리스 워크플로우", "labelEn": "Deployment and release workflow", "href": "https://github.com/qtaghdi/rust-with-typescript/blob/main/.github/workflows/deploy.yml"}
 metrics: []
 callouts: []
-tech:
-  - "Astro"
-  - "Starlight"
-  - "Rust"
-  - "Axum"
-  - "Cloudflare Workers"
-  - "TypeScript"
-  - "MDX"
-  - "Bun"
+tech: ["JavaScript", "SCSS", "Rust", "MDX", "TypeScript", "Astro", "Starlight", "Axum", "Cloudflare Workers"]
 link: "https://rust-with-typescript.qtaghdi.workers.dev/"
 github: "https://github.com/qtaghdi/rust-with-typescript"
 ---
 
 ## TypeScript 개발자를 위한 Rust 학습
 
-TypeScript 개발자가 Rust를 배울 때는 새로운 문법보다 소유권, borrowing과 lifetime을 기존의 사고방식과 연결하는 일이 어려웠습니다. 익숙한 코드를 Rust와 나란히 비교하고, 컴파일 결과를 설명 바로 옆에서 확인할 수 있는 학습 환경을 만들었습니다.
+TypeScript 개발자가 Rust를 배울 때는 새로운 문법보다 소유권, borrowing과 lifetime을 기존의 사고방식과 연결하는 일이 어려웠습니다.<br />
+익숙한 코드를 Rust와 나란히 비교하고, 컴파일 결과를 설명 바로 옆에서 확인할 수 있는 학습 환경을 만들었습니다.
 
 브라우저에서 코드를 실행하게 하면 문서 사이트가 실행 서버의 진입점이 됩니다. 학습용 예제를 편하게 실행하는 경험과 서버에 들어오는 요청을 제한하는 경계를 함께 설계해야 했습니다.
 
@@ -66,4 +59,4 @@ CI에서 Astro 타입 검사·빌드와 Rust clippy·테스트를 분리해 실�
 
 한국어·영어 14개 챕터와 문서 내 Rust 예제 실행 흐름을 구현해 배포했습니다. 문서 사이트는 Workers 주소로 공개되어 있으며, 소스와 배포·릴리스 기록을 함께 확인할 수 있습니다.
 
-콘텐츠 제작뿐 아니라 문서 예제의 빌드 시점 검증, 실행 API와 Rust 서버의 역할 분리, 결과 표시와 배포 자동화까지 연결한 프로젝트입니다.
+학습 내용을 작성하면서 예제가 실제로 빌드되는지도 검사했습니다. 독자가 문서에서 코드를 실행하고 결과를 확인할 수 있도록 실행 서버와 배포 자동화도 함께 구성했습니다.

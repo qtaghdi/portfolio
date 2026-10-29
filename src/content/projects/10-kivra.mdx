@@ -21,19 +21,14 @@ traceLinks:
   - { label: "다른 기여자의 저장 경로 변경 PR #2", labelEn: "Collaborator storage change PR #2", href: "https://github.com/Kivra-App/Kivra/pull/2" }
 metrics: []
 callouts: []
-tech:
-  - "Tauri"
-  - "Rust"
-  - "React"
-  - "TypeScript"
-  - "VS Code API"
-  - "JetBrains SDK"
+tech: ["TypeScript", "Rust", "Kotlin", "Tauri", "React", "VS Code API", "JetBrains SDK"]
 github: "https://github.com/Kivra-App/Kivra"
 ---
 
 ## 여러 개발 도구에 흩어진 실행 기록
 
-개발 중 실행 로그, 오류와 해결 과정은 터미널과 IDE에 흩어집니다. Kivra는 프로젝트와 실행 기록, 해결 노트를 로컬 데스크톱 앱에 모으는 협업 프로젝트입니다. 저는 터미널과 서로 다른 편집기의 실행 기록을 같은 형식으로 수집하고, 앱에서 프로젝트 맥락과 함께 볼 수 있게 연결했습니다.
+개발 중 실행 로그, 오류와 해결 과정은 터미널과 IDE에 흩어집니다.<br />
+Kivra는 프로젝트와 실행 기록, 해결 노트를 로컬 데스크톱 앱에 모으는 협업 프로젝트입니다. 저는 터미널과 서로 다른 편집기의 실행 기록을 같은 형식으로 수집하고, 앱에서 프로젝트 맥락과 함께 볼 수 있게 연결했습니다.
 
 ## 공통 수집 계약과 도구 연동
 
@@ -55,4 +50,4 @@ VS Code와 JetBrains 통합도 같은 수집 흐름을 사용하도록 변경했
 
 Tauri 데스크톱 앱에서 외부 실행 기록을 읽어 프로젝트의 Runs 목록에 표시하는 흐름을 구현했습니다. 터미널, VS Code와 JetBrains가 공통 계약으로 기록을 남기고, Rust 모듈이 이를 읽어 렌더러에 전달합니다.
 
-로컬 기록 수집은 선택적인 계정·동기화 기능과 구분해 구성했습니다. 수집 계약부터 편집기 연결, 저장 경로 협업과 모듈 분리까지 이어지며, 여러 도구가 같은 실행 맥락을 공유하는 경계를 설계한 경험입니다.
+로컬 기록 수집은 선택적인 계정·동기화 기능과 구분해 구성했습니다. 도구마다 기록 형식이 달라지지 않도록 공통 계약을 정하고, 편집기별 수집 코드와 앱의 조회 화면을 그 계약에 맞춰 구현했습니다.

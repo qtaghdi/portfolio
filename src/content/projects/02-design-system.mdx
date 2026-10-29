@@ -21,7 +21,7 @@ traceLinks:
   - { label: "패키지 릴리스", labelEn: "Package releases", href: "https://github.com/Bigtablet/bigtablet-design-system/releases" }
 metrics: []
 callouts: []
-tech: ["React", "TypeScript", "SCSS", "CSS Custom Properties", "Storybook", "Vitest", "tsup"]
+tech: ["TypeScript", "React", "SCSS", "Storybook", "Vitest", "tsup"]
 github: "https://github.com/Bigtablet/bigtablet-design-system"
 link: "https://www.npmjs.com/package/@bigtablet/design-system"
 ---
@@ -66,7 +66,7 @@ link: "https://www.npmjs.com/package/@bigtablet/design-system"
 - **오버레이 수명:** 열리는 렌더의 마운트, 모션이 없을 때 즉시 해제, 퇴출 완료 대기, 퇴출 도중 재열기, 처음부터 닫혀 있던 요소의 콜백 처리를 단위 테스트로 남겼습니다.
 - **소비 앱 적용:** 마이그레이션 문서에는 전체 CSS import 제거, 테마 변수와 번들러별 설정을 기록했습니다. Notiiv의 네 앱은 같은 디자인 시스템 패키지를 참조합니다.
 
-디자인 시스템은 공개 NPM 패키지와 Storybook으로 배포되며, Notiiv 네 앱이 같은 패키지를 참조합니다. 필요한 컴포넌트와 스타일이 같은 의존 관계로 배포되고, 별도 모션 런타임 없이 오버레이 수명을 관리하도록 바뀐 것입니다. 제 기여는 배포 후처리와 설정, presence 훅, 토큰 생성과 소비 앱 변경까지 이어지는 범위입니다.
+디자인 시스템은 공개 NPM 패키지와 Storybook으로 배포되며, Notiiv 네 앱이 같은 패키지를 참조합니다. 필요한 컴포넌트와 스타일이 같은 의존 관계로 배포되고, 별도 모션 런타임 없이 오버레이 수명을 관리하도록 바뀐 것입니다. 배포 후처리와 presence 훅, 토큰 생성 코드를 수정하고, 이를 사용하는 앱의 설정도 함께 갱신했습니다.
 
 - [컴포넌트별 ESM·CSS 배포 변경](https://github.com/Bigtablet/bigtablet-design-system/commit/3a9c75010f1f0aeae551e2127e7c4b5f1e7a355e)
 - [CSS 모션 전환과 presence 테스트](https://github.com/Bigtablet/bigtablet-design-system/commit/32972ad735ff921c2bfc1fa84867cfb50dd1dc96)

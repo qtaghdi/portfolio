@@ -18,16 +18,7 @@ traceLinks:
   - {"label": "모션 감소 설정 지원", "labelEn": "Reduced motion support", "href": "https://github.com/Bigtablet/bigtablet-homepage-web/commit/25ae4d82cab2da91fe0a096831fc23b278c552d3"}
 metrics: []
 callouts: []
-tech:
-  - "Next.js"
-  - "React"
-  - "TypeScript"
-  - "SCSS Modules"
-  - "GSAP"
-  - "next-intl"
-  - "Playwright"
-  - "GitHub Actions"
-  - "Docker"
+tech: ["TypeScript", "Next.js", "React", "SCSS Modules", "next-intl", "GSAP", "Playwright"]
 link: "https://bigtablet.com"
 github: "https://github.com/Bigtablet/bigtablet-homepage-web"
 ---
@@ -62,4 +53,4 @@ next-intl 메시지에 오류, 재시도와 목록 복귀 문구를 포함했습
 
 공식 홈페이지의 정적 구성은 서버에서 처리하고, 실제 상호작용이 필요한 영역은 클라이언트에 남기는 구조로 정리했습니다. 다국어 적용 범위는 본문에서 오류·재시도·복귀 동작까지 확장됐습니다.
 
-연혁 애니메이션은 화면 전환 때 함께 해제되고, 모션 감소 설정을 지원하도록 바뀌었습니다. 공개 커밋에서 렌더링 경계, 메시지 구조와 모션 수명 관리에 대한 담당 변경을 확인할 수 있습니다.
+연혁 애니메이션은 화면 전환 때 함께 해제되고, 모션 감소 설정을 지원하도록 바뀌었습니다. 렌더링 방식과 다국어 메시지 구조를 정리하고, 페이지를 벗어날 때 애니메이션도 함께 해제하도록 했습니다.
