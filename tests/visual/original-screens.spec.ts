@@ -98,8 +98,8 @@ test('work, contents and language links retain navigation', async ({ page }, tes
   await expect(page).toHaveURL(/#projects$/);
   await page.getByRole('link', { name: 'Bigtablet Design System 자세히 보기', exact: true }).click();
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('Bigtablet Design System');
-  await page.getByRole('navigation', { name: '목차', exact: true }).getByRole('link', { name: '선택한 방법', exact: true }).click();
-  await expect(page.locator('h2[id="선택한-방법"]')).toBeInViewport();
+  await page.getByRole('navigation', { name: '목차', exact: true }).getByRole('link', { name: '컴포넌트 배포와 모션 구조 개선', exact: true }).click();
+  await expect(page.locator('h2[id="컴포넌트-배포와-모션-구조-개선"]')).toBeInViewport();
   if (testInfo.project.name === 'mobile') {
     await page.getByRole('button', { name: '메뉴 열기' }).click();
     await expect(page.getByRole('button', { name: '메뉴 열기' })).toHaveAttribute('aria-expanded', 'true');
