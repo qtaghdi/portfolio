@@ -7,6 +7,7 @@ import { copy, localePath, projectPath, type Locale } from '../i18n';
 import { projectEn, projectKey } from '../i18n/projects';
 import ProjectVisual from './ProjectVisual.astro';
 import ProjectText from './ProjectText.astro';
+import SectionRail from './SectionRail.astro';
 interface Props { locale: Locale; project: CollectionEntry<'projects'>; }
 const { locale, project } = Astro.props;
 const { Content, headings } = await project.render();
@@ -47,10 +48,7 @@ const screenCaptions: Record<string, { ko: string; en: string }> = {
       </dl>
     </header>
     <div class="case-layout shell">
-      <aside><nav class="chapter-nav" aria-label={dictionary.index}>
-        {chapters.map((chapter) => <a href={`#${chapter.id}`}>{chapter.title}</a>)}
-        <a href="#trace">{dictionary.trace}</a>
-      </nav></aside>
+      <SectionRail chapters={[...chapters, { id: "trace", title: dictionary.trace }]} label={dictionary.index} />
       <article class="case-content">
         {locale === 'ko' ? <div class="mdx-content"><Content /></div> : translation.sections.map((section) => (
           <section id={section.id} class="content-section">
@@ -94,10 +92,7 @@ const screenCaptions: Record<string, { ko: string; en: string }> = {
   .project-meta { display: grid; gap: 14px; margin-top: 40px; }
   .project-meta > div { display: grid; grid-template-columns: 88px minmax(0,1fr); gap: 24px; }
   dt { color: $silver; }dd { color: $silver; font-size: 15px; line-height: 1.8; overflow-wrap: anywhere; }
-  .case-layout { display: grid; grid-template-columns: 180px minmax(0,760px); justify-content: space-between; gap: 48px; padding-top: 48px; }
-  .chapter-nav { position: sticky; top: 108px; display: grid; gap: 4px; }
-  .chapter-nav a { display: flex; align-items: center; min-height: 44px; color: $silver; font-size: 14px; }
-  .chapter-nav a:hover { color: $accent; }
+  .case-layout { display: grid; grid-template-columns: minmax(0,760px); justify-content: center; gap: 48px; padding-top: 48px; }
   .case-content { min-width: 0; }
   .content-section, .trace-section, .case-content :global(.mdx-content > h2) { scroll-margin-top: 108px; }
   .content-section { margin-bottom: 56px; }
@@ -126,7 +121,7 @@ const screenCaptions: Record<string, { ko: string; en: string }> = {
   .case-visual.presence-screen { height: auto; aspect-ratio: 828 / 340; }
   figcaption { margin-top: 14px; color: $gunmetal; font-size: 13px; line-height: 1.8; }
   .next-project { display: flex; align-items: center; justify-content: space-between; gap: 24px; padding: 32px 0; margin-top: 72px; border-top: 1px solid $line; }.next-project span { color: $gunmetal; font-size: 14px; }.next-project a { display: flex; align-items: center; gap: 12px; min-height: 44px; color: $accent; font-size: 18px; }
-  @media (max-width: 760px) { .case-layout { grid-template-columns: 1fr; gap: 24px; }.chapter-nav { position: static; display: flex; flex-wrap: wrap; gap: 8px 24px; padding-bottom: 16px; border-bottom: 1px solid $line; } }
+  @media (max-width: 760px) { .case-layout { padding-right: 40px; } }
   @media (max-width: 680px) {
     .project-page { padding-top: 68px; }.project-hero { padding-top: 24px; padding-bottom: 28px; }h1 { font-size: 32px; margin-top: 20px; }.thesis { font-size: 20px; }.project-meta { margin-top: 28px; }.project-meta > div { grid-template-columns: 48px minmax(0,1fr); gap: 16px; }dt,dd { font-size: 14px; }
     .case-layout { padding-top: 24px; }.content-section h2, .trace-section h2, .case-content :global(.mdx-content > h2) { font-size: 24px; }.case-subsection h3, .case-content :global(.mdx-content > h3) { font-size: 19px; }.content-section p, .case-subsection ul, .case-content :global(.mdx-content > p), .case-content :global(.mdx-content > ul), .case-content :global(.mdx-content > ol) { font-size: 16px; }

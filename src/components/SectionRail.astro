@@ -1,0 +1,39 @@
+---
+interface Props { chapters: { id: string; title: string }[]; label: string; }
+const { chapters, label } = Astro.props;
+---
+<nav class="section-rail" aria-label={label}>
+  {chapters.map((chapter, index) => <a href={`#${chapter.id}`} aria-label={chapter.title} aria-current={index === 0 ? 'location' : undefined}><span>{chapter.title}</span><i aria-hidden="true"></i></a>)}
+</nav>
+<script>
+  const rail = document.querySelector<HTMLElement>('.section-rail');
+  if (rail) {
+    const links = [...rail.querySelectorAll<HTMLAnchorElement>('a')];
+    const targets = links.map((link) => document.getElementById(decodeURIComponent(link.hash.slice(1))));
+    let queued = false;
+    const update = () => {
+      queued = false;
+      let current = 0;
+      targets.forEach((target, index) => { if (target && target.getBoundingClientRect().top <= 160) current = index; });
+      if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 4) current = links.length - 1;
+      links.forEach((link, index) => { if (index === current) link.setAttribute('aria-current', 'location'); else link.removeAttribute('aria-current'); });
+    };
+    window.addEventListener('scroll', () => { if (!queued) { queued = true; requestAnimationFrame(update); } }, { passive: true });
+    window.addEventListener('resize', update);
+    update();
+  }
+</script>
+<style lang="scss">
+  @use '../styles/tokens' as *;
+  .section-rail { position: fixed; z-index: 30; right: 18px; top: 50%; transform: translateY(-50%); display: grid; gap: 0; padding: 10px 8px; border: 1px solid transparent; border-radius: 18px; max-height: calc(100dvh - 160px); overflow-y: auto; background: rgba(255,255,255,.96); }
+  a { display: flex; justify-content: flex-end; align-items: center; gap: 14px; min-height: 36px; padding: 0 7px; color: $silver; text-decoration: none; }
+  span { display: none; max-width: 250px; font-size: 13px; line-height: 1.5; text-align: right; word-break: keep-all; }
+  i { display: block; width: 9px; height: 10px; background: #c9cbd0; clip-path: polygon(25% 0,75% 0,100% 50%,75% 100%,25% 100%,0 50%); flex-shrink: 0; }
+  a[aria-current] i { background: $accent; }
+  a[aria-current] span { color: $accent; font-weight: 600; }
+  .section-rail:hover, .section-rail:focus-within { border-color: $line; box-shadow: 0 8px 28px rgba(15,23,42,.06); }
+  .section-rail:hover span, .section-rail:focus-within span { display: block; }
+  a:focus-visible { outline: 2px solid $accent; outline-offset: -2px; border-radius: 6px; }
+  @media(max-width: 680px) { .section-rail { right: 3px; padding: 6px 2px; }a { min-height: 44px; padding: 0 4px; }.section-rail span { max-width: min(230px,65vw); } }
+  @media(hover: none) { .section-rail:focus-within span { display: block; } }
+</style>
