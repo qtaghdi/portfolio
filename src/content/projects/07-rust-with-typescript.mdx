@@ -36,13 +36,13 @@ link: "https://rust-with-typescript.qtaghdi.workers.dev/"
 github: "https://github.com/qtaghdi/rust-with-typescript"
 ---
 
-## 문제
+## TypeScript 개발자를 위한 Rust 학습
 
 TypeScript 개발자가 Rust를 배울 때는 새로운 문법보다 소유권, borrowing과 lifetime을 기존의 사고방식과 연결하는 일이 어려웠습니다. 익숙한 코드를 Rust와 나란히 비교하고, 컴파일 결과를 설명 바로 옆에서 확인할 수 있는 학습 환경을 만들었습니다.
 
 브라우저에서 코드를 실행하게 하면 문서 사이트가 실행 서버의 진입점이 됩니다. 학습용 예제를 편하게 실행하는 경험과 서버에 들어오는 요청을 제한하는 경계를 함께 설계해야 했습니다.
 
-## 선택한 방법
+## 설명과 코드 실행을 함께 설계하기
 
 ### 14개 챕터를 TypeScript의 개념에서 시작
 
@@ -62,7 +62,7 @@ Astro와 Starlight로 한국어·영어 문서를 구성했습니다. 각 챕터
 
 CI에서 Astro 타입 검사·빌드와 Rust clippy·테스트를 분리해 실행합니다. main 변경은 Workers 배포로 이어지고, 배포가 끝나면 태그와 변경 내역을 포함한 GitHub Release를 생성하도록 구성했습니다.
 
-## 확인한 결과
+## 14개 챕터와 실행 환경 공개
 
 한국어·영어 14개 챕터와 문서 내 Rust 예제 실행 흐름을 구현해 배포했습니다. 문서 사이트는 Workers 주소로 공개되어 있으며, 소스와 배포·릴리스 기록을 함께 확인할 수 있습니다.
 

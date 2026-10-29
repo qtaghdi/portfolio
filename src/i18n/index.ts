@@ -46,7 +46,7 @@ export const copy = {
     },
     detail: {
       back: '작업 목록', role: '역할', focus: '집중한 영역', stack: '기술',
-      index: '목차', problem: '문제', decisions: '선택한 방법', outcome: '확인한 결과', trace: '근거',
+      index: '목차', problem: '문제', decisions: '선택한 방법', outcome: '성과와 배운 점', trace: '근거',
       live: '사이트', github: 'GitHub', next: '다음 작업',
     },
     meta: {

@@ -9,7 +9,7 @@ import ProjectVisual from './ProjectVisual.astro';
 import ProjectText from './ProjectText.astro';
 interface Props { locale: Locale; project: CollectionEntry<'projects'>; }
 const { locale, project } = Astro.props;
-const { Content } = await project.render();
+const { Content, headings } = await project.render();
 const key = projectKey(project.slug);
 const translation = projectEn[key];
 const data = locale === 'en' ? { ...project.data, ...translation } : project.data;
@@ -20,7 +20,9 @@ const currentIndex = allProjects.findIndex((item) => item.slug === project.slug)
 const nextProject = allProjects[(currentIndex + 1) % allProjects.length];
 const nextData = locale === 'en' ? { ...nextProject.data, ...projectEn[projectKey(nextProject.slug)] } : nextProject.data;
 const pageTitle = `${data.title} | ${locale === 'ko' ? '박상민 포트폴리오' : 'Park Sangmin Portfolio'}`;
-const chapterIds = locale === 'ko' ? ['문제', '선택한-방법', '확인한-결과'] : ['problem', 'decisions', 'outcome'];
+const chapters = locale === 'ko'
+  ? headings.filter((heading) => heading.depth === 2).map((heading) => ({ id: heading.slug, title: heading.text }))
+  : translation.sections.map((section) => ({ id: section.id, title: section.title }));
 const hasEvidenceScreen = ['notiiv', 'design-system', 'intranet', 'document-workspace', 'boundra', 'apple-music-discord-presence'].includes(key);
 const screenCaptions: Record<string, { ko: string; en: string }> = {
   notiiv: { ko: 'Notiiv · 고객지원', en: 'Notiiv · Customer support' },
@@ -46,9 +48,7 @@ const screenCaptions: Record<string, { ko: string; en: string }> = {
     </header>
     <div class="case-layout shell">
       <aside><nav class="chapter-nav" aria-label={dictionary.index}>
-        <a href={`#${chapterIds[0]}`}>{dictionary.problem}</a>
-        <a href={`#${chapterIds[1]}`}>{dictionary.decisions}</a>
-        <a href={`#${chapterIds[2]}`}>{dictionary.outcome}</a>
+        {chapters.map((chapter) => <a href={`#${chapter.id}`}>{chapter.title}</a>)}
         <a href="#trace">{dictionary.trace}</a>
       </nav></aside>
       <article class="case-content">
