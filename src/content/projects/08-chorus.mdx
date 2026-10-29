@@ -24,6 +24,7 @@ github: "https://github.com/qtaghdi/chorus"
 
 ---
 
+import ProjectScreenshot from '../../components/ProjectScreenshot.astro';
 
 ## 음악과 메시지를 함께 전하는 경험
 
@@ -32,6 +33,7 @@ github: "https://github.com/qtaghdi/chorus"
 
 화면을 그리는 일 외에도 브라우저의 오디오 재생 정책, WebGL 캔버스 캡처와 모바일의 파일 저장 방식을 함께 다뤄야 했습니다.
 
+<ProjectScreenshot projectKey="chorus" screen="search" />
 
 ## 재생부터 이미지 저장까지 구현
 
@@ -45,6 +47,7 @@ Threlte와 Three.js로 바이닐 LP와 반사 재질을 표현했습니다. Web 
 
 모바일의 자동 재생 제한을 고려해 오디오 컨텍스트 생성·재개와 재생을 사용자 동작에서 시작했습니다. 화면을 떠날 때는 오디오를 멈추고 컨텍스트와 animation frame을 정리해, 시각 효과와 음원이 화면 수명 밖에서 계속 실행되지 않도록 했습니다.
 
+<ProjectScreenshot projectKey="chorus" />
 
 ### WebGL과 DOM을 함께 이미지로 저장
 
@@ -52,6 +55,7 @@ WebGL renderer의 drawing buffer를 보존하고 html-to-image로 캔버스와 �
 
 데스크톱은 파일 다운로드, 모바일은 새 창에 이미지를 표시해 사용자가 저장하는 경로로 나눴습니다. 링크 공유도 Web Share API를 우선 사용하고, 지원하지 않으면 클립보드 복사로 이어지게 했습니다.
 
+<ProjectScreenshot projectKey="chorus" screen="export" />
 
 ## 음악을 공유 카드로 남기는 흐름
 

@@ -8,6 +8,8 @@ import { projectEn, projectKey } from '../i18n/projects';
 import ProjectVisual from './ProjectVisual.astro';
 import ProjectText from './ProjectText.astro';
 import SectionRail from './SectionRail.astro';
+import ProjectScreenshot from './ProjectScreenshot.astro';
+import { englishScreens } from '../data/project-screens';
 interface Props { locale: Locale; project: CollectionEntry<'projects'>; }
 const { locale, project } = Astro.props;
 const { Content, headings } = await project.render();
@@ -24,15 +26,7 @@ const pageTitle = `${data.title} | ${locale === 'ko' ? '박상민 포트폴리�
 const chapters = locale === 'ko'
   ? headings.filter((heading) => heading.depth === 2).map((heading) => ({ id: heading.slug, title: heading.text }))
   : translation.sections.map((section) => ({ id: section.id, title: section.title }));
-const hasEvidenceScreen = ['notiiv', 'design-system', 'intranet', 'document-workspace', 'boundra', 'apple-music-discord-presence'].includes(key);
-const screenCaptions: Record<string, { ko: string; en: string }> = {
-  notiiv: { ko: 'Notiiv · 고객지원', en: 'Notiiv · Customer support' },
-  'design-system': { ko: 'Bigtablet Design System · Storybook', en: 'Bigtablet Design System · Storybook' },
-  intranet: { ko: 'Bigtablet Intranet · 모바일 홈', en: 'Bigtablet Intranet · Mobile home' },
-  'document-workspace': { ko: 'document-workspace · XLSX 편집기', en: 'document-workspace · XLSX editor' },
-  boundra: { ko: 'Boundra · CLI 출력 예시', en: 'Boundra · Reconstructed CLI output' },
-  'apple-music-discord-presence': { ko: 'Apple Music Discord Presence · macOS의 Discord 활동', en: 'Apple Music Discord Presence · Discord activity on macOS' },
-};
+
 ---
 <BaseLayout locale={locale} title={pageTitle} description={data.summary}>
   <Navbar locale={locale} />
@@ -54,9 +48,11 @@ const screenCaptions: Record<string, { ko: string; en: string }> = {
           <section id={section.id} class="content-section">
             <h2>{section.title}</h2>
             {section.paragraphs.map((paragraph) => <p><ProjectText text={paragraph} references={data.traceLinks} /></p>)}
-            {section.subsections?.map((subsection) => <div class="case-subsection">
+            {englishScreens(key, section.id).map((screen) => <ProjectScreenshot projectKey={key} screen={screen} locale={locale} />)}
+            {section.subsections?.map((subsection, subsectionIndex) => <div class="case-subsection">
               <h3>{subsection.title}</h3>
               {subsection.paragraphs.map((paragraph) => <p><ProjectText text={paragraph} references={data.traceLinks} /></p>)}
+              {englishScreens(key, section.id, subsectionIndex).map((screen) => <ProjectScreenshot projectKey={key} screen={screen} locale={locale} />)}
               {subsection.items && <ul>{subsection.items.map((item) => <li><ProjectText text={item} references={data.traceLinks} /></li>)}</ul>}
             </div>)}
             {section.links && <div class="project-links">{section.links.map((link) => <a href={link.href} target="_blank" rel="noopener noreferrer">{link.label}</a>)}</div>}
@@ -74,9 +70,9 @@ const screenCaptions: Record<string, { ko: string; en: string }> = {
             {data.github && <a href={data.github} target="_blank" rel="noopener noreferrer">{dictionary.github}</a>}
             {data.traceLinks.map((link) => <a href={link.href} target="_blank" rel="noopener noreferrer">{locale === 'ko' ? link.label : link.labelEn}</a>)}
           </div>
-          {hasEvidenceScreen && <figure class="screen-evidence">
-            <div id="project-visual" class:list={['case-visual', { 'mobile-screen': key === 'intranet', 'presence-screen': key === 'apple-music-discord-presence' }]}><ProjectVisual projectKey={key} locale={locale} variant="detail" /></div>
-            <figcaption>{screenCaptions[key][locale]}</figcaption>
+          {key === 'boundra' && <figure class="screen-evidence">
+            <div class="case-visual"><ProjectVisual projectKey={key} locale={locale} variant="detail" /></div>
+            <figcaption>{locale === 'ko' ? 'Boundra · CLI 출력 예시' : 'Boundra · Reconstructed CLI output'}</figcaption>
           </figure>}
         </section>
       </article>

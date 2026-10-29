@@ -2,22 +2,25 @@ import { createHash } from 'node:crypto';
 import { readFile } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 import { expect, test } from '@playwright/test';
-import { declaredReconstructions, originalScreens } from './references';
+import { declaredReconstructions, originalScreens, supplementalReferences } from './references';
 
 const workspaceRoot = fileURLToPath(new URL('../../', import.meta.url));
 
 for (const reference of originalScreens) {
-  test(`${reference.key} uses its original screen without visual rewriting`, async ({ page }, testInfo) => {
+  for (const prefix of ['', '/en']) {
+  test(`${reference.key} ${prefix ? 'English' : 'Korean'} uses its original screen without visual rewriting`, async ({ page }, testInfo) => {
     const bytes = await readFile(`${workspaceRoot}public${reference.asset}`);
     expect(createHash('sha256').update(bytes).digest('hex')).toBe(reference.sha256);
 
-    await page.goto(reference.route);
+    await page.goto(`${prefix}${reference.route}`);
     await page.evaluate(() => document.fonts.ready);
 
     const visual = page.locator(`[data-visual="${reference.key}"]`);
     const image = visual.locator('[data-original-screen]');
     await expect(visual).toHaveAttribute('data-fidelity', 'original');
+    await image.scrollIntoViewIfNeeded();
     await expect(image).toBeVisible();
+    await image.evaluate((node: HTMLImageElement) => node.decode());
     await expect(image).toHaveAttribute('src', reference.asset);
 
     const rendering = await image.evaluate((node: HTMLImageElement) => {
@@ -40,6 +43,9 @@ for (const reference of originalScreens) {
         naturalHeight: node.naturalHeight,
         objectFit: style.objectFit,
         objectPosition: style.objectPosition,
+        renderedWidth: node.clientWidth,
+        renderedHeight: node.clientHeight,
+        inline: node.closest('.mdx-content, .content-section') !== null,
         ancestors,
       };
     });
@@ -49,6 +55,8 @@ for (const reference of originalScreens) {
     expect(rendering.naturalHeight).toBe(reference.height);
     expect(rendering.objectFit).toBe('contain');
     expect(rendering.objectPosition).toBe('50% 50%');
+    expect(rendering.inline).toBe(true);
+    expect(Math.abs(rendering.renderedHeight - rendering.renderedWidth * reference.height / reference.width)).toBeLessThan(2);
     for (const ancestor of rendering.ancestors) {
       expect(ancestor.filter).toBe('none');
       expect(Number(ancestor.opacity)).toBe(1);
@@ -57,6 +65,7 @@ for (const reference of originalScreens) {
 
     await visual.screenshot({ path: testInfo.outputPath(`${reference.key}.png`) });
   });
+  }
 }
 
 for (const reference of declaredReconstructions) {
@@ -67,6 +76,29 @@ for (const reference of declaredReconstructions) {
     await expect(visual.locator('[data-original-screen]')).toHaveCount(0);
   });
 }
+
+test('supplemental captures preserve source bytes and open at original size in both languages', async ({ page }) => {
+  for (const reference of supplementalReferences) {
+    const bytes = await readFile(`${workspaceRoot}public${reference.asset}`);
+    expect(createHash('sha256').update(bytes).digest('hex')).toBe(reference.sha256);
+    for (const prefix of ['', '/en']) {
+      await page.goto(`${prefix}/projects/${reference.key}/`);
+      const image = page.locator(`img[data-supplemental-screen][src="${reference.asset}"]`);
+      await image.scrollIntoViewIfNeeded();
+      await expect(image).toBeVisible();
+      await image.evaluate((node: HTMLImageElement) => node.decode());
+      await expect(image.locator('..')).toHaveAttribute('href', reference.asset);
+      await expect(image.locator('..')).toHaveAttribute('target', '_blank');
+      const rendered = await image.evaluate((node: HTMLImageElement) => ({
+        width: node.naturalWidth, height: node.naturalHeight, fit: getComputedStyle(node).objectFit,
+      }));
+      expect(rendered).toEqual({ width: reference.width, height: reference.height, fit: 'contain' });
+      expect(await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth)).toBeLessThanOrEqual(1);
+      expect(await image.evaluate((node) => node.closest('.mdx-content, .content-section') !== null)).toBe(true);
+      expect(await image.evaluate((node) => node.closest('#trace') === null)).toBe(true);
+    }
+  }
+});
 
 test('home shows small project icons in both work lists', async ({ page }) => {
   await page.goto('/');

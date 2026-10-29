@@ -37,6 +37,7 @@ callouts:
 tech: ["Go", "TypeScript", "Excelize", "Univer", "Vite", "MCP", "SSE"]
 ---
 
+import ProjectScreenshot from '../../components/ProjectScreenshot.astro';
 
 ## AI와 사용자가 함께 문서를 편집하려면
 
@@ -57,6 +58,7 @@ XLSX 저장에는 별도의 보존 문제가 있습니다. 셀 값 하나를 바
 
 대신 Univer를 XLSX 원본의 저장 주체로 두지 않았습니다. `SpreadsheetEngine` 경계 뒤에서 렌더링과 입력을 담당하게 하고, Go adapter가 검증된 작업, revision, 충돌과 저장을 소유합니다. 편집기 엔진을 바꿔도 문서 저장 규칙을 다시 작성하지 않도록 한 경계입니다. 고급 기능의 표시와 원본 보존을 직접 연결하고 검증해야 한다는 비용은 남습니다.
 
+<ProjectScreenshot projectKey="document-workspace" />
 
 ### 2. 동시 쓰기는 병합을 추측하지 않고 충돌로 반환
 

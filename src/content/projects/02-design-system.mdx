@@ -26,6 +26,7 @@ github: "https://github.com/Bigtablet/bigtablet-design-system"
 link: "https://www.npmjs.com/package/@bigtablet/design-system"
 ---
 
+import ProjectScreenshot from '../../components/ProjectScreenshot.astro';
 
 ## 공통 UI를 배포하며 마주한 과제
 
@@ -37,6 +38,7 @@ link: "https://www.npmjs.com/package/@bigtablet/design-system"
 
 모션도 별도의 과제였습니다. 오버레이의 열고 닫는 효과에 사용하던 런타임 의존성을 제거하려면 보이는 애니메이션뿐 아니라 DOM을 언제 붙이고 떼는지까지 유지해야 했습니다. 닫기를 누르자마자 요소를 지우면 퇴출 모션이 사라지고, 닫는 도중 다시 열었는데 이전 완료 처리가 실행되면 열린 창이 사라질 수 있습니다.
 
+<ProjectScreenshot projectKey="design-system" />
 
 ## 컴포넌트 배포와 모션 구조 개선
 
@@ -60,6 +62,7 @@ link: "https://www.npmjs.com/package/@bigtablet/design-system"
 
 토큰은 `tokens.json`에서 SCSS, TypeScript와 테마 변수를 생성하도록 통합했습니다. 생성 결과와 커밋된 파일이 다르면 검사가 실패하게 해, 한쪽 출력만 수동 수정하면서 테마가 어긋나는 문제를 드러내도록 했습니다. 소비하는 Notiiv 앱에서는 패키지 버전과 스타일 import를 함께 갱신했습니다.
 
+<ProjectScreenshot projectKey="design-system" screen="tokens-components" />
 
 ## 패키지 배포와 소비 앱 적용
 
@@ -70,7 +73,9 @@ link: "https://www.npmjs.com/package/@bigtablet/design-system"
 - **소비 앱 적용:** 마이그레이션 문서에는 전체 CSS import 제거, 테마 변수와 번들러별 설정을 기록했습니다. Notiiv의 네 앱은 같은 디자인 시스템 패키지를 참조합니다.
 - **시각 회귀:** 2026년 10월 27일에는 핵심 컴포넌트를 라이트·다크 테마로 촬영하고 CI의 Playwright 환경에서 기준 이미지와 비교하는 검사를 추가했습니다. 실패 시 실제·차이·새 기준 이미지를 남기고, 의도한 변경은 해당 CI 실행에서 기준을 가져오도록 했습니다. 아래 Button 이미지는 이 검사의 CI 기준 이미지입니다.
 
+<ProjectScreenshot projectKey="design-system" screen="button-light-reference" />
 
+<ProjectScreenshot projectKey="design-system" screen="button-dark-reference" />
 
 디자인 시스템은 공개 NPM 패키지와 Storybook으로 배포되며, Notiiv 네 앱이 같은 패키지를 참조합니다. 필요한 컴포넌트와 스타일이 같은 의존 관계로 배포되고, 별도 모션 런타임 없이 오버레이 수명을 관리하도록 바뀐 것입니다. 배포 후처리와 presence 훅, 토큰 생성 코드를 수정하고, 이를 사용하는 앱의 설정도 함께 갱신했습니다.
 
