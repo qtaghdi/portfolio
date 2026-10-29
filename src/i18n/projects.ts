@@ -1,5 +1,5 @@
 export interface ProjectSection {
-  id: 'problem' | 'decisions' | 'outcome';
+  id: string;
   title: string;
   paragraphs: string[];
   links?: { label: string; href: string }[];
@@ -575,72 +575,63 @@ export const projectEn: Record<string, ProjectTranslation> = {
         },
         {
             "val": "Gather Bot",
-            "label": "Development and testing"
+            "label": "Test-server pilot deployment"
         }
     ],
     "sections": [
         {
             "id": "problem",
-            "title": "Operators need shared state as well as fast updates",
+            "title": "Community operations across several tools",
             "paragraphs": [
-                "OWKR operations include team setup, admin selection exams, recruitment, waiting lists, and rules. Match editing must prevent one operator from silently overwriting another, rather than merely showing updates quickly."
+                "Community matches require participant identification, team setup, recruitment, admin exams, and shared guidance. I worked across these tools with other contributors, focusing on state changes that operators need to trust."
+            ]
+        },
+        {
+            "id": "identity",
+            "title": "Participant identity and roster sharing",
+            "paragraphs": [
+                "Match PR #5 replaced mutable names with Discord IDs and added an explicit review step for linking new and existing players. Missing display names preserve existing information.",
+                "PR #9 stores Discord IDs and exact team positions for 24 hours. Loading a share refreshes tiers from the user sheet while preserving placement. PR #23 separates collaborative editing from sending a completed result."
             ]
         },
         {
             "id": "decisions",
-            "title": "Give each operational tool an explicit state boundary",
-            "paragraphs": [],
-            "subsections": [
-                {
-                    "title": "Match: two operators editing the same roster",
-                    "paragraphs": [
-                        "In PR #10, I implemented shared roster editing. If one operator adds a participant while another rearranges positions, replacing the full roster with the last write can lose the first change.",
-                        "A Redis Lua operation checks the expected revision and updates atomically. Separate read and write calls could both pass the same check. A stale write receives a conflict with the current state.",
-                        "The PR #10 client applies the current roster on conflict and asks the operator to reapply needed changes. Participant order and team positions are validated under one revision to keep the saved roster consistent."
-                    ]
-                },
-                {
-                    "title": "Match: limit replicated data and update scope",
-                    "paragraphs": [
-                        "Sessions store Discord IDs, participant order, and optional team positions. Display names and role tiers are hydrated from the user sheet rather than copied into every session. Missing or duplicate IDs and incomplete team positions are rejected.",
-                        "PR #10 uses polling with delayed local publishing. Polling avoids overwriting pending local edits, skips hidden tabs, and does not run while publishing. PR #17 adds authenticated editor presence and recent changes to the existing response.",
-                        "Presence and recent changes travel through the existing polling response, while revision checks validate the final save. Collaboration feedback and persistence rules have separate responsibilities."
-                    ]
-                },
-                {
-                    "title": "Match: deployment constraints and regression coverage",
-                    "paragraphs": [
-                        "Live collaboration and snapshot sharing use modes within the same Vercel Function. This fits the Hobby function limit while retaining the existing snapshot-sharing path.",
-                        "Store tests check revision advancement and stale-write conflicts; contract tests check participant and waiting-list order, full team positions, and invalid IDs.",
-                        "Other contributors improved authentication and matchup UI. My work covers the shared contract, API, hook, UI integration, and editor presence."
-                    ]
-                },
-                {
-                    "title": "Exam: server-owned time controls",
-                    "paragraphs": [
-                        "The app covers Discord sign-in, assigned codes, answer saving, submission, questions, and grading. In PR #4, I added pause, resume, and extension state on the server with regression checks for ownership, admin authority, expiration, submission locks, and repeated actions. PR #5 separates test attempts from normal admin records."
-                    ]
-                },
-                {
-                    "title": "Gather Bot: recruitment and restart recovery",
-                    "paragraphs": [
-                        "I worked on the Python and SQLite recruitment bot with per-session actors, participants, waiting lists, tier collection, and restart recovery. Authored changes include substitute recruitment, lobby assignment, migrations, and tests. It remains in development and testing without automatic Match integration."
-                    ]
-                },
-                {
-                    "title": "Docs: maintain guidance alongside the tools",
-                    "paragraphs": [
-                        "The Astro site provides rules, participation instructions, and FAQs. My commits update participation and notification rules and connect the entry points for the tools."
-                    ]
-                }
+            "title": "Preventing lost edits between operators",
+            "paragraphs": [
+                "Match PR #10 uses a shared revision and an atomic Redis Lua comparison and update. Stale writes return a conflict with the current roster, rather than silently overwriting another operator.",
+                "Polling avoids replacing unsent local changes. PR #17 adds editor presence through the existing response, while revision checks remain responsible for write correctness."
+            ]
+        },
+        {
+            "id": "exam",
+            "title": "Preserving answers through saving and submission",
+            "paragraphs": [
+                "Exam PR #2 adds save status and retries, waits for pending saves before manual submission, and locks inputs during submission. Admin editing pins the revision at edit start and restores drafts after conflicts. Score bounds are checked in both the UI and server.",
+                "PR #3 adds unanswered and review filters, persistent time and save status, and navigation to ungraded questions. PR #4 manages pause, resume, and extensions on the server; PR #5 separates test attempts."
+            ]
+        },
+        {
+            "id": "recruitment",
+            "title": "Concurrent recruitment and recoverable cancellation",
+            "paragraphs": [
+                "Gather Bot PR #14 reserves two voice lobbies, including sessions still being created. Duplicate requests reuse a session, and cancellation or failure releases only its own reservation.",
+                "PR #17 drains queued reactions and writes before deciding whether initial recruitment missed its deadline. It distinguishes later departures from incomplete recruitment. Confirmed announcement deletion triggers cancellation; failed message cleanup remains retryable after restart."
+            ]
+        },
+        {
+            "id": "operations",
+            "title": "Operating schedules, backups, and retention",
+            "paragraphs": [
+                "PR #10 coordinates operating hours and backups through a shared lock. The container stops normally outside pilot hours while the VM and persistent disk remain available.",
+                "PR #18 implements approved seven-day backup and maximum thirty-day log retention. Backup cleanup previews by default and aborts before deletion if creation records are invalid. Policies and cancellation rules are maintained alongside implementation in OWKR Docs."
             ]
         },
         {
             "id": "outcome",
-            "title": "A connected set of community operations tools",
+            "title": "Deployment and verification scope",
             "paragraphs": [
-                "Match is used for community match setup and result sharing, with collaboration and presence changes included in production deployments. Exam deployments include time controls and test-attempt separation. The operations guide is published on GitHub Pages; Gather Bot is in development and testing.",
-                "The work covers collaborative editing conflicts, server-owned exam state, event processing, recovery, and operational documentation."
+                "Match is used by community operators; Exam and the guide are deployed. Gather Bot has a test-server pilot deployment. The October 28, 2026 record covers restart recovery for simultaneous sessions, deadline cancellation, and cancellation after announcement deletion.",
+                "That bot check had zero real participants. The tenth reaction and departures after recruitment were covered by automated tests, not a ten-person end-to-end exercise. Exam checks used test data and did not cover the complete production Discord login flow."
             ]
         }
     ]
