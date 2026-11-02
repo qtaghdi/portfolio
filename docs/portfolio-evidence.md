@@ -75,3 +75,7 @@ Authored commit counts below use unique SHAs across all local refs and the known
 ## Design concept delivery
 
 `docs/design/clean-v1/index.html`은 Image Gen 시안 네 개를 포함한 독립적인 디자인 검토 문서다. 생성 프롬프트는 동일 폴더의 `prompts.md`에 기록한다. 초기 구상 단계에서 한·영 소개와 내용을 먼저 수정했다. 이후 사용자 승인에 따라 시안의 레이아웃과 스타일을 적용하고 주요 작업의 실제 아이콘을 추가했다. 검증 기록은 `docs/design/clean-v1/verification.md`에 있다.
+
+## 2026-11-02 weekly review
+
+- OWKR Gather Bot: [PR #20](https://github.com/Overwatch-KR/owkr-gather-bot/pull/20), merged 2026-10-29, records temporary database checks for 13 VM and 5 Mac backups and three isolated deletion/recovery scenarios. No actual deletion request was received; end-to-end handling and deletion across all copies were not established. This is the recorded verification, not a fresh rerun.

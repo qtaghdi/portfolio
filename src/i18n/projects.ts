@@ -623,7 +623,8 @@ export const projectEn: Record<string, ProjectTranslation> = {
             "title": "Operating schedules, backups, and retention",
             "paragraphs": [
                 "PR #10 coordinates operating hours and backups through a shared lock. The container stops normally outside pilot hours while the VM and persistent disk remain available.",
-                "PR #18 implements approved seven-day backup and maximum thirty-day log retention. Backup cleanup previews by default and aborts before deletion if creation records are invalid. Policies and cancellation rules are maintained alongside implementation in OWKR Docs."
+                "PR #18 implements approved seven-day backup and maximum thirty-day log retention. Backup cleanup previews by default and aborts before deletion if creation records are invalid. Policies and cancellation rules are maintained alongside implementation in OWKR Docs.",
+                "The October 29, 2026 record in Gather Bot PR #20 checks 13 VM backups and 5 Mac backups using temporary databases, and three deletion and recovery scenarios in an isolated production image. No real deletion requests had been received, so the complete request, deletion across all copies, and response process was not verified."
             ]
         },
         {
