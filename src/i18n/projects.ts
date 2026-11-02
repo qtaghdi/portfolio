@@ -638,7 +638,8 @@ export const projectEn: Record<string, ProjectTranslation> = {
           "title": "Backup and deletion verification scope",
           "paragraphs": [
             "Cleanup previews by default and aborts before deletion when creation records are invalid. It does not follow links or unrelated files.",
-            "PR #19 records isolated erasure and restore checks; PR #20 records a live backup inspection. Deletion requests are not replayed automatically and require the request-ledger procedure."
+            "PR #19 records isolated erasure and restore checks; PR #20 records a live backup inspection. Deletion requests are not replayed automatically and require the request-ledger procedure.",
+            "The October 29, 2026 record in Gather Bot PR #20 checks 13 VM backups and 5 Mac backups using temporary databases, and three deletion and recovery scenarios in an isolated production image. No real deletion requests had been received, so the complete request, deletion across all copies, and response process was not verified."
           ]
         }
       },

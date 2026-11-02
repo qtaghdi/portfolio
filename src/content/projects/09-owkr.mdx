@@ -64,6 +64,8 @@ OWKR 운영진은 참가 명단을 확인하고 팀을 편성하는 한편, 운�
 
 저장소 테스트는 revision 증가와 stale 저장의 거절을 확인합니다. Redis 테스트 대역을 사용하는 검사이며, 실제 Redis의 동시 요청 부하 검증과는 구분합니다. 구현은 [공동 편집 PR #10](https://github.com/Overwatch-KR/owkr-balance/pull/10)과 [접속자 표시 PR #17](https://github.com/Overwatch-KR/owkr-balance/pull/17)에 있습니다.
 
+[PR #20](https://github.com/Overwatch-KR/owkr-gather-bot/pull/20)의 2026년 10월 29일 점검 기록에서는 VM 백업 13개와 Mac 백업 5개를 임시 DB로 복사해 초기화와 무결성을 확인했습니다. 운영 이미지를 격리한 삭제·복원 시나리오 3개도 통과했습니다. 실제 삭제 요청은 없어 요청 접수부터 모든 복사본 삭제와 회신까지의 전체 절차를 검증한 것은 아닙니다.
+
 </details>
 
 ## 답안 저장부터 제출과 채점까지

@@ -83,3 +83,7 @@ Authored commit counts below use unique SHAs across all local refs and the known
 ## 2026-11-01 프로젝트 이미지 전체 점검
 
 [운영 배포와 전체 이미지 점검](image-audit-2026-11-01.md)에서 운영 주소가 이전 커밋을 가리키는 것과 상세 여덟 프로젝트의 대표 비주얼 누락을 확인했습니다. 로컬 수정본에는 실제 캡처 여덟 개와 명시적으로 구분한 구조 다이어그램 여섯 개를 홈·상세에 연결했습니다. 이는 모든 프로젝트의 실제 캡처 확보를 뜻하지 않습니다. Boundra의 잘림을 수정하고 한영·모바일을 포함한 전체 프로젝트 이미지 검사를 추가했습니다. 운영 배포는 아직 변경하지 않았습니다.
+
+## 2026-11-02 weekly review
+
+- OWKR Gather Bot: [PR #20](https://github.com/Overwatch-KR/owkr-gather-bot/pull/20), merged 2026-10-29, records temporary database checks for 13 VM and 5 Mac backups and three isolated deletion/recovery scenarios. No actual deletion request was received; end-to-end handling and deletion across all copies were not established. This is the recorded verification, not a fresh rerun.
