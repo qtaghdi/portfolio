@@ -115,6 +115,7 @@ test('home shows small project icons in both work lists', async ({ page }) => {
   for (const icon of await icons.all()) {
     await icon.scrollIntoViewIfNeeded();
     await expect(icon).toBeVisible();
+    await icon.evaluate((image: HTMLImageElement) => image.decode());
     await expect(icon).toHaveCSS('width', '24px');
     await expect(icon).toHaveCSS('height', '24px');
     expect(await icon.evaluate((image: HTMLImageElement) => image.complete && image.naturalWidth > 0)).toBe(true);
