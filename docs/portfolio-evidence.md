@@ -1,8 +1,10 @@
 # Portfolio evidence register
 
-최근 내용 검토일: 2026-10-29 (Asia/Seoul). 아래 과거 스냅샷은 당시 기록이며 최신 상태와 구분합니다.
+최근 내용 검토일: 2026-10-31 (Asia/Seoul). 아래 과거 스냅샷은 당시 기록이며 최신 상태와 구분합니다.
 
-최신 Git 대조: [17개 저장소 검토와 화면 출처](git-comparison-2026-10-29.md). 15개는 원격 최신 참조를 받았고, Notiiv·인트라넷은 회사 SSO 제한을 명시했다. 신규 화면 7장과 과거 CI 기준 이미지 2장을 추가했다. 성능 수치나 외부 프로젝트의 테스트는 이번에 재실행하지 않았다.
+최신 회사 프로젝트 검토: [Bigtablet 로컬 이력과 홈페이지 기여 범위](bigtablet-review-2026-10-31.md). 새 Notiiv·인트라넷 클론의 코드를 확인했고, 홈페이지는 Jiho Moon의 2026-06-29 재설계 이전 구현을 기준으로 개발 범위를 보완했다. 홈페이지의 새 폴더는 체크아웃이 없어 이전 검토용 클론을 사용했다.
+
+이전 전체 Git 대조: [17개 저장소 검토와 화면 출처](git-comparison-2026-10-29.md). 15개는 원격 최신 참조를 받았고, Notiiv·인트라넷은 회사 SSO 제한을 명시했다. 신규 화면 7장과 과거 CI 기준 이미지 2장을 추가했다. 성능 수치나 외부 프로젝트의 테스트는 이번에 재실행하지 않았다.
 
 이 문서는 포트폴리오에 적은 주장과 근거를 분리해 관리하기 위한 내부 기록이다. 커밋 수는 작업 참여 범위를 탐색하는 색인으로만 사용하며, 사용자 성과나 생산성 지표로 공개하지 않는다.
 
@@ -36,7 +38,7 @@
 
 ## Commit trace: internal only
 
-Authored commit counts below use unique SHAs across all local refs and the known author aliases `Engy Park`, `박상민`, `상만`. They include merges and do not represent impact.
+Authored commit counts below use unique SHAs across all local refs and the known author aliases `Engy Park`, `박상민`, `상만`. 홈페이지 추가 검토에서 `sangmin <sangmin@bigtablet.com>`도 확인했습니다. 아래 과거 커밋 수는 다시 계산하지 않았습니다. They include merges and do not represent impact.
 
 | Repository | Unique authored SHAs | Representative trace |
 | --- | ---: | --- |
@@ -77,3 +79,7 @@ Authored commit counts below use unique SHAs across all local refs and the known
 ## Design concept delivery
 
 `docs/design/clean-v1/index.html`은 Image Gen 시안 네 개를 포함한 독립적인 디자인 검토 문서다. 생성 프롬프트는 동일 폴더의 `prompts.md`에 기록한다. 초기 구상 단계에서 한·영 소개와 내용을 먼저 수정했다. 이후 사용자 승인에 따라 시안의 레이아웃과 스타일을 적용하고 주요 작업의 실제 아이콘을 추가했다. 검증 기록은 `docs/design/clean-v1/verification.md`에 있다.
+
+## 2026-11-01 프로젝트 이미지 전체 점검
+
+[운영 배포와 전체 이미지 점검](image-audit-2026-11-01.md)에서 운영 주소가 이전 커밋을 가리키는 것과 상세 여덟 프로젝트의 대표 비주얼 누락을 확인했습니다. 로컬 수정본에는 실제 캡처 여덟 개와 명시적으로 구분한 구조 다이어그램 여섯 개를 홈·상세에 연결했습니다. 이는 모든 프로젝트의 실제 캡처 확보를 뜻하지 않습니다. Boundra의 잘림을 수정하고 한영·모바일을 포함한 전체 프로젝트 이미지 검사를 추가했습니다. 운영 배포는 아직 변경하지 않았습니다.

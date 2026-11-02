@@ -20,6 +20,9 @@ summary: "어드민, 오너, 서비스 상태, 고객지원 네 앱과 13개 공
 evidence:
   - {"val": "제품 운영", "label": "어드민·오너 대시보드·서비스 상태·고객지원 화면을 하나의 제품으로 연결"}
   - {"val": "공통 기반", "label": "여러 앱에서 인증·API 요청·공유 흐름을 일관되게 처리"}
+traceLinks:
+  - { label: "네 앱의 공통 스타일 전환", labelEn: "Shared style migration across four apps", href: "https://github.com/Bigtablet/bigtablet-notiiv-monorepo-web/commit/8b7ab9d442af503d0228e29fb016bc78c76332c7" }
+  - { label: "디자인 시스템 API 마이그레이션", labelEn: "Design system API migration", href: "https://github.com/Bigtablet/bigtablet-notiiv-monorepo-web/commit/e07251fd09560cf4e74317b31dda08364abfa0af" }
 metrics: []
 callouts:
   - icon: "🔐"
@@ -78,6 +81,12 @@ FAQ 작성 화면은 미리보기와 고객지원 렌더링의 규칙을 맞추�
 미팅 후속 일정은 백엔드가 제공하는 이벤트 목록을 공유 화면에 표시하고 하나의 캘린더 파일로 내보내도록 연결했습니다. 문자열을 파일로 만드는 데서 끝내지 않고 시간대, 잘못된 날짜, 텍스트 escaping과 긴 줄 처리를 다뤘습니다. 제목에서 일정을 추측하던 구현을 명시적인 이벤트 데이터로 옮긴 변경도 기록되어 있습니다.
 
 카카오톡 인앱 브라우저에는 외부 브라우저 전환 안내를 제공하고, 다운로드와 브라우저 API에는 지원 여부에 따른 대체 흐름을 두었습니다. PDF 뷰어에서는 확대 중 swipe가 페이지 넘김으로 해석되지 않게 하고, 한국어 IME의 키 이벤트 차이도 처리했습니다.
+
+### 5. 공통 UI 변경을 네 앱의 실제 사용 코드에 적용
+
+디자인 시스템 4의 컴포넌트별 CSS 배포에 맞춰 네 앱의 레이아웃에서 전체 스타일 import를 제거했습니다. 같은 스타일을 중복으로 가져오지 않도록 패키지 배포 방식과 소비 앱 설정을 함께 바꾼 작업입니다.
+
+4.1의 API 변경에서는 `onValueChange`, `tone` 등으로 호출부를 옮기고 테스트 mock도 함께 갱신했습니다. 공통 라이브러리의 릴리스만으로 마무리하지 않고, 실제 제품의 입력·알림·배지와 운영 화면이 새 API를 사용하도록 연결했습니다.
 
 ## 서비스 적용과 운영 배포
 

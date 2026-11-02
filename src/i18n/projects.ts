@@ -169,6 +169,12 @@ export const projectEn: Record<string, ProjectTranslation> = {
                         "Calendar sharing moved from inferring dates from titles to explicit backend follow-up events displayed on the share card and exported together. Handling includes time zones, invalid dates, escaping, and long lines.",
                         "Webview guidance and browser fallbacks cover unsupported downloads and APIs. PDF interaction separates zoom from page swipes and accounts for Korean IME keyboard-event differences."
                     ]
+                },
+                {
+                    title: 'Apply shared UI changes in the product apps',
+                    paragraphs: [
+                        'I removed full-stylesheet imports from all four app layouts for design system 4, matching component-owned CSS without duplicate global imports. The 4.1 API migration updated consuming components and test mocks to onValueChange and tone, connecting the library release to actual forms, alerts, badges, and operational screens.',
+                    ],
                 }
             ]
         },
@@ -250,6 +256,13 @@ export const projectEn: Record<string, ProjectTranslation> = {
                         "The previous full stylesheet remains available for compatibility. Migration guidance distinguishes removing it from cases requiring theme variables, and documents the package-import optimization needed for webpack.",
                         "tokens.json generates SCSS, TypeScript, and theme output. A stale-output check detects divergence. Consumer updates include package versions and stylesheet imports rather than stopping at a successful package build."
                     ]
+                },
+                {
+                    title: 'Keep form and accessibility behavior aligned in plain HTML',
+                    paragraphs: [
+                        'I also maintained the Vanilla JavaScript distribution for pages without React. Dropdown hidden inputs reflect selected values and disabled state, while reset and reinitialization avoid retaining old state. Search handles Korean initial consonants and in-progress composition.',
+                        'Modal and dropdown changes cover accessible names, keyboard focus, and focus indicators. Hidden inputs, including those with tabindex, are excluded from both React and Vanilla focus traps. Regression cases cover form values, reset, naming, and focus behavior.',
+                    ],
                 }
             ]
         },
@@ -340,9 +353,11 @@ export const projectEn: Record<string, ProjectTranslation> = {
             ]
           },
           {
-            "title": "Resume training from server-owned progress",
+            "title": "Track watched segments and resume from server progress",
             "paragraphs": [
-              "I carried lastPositionSec from the training response through the domain model to the player. Both the native video player and YouTube path receive the resume position when the user reopens the lesson."
+              "I connected course and lesson screens with API and domain layers for video, quiz, and other lesson types. Video tracking reports the intervals actually watched, so seeking forward does not count the skipped interval. The completion control follows the watch requirement returned by the server.",
+              "Watch requests run one at a time. Recoverable failures return intervals to the next transmission with bounded retries. Closing the screen waits for any in-flight report before sending pending intervals; this does not guarantee delivery if the app is forcibly terminated.",
+              "I carried lastPositionSec through the response and domain model to both the native video player and YouTube path. Reopening a lesson restores the saved position, and the interface updates completion from the server-confirmed result."
             ]
           }
         ]
@@ -931,29 +946,36 @@ export const projectEn: Record<string, ProjectTranslation> = {
     "title": "Bigtablet Homepage Renewal",
     "category": "Company · Public Website",
     "role": "Frontend Engineer",
-    "thesis": "Keeping localized content, rendering, and motion coherent",
-    "responsibility": "Server and client boundaries, localization, responsive UI, motion cleanup, and SEO",
+    "thesis": "Connect company information, content, and recruitment applications",
+    "responsibility": "Company, content, and recruitment interfaces, application validation, email verification, uploads, localization, motion, and SEO",
     "focus": [
       "Rendering boundaries",
       "i18n",
       "Motion lifecycle",
       "SEO"
     ],
-    "summary": "Contributed to the company website renewal and maintenance, covering server rendering, bilingual error flows, animation cleanup, and public-site delivery.",
+    "summary": "Developed the company website frontend across company and product content, blog and news pages, and recruitment applications, including email verification, uploads, localization, and responsive interaction.",
     "sections": [
       {
         "id": "problem",
         "title": "Localization and interaction extend beyond the main content",
         "paragraphs": [
-          "I contributed to the renewal and maintenance of Bigtablet’s Korean and English company website, including company information, history, and recruitment content.",
+          "I developed the frontend for company and product information, history, team details, blog and news pages, and recruitment listings and applications, then improved localization, responsive behavior, and public delivery.",
           "Error screens could retain Korean copy or display mismatched history content. Rapid year changes could also leave an earlier GSAP animation running against the new screen."
         ]
       },
       {
         "id": "decisions",
-        "title": "Align rendering, language, and interaction lifetimes",
+        "title": "Connect content, applications, rendering, and interaction",
         "paragraphs": [],
         "subsections": [
+          {
+            title: 'Connect content pages and recruitment applications',
+            paragraphs: [
+              'I built blog and news lists and details with create, edit, and delete flows, alongside company, history, team, and recruitment pages. Shared empty states, list layouts, loading states, and error boundaries reduced repeated page handling.',
+              'The application flow combines React Hook Form and Zod validation, conditional education fields, email-verification checks before submission, and shared upload type and size checks. A date-order bug came from converting YYYY-MM input to a number; I replaced it with comparison of matching formatted strings and added regression cases using the actual input format. The talent form also received a Zod resolver so validation runs on submission.',
+            ],
+          },
           {
             "title": "Keep static composition on the server",
             "paragraphs": [
@@ -974,9 +996,10 @@ export const projectEn: Record<string, ProjectTranslation> = {
             ]
           },
           {
-            "title": "Maintain the public delivery surface",
+            "title": "Maintain delivery and add page checks",
             "paragraphs": [
-              "I maintained metadata, sitemap and robots output, asset paths, localized links, and responsive behavior alongside build checks and deployment-branch changes."
+              "I maintained metadata, sitemap and robots output, asset paths, localized links, and responsive behavior alongside build checks and deployment-branch changes.",
+              "Playwright checks cover main, about, blog and news, recruitment, policies, and language switching. The axe suite targets the main, about, privacy, and terms pages without API dependencies. Critical violations fail the check; serious violations are warnings. This does not establish accessibility compliance across the entire site."
             ]
           }
         ]
@@ -987,7 +1010,7 @@ export const projectEn: Record<string, ProjectTranslation> = {
         "paragraphs": [
           "Static page composition moved to server rendering while interactive areas retained client behavior. Localization now includes error, retry, and return actions.",
           "History animations clean up on transitions and support reduced-motion preferences. Public commits show the authored changes to these rendering and interaction boundaries.",
-          "This case describes the earlier Next.js renewal and maintenance work. A June 30, 2026 follow-up changed the root to a temporary static home, so the current public design should not be treated as a screenshot of that implementation."
+          "This case covers the website before Jiho Moon’s first main-page redesign on June 29, 2026. It includes company, content, and recruitment frontend development and maintenance. The main design adopted from June 30 belongs to the subsequent work and is outside this case’s visual results."
         ]
       }
     ]

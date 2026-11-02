@@ -20,6 +20,10 @@ summary: "Flutter로 만든 사내 모바일 앱에서 홈·메신저·업무 �
 evidence:
   - {"val": "모바일 업무", "label": "메일·전자결재·일정 등 사내 업무를 모바일에서 확인"}
   - {"val": "알림과 이동", "label": "업무 알림에서 관련 상세 화면으로 바로 연결"}
+traceLinks:
+  - { label: "메일 캐시와 네트워크 갱신", labelEn: "Mail cache and network refresh", href: "https://github.com/Bigtablet/bigtablet-intranet-app/commit/47ae19d2da356c8be2b95902c5828ed7438b64c7" }
+  - { label: "교육 영상 시청 기록", labelEn: "Training watch tracking", href: "https://github.com/Bigtablet/bigtablet-intranet-app/commit/8cc30dad7d32b220901f2fde9f92ca0e13dcfd08" }
+  - { label: "시청 전송 재시도와 화면 종료 처리", labelEn: "Watch retry and close handling", href: "https://github.com/Bigtablet/bigtablet-intranet-app/commit/0b505f4c5b025ecb06374fdc65f36bb0e6b03b5a" }
 metrics: []
 callouts:
   - icon: "01"
@@ -61,9 +65,13 @@ import ProjectScreenshot from '../../components/ProjectScreenshot.astro';
 
 일괄 작업에서는 낙관적 성공 메시지를 줄였습니다. 메일 삭제·보관과 결재 일괄 승인에서 transport 실패, 부분 성공, 중복 결과를 나눠 처리하고, 페이지를 빠르게 이동했을 때 늦은 응답이 현재 목록을 덮어쓰지 않도록 stale response를 버렸습니다.
 
-### 4. 교육 영상의 이어 보기
+### 4. 교육 영상의 시청 기록과 이어 보기
 
-교육 영상은 서버의 lastPositionSec를 앱의 응답 모델부터 플레이어까지 전달하도록 연결했습니다. 자체 영상 플레이어와 YouTube 재생 경로에 같은 이어 보기 기준을 적용해, 화면을 다시 열었을 때 사용자의 학습 위치를 복원하도록 했습니다.
+교육 과정·강의 화면과 API·도메인 계층을 연결하고, 영상과 퀴즈 등 강의 유형에 맞춰 학습 흐름을 구성했습니다. 영상은 단순히 마지막 위치만 저장하면 앞으로 건너뛴 구간도 시청한 것으로 처리할 수 있어, 재생 중 실제로 지나간 구간을 모아 서버로 보내도록 했습니다. 완료 버튼은 서버가 반환한 시청 기준 충족 여부를 따릅니다.
+
+시청 기록 요청은 한 번에 하나씩 보내고, 복구 가능한 실패는 다음 전송에 다시 싣되 재시도 횟수에 상한을 뒀습니다. 화면을 닫을 때 진행 중인 전송이 있으면 이를 기다린 뒤 남은 구간을 보내도록 보완했습니다. 앱 강제 종료까지 전송을 보장하는 구조는 아닙니다.
+
+서버의 `lastPositionSec`는 응답 모델부터 자체 영상 플레이어와 YouTube 재생 경로까지 전달했습니다. 화면을 다시 열었을 때 저장된 학습 위치를 복원하며, 완료 여부는 서버가 확정한 결과로 갱신합니다.
 
 ## 사용자가 신뢰할 수 있는 업무 흐름
 

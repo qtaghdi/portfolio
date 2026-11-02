@@ -16,6 +16,7 @@ evidence:
   - {"val": "제품 UI", "label": "Notiiv의 네 앱에서 공통 컴포넌트와 스타일을 사용"}
   - {"val": "Storybook", "label": "컴포넌트 상태와 디자인 토큰을 확인하고 사용법을 살펴보는 문서"}
 traceLinks:
+  - { label: "일반 HTML용 폼과 접근성 개선", labelEn: "Vanilla forms and accessibility", href: "https://github.com/Bigtablet/bigtablet-design-system/commit/33104c0779616ebff12f5fc4746f2a3d24a0002d" }
   - { label: "시각 회귀 검사 구현", labelEn: "Visual regression implementation", href: "https://github.com/Bigtablet/bigtablet-design-system/commit/1e66a69c76fddd8651e3d3518f8017ac84d75f6b" }
   - { label: "Storybook", labelEn: "Storybook", href: "https://bigtablet.github.io/bigtablet-design-system/" }
   - { label: "패키지 릴리스", labelEn: "Package releases", href: "https://github.com/Bigtablet/bigtablet-design-system/releases" }
@@ -63,6 +64,12 @@ import ProjectScreenshot from '../../components/ProjectScreenshot.astro';
 토큰은 `tokens.json`에서 SCSS, TypeScript와 테마 변수를 생성하도록 통합했습니다. 생성 결과와 커밋된 파일이 다르면 검사가 실패하게 해, 한쪽 출력만 수동 수정하면서 테마가 어긋나는 문제를 드러내도록 했습니다. 소비하는 Notiiv 앱에서는 패키지 버전과 스타일 import를 함께 갱신했습니다.
 
 <ProjectScreenshot projectKey="design-system" screen="tokens-components" />
+
+### 4. 일반 HTML에서도 같은 UI 규칙 유지
+
+React를 사용하지 않는 화면을 위한 Vanilla JavaScript 배포도 유지보수했습니다. Dropdown의 선택값이 실제 폼 제출값과 맞도록 hidden input과 disabled 상태를 동기화하고, 폼 초기화와 재초기화 때 이전 상태가 남지 않도록 정리했습니다. 검색에는 한국어 초성과 조합 중인 글자를 처리하는 규칙을 반영했습니다.
+
+모달과 드롭다운의 접근 가능한 이름, 키보드 포커스와 포커스 표시도 보완했습니다. 특히 모달의 첫 포커스 후보에 숨겨진 폼 입력이 포함되면 Tab 이동이 깨질 수 있어, `tabindex`가 붙은 hidden input까지 React와 Vanilla 양쪽 포커스 트랩에서 제외했습니다. 폼 제출값·초기화·접근 가능한 이름·포커스 회귀 테스트를 함께 추가했습니다.
 
 ## 패키지 배포와 소비 앱 적용
 

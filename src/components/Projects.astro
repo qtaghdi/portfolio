@@ -2,6 +2,7 @@
 import { getCollection, type CollectionEntry } from 'astro:content';
 import { copy, projectPath, type Locale } from '../i18n';
 import { projectEn, projectKey } from '../i18n/projects';
+import { primaryScreens, projectDiagrams } from '../data/project-screens';
 interface Props { locale: Locale; }
 const { locale } = Astro.props;
 const ko = locale === 'ko';
@@ -85,6 +86,7 @@ const notes: Record<string, { summary: string; meta: string; role: string }> = {
         const key = projectKey(project.slug);
         const note = notes[key];
         const icon = projectIcons[key];
+        const screen = primaryScreens[key] ?? projectDiagrams[key];
         const href = projectPath(locale, project.slug);
         return (
           <article class="featured-project" data-project-group={project.data.group}>
@@ -97,6 +99,9 @@ const notes: Record<string, { summary: string; meta: string; role: string }> = {
               <p class="project-role">{ko ? '담당' : 'Scope'}: {note?.role ?? data.role}</p>
             </div>
             <a class="case-link" href={href} aria-label={`${data.title} ${dictionary.detail}`}>{dictionary.detail}<svg aria-hidden="true" viewBox="0 0 20 20"><path d="M4 10h12m-5-5 5 5-5 5" /></svg></a>
+            {screen && <a class="project-preview" href={href} aria-label={`${data.title} ${ko ? '화면과 작업 내용 보기' : 'screens and case study'}`}>
+              <img src={screen.src} width={screen.width} height={screen.height} alt={screen[locale]} loading="lazy" decoding="async" data-home-screen={key} data-image-kind={primaryScreens[key] ? 'screenshot' : 'diagram'} />
+            </a>}
           </article>
         );
       })}
@@ -105,7 +110,9 @@ const notes: Record<string, { summary: string; meta: string; role: string }> = {
       <h2 id="more-work-title">{dictionary.moreTitle}</h2>
       <ol>{projects.filter((project) => !project.data.featured).map((project) => {
         const data = localized(project);
-        return <li><a href={projectPath(locale, project.slug)}><strong>{projectIcons[projectKey(project.slug)] && <img class="project-icon" src={projectIcons[projectKey(project.slug)]} width="24" height="24" alt="" aria-hidden="true" decoding="async" loading="lazy" />}<span>{data.title}</span></strong><span class="more-summary"><small class="work-type">{groupLabels[project.data.group]}</small>{moreNotes[projectKey(project.slug)] ?? data.summary}</span><svg aria-hidden="true" viewBox="0 0 20 20"><path d="M4 10h12m-5-5 5 5-5 5" /></svg></a></li>;
+        const key = projectKey(project.slug);
+        const screen = primaryScreens[key] ?? projectDiagrams[key];
+        return <li><a href={projectPath(locale, project.slug)} class:list={{ 'has-preview': !!screen }}><strong>{projectIcons[projectKey(project.slug)] && <img class="project-icon" src={projectIcons[projectKey(project.slug)]} width="24" height="24" alt="" aria-hidden="true" decoding="async" loading="lazy" />}<span>{data.title}</span></strong><span class="more-summary"><small class="work-type">{groupLabels[project.data.group]}</small>{moreNotes[projectKey(project.slug)] ?? data.summary}</span><svg aria-hidden="true" viewBox="0 0 20 20"><path d="M4 10h12m-5-5 5 5-5 5" /></svg>{screen && <span class:list={['more-preview', { portrait: screen.height > screen.width }]}><img src={screen.src} width={screen.width} height={screen.height} alt={screen[locale]} loading="lazy" decoding="async" data-home-screen={key} data-image-kind={primaryScreens[key] ? 'screenshot' : 'diagram'} />{projectDiagrams[key] && <small class="diagram-label">{ko ? '구현 구조 요약' : 'Implementation diagram'}</small>}</span>}</a></li>;
       })}</ol>
     </section>
   </div>
@@ -131,11 +138,28 @@ const notes: Record<string, { summary: string; meta: string; role: string }> = {
   .project-role { margin-top: 14px; color: $silver; font-size: 15px; line-height: 1.7; }
   .case-link { display: inline-flex; align-items: center; gap: 8px; align-self: start; min-height: 44px; color: $accent; font-size: 15px; white-space: nowrap; text-decoration: underline; text-underline-offset: 4px; }
   svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 1.4; }
+  .project-preview { display: block; grid-column: 2 / -1; width: 100%; max-width: 960px; margin-top: 8px; }
+  .project-preview img, .more-preview img { display: block; width: 100%; height: auto; object-fit: contain; border: 1px solid $line; }
+  .project-preview:focus-visible { outline: 2px solid $accent; outline-offset: 4px; }
   .more-work { padding-top: 72px; }
   .more-work h2 { margin-bottom: 24px; font-size: 26px; }
   .more-work ol { list-style: none; border-top: 1px solid $line; }
   .more-work li { border-bottom: 1px solid $line; }
   .more-work li a { display: grid; grid-template-columns: 230px minmax(0,1fr) 20px; gap: 24px; min-height: 80px; align-items: center; padding: 18px 0; }
+  .more-work li a.has-preview { grid-template-columns: 180px 230px minmax(0,1fr) 20px; }
+  .more-preview { grid-column: 1; grid-row: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; min-width: 0; }
+  .diagram-label { margin-top: 6px; color: $gunmetal; font-size: 11px; }
+  .more-preview.portrait img { width: auto; max-width: 100%; max-height: 180px; }
+  .more-work li a.has-preview > strong { grid-column: 2; }
+  .more-work li a.has-preview > .more-summary { grid-column: 3; }
+  .more-work li a.has-preview > svg { grid-column: 4; }
+  @media (min-width: 681px) and (max-width: 1000px) {
+    .more-work li a.has-preview { grid-template-columns: 140px minmax(0,1fr) 20px; }
+    .more-work li a.has-preview > strong { grid-column: 2; grid-row: 1; }
+    .more-work li a.has-preview > .more-summary { grid-column: 2; grid-row: 2; }
+    .more-work li a.has-preview > svg { grid-column: 3; grid-row: 1 / 3; }
+    .more-preview { grid-row: 1 / 3; }
+  }
   .more-work strong { display: flex; align-items: center; gap: 12px; min-width: 0; font-size: 16px; font-weight: 600; }
   .more-work strong span { min-width: 0; overflow-wrap: anywhere; }
   .work-type { display: block; margin-bottom: 2px; color: $gunmetal; font-size: 12px; }
@@ -151,6 +175,13 @@ const notes: Record<string, { summary: string; meta: string; role: string }> = {
     .case-link { grid-column: 2; margin-top: 0; font-size: 14px; width: fit-content; }
     .more-work { padding-top: 52px; }.more-work h2 { font-size: 23px; }
     .more-work li a { grid-template-columns: minmax(0,1fr) 20px; gap: 8px 16px; }
+    .project-preview { grid-column: 1 / -1; margin-top: 12px; }
+    .more-preview.portrait img { max-height: 420px; }
+    .more-work li a.has-preview { grid-template-columns: minmax(0,1fr) 20px; }
+    .more-work li a.has-preview > strong { grid-column: 1; grid-row: 1; }
+    .more-work li a.has-preview > .more-summary { grid-column: 1; grid-row: 2; }
+    .more-work li a.has-preview > svg { grid-column: 2; grid-row: 1 / 3; }
+    .more-work li a.has-preview > .more-preview { grid-column: 1 / -1; grid-row: 3; margin-top: 12px; }
     .more-summary { grid-column: 1; grid-row: 2; padding-left: 36px; }.more-work li svg { grid-column: 2; grid-row: 1 / 3; }
   }
 </style>

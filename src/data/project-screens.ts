@@ -45,7 +45,7 @@ export const supplementalScreens: Record<string, SupplementalScreen[]> = {
   }],
 };
 
-const primaryScreens: Record<string, SupplementalScreen> = {
+export const primaryScreens: Record<string, SupplementalScreen> = {
   notiiv: { src: '/projects/notiiv/img.png', width: 1905, height: 956, ko: 'Notiiv 고객지원 실제 화면', en: 'Actual Notiiv customer support screen' },
   'design-system': { src: '/projects/design-system/storybook-overview.png', width: 1440, height: 900, ko: 'Bigtablet Design System의 Storybook 실제 화면', en: 'Actual Bigtablet Design System Storybook screen' },
   intranet: { src: '/projects/intranet/home.png', width: 390, height: 788, ko: '데모 데이터로 실행한 Bigtablet 인트라넷 모바일 홈', en: 'Bigtablet intranet mobile home running with fixture data' },
@@ -76,3 +76,12 @@ const englishPlacements: Record<string, [section: string, subsection: number | n
 export function englishScreens(project: string, section: string, subsection: number | null = null): string[] {
   return (englishPlacements[project] ?? []).filter(([id, index]) => id === section && index === subsection).map(([, , screen]) => screen);
 }
+
+// These are implementation diagrams, not product screenshots.
+export const projectDiagrams: Record<string, SupplementalScreen> = Object.fromEntries(
+  ['boundra', 'homepage', 'jeomjuro', 'marker', 'kivra', 'echo'].map((key) => [key, {
+    src: `/projects/${key}/implementation.svg`, width: 1400, height: 840,
+    ko: '구현 구조 요약 · 실제 제품 화면이 아닌 설명용 다이어그램',
+    en: 'Implementation overview · explanatory diagram, not a product screenshot',
+  }]),
+);

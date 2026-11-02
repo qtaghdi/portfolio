@@ -50,11 +50,10 @@ export const originalScreens = [
 ] as const;
 
 export const declaredReconstructions = [
-  {
-    key: 'boundra',
-    route: '/projects/boundra',
-    reason: 'CLI output is rendered as selectable HTML because no distributable original capture is available.',
-  },
+  ...['boundra', 'homepage', 'jeomjuro', 'marker', 'kivra', 'echo'].map((key) => ({
+    key, route: `/projects/${key}`,
+    reason: 'Implementation diagram is explicitly labeled; no original product screenshot is claimed.',
+  })),
 ] as const;
 
 export const supplementalReferences = [

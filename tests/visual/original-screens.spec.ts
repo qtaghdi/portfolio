@@ -74,6 +74,12 @@ for (const reference of declaredReconstructions) {
     const visual = page.locator(`[data-visual="${reference.key}"]`);
     await expect(visual).toHaveAttribute('data-fidelity', 'reconstruction');
     await expect(visual.locator('[data-original-screen]')).toHaveCount(0);
+    const diagram = visual.locator('[data-project-diagram]');
+    await diagram.scrollIntoViewIfNeeded();
+    await expect(diagram).toBeVisible();
+    await diagram.evaluate((node: HTMLImageElement) => node.decode());
+    await expect(diagram).toHaveAttribute('alt', /다이어그램/);
+    expect(await diagram.evaluate((node: HTMLImageElement) => node.naturalWidth)).toBe(1400);
   });
 }
 
@@ -102,7 +108,6 @@ test('supplemental captures preserve source bytes and open at original size in b
 
 test('home shows small project icons in both work lists', async ({ page }) => {
   await page.goto('/');
-  await expect(page.locator('[data-original-screen]')).toHaveCount(0);
   const icons = page.locator('#projects .project-icon');
   await expect(icons).toHaveCount(14);
   await expect(icons.nth(0)).toHaveAttribute('src', '/projects/design-system/favicon.png');
@@ -122,6 +127,29 @@ test('home shows small project icons in both work lists', async ({ page }) => {
   await expect(page.locator('.featured-list .project-icon').nth(2)).toHaveAttribute('src', '/projects/document-workspace/icon.svg');
   const overflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
   expect(overflow).toBeLessThanOrEqual(1);
+});
+
+test('home project screens load in both languages without cropping', async ({ page }) => {
+  for (const prefix of ['', '/en']) {
+    await page.goto(`${prefix}/`);
+    const images = page.locator('[data-home-screen]');
+    await expect(images).toHaveCount(14);
+    await expect(page.locator('[data-home-screen][data-image-kind="screenshot"]')).toHaveCount(8);
+    await expect(page.locator('[data-home-screen][data-image-kind="diagram"]')).toHaveCount(6);
+    await expect(page.locator('.featured-list [data-home-screen]')).toHaveCount(4);
+    for (const image of await images.all()) {
+      await image.scrollIntoViewIfNeeded();
+      await expect(image).toBeVisible();
+      const size = await image.evaluate(async (node: HTMLImageElement) => {
+        await node.decode();
+        return { width: node.naturalWidth, height: node.naturalHeight, renderedWidth: node.clientWidth, renderedHeight: node.clientHeight };
+      });
+      expect(size.width).toBeGreaterThan(0);
+      expect(Math.abs(size.renderedHeight - size.renderedWidth * size.height / size.width)).toBeLessThan(2);
+      await expect(image).toHaveAttribute('alt', /.+/);
+      await expect(image.locator('xpath=ancestor::a')).toHaveAttribute('href', /projects\//);
+    }
+  }
 });
 
 test('work, contents and language links retain navigation', async ({ page }, testInfo) => {
@@ -180,5 +208,25 @@ test('text contents follow the article and highlight the current section', async
     const bounds = await rail.evaluate((node) => ({ rail: node.getBoundingClientRect().bottom, container: node.closest('.case-layout')!.getBoundingClientRect().bottom }));
     expect(bounds.rail).toBeLessThanOrEqual(bounds.container + 1);
     expect(await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth)).toBeLessThanOrEqual(1);
+  }
+});
+
+test('every project detail has a working visual in Korean and English', async ({ page }) => {
+  await page.goto('/');
+  const routes = await page.locator('#projects a[href*="/projects/"]').evaluateAll((links) => [...new Set(links.map((link) => new URL((link as HTMLAnchorElement).href).pathname))]);
+  expect(routes).toHaveLength(14);
+  for (const prefix of ['', '/en']) {
+    for (const route of routes) {
+      const response = await page.goto(`${prefix}${route}`);
+      expect(response?.status(), `${prefix}${route}`).toBe(200);
+      const images = page.locator('[data-visual] img');
+      expect(await images.count(), `${prefix}${route} has no project image`).toBeGreaterThan(0);
+      for (const image of await images.all()) {
+        await image.scrollIntoViewIfNeeded();
+        await image.evaluate((node: HTMLImageElement) => node.decode());
+        expect(await image.evaluate((node: HTMLImageElement) => node.complete && node.naturalWidth > 0)).toBe(true);
+      }
+      expect(await page.evaluate(() => document.documentElement.scrollWidth - innerWidth)).toBeLessThanOrEqual(1);
+    }
   }
 });

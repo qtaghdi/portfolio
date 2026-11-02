@@ -5,11 +5,11 @@ import Navbar from './Navbar.astro';
 import Footer from './Footer.astro';
 import { copy, localePath, projectPath, type Locale } from '../i18n';
 import { projectEn, projectKey } from '../i18n/projects';
-import ProjectVisual from './ProjectVisual.astro';
+import ProjectDiagram from './ProjectDiagram.astro';
 import ProjectText from './ProjectText.astro';
 import SectionRail from './SectionRail.astro';
 import ProjectScreenshot from './ProjectScreenshot.astro';
-import { englishScreens } from '../data/project-screens';
+import { englishScreens, projectDiagrams } from '../data/project-screens';
 interface Props { locale: Locale; project: CollectionEntry<'projects'>; }
 const { locale, project } = Astro.props;
 const { Content, headings } = await project.render();
@@ -44,6 +44,7 @@ const chapters = locale === 'ko'
     <div class="case-layout shell">
       <SectionRail chapters={[...chapters, { id: "trace", title: dictionary.trace }]} label={dictionary.index} />
       <article class="case-content">
+        {projectDiagrams[key] && <ProjectDiagram projectKey={key} locale={locale} />}
         {locale === 'ko' ? <div class="mdx-content"><Content /></div> : translation.sections.map((section) => (
           <section id={section.id} class="content-section">
             <h2>{section.title}</h2>
@@ -70,10 +71,6 @@ const chapters = locale === 'ko'
             {data.github && <a href={data.github} target="_blank" rel="noopener noreferrer">{dictionary.github}</a>}
             {data.traceLinks.map((link) => <a href={link.href} target="_blank" rel="noopener noreferrer">{locale === 'ko' ? link.label : link.labelEn}</a>)}
           </div>
-          {key === 'boundra' && <figure class="screen-evidence">
-            <div class="case-visual"><ProjectVisual projectKey={key} locale={locale} variant="detail" /></div>
-            <figcaption>{locale === 'ko' ? 'Boundra · CLI 출력 예시' : 'Boundra · Reconstructed CLI output'}</figcaption>
-          </figure>}
         </section>
       </article>
     </div>

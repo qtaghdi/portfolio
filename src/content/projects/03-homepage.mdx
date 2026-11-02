@@ -6,14 +6,16 @@ group: company
 featured: false
 category: "Company"
 year: "2025-2026"
-role: "프론트엔드 개발 및 유지보수"
+role: "홈페이지 프론트엔드 개발 및 운영"
 accentColor: teal
-summary: "Bigtablet 공식 홈페이지의 브랜드 경험, 다국어 콘텐츠, 반응형 UI, 인터랙션, 배포/운영 품질을 개선한 웹 프로젝트"
-focus: ["Brand experience", "i18n", "SEO", "Delivery"]
-responsibility: "다국어 콘텐츠, 반응형 화면, SEO와 배포 품질 유지보수"
+summary: "회사·제품 소개부터 블로그·뉴스·채용 지원까지 공식 홈페이지의 프론트엔드를 개발했습니다. 이메일 인증과 파일 업로드, 한국어·영어 콘텐츠, 반응형 화면과 인터랙션을 연결했습니다."
+thesis: "회사 소개에서 채용 지원까지 이어지는 홈페이지를 만들다"
+focus: ["Content interfaces", "Application forms", "i18n", "Motion lifecycle"]
+responsibility: "회사·콘텐츠·채용 화면, 지원서 검증·이메일 인증·파일 업로드, 다국어·반응형 UI, 모션과 SEO"
 evidence:
   - {"val": "공식 홈페이지", "label": "방문자에게 회사의 기술과 제품을 소개하고 문의 경로를 안내"}
 traceLinks:
+  - {"label": "채용 지원서 검증과 회귀 테스트", "labelEn": "Application validation and regression tests", "href": "https://github.com/Bigtablet/bigtablet-homepage-web/commit/6f0db18d7ae12b51b619a9b924fc0647c07da964"}
   - {"label": "서버 컴포넌트·다국어 적용", "labelEn": "Server components and localization", "href": "https://github.com/Bigtablet/bigtablet-homepage-web/commit/08d0f567e70edb9388cbb9a1b7eb4ef934401720"}
   - {"label": "GSAP 정리 범위 개선", "labelEn": "GSAP cleanup change", "href": "https://github.com/Bigtablet/bigtablet-homepage-web/commit/cae02df0c5afa0955cf1488c27b4fafe14fcb33f"}
   - {"label": "모션 감소 설정 지원", "labelEn": "Reduced motion support", "href": "https://github.com/Bigtablet/bigtablet-homepage-web/commit/25ae4d82cab2da91fe0a096831fc23b278c552d3"}
@@ -26,9 +28,21 @@ github: "https://github.com/Bigtablet/bigtablet-homepage-web"
 
 ## 공식 홈페이지의 개편 배경
 
-Bigtablet 공식 홈페이지의 리뉴얼과 운영 유지보수에 참여했습니다. 회사·제품 소개, 연혁과 채용 정보가 한국어·영어로 제공되는 사이트에서 언어별 콘텐츠, 렌더링과 인터랙션이 함께 일관되게 동작해야 했습니다.
+Bigtablet 공식 홈페이지에서 회사·제품 소개, 연혁, 팀 소개와 블로그·뉴스, 채용 목록·상세와 지원서 화면의 프론트엔드를 개발했습니다. 방문자가 회사를 살펴본 뒤 콘텐츠를 읽거나 채용에 지원하는 흐름을 연결하고, 이후 다국어·반응형 UI와 운영 품질을 개선했습니다.
 
 문구를 번역하는 것만으로는 부족했습니다. 오류·404 화면에 한국어가 남거나 연혁 데이터의 언어가 섞일 수 있었고, 연도를 빠르게 전환할 때 이전 GSAP 효과가 살아 있으면 새 화면의 표시 상태를 바꿀 수 있었습니다.
+
+## 콘텐츠 탐색부터 채용 지원까지
+
+### 목록과 상세, 작성 기능을 연결
+
+블로그와 뉴스의 목록·상세 화면을 만들고 콘텐츠 생성·수정·삭제 흐름을 연결했습니다. 회사 소개와 연혁, 팀원 상세, 채용 공고도 각각의 페이지로 구성했습니다. 이후 공통 빈 상태와 목록 레이아웃, 로딩·오류 경계를 정리해 페이지마다 비슷한 상태 처리를 반복하지 않도록 했습니다.
+
+### 지원서의 입력·인증·첨부를 하나의 제출 흐름으로
+
+채용 지원에는 연락처, 학력, 포트폴리오와 프로필 이미지 등 여러 입력이 필요했습니다. React Hook Form과 Zod로 필수값과 조건부 학력 입력을 검증하고, 이메일 인증 완료 여부를 확인한 뒤 API 요청을 보내도록 연결했습니다. 파일 업로드에는 형식과 크기를 확인하는 공통 검증을 적용했습니다.
+
+날짜 비교에서는 실제 입력값이 `YYYY-MM`인데 숫자로 변환해 검사하면 비교가 동작하지 않는 문제가 있었습니다. 같은 형식의 문자열끼리 비교하도록 고치고 실제 입력 형식의 회귀 테스트를 추가했습니다. 인재 등록 폼에도 Zod resolver를 연결해 화면의 검증 규칙이 제출에 적용되도록 했습니다.
 
 ## 렌더링과 다국어 경험 개선
 
@@ -52,8 +66,12 @@ next-intl 메시지에 오류, 재시도와 목록 복귀 문구를 포함했습
 
 ## 개편 이후 달라진 점
 
-이 사례는 당시 Next.js 기반 홈페이지의 리뉴얼과 유지보수 작업입니다. 저장소에는 2026년 6월 30일 루트를 임시 정적 메인으로 전환한 후속 변경이 있고, 현재 공개 사이트의 전체 디자인이 아래 구현 사례와 같다는 뜻은 아닙니다.
+이 사례의 구현 범위는 2026년 6월 29일 Jiho Moon의 메인 재설계 이전 홈페이지입니다. 회사·콘텐츠·채용 화면을 개발하고 운영한 작업을 다룹니다. 6월 30일 이후 적용된 메인 디자인은 후속 작업자의 변경이므로 이 사례의 화면 결과로 소개하지 않습니다.
 
 공식 홈페이지의 정적 구성은 서버에서 처리하고, 실제 상호작용이 필요한 영역은 클라이언트에 남기는 구조로 정리했습니다. 다국어 적용 범위는 본문에서 오류·재시도·복귀 동작까지 확장됐습니다.
 
 연혁 애니메이션은 화면 전환 때 함께 해제되고, 모션 감소 설정을 지원하도록 바뀌었습니다. 렌더링 방식과 다국어 메시지 구조를 정리하고, 페이지를 벗어날 때 애니메이션도 함께 해제하도록 했습니다.
+
+### 페이지 흐름과 접근성 검사
+
+Playwright에는 메인, 소개, 블로그·뉴스, 채용, 정책 페이지와 언어 전환 검사를 추가했습니다. axe 검사는 API 없이 열 수 있는 메인·소개·개인정보·이용약관 페이지를 대상으로 하며, critical 위반을 실패로 처리하고 serious 위반은 경고로 남깁니다. 전체 사이트의 접근성 준수를 인증하는 검사와는 범위가 다릅니다.

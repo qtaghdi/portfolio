@@ -1,0 +1,20 @@
+---
+import type { Locale } from '../i18n';
+import { projectDiagrams } from '../data/project-screens';
+interface Props { projectKey: string; locale: Locale; }
+const { projectKey, locale } = Astro.props;
+const image = projectDiagrams[projectKey];
+---
+<figure class="project-diagram" data-visual={projectKey} data-fidelity="reconstruction">
+  <a href={image.src} target="_blank" rel="noopener noreferrer" aria-label={image[locale]}>
+    <img src={image.src} width={image.width} height={image.height} alt={image[locale]} loading="lazy" decoding="async" data-project-diagram={projectKey} />
+  </a>
+  <figcaption>{image[locale]} <a href={image.src} target="_blank" rel="noopener noreferrer">{locale === 'ko' ? '크게 보기' : 'View full size'}</a></figcaption>
+</figure>
+<style lang="scss">
+  @use '../styles/tokens' as *;
+  .project-diagram { margin: 0 0 40px; }
+  img { display: block; width: 100%; height: auto; border: 1px solid $line; }
+  figcaption { margin-top: 12px; color: $gunmetal; font-size: 13px; line-height: 1.8; }
+  figcaption a { margin-left: 8px; color: $accent; text-decoration: underline; }
+</style>
