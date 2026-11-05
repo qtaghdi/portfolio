@@ -41,6 +41,10 @@ function cardHtml(data, origin) {
     @font-face{font-family:Pretendard;src:url('${origin}/fonts/Pretendard-SemiBold.woff2');font-weight:600}
     *{box-sizing:border-box}body{margin:0;background:#fff;color:${baseColor};font-family:Pretendard,sans-serif;-webkit-font-smoothing:antialiased}
     main{width:1200px;height:630px;padding:44px 64px 36px;display:flex;flex-direction:column}
+    main.home{background:center/cover no-repeat url('${origin}/social/v2/home-background.jpg')}
+    .home article{max-width:555px}
+    .home h1{font-size:78px}
+    .home .subtitle{font-size:28px}
     header{display:flex;align-items:center;justify-content:space-between;padding-bottom:24px;border-bottom:1px solid #e4e4e7;font-size:18px;line-height:1.4}
     .name{font-weight:600;letter-spacing:.035em}.edition{color:#71717a;font-size:15px;letter-spacing:.08em}
     article{flex:1;display:flex;flex-direction:column;justify-content:center;padding:24px 0 30px}
@@ -49,7 +53,7 @@ function cardHtml(data, origin) {
     .subtitle{margin:22px 0 0;max-width:1030px;color:#52525b;font-size:${data.home ? '32' : '27'}px;line-height:1.5;letter-spacing:-.025em;word-break:keep-all}
     footer{display:flex;align-items:center;justify-content:space-between;gap:24px;padding-top:24px;border-top:1px solid #e4e4e7;font-size:17px;line-height:1.5}
     .topics{color:#71717a;max-width:740px}.domain{color:${accent};white-space:nowrap;font-weight:500}
-  </style></head><body><main><header><span class="name">PARK SANGMIN</span><span class="edition">${data.home ? 'PORTFOLIO' : 'SELECTED WORK'}</span></header><article><p class="label">${escape(label)}</p><h1>${escape(heading)}</h1><p class="subtitle">${escape(subtitle)}</p></article><footer><span class="topics">${escape(footer)}</span><span class="domain">park-sangmin.vercel.app</span></footer></main></body></html>`;
+  </style></head><body><main class="${data.home ? 'home' : ''}"><header><span class="name">PARK SANGMIN</span><span class="edition">${data.home ? 'PORTFOLIO' : 'SELECTED WORK'}</span></header><article><p class="label">${escape(label)}</p><h1>${escape(heading)}</h1><p class="subtitle">${escape(subtitle)}</p></article><footer><span class="topics">${escape(footer)}</span><span class="domain">park-sangmin.vercel.app</span></footer></main></body></html>`;
 }
 
 await build();
@@ -59,7 +63,7 @@ const server = createServer(async (request, response) => {
     let path = resolve(dist, '.' + decodeURIComponent(url.pathname));
     if (path !== dist && !path.startsWith(dist + sep)) throw new Error('Invalid path');
     if (!extname(path)) path = join(path, 'index.html');
-    const mime = { '.html': 'text/html; charset=utf-8', '.png': 'image/png', '.svg': 'image/svg+xml', '.woff2': 'font/woff2', '.css': 'text/css', '.js': 'text/javascript' };
+    const mime = { '.html': 'text/html; charset=utf-8', '.png': 'image/png', '.svg': 'image/svg+xml', '.woff2': 'font/woff2', '.css': 'text/css', '.js': 'text/javascript', '.jpg': 'image/jpeg' };
     const bytes = await readFile(path);
     response.writeHead(200, { 'Content-Type': mime[extname(path)] ?? 'application/octet-stream' });
     response.end(bytes);
@@ -88,9 +92,16 @@ try {
       tech: document.querySelector('.project-meta > div:last-child dd')?.textContent.split(', ').slice(0, 5).join(' · ') ?? '',
       image: new URL(document.querySelector('meta[property="og:image"]').content).pathname,
     }));
-    if (!data.image.startsWith('/social/v1/')) throw new Error(`Unexpected social image: ${data.image}`);
+    if (!data.image.startsWith(data.home ? '/social/v2/' : '/social/v1/')) throw new Error(`Unexpected social image: ${data.image}`);
     await card.setContent(cardHtml(data, origin));
-    await card.evaluate(() => document.fonts.ready);
+    await card.evaluate(async (background) => {
+      await document.fonts.ready;
+      if (background) {
+        const artwork = new Image();
+        artwork.src = background;
+        await artwork.decode();
+      }
+    }, data.home ? origin + '/social/v2/home-background.jpg' : null);
     const clipped = await card.evaluate(() => {
       const article = document.querySelector('article').getBoundingClientRect();
       const footer = document.querySelector('footer').getBoundingClientRect();

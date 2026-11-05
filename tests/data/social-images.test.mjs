@@ -26,7 +26,11 @@ test('every page has a matching, readable localized sharing image', async () => 
     const url = new URL(image);
     const english = /<html\b[^>]*\blang="en"/.test(html);
     assert.equal(url.origin, 'https://park-sangmin.vercel.app', path);
-    assert.ok(url.pathname.startsWith(`/social/v1/${english ? 'en' : 'ko'}/`), path);
+    const route = new URL(meta(html, 'og:url')).pathname;
+    const locale = english ? 'en' : 'ko';
+    const project = route.match(/\/projects\/([a-z0-9-]+)\/?$/)?.[1];
+    const expected = project ? `/social/v1/${locale}/${project}.png` : `/social/v2/${locale}/index.png`;
+    assert.equal(url.pathname, expected, path);
     assert.equal(meta(html, 'og:image:secure_url'), image, path);
     assert.equal(meta(html, 'twitter:image'), image, path);
     assert.equal(meta(html, 'og:title'), meta(html, 'twitter:title'), path);

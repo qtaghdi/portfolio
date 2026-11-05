@@ -11,6 +11,13 @@ jobs:
     timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
+      - name: Check for tracked review files
+        run: |
+          files=$(git ls-files -- docs ':!docs/images/portfolio-preview.png')
+          if [ -n "$files" ]; then
+            printf '%s\n' 'Keep review files out of Git:' "$files"
+            exit 1
+          fi
       - uses: pnpm/action-setup@v4
         with:
           version: 11.9.0
@@ -22,11 +29,3 @@ jobs:
       - run: pnpm exec playwright install --with-deps chromium
       - run: pnpm test:profile
       - run: pnpm visual:audit
-      - if: failure()
-        uses: actions/upload-artifact@v4
-        with:
-          name: visual-fidelity-report
-          path: |
-            playwright-report
-            test-results
-          retention-days: 7

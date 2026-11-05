@@ -30,3 +30,9 @@ dist-ssr
 .vite/
 playwright-report/
 test-results/
+
+# Keep internal reviews and supporting files local.
+/docs/*
+!/docs/images/
+/docs/images/*
+!/docs/images/portfolio-preview.png

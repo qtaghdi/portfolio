@@ -1,3 +1,7 @@
+# Internal reviews
+
+Keep internal reviews, audit reports, and supporting captures out of Git. Store them locally under the ignored `docs/` directory. Only the public README preview belongs in Git under `docs/`.
+
 # Writing conventions
 
 - Do not use em dashes (`—`) or en dashes (`–`) in user-facing copy, documentation, metadata, or generated content.
