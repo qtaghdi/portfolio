@@ -49,7 +49,7 @@ export const primaryScreens: Record<string, SupplementalScreen> = {
   notiiv: { src: '/projects/notiiv/img.png', width: 1905, height: 956, ko: 'Notiiv 고객지원 실제 화면', en: 'Actual Notiiv customer support screen' },
   'design-system': { src: '/projects/design-system/storybook-overview.png', width: 1440, height: 900, ko: 'Bigtablet Design System의 Storybook 실제 화면', en: 'Actual Bigtablet Design System Storybook screen' },
   intranet: { src: '/projects/intranet/home.png', width: 390, height: 788, ko: '데모 데이터로 실행한 Bigtablet 인트라넷 모바일 홈', en: 'Bigtablet intranet mobile home running with fixture data' },
-  'document-workspace': { src: '/projects/document-workspace/editor.png', width: 1440, height: 900, ko: '호환성 검증용 XLSX를 연 document-workspace 실제 편집기', en: 'Actual document-workspace editor with a compatibility XLSX fixture' },
+  'document-workspace': { src: '/projects/document-workspace/editor.png', width: 1440, height: 900, ko: '호환성 검증용 XLSX를 연 Foloom(이전 이름 document-workspace) 실제 편집기', en: 'Actual Foloom editor (formerly document-workspace) with a compatibility XLSX fixture' },
   'apple-music-discord-presence': { src: '/projects/apple-music-discord-presence/discord-presence.png', width: 828, height: 340, ko: 'macOS Discord에 표시된 Apple Music 활동', en: 'Apple Music activity displayed in Discord on macOS' },
   owkr: { src: '/projects/owkr/team-result.png', width: 1600, height: 1000, ko: 'OWKR Match에서 데모 참가자 10명으로 실행한 팀 배정 · 2026-10-29', en: 'Team assignment executed in OWKR Match with ten demo participants · 2026-10-29' },
   chorus: { src: '/projects/chorus/vinyl.png', width: 600, height: 1000, ko: 'Chorus · 실제 곡을 선택해 확인한 로컬 앱의 3D 카드 편집 화면', en: 'Chorus 3D card editor in the local app with a selected music track' },

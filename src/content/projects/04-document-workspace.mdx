@@ -1,7 +1,7 @@
 ---
 order: 4
-title: "document-workspace"
-titleKo: "document-workspace"
+title: "Foloom"
+titleKo: "폴룸"
 group: personal
 featured: true
 category: "Personal · MCP · Document Tool"
@@ -10,13 +10,13 @@ year: "2026"
 role: "Creator"
 accentColor: sky
 thesis: "사람과 AI가 같은 문서 revision 위에서 안전하게 협업하다"
-responsibility: "제품 설계, Go XLSX adapter, MCP transport, Univer 웹 편집기, revision·history·persistence 모델, 성능과 안전성 검증"
+responsibility: "제품 설계, Go XLSX·DOCX 어댑터, MCP transport, 웹 편집기, revision·history·persistence 모델과 검증"
 focus:
   - "Human-AI collaboration"
   - "Revision conflicts"
   - "XLSX fidelity"
   - "MCP Apps"
-summary: "사람과 AI가 같은 XLSX 세션을 편집하면서 변경 충돌, undo·redo, 원자적 저장과 대용량 시트 로딩을 안전하게 처리하는 MCP 기반 문서 워크스페이스를 만들었습니다."
+summary: "사람과 AI가 같은 문서를 편집하는 로컬 MCP 워크스페이스를 만들었습니다. XLSX 충돌·저장·이력 관리와 실험적인 DOCX 편집을 구현했습니다."
 evidence:
   - {"val": "문서 공동 편집", "label": "사람과 AI가 같은 XLSX 문서의 셀·수식·스타일을 함께 편집"}
   - {"val": "변경 관리", "label": "문서의 수정 이력을 확인하고 실행 취소·다시 실행·저장을 수행"}
@@ -44,7 +44,7 @@ import ProjectScreenshot from '../../components/ProjectScreenshot.astro';
 ### 두 편집기를 연결해도 저장의 기준은 하나여야 함
 
 사람과 AI가 같은 XLSX를 편집하는 로컬 작업 공간을 개인 프로젝트로 만들었습니다.<br />
-제품을 설계하고 Go 기반 XLSX 처리, MCP 통신, Univer 편집 화면과 저장 실패 복구를 직접 구현했습니다. 현재 XLSX 알파 단계입니다.
+제품을 설계하고 Go 기반 XLSX 처리, MCP 통신, Univer 편집 화면과 저장 실패 복구를 직접 구현했습니다. 프로젝트 이름은 Foloom으로 변경했으며, XLSX는 비공개 알파이고 DOCX 편집은 실험 기능입니다.
 
 사용자와 AI가 revision 12의 문서를 읽고 각각 변경하면, 마지막에 도착한 요청을 그대로 덮어쓰는 방식은 먼저 반영한 변경을 잃게 만듭니다. 저장은 성공했는데 응답만 유실된 상황도 문제입니다. 행 삽입을 자동 재시도하면 같은 행을 두 번 만들 수 있고, 서버 revision이 올라갔다는 사실만으로는 내 요청이 성공했는지 알 수 없습니다.
 
@@ -84,7 +84,7 @@ Undo와 redo는 브라우저의 임시 기록이 아니라 서버의 revisioned 
 
 Univer 편집기는 viewport에 필요한 제한 범위부터 읽고 스크롤에 따라 추가 범위를 불러옵니다. MCP도 전체 workbook을 매번 전달하는 대신 metadata와 필요한 범위를 읽도록 구성했습니다. 브라우저와 MCP 인증 정보는 분리하고, 대체 브라우저 URL은 한 번만 사용하며 2분 뒤 만료되게 했습니다.
 
-XLSX의 형식 규칙은 adapter에 둡니다. DOCX·PPTX·PDF도 같은 모델에 바로 끼워 넣기보다, 두 번째 실제 adapter에서 공통 계약이 확인된 뒤 추상화하도록 정했습니다. 수식은 저장하지만 서버가 계산하지 않고, 브라우저 계산 결과도 원본의 계산값과 구분합니다.
+XLSX의 형식 규칙은 adapter에 둡니다. 수식은 저장하지만 서버가 계산하지 않고, 브라우저 계산 결과도 원본의 계산값과 구분합니다. 이후 DOCX 전용 어댑터를 별도로 추가해 문서 생성과 본문·단순 표의 텍스트 편집을 지원했습니다. 지원하지 않는 구조는 보호하며 원본 보존을 검사합니다. Word 전체 호환성은 아직 검증하지 않았습니다.
 
 ## 저장과 복구를 같은 기준으로 검증
 
@@ -113,4 +113,4 @@ XLSX의 형식 규칙은 adapter에 둡니다. DOCX·PPTX·PDF도 같은 모델�
 
 이 프로젝트에서 구현한 것은 사람과 AI의 입력 화면뿐 아니라 **충돌, 저장, 이력과 복구가 같은 서버 상태를 기준으로 동작하는 편집 경로**입니다. 원본을 보존하는 저장 규칙과 실패 후 복구 절차를 먼저 정하고, 그 기준에 맞춰 편집 기능을 구현했습니다.
 
-개인용 로컬 XLSX 알파로 개발하고 있으며, 공개 소스나 설치 파일은 제공하지 않습니다.
+개인용 로컬 XLSX 알파와 실험적인 DOCX 편집 기능으로 개발하고 있으며, 공개 소스나 설치 파일은 제공하지 않습니다.

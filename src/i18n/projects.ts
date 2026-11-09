@@ -377,14 +377,14 @@ export const projectEn: Record<string, ProjectTranslation> = {
     "badge": "Local XLSX Alpha",
     "role": "Creator",
     "thesis": "One authoritative document state for human and AI edits",
-    "responsibility": "Product design, Go XLSX adapter, MCP transport, Univer editor, revision, history, persistence, and verification",
+    "responsibility": "Product design, Go XLSX and DOCX adapters, MCP transport, web editor, revision, history, persistence, and verification",
     "focus": [
       "Human-AI collaboration",
       "Revision conflicts",
       "XLSX fidelity",
       "Recovery"
     ],
-    "summary": "Built a local XLSX workspace connecting human and AI edits through revisioned commits, durable history, atomic persistence, and bounded range loading.",
+    "summary": "Built a local MCP workspace for human and AI document editing, with XLSX conflict and history management and experimental DOCX editing.",
     "evidence": [
       {
         "val": "Document collaboration",
@@ -400,7 +400,7 @@ export const projectEn: Record<string, ProjectTranslation> = {
         "id": "problem",
         "title": "Two editors still need one definition of saved state",
         "paragraphs": [
-          "I independently designed and implemented the product, XLSX adapter, transports, editor, and recovery model as a local XLSX alpha.",
+          "I independently designed and implemented the product, XLSX adapter, transports, editor, and recovery model. The project is now called Foloom; XLSX remains a private local alpha and DOCX editing is experimental.",
           "If a person and an AI both read revision 12, accepting both writes without a revision boundary can lose the earlier change. A successful save followed by a lost response is different: automatically retrying a row insertion can duplicate it, and a higher server revision does not identify which request succeeded.",
           "A workbook is more than displayed cell values. A small edit must not silently discard formulas, validation, or charts. The UI engine cannot be assumed to own the original document state."
         ]
@@ -442,7 +442,7 @@ export const projectEn: Record<string, ProjectTranslation> = {
             "title": "Bound reads and defer unproven abstractions",
             "paragraphs": [
               "The browser loads viewport ranges incrementally; MCP reads metadata and needed ranges. Browser and MCP credentials are separate, with a single-use fallback URL expiring after two minutes.",
-              "Format rules remain in the XLSX adapter. A shared multi-format abstraction is deferred until a second real adapter demonstrates it. Formulas are stored but not calculated by the server, and browser previews are distinguished from source cached results."
+              "Format rules remain in the XLSX adapter. Formulas are stored but not calculated by the server, and browser previews are distinguished from source cached results. A separate experimental DOCX adapter was later added for document creation and text editing in body paragraphs and simple tables. Unsupported structures are protected and preservation is tested; full Word compatibility has not been verified."
             ]
           }
         ]
@@ -451,7 +451,7 @@ export const projectEn: Record<string, ProjectTranslation> = {
         "id": "outcome",
         "title": "One editing path for changes, saving, and recovery",
         "paragraphs": [
-          "People and AI edit through the same authoritative state. Automated checks cover partial writes, stale revisions, persistence failures, and connection recovery. A recorded 400,000-cell workload provides a repeatable performance baseline. The project is a private local XLSX alpha; source and installation packages are not publicly distributed."
+          "People and AI edit XLSX through the same authoritative state. Automated checks cover partial writes, stale revisions, persistence failures, and connection recovery. A recorded 400,000-cell workload provides a repeatable performance baseline. XLSX remains a private local alpha and DOCX editing is experimental; source and installation packages are not publicly distributed."
         ],
         "notes": {
           "title": "Safety checks and benchmark conditions",
