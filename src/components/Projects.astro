@@ -2,7 +2,7 @@
 import { getCollection, type CollectionEntry } from 'astro:content';
 import { copy, projectPath, type Locale } from '../i18n';
 import { projectEn, projectKey } from '../i18n/projects';
-import { foloomWordmark, projectIcons } from '../data/project-brand';
+import { projectIcons } from '../data/project-brand';
 interface Props { locale: Locale; }
 const { locale } = Astro.props;
 const ko = locale === 'ko';
@@ -82,7 +82,6 @@ const notes: Record<string, { summary: string; meta: string; role: string }> = {
               <p class="project-role">{ko ? '담당' : 'Scope'}: {note?.role ?? data.role}</p>
             </div>
             <a class="case-link" href={href} aria-label={`${data.title} ${dictionary.detail}`}>{dictionary.detail}<svg aria-hidden="true" viewBox="0 0 20 20"><path d="M4 10h12m-5-5 5 5-5 5" /></svg></a>
-            {key === 'document-workspace' && <img class="project-wordmark" src={foloomWordmark} width="258" height="64" alt="" decoding="async" />}
           </article>
         );
       })}
@@ -127,7 +126,6 @@ const notes: Record<string, { summary: string; meta: string; role: string }> = {
   .project-role { margin-top: 14px; color: $silver; font-size: 15px; line-height: 1.7; }
   .case-link { display: inline-flex; align-items: center; gap: 8px; align-self: start; min-height: 44px; color: $accent; font-size: 15px; white-space: nowrap; text-decoration: underline; text-underline-offset: 4px; }
   svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 1.4; }
-  .project-wordmark { display: block; grid-column: 2; width: min(100%, 194px); height: auto; }
   .more-work { padding-top: 72px; }
   .more-work h2 { margin-bottom: 24px; font-size: 26px; }
   .more-work ol { list-style: none; border-top: 1px solid $line; }

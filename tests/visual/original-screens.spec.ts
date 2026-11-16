@@ -110,21 +110,21 @@ test('home shows small project icons in both work lists', async ({ page }) => {
   await expect(profile).toHaveAttribute('alt', /프로필 사진$/);
   await expect(page.locator('#hero a[href="https://github.com/qtaghdi"]')).toHaveCount(1);
   await expect(page.locator('#more-work .project-icon')).toHaveCount(10);
-  await expect(page.locator('.featured-list .project-icon').nth(2)).toHaveAttribute('src', '/projects/document-workspace/icon.svg');
+  await expect(page.locator('.featured-list .project-icon').nth(2)).toHaveAttribute('src', '/projects/document-workspace/favicon.svg');
   const overflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
   expect(overflow).toBeLessThanOrEqual(1);
 });
 
-test('home uses project branding and Foloom includes its wordmark in both languages', async ({ page }) => {
+test('home uses project branding and Foloom uses its favicon beside the title in both languages', async ({ page }) => {
   for (const prefix of ['', '/en']) {
     await page.goto(`${prefix}/`);
     await expect(page.locator('#projects a[href$="/interaction-inspector"]')).toBeVisible();
     await expect(page.locator('#projects [data-home-screen], #projects [data-project-diagram]')).toHaveCount(0);
     const foloom = page.locator('.featured-project').filter({ has: page.getByRole('heading', { name: 'Foloom' }) });
-    await expect(foloom.locator('.project-icon')).toHaveAttribute('src', '/projects/document-workspace/icon.svg');
-    const wordmark = foloom.locator('.project-wordmark');
-    await expect(wordmark).toHaveAttribute('src', '/projects/document-workspace/foloom-wordmark.svg');
-    await wordmark.evaluate((image: HTMLImageElement) => image.decode());
+    await expect(foloom.locator('.project-icon')).toHaveAttribute('src', '/projects/document-workspace/favicon.svg');
+    const favicon = foloom.locator('.project-title .project-icon');
+    await expect(foloom.locator('img')).toHaveCount(1);
+    await favicon.evaluate((image: HTMLImageElement) => image.decode());
   }
 });
 
