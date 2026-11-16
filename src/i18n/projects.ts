@@ -24,6 +24,42 @@ export interface ProjectTranslation {
 export const projectKey = (slug: string) => slug.replace(/^\d+-/, '');
 
 export const projectEn: Record<string, ProjectTranslation> = {
+  'interaction-inspector': {
+    category: 'Open Source · Chrome Extension',
+    role: 'Project planning and development',
+    thesis: 'Inspect keyboard focus and DOM events together',
+    responsibility: 'Extension planning, event recording, focus inspection, privacy boundaries, and documentation',
+    focus: ['Keyboard focus', 'DOM events', 'Privacy', 'Browser extensions'],
+    summary: 'A Chrome extension for inspecting keyboard focus and DOM event flows on a web page.',
+    evidence: [
+      { val: 'DOM events', label: 'Inspect focus, click, and keydown events over time' },
+      { val: 'Minimal collection', label: 'Keep the session in page memory without recording input values or keys' },
+    ],
+    sections: [
+      {
+        id: 'problem',
+        title: 'See how interactions unfold on the page',
+        paragraphs: [
+          'Mouse and keyboard interaction can produce different focus and event sequences. Interaction Inspector is an Oddmash Chrome extension for selecting an element and inspecting its focus state alongside recorded events.',
+        ],
+      },
+      {
+        id: 'decisions',
+        title: 'Selection, recording, and privacy boundaries',
+        paragraphs: [
+          'The picker highlights elements and reports focus, focus-visible, tabindex category, and selected ARIA states. A timeline retains the latest 200 focusin, focusout, click, and keydown events and can be filtered by type or selected element.',
+          'The extension does not record key values, input values, or page text. It excludes password-field events and keydowns from editable controls. It injects into the active tab after a toolbar click and keeps the session in page memory.',
+        ],
+      },
+      {
+        id: 'scope',
+        title: 'Verification and current scope',
+        paragraphs: [
+          'The repository includes unit tests and Playwright checks that load the extension in Chromium. Its README provides a captured Chromium demo and local setup instructions. Inspection covers the top-level document; events inside iframes and closed shadow roots are outside its scope.',
+        ],
+      },
+    ],
+  },
   'apple-music-discord-presence': {
     category: 'Personal · Desktop Tool',
     badge: 'macOS · Windows',
