@@ -1,7 +1,7 @@
 export const projectIcons: Record<string, string> = {
   'design-system': '/projects/design-system/favicon.png',
   notiiv: '/projects/notiiv/favicon.svg',
-  'document-workspace': '/projects/document-workspace/icon.svg',
+  'document-workspace': '/projects/document-workspace/favicon.svg',
   intranet: '/projects/intranet/icon.png',
   boundra: '/projects/boundra/icon.svg',
   owkr: '/projects/owkr/favicon.webp',
@@ -14,5 +14,3 @@ export const projectIcons: Record<string, string> = {
   chorus: '/projects/chorus/favicon.svg',
   'apple-music-discord-presence': '/projects/apple-music-discord-presence/favicon.svg',
 };
-
-export const foloomWordmark = '/projects/document-workspace/foloom-wordmark.svg';

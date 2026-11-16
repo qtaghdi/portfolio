@@ -9,7 +9,7 @@ import ProjectText from './ProjectText.astro';
 import SectionRail from './SectionRail.astro';
 import ProjectScreenshot from './ProjectScreenshot.astro';
 import { englishScreens, primaryScreens } from '../data/project-screens';
-import { foloomWordmark, projectIcons } from '../data/project-brand';
+import { projectIcons } from '../data/project-brand';
 interface Props { locale: Locale; project: CollectionEntry<'projects'>; }
 const { locale, project } = Astro.props;
 const { Content, headings } = await project.render();
@@ -34,7 +34,6 @@ const chapters = locale === 'ko'
     <header class="project-hero shell">
       <a class="back-link" href={`${localePath(locale)}#projects`}><svg aria-hidden="true" viewBox="0 0 20 20"><path d="M16 10H4m5-5-5 5 5 5" /></svg>{dictionary.back}</a>
       <h1>{data.title}</h1>
-      {key === 'document-workspace' && <img class="case-wordmark" src={foloomWordmark} width="258" height="64" alt="" decoding="async" />}
       {!primaryScreens[key] && projectIcons[key] && <img class="case-logo" src={projectIcons[key]} width="48" height="48" alt="" decoding="async" />}
       {data.thesis && <p class="thesis">{data.thesis}</p>}
       <dl class="project-meta">
@@ -81,8 +80,7 @@ const chapters = locale === 'ko'
 </BaseLayout>
 <style lang="scss">
   @use '../styles/tokens' as *;
-  .case-wordmark, .case-logo { display: block; margin-top: 16px; }
-  .case-wordmark { width: min(100%, 194px); height: auto; }
+  .case-logo { display: block; margin-top: 16px; }
   .case-logo { object-fit: contain; }
   .project-page { padding-top: 76px; }
   .project-hero { padding-top: 48px; padding-bottom: 40px; border-bottom: 1px solid $line; }
