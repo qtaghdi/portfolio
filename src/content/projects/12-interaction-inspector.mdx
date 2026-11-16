@@ -1,0 +1,44 @@
+---
+order: 12
+title: "Interaction Inspector"
+titleKo: "Interaction Inspector"
+group: team
+featured: false
+category: "Open Source · Chrome Extension"
+year: "2026"
+role: "프로젝트 기획 및 개발"
+accentColor: sky
+thesis: "키보드 입력부터 포커스와 이벤트까지 한 화면에서 확인"
+responsibility: "확장 프로그램 기획, 이벤트 기록과 포커스 검사, 개인정보 보호 범위 및 문서화"
+focus: ["Keyboard focus", "DOM events", "Privacy", "Browser extensions"]
+summary: "웹 화면의 키보드 포커스와 DOM 이벤트 흐름을 살펴보는 Chrome 확장 프로그램입니다."
+evidence:
+  - { val: "DOM 이벤트", label: "포커스·클릭·키다운 이벤트를 시간순으로 확인" }
+  - { val: "최소 수집", label: "입력값과 키 정보를 기록하지 않고 세션을 페이지 메모리에서 관리" }
+traceLinks:
+  - { label: "프로젝트 README", labelEn: "Project README", href: "https://github.com/Oddmash/interaction-inspector" }
+  - { label: "MVP 구현", labelEn: "MVP implementation", href: "https://github.com/Oddmash/interaction-inspector/commit/0a5187cf3513bf442ebebea73332413b038f58c8" }
+  - { label: "이벤트 필터 구현", labelEn: "Event filters", href: "https://github.com/Oddmash/interaction-inspector/commit/6fee270ca48fe0910ed8fff60af8efe9febfc86c" }
+metrics: []
+callouts: []
+tech: ["TypeScript", "React", "SCSS", "Vite", "Chrome Extensions", "Playwright"]
+github: "https://github.com/Oddmash/interaction-inspector"
+---
+
+import ProjectScreenshot from '../../components/ProjectScreenshot.astro';
+
+## 화면에서 인터랙션 흐름을 살펴보기
+
+마우스와 키보드로 같은 UI를 조작해도 포커스 이동과 이벤트 순서가 다를 수 있습니다. Interaction Inspector는 웹 화면에서 요소를 선택하고 포커스 상태와 이벤트를 함께 확인할 수 있도록 만든 Chrome 확장 프로그램입니다. Oddmash의 공개 프로젝트로 기획과 개발을 진행했습니다.
+
+<ProjectScreenshot projectKey="interaction-inspector" />
+
+## 선택, 기록과 개인정보 경계
+
+요소 선택 모드에서는 가리킨 요소를 강조하고, 선택한 요소의 포커스와 `:focus-visible`, tabindex 분류 및 일부 ARIA 상태를 보여줍니다. `focusin`, `focusout`, `click`, `keydown` 이벤트는 시간과 함께 최근 200개까지 표시하며 이벤트 종류나 선택한 요소를 기준으로 필터링할 수 있습니다.
+
+디버깅 도구가 민감한 입력까지 모으지 않도록 기록 항목을 제한했습니다. 키 값이나 입력값, 페이지 텍스트는 기록하지 않고 비밀번호 필드의 이벤트와 편집 가능한 컨트롤의 키다운도 제외합니다. 도구 모음 클릭 후 활성 탭에만 주입하며 세션은 페이지 메모리에 유지합니다.
+
+## 검증과 현재 범위
+
+저장소에는 단위 테스트와 Chromium에서 확장 프로그램을 불러오는 Playwright 검사가 있습니다. README에는 실제 Chromium 데모 화면과 로컬 설치 방법을 제공했습니다. 현재 검사는 최상위 문서를 대상으로 하며 iframe과 닫힌 shadow root 내부 이벤트는 범위 밖입니다. 공개 저장소에서 코드를 확인하고 개발자 모드로 직접 실행할 수 있습니다.

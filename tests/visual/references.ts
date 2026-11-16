@@ -1,4 +1,5 @@
 export const originalScreens = [
+  { key: 'interaction-inspector', route: '/projects/interaction-inspector', asset: '/projects/interaction-inspector/inspector-demo.png', width: 1280, height: 720, sha256: 'fa7001c832d95c164f6e5c2b059dd4c8c8a6ad8d4365d2272c05540190e6b5f6', source: 'Interaction Inspector README capture from Chromium' },
   { key: 'owkr', route: '/projects/owkr', asset: '/projects/owkr/team-result.png', width: 1600, height: 1000, sha256: '8132732f8c6a97b124ac752e674514ab7d739d1f874cb18ceab2bca9cca8e6a0', source: 'OWKR Match local app with ten demo participants' },
   { key: 'chorus', route: '/projects/chorus', asset: '/projects/chorus/vinyl.png', width: 600, height: 1000, sha256: '9df0eb4447b357e245049f30fadac914eb76284714a853e5d5f296f2f34eda76', source: 'Chorus local repaired UI with real music metadata' },
   { key: 'rust-with-typescript', route: '/projects/rust-with-typescript', asset: '/projects/rust-with-typescript/ownership.png', width: 1600, height: 1000, sha256: '5bff038dc19ab0d394b9b26e59ac15cd7f4c39326818995d7099f722b7516934', source: 'Rust with TypeScript public Korean chapter' },
@@ -47,13 +48,6 @@ export const originalScreens = [
     sha256: '286756ba5922e516590ab6dc12409be46c734e99a55698ab57eb24a1b668c32c',
     source: 'document-workspace LibreOffice compatibility fixture',
   },
-] as const;
-
-export const declaredReconstructions = [
-  ...['boundra', 'homepage', 'jeomjuro', 'marker', 'kivra', 'echo'].map((key) => ({
-    key, route: `/projects/${key}`,
-    reason: 'Implementation diagram is explicitly labeled; no original product screenshot is claimed.',
-  })),
 ] as const;
 
 export const supplementalReferences = [

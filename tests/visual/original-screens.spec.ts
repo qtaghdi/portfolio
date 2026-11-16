@@ -2,7 +2,7 @@ import { createHash } from 'node:crypto';
 import { readFile } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 import { expect, test } from '@playwright/test';
-import { declaredReconstructions, originalScreens, supplementalReferences } from './references';
+import { originalScreens, supplementalReferences } from './references';
 
 const workspaceRoot = fileURLToPath(new URL('../../', import.meta.url));
 
@@ -68,21 +68,6 @@ for (const reference of originalScreens) {
   }
 }
 
-for (const reference of declaredReconstructions) {
-  test(`${reference.key} is explicitly marked as a reconstruction`, async ({ page }) => {
-    await page.goto(reference.route);
-    const visual = page.locator(`[data-visual="${reference.key}"]`);
-    await expect(visual).toHaveAttribute('data-fidelity', 'reconstruction');
-    await expect(visual.locator('[data-original-screen]')).toHaveCount(0);
-    const diagram = visual.locator('[data-project-diagram]');
-    await diagram.scrollIntoViewIfNeeded();
-    await expect(diagram).toBeVisible();
-    await diagram.evaluate((node: HTMLImageElement) => node.decode());
-    await expect(diagram).toHaveAttribute('alt', /다이어그램/);
-    expect(await diagram.evaluate((node: HTMLImageElement) => node.naturalWidth)).toBe(1400);
-  });
-}
-
 test('supplemental captures preserve source bytes and open at original size in both languages', async ({ page }) => {
   for (const reference of supplementalReferences) {
     const bytes = await readFile(`${workspaceRoot}public${reference.asset}`);
@@ -130,26 +115,16 @@ test('home shows small project icons in both work lists', async ({ page }) => {
   expect(overflow).toBeLessThanOrEqual(1);
 });
 
-test('home project screens load in both languages without cropping', async ({ page }) => {
+test('home uses project branding and Foloom includes its wordmark in both languages', async ({ page }) => {
   for (const prefix of ['', '/en']) {
     await page.goto(`${prefix}/`);
-    const images = page.locator('[data-home-screen]');
-    await expect(images).toHaveCount(14);
-    await expect(page.locator('[data-home-screen][data-image-kind="screenshot"]')).toHaveCount(8);
-    await expect(page.locator('[data-home-screen][data-image-kind="diagram"]')).toHaveCount(6);
-    await expect(page.locator('.featured-list [data-home-screen]')).toHaveCount(4);
-    for (const image of await images.all()) {
-      await image.scrollIntoViewIfNeeded();
-      await expect(image).toBeVisible();
-      const size = await image.evaluate(async (node: HTMLImageElement) => {
-        await node.decode();
-        return { width: node.naturalWidth, height: node.naturalHeight, renderedWidth: node.clientWidth, renderedHeight: node.clientHeight };
-      });
-      expect(size.width).toBeGreaterThan(0);
-      expect(Math.abs(size.renderedHeight - size.renderedWidth * size.height / size.width)).toBeLessThan(2);
-      await expect(image).toHaveAttribute('alt', /.+/);
-      await expect(image.locator('xpath=ancestor::a')).toHaveAttribute('href', /projects\//);
-    }
+    await expect(page.locator('#projects a[href$="/interaction-inspector"]')).toBeVisible();
+    await expect(page.locator('#projects [data-home-screen], #projects [data-project-diagram]')).toHaveCount(0);
+    const foloom = page.locator('.featured-project').filter({ has: page.getByRole('heading', { name: 'Foloom' }) });
+    await expect(foloom.locator('.project-icon')).toHaveAttribute('src', '/projects/document-workspace/icon.svg');
+    const wordmark = foloom.locator('.project-wordmark');
+    await expect(wordmark).toHaveAttribute('src', '/projects/document-workspace/foloom-wordmark.svg');
+    await wordmark.evaluate((image: HTMLImageElement) => image.decode());
   }
 });
 
@@ -212,15 +187,16 @@ test('text contents follow the article and highlight the current section', async
   }
 });
 
-test('every project detail has a working visual in Korean and English', async ({ page }) => {
+test('every project detail has a working product capture or logo in Korean and English', async ({ page }) => {
   await page.goto('/');
   const routes = await page.locator('#projects a[href*="/projects/"]').evaluateAll((links) => [...new Set(links.map((link) => new URL((link as HTMLAnchorElement).href).pathname))]);
-  expect(routes).toHaveLength(14);
+  expect(routes).toHaveLength(15);
   for (const prefix of ['', '/en']) {
     for (const route of routes) {
       const response = await page.goto(`${prefix}${route}`);
       expect(response?.status(), `${prefix}${route}`).toBe(200);
-      const images = page.locator('[data-visual] img');
+      await expect(page.locator('[data-project-diagram]')).toHaveCount(0);
+      const images = page.locator('[data-original-screen], .case-logo');
       expect(await images.count(), `${prefix}${route} has no project image`).toBeGreaterThan(0);
       for (const image of await images.all()) {
         await image.scrollIntoViewIfNeeded();
