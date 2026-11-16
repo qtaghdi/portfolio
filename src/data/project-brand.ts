@@ -1,0 +1,18 @@
+export const projectIcons: Record<string, string> = {
+  'design-system': '/projects/design-system/favicon.png',
+  notiiv: '/projects/notiiv/favicon.svg',
+  'document-workspace': '/projects/document-workspace/icon.svg',
+  intranet: '/projects/intranet/icon.png',
+  boundra: '/projects/boundra/icon.svg',
+  owkr: '/projects/owkr/favicon.webp',
+  jeomjuro: '/projects/jeomjuro/non-favicon.svg',
+  marker: '/projects/marker/icon.png',
+  'rust-with-typescript': '/projects/rust-with-typescript/favicon.svg',
+  kivra: '/projects/kivra/icon.svg',
+  homepage: '/projects/design-system/favicon.png',
+  echo: '/projects/echo/icon.svg',
+  chorus: '/projects/chorus/favicon.svg',
+  'apple-music-discord-presence': '/projects/apple-music-discord-presence/favicon.svg',
+};
+
+export const foloomWordmark = '/projects/document-workspace/foloom-wordmark.svg';

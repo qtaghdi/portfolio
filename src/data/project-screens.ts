@@ -46,6 +46,11 @@ export const supplementalScreens: Record<string, SupplementalScreen[]> = {
 };
 
 export const primaryScreens: Record<string, SupplementalScreen> = {
+  'interaction-inspector': {
+    src: '/projects/interaction-inspector/inspector-demo.png', width: 1280, height: 720,
+    ko: 'Chromium 데모에서 Interaction Inspector로 버튼의 포커스 상태와 DOM 이벤트를 확인하는 화면',
+    en: 'Interaction Inspector showing button focus and DOM events in the Chromium demo',
+  },
   notiiv: { src: '/projects/notiiv/img.png', width: 1905, height: 956, ko: 'Notiiv 고객지원 실제 화면', en: 'Actual Notiiv customer support screen' },
   'design-system': { src: '/projects/design-system/storybook-overview.png', width: 1440, height: 900, ko: 'Bigtablet Design System의 Storybook 실제 화면', en: 'Actual Bigtablet Design System Storybook screen' },
   intranet: { src: '/projects/intranet/home.png', width: 390, height: 788, ko: '데모 데이터로 실행한 Bigtablet 인트라넷 모바일 홈', en: 'Bigtablet intranet mobile home running with fixture data' },
@@ -63,6 +68,7 @@ export function caseScreen(project: string, screen: string = 'primary'): Supplem
 }
 
 const englishPlacements: Record<string, [section: string, subsection: number | null, screen: string][]> = {
+  'interaction-inspector': [['problem', null, 'primary']],
   notiiv: [['decisions', 2, 'primary']],
   'design-system': [['problem', null, 'primary'], ['decisions', 2, 'tokens-components'], ['outcome', 0, 'button-light-reference'], ['outcome', 0, 'button-dark-reference']],
   intranet: [['problem', null, 'primary']],

@@ -5,11 +5,11 @@ import Navbar from './Navbar.astro';
 import Footer from './Footer.astro';
 import { copy, localePath, projectPath, type Locale } from '../i18n';
 import { projectEn, projectKey } from '../i18n/projects';
-import ProjectDiagram from './ProjectDiagram.astro';
 import ProjectText from './ProjectText.astro';
 import SectionRail from './SectionRail.astro';
 import ProjectScreenshot from './ProjectScreenshot.astro';
-import { englishScreens, projectDiagrams } from '../data/project-screens';
+import { englishScreens, primaryScreens } from '../data/project-screens';
+import { foloomWordmark, projectIcons } from '../data/project-brand';
 interface Props { locale: Locale; project: CollectionEntry<'projects'>; }
 const { locale, project } = Astro.props;
 const { Content, headings } = await project.render();
@@ -34,6 +34,8 @@ const chapters = locale === 'ko'
     <header class="project-hero shell">
       <a class="back-link" href={`${localePath(locale)}#projects`}><svg aria-hidden="true" viewBox="0 0 20 20"><path d="M16 10H4m5-5-5 5 5 5" /></svg>{dictionary.back}</a>
       <h1>{data.title}</h1>
+      {key === 'document-workspace' && <img class="case-wordmark" src={foloomWordmark} width="258" height="64" alt="" decoding="async" />}
+      {!primaryScreens[key] && projectIcons[key] && <img class="case-logo" src={projectIcons[key]} width="48" height="48" alt="" decoding="async" />}
       {data.thesis && <p class="thesis">{data.thesis}</p>}
       <dl class="project-meta">
         <div><dt>{locale === 'ko' ? '구분' : 'Context'}</dt><dd>{groupLabels[project.data.group]}</dd></div>
@@ -44,7 +46,6 @@ const chapters = locale === 'ko'
     <div class="case-layout shell">
       <SectionRail chapters={[...chapters, { id: "trace", title: dictionary.trace }]} label={dictionary.index} />
       <article class="case-content">
-        {projectDiagrams[key] && <ProjectDiagram projectKey={key} locale={locale} />}
         {locale === 'ko' ? <div class="mdx-content"><Content /></div> : translation.sections.map((section) => (
           <section id={section.id} class="content-section">
             <h2>{section.title}</h2>
@@ -80,6 +81,9 @@ const chapters = locale === 'ko'
 </BaseLayout>
 <style lang="scss">
   @use '../styles/tokens' as *;
+  .case-wordmark, .case-logo { display: block; margin-top: 16px; }
+  .case-wordmark { width: min(100%, 194px); height: auto; }
+  .case-logo { object-fit: contain; }
   .project-page { padding-top: 76px; }
   .project-hero { padding-top: 48px; padding-bottom: 40px; border-bottom: 1px solid $line; }
   .back-link { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; color: $accent; font-size: 14px; }
