@@ -4,24 +4,26 @@ import { caseScreen } from '../data/project-screens';
 
 interface Props { projectKey: string; screen?: string; locale?: Locale; }
 const { projectKey, screen = 'primary', locale = 'ko' } = Astro.props;
-const image = caseScreen(projectKey, screen);
-const caption = image[locale];
+const capture = caseScreen(projectKey, screen);
+const image = locale === 'en' ? capture.englishImage ?? capture : capture;
+const caption = capture[locale];
 const openLabel = locale === 'ko' ? '원본 보기' : 'View original';
 ---
 <figure id={`screen-${projectKey}-${screen}`} class:list={['case-screenshot', { portrait: image.height > image.width }]} style={image.height > image.width ? `max-width: ${Math.min(440, image.width)}px` : undefined} data-case-image={`${projectKey}/${screen}`} data-visual={screen === 'primary' ? projectKey : undefined} data-fidelity="original">
   <a href={image.src} target="_blank" rel="noopener noreferrer" aria-label={`${caption} (${openLabel})`}>
     <img src={image.src} width={image.width} height={image.height} alt={caption} loading="lazy" decoding="async" data-original-screen={screen === 'primary' || undefined} data-supplemental-screen={screen !== 'primary' || undefined} />
   </a>
-  <figcaption>{caption} <a href={image.src} target="_blank" rel="noopener noreferrer">{openLabel}</a></figcaption>
+  <figcaption>{caption} <a href={image.src} target="_blank" rel="noopener noreferrer">{openLabel}<span aria-hidden="true">↗</span></a></figcaption>
 </figure>
 <style lang="scss">
   @use '../styles/tokens' as *;
   .case-screenshot { margin: 32px 0 40px; width: 100%; scroll-margin-top: 108px; }
   .case-screenshot.portrait { max-width: 440px; }
-  .case-screenshot > a { display: block; }
-  .case-screenshot img { display: block; width: 100%; height: auto; object-fit: contain; object-position: center; border: 1px solid $line; }
-  figcaption { margin-top: 12px; color: $gunmetal; font-size: 13px; line-height: 1.8; word-break: keep-all; overflow-wrap: anywhere; }
-  figcaption a { margin-left: 8px; color: $accent; text-decoration: underline; text-underline-offset: 4px; }
+  .case-screenshot > a { display: block; border-radius: 8px 8px 0 0; }
+  .case-screenshot img { display: block; width: 100%; height: auto; object-fit: contain; object-position: center; border: 1px solid $line; border-radius: inherit; }
+  figcaption { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 6px 16px; padding: 10px 14px; border: 1px solid $line; border-top: 0; border-radius: 0 0 8px 8px; background: $black-soft; color: $silver; font-size: 13px; line-height: 1.8; word-break: keep-all; overflow-wrap: anywhere; }
+  figcaption a { white-space: nowrap; color: $accent; text-decoration: underline; text-underline-offset: 4px; }
+  figcaption a span { margin-left: 4px; }
   a:focus-visible { outline: 2px solid $accent; outline-offset: 4px; }
   @media (max-width: 680px) { .case-screenshot { margin: 24px 0 32px; } }
 </style>
