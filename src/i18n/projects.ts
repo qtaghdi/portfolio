@@ -143,7 +143,7 @@ export const projectEn: Record<string, ProjectTranslation> = {
     "category": "Company · Production",
     "badge": "Flagship",
     "role": "Frontend Engineer",
-    "thesis": "Consolidating repeated authentication and API handling across apps",
+    "thesis": "Move request validation, authentication, and token refresh into a shared proxy.",
     "responsibility": "Shared BFF and Query infrastructure, operational interfaces, and authentication, sharing, and webview edge conditions",
     "focus": [
         "pnpm monorepo",
@@ -238,7 +238,7 @@ export const projectEn: Record<string, ProjectTranslation> = {
   'design-system': {
     "category": "Company · UI Library · NPM",
     "role": "Frontend Engineer and Design System Contributor",
-    "thesis": "Load CSS for the components in use",
+    "thesis": "Ship each component with its own CSS and migrate all four Notiiv apps.",
     "responsibility": "Per-component ESM and CSS output, token generation, overlay motion, component maintenance, and consumer migration",
     "focus": [
         "Package distribution",
@@ -337,7 +337,7 @@ export const projectEn: Record<string, ProjectTranslation> = {
     "category": "Company · Flutter App · Production",
     "badge": "Mobile",
     "role": "Flutter Developer",
-    "thesis": "Connecting collaborative work and state inside one Flutter app",
+    "thesis": "Open cached mail immediately and route notifications to the document that needs attention.",
     "responsibility": "Flutter app shell, mail and approval state, notification deep links, failure handling, and training resume",
     "focus": [
       "Flutter app shell",
@@ -402,8 +402,7 @@ export const projectEn: Record<string, ProjectTranslation> = {
         "id": "outcome",
         "title": "More predictable behavior around everyday interruptions",
         "paragraphs": [
-          "Mail starts with readable cached content and swaps in fresh results. Notifications open the related document, batch actions report actual completion, and training screens receive saved playback progress.",
-          "The work focuses on explaining which state is visible and what a request completed when connectivity, navigation, and background events overlap."
+          "Mail opens from the local cache and updates when the server responds. Notifications go straight to the relevant mail or approval document. Batch actions report the outcome for each item, and the training player resumes at the position saved by the server."
         ]
       }
     ]
@@ -412,7 +411,7 @@ export const projectEn: Record<string, ProjectTranslation> = {
     "category": "Personal · MCP · Document Tool",
     "badge": "Local XLSX Alpha",
     "role": "Creator",
-    "thesis": "One authoritative document state for human and AI edits",
+    "thesis": "Preserve the first saved edit when a person and AI change the same workbook.",
     "responsibility": "Product design, Go XLSX and DOCX adapters, MCP transport, web editor, revision, history, persistence, and verification",
     "focus": [
       "Human-AI collaboration",

@@ -207,3 +207,31 @@ test('every project detail has a working product capture or logo in Korean and E
     }
   }
 });
+
+test('intranet shows the localized approval capture after notification routing', async ({ page }) => {
+  for (const { prefix, asset, dimensions, heading } of [
+    { prefix: '', asset: 'approval.png', dimensions: [1320, 2868], heading: /Notification Routing/ },
+    { prefix: '/en', asset: 'approval-en.png', dimensions: [2752, 2064], heading: /Route notifications/ },
+  ]) {
+    await page.goto(`${prefix}/projects/intranet/`);
+    const capture = page.locator('[data-case-image="intranet/approval"]');
+    await expect(capture).toHaveCount(1);
+    const image = capture.locator('img');
+    const src = `/projects/intranet/${asset}`;
+    await expect(image).toHaveAttribute('src', src);
+    await expect(image.locator('..')).toHaveAttribute('href', src);
+    await image.scrollIntoViewIfNeeded();
+    const rendered = await image.evaluate(async (node: HTMLImageElement) => {
+      await node.decode();
+      return [node.naturalWidth, node.naturalHeight];
+    });
+    expect(rendered).toEqual(dimensions);
+
+    const sectionHeading = await capture.evaluate((figure) => {
+      let sibling = figure.previousElementSibling;
+      while (sibling && sibling.tagName !== 'H3') sibling = sibling.previousElementSibling;
+      return sibling?.textContent;
+    });
+    expect(sectionHeading).toMatch(heading);
+  }
+});

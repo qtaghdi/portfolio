@@ -4,6 +4,7 @@ export interface SupplementalScreen {
   height: number;
   ko: string;
   en: string;
+  englishImage?: { src: string; width: number; height: number };
 }
 
 export const supplementalScreens: Record<string, SupplementalScreen[]> = {
@@ -24,6 +25,12 @@ export const supplementalScreens: Record<string, SupplementalScreen[]> = {
       en: 'Button, dark theme · CI visual regression baseline from 2026-10-27',
     },
   ],
+  intranet: [{
+    src: '/projects/intranet/approval.png', width: 1320, height: 2868,
+    englishImage: { src: '/projects/intranet/approval-en.png', width: 2752, height: 2064 },
+    ko: '데모 데이터로 실행한 iPhone 앱의 결재 대기 목록과 문서 상태',
+    en: 'Approval queue and selected document on an iPad running with demo data',
+  }],
   owkr: [{
     src: '/projects/owkr/operations-guide.png', width: 1600, height: 1000,
     ko: 'OWKR Docs 공개 운영 가이드 · 2026-10-29 촬영',
@@ -71,8 +78,8 @@ const englishPlacements: Record<string, [section: string, subsection: number | n
   'interaction-inspector': [['problem', null, 'primary']],
   notiiv: [['decisions', 2, 'primary']],
   'design-system': [['problem', null, 'primary'], ['decisions', 2, 'tokens-components'], ['outcome', 0, 'button-light-reference'], ['outcome', 0, 'button-dark-reference']],
-  intranet: [['problem', null, 'primary']],
-  'document-workspace': [['decisions', 0, 'primary']],
+  intranet: [['problem', null, 'primary'], ['decisions', 1, 'approval']],
+  'document-workspace': [['problem', null, 'primary']],
   'apple-music-discord-presence': [['problem', null, 'primary']],
   owkr: [['identity', null, 'primary'], ['operations', null, 'operations-guide']],
   chorus: [['problem', null, 'search'], ['decisions', 1, 'primary'], ['decisions', 2, 'export']],
