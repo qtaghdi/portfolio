@@ -52,6 +52,13 @@ export const projectEn: Record<string, ProjectTranslation> = {
         ],
       },
       {
+        id: 'shared-ui',
+        title: 'Adopt shared UI components',
+        paragraphs: [
+          'The panel buttons and timeline filters use shared Oddmash UI components, with the palette mapped to semantic tokens. The closed shadow root, extension permissions, and event collection behavior remain in place. The extension smoke test covers keyboard use.',
+        ],
+      },
+      {
         id: 'scope',
         title: 'Verification and current scope',
         paragraphs: [
