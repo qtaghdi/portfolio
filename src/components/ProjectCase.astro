@@ -35,7 +35,7 @@ const chapters = locale === 'ko'
       <a class="back-link" href={`${localePath(locale)}#projects`}><svg aria-hidden="true" viewBox="0 0 20 20"><path d="M16 10H4m5-5-5 5 5 5" /></svg>{dictionary.back}</a>
       <h1>{data.title}</h1>
       {!primaryScreens[key] && projectIcons[key] && <img class="case-logo" src={projectIcons[key]} width="48" height="48" alt="" decoding="async" />}
-      {data.thesis && <p class="thesis">{data.thesis}</p>}
+      {data.thesis && <p class="thesis" data-kowrap={locale === 'ko' ? '' : undefined}>{data.thesis}</p>}
       <dl class="project-meta">
         <div><dt>{locale === 'ko' ? '구분' : 'Context'}</dt><dd>{groupLabels[project.data.group]}</dd></div>
         <div><dt>{locale === 'ko' ? '담당' : 'Scope'}</dt><dd>{data.responsibility ?? data.role}</dd></div>

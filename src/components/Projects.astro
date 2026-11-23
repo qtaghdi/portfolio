@@ -62,7 +62,7 @@ const notes: Record<string, { summary: string; meta: string; role: string }> = {
   <div class="shell">
     <header class="section-head">
       <h2>{dictionary.title}</h2><p class="years">2025-2026</p>
-      <p class="section-description">{dictionary.description}</p>
+      <p class="section-description" data-kowrap={ko ? '' : undefined}>{dictionary.description}</p>
     </header>
     <div class="featured-list">
       {projects.filter((project) => project.data.featured).map((project) => {
@@ -76,9 +76,9 @@ const notes: Record<string, { summary: string; meta: string; role: string }> = {
             <div class="project-copy">
               <p class="project-context">{project.data.group === 'personal' ? (ko ? '개인 프로젝트 · 독립 개발' : 'Personal project · Independent work') : groupLabels[project.data.group]}</p>
               <h3><a class="project-title" href={href}>{icon && <img class="project-icon" src={icon} width="24" height="24" alt="" aria-hidden="true" decoding="async" />}{data.title}</a></h3>
-              <p class="project-summary">{note?.summary ?? data.summary}</p>
+              <p class="project-summary" data-kowrap={ko ? '' : undefined}>{note?.summary ?? data.summary}</p>
               <p class="project-meta">{note?.meta ?? data.category}</p>
-              <p class="project-role">{ko ? '담당' : 'Scope'}: {note?.role ?? data.role}</p>
+              <p class="project-role" data-kowrap={ko ? '' : undefined}>{ko ? '담당' : 'Scope'}: {note?.role ?? data.role}</p>
             </div>
             <a class="case-link" href={href} aria-label={`${data.title} ${dictionary.detail}`}>{dictionary.detail}<svg aria-hidden="true" viewBox="0 0 20 20"><path d="M4 10h12m-5-5 5 5-5 5" /></svg></a>
           </article>
@@ -95,7 +95,7 @@ const notes: Record<string, { summary: string; meta: string; role: string }> = {
           <li>
             <a href={projectPath(locale, project.slug)}>
               <strong>{icon && <img class="project-icon" src={icon} width="24" height="24" alt="" decoding="async" loading="lazy" />}<span>{data.title}</span></strong>
-              <span class="more-summary"><small class="work-type">{groupLabels[project.data.group]}</small>{moreNotes[key] ?? data.summary}</span>
+              <span class="more-summary"><small class="work-type">{groupLabels[project.data.group]}</small><span class="more-description" data-kowrap={ko ? '' : undefined}>{moreNotes[key] ?? data.summary}</span></span>
               <svg aria-hidden="true" viewBox="0 0 20 20"><path d="M4 10h12m-5-5 5 5-5 5" /></svg>
             </a>
           </li>
@@ -134,6 +134,7 @@ const notes: Record<string, { summary: string; meta: string; role: string }> = {
   .more-work strong { display: flex; align-items: center; gap: 12px; min-width: 0; font-size: 16px; font-weight: 600; }
   .more-work strong span { min-width: 0; overflow-wrap: anywhere; }
   .work-type { display: block; margin-bottom: 2px; color: $gunmetal; font-size: 12px; }
+  .more-description { display: block; }
   .more-summary { color: $silver; font-size: 14px; line-height: 1.7; }
   .more-work li a:hover strong, .more-work li a:hover svg { color: $accent; }
   @media (max-width: 680px) {
