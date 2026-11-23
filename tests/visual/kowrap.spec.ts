@@ -3,6 +3,35 @@ import { expect, test } from '@playwright/test';
 const targets = '[data-kowrap], [data-kowrap-prose] > :is(p, h2, h3):not(:has(*:not(br[data-kowrap-break])))';
 const routes = ['/', '/projects/design-system/'];
 
+const phraseSplits = (nodes: Element[]) => {
+  const phrases = /CSS import|보이는 애니메이션|런타임 의존성|배포 단위|다른 컴포넌트/gu;
+  let count = 0;
+  for (const element of nodes) {
+    const text = element.textContent ?? '';
+    const walker = document.createTreeWalker(element, NodeFilter.SHOW_TEXT);
+    const textNodes: Text[] = [];
+    while (walker.nextNode()) textNodes.push(walker.currentNode as Text);
+    const topAt = (index: number) => {
+      for (const node of textNodes) {
+        if (index < node.length) {
+          const range = document.createRange();
+          range.setStart(node, index);
+          range.setEnd(node, index + 1);
+          return range.getBoundingClientRect().top;
+        }
+        index -= node.length;
+      }
+      return null;
+    };
+    for (const match of text.matchAll(phrases)) {
+      const start = topAt(match.index!);
+      const end = topAt(match.index! + match[0].length - 1);
+      if (start !== null && end !== null && Math.abs(start - end) > 1) count++;
+    }
+  }
+  return count;
+};
+
 test('Korean wrapping preserves text, fits the viewport, and responds to resizing', async ({ page, browser }, testInfo) => {
   test.setTimeout(120_000);
   const fallback = await browser.newPage({ javaScriptEnabled: false });
@@ -12,7 +41,7 @@ test('Korean wrapping preserves text, fits the viewport, and responds to resizin
     if (message.text().includes('Kowrap enhancement unavailable')) errors.push(message.text());
   });
 
-  const comparisons: { route: string; width: number; css: number[]; kowrap: number[]; insertedBreaks: number }[] = [];
+  const comparisons: { route: string; width: number; css: number[]; kowrap: number[]; insertedBreaks: number; cssPhraseSplits: number; kowrapPhraseSplits: number }[] = [];
   try {
     for (const route of routes) {
       await page.goto(route);
@@ -41,6 +70,8 @@ test('Korean wrapping preserves text, fits the viewport, and responds to resizin
           css: await fallback.locator(targets).evaluateAll((nodes) => nodes.map((node) => node.getBoundingClientRect().height)),
           kowrap: await elements.evaluateAll((nodes) => nodes.map((node) => node.getBoundingClientRect().height)),
           insertedBreaks: await page.locator('[data-kowrap-break]').count(),
+          cssPhraseSplits: await fallback.locator(targets).evaluateAll(phraseSplits),
+          kowrapPhraseSplits: await elements.evaluateAll(phraseSplits),
         });
         await page.screenshot({ path: testInfo.outputPath(`kowrap-${route === '/' ? 'home' : 'case'}-${width}.png`), fullPage: true, animations: 'disabled' });
         await fallback.screenshot({ path: testInfo.outputPath(`css-${route === '/' ? 'home' : 'case'}-${width}.png`), fullPage: true, animations: 'disabled' });
