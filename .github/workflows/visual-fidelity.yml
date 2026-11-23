@@ -29,3 +29,12 @@ jobs:
       - run: pnpm exec playwright install --with-deps chromium
       - run: pnpm test:profile
       - run: pnpm visual:audit
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: visual-fidelity
+          path: |
+            playwright-report/
+            test-results/visual-fidelity/
+          if-no-files-found: ignore
+          retention-days: 7
