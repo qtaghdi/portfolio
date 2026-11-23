@@ -1,6 +1,6 @@
 import { expect, test } from '@playwright/test';
 
-const targets = '[data-kowrap]';
+const targets = '[data-kowrap], [data-kowrap-prose] > :is(p, h2, h3):not(:has(*:not(br[data-kowrap-break])))';
 const routes = ['/', '/projects/design-system/'];
 
 test('Korean wrapping preserves text, fits the viewport, and responds to resizing', async ({ page, browser }, testInfo) => {
@@ -21,6 +21,9 @@ test('Korean wrapping preserves text, fits the viewport, and responds to resizin
       expect(original.length).toBeGreaterThan(0);
       const elements = page.locator(targets);
       await expect(page.locator('[data-kowrap-mounted]')).toHaveCount(original.length);
+      if (route === '/projects/design-system/') {
+        await expect(page.locator('.mdx-content > p').filter({ hasText: '이 CSS import를' })).toHaveAttribute('data-kowrap-mounted', '');
+      }
 
       for (const width of [320, 390, 768, 1440]) {
         await page.setViewportSize({ width, height: 900 });
