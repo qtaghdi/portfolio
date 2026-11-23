@@ -19,6 +19,8 @@ traceLinks:
   - { label: "프로젝트 README", labelEn: "Project README", href: "https://github.com/Oddmash/interaction-inspector" }
   - { label: "MVP 구현", labelEn: "MVP implementation", href: "https://github.com/Oddmash/interaction-inspector/commit/0a5187cf3513bf442ebebea73332413b038f58c8" }
   - { label: "이벤트 필터 구현", labelEn: "Event filters", href: "https://github.com/Oddmash/interaction-inspector/commit/6fee270ca48fe0910ed8fff60af8efe9febfc86c" }
+  - { label: "공통 UI 적용", labelEn: "Shared UI adoption", href: "https://github.com/Oddmash/interaction-inspector/pull/5" }
+  - { label: "필터 컴포넌트 적용", labelEn: "Shared timeline filters", href: "https://github.com/Oddmash/interaction-inspector/pull/7" }
 metrics: []
 callouts: []
 tech: ["TypeScript", "React", "SCSS", "Vite", "Chrome Extensions", "Playwright"]
@@ -38,6 +40,10 @@ import ProjectScreenshot from '../../components/ProjectScreenshot.astro';
 요소 선택 모드에서는 가리킨 요소를 강조하고, 선택한 요소의 포커스와 `:focus-visible`, tabindex 분류 및 일부 ARIA 상태를 보여줍니다. `focusin`, `focusout`, `click`, `keydown` 이벤트는 시간과 함께 최근 200개까지 표시하며 이벤트 종류나 선택한 요소를 기준으로 필터링할 수 있습니다.
 
 디버깅 도구가 민감한 입력까지 모으지 않도록 기록 항목을 제한했습니다. 키 값이나 입력값, 페이지 텍스트는 기록하지 않고 비밀번호 필드의 이벤트와 편집 가능한 컨트롤의 키다운도 제외합니다. 도구 모음 클릭 후 활성 탭에만 주입하며 세션은 페이지 메모리에 유지합니다.
+
+## 공통 UI 적용
+
+패널의 버튼과 타임라인 필터를 Oddmash UI의 공통 컴포넌트로 교체하고, 색상을 의미별 토큰으로 연결했습니다. 기존 closed Shadow DOM과 확장 프로그램의 권한·이벤트 수집 동작을 유지하면서 키보드 사용을 확장 프로그램 스모크 테스트에 포함했습니다.
 
 ## 검증과 현재 범위
 
