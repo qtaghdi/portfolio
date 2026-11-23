@@ -1,6 +1,6 @@
 export const enhanceKoreanText = async () => {
   if (document.documentElement.lang !== 'ko') return;
-  const elements = [...document.querySelectorAll<HTMLElement>('[data-kowrap]')];
+  const elements = [...document.querySelectorAll<HTMLElement>('[data-kowrap], [data-kowrap-prose] > :is(p, h2, h3):not(:has(*:not(br[data-kowrap-break])))')];
   if (elements.length === 0) return;
 
   try {

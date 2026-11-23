@@ -45,7 +45,7 @@ const chapters = locale === 'ko'
     <div class="case-layout shell">
       <SectionRail chapters={[...chapters, { id: "trace", title: dictionary.trace }]} label={dictionary.index} />
       <article class="case-content">
-        {locale === 'ko' ? <div class="mdx-content"><Content /></div> : translation.sections.map((section) => (
+        {locale === 'ko' ? <div class="mdx-content" data-kowrap-prose><Content /></div> : translation.sections.map((section) => (
           <section id={section.id} class="content-section">
             <h2>{section.title}</h2>
             {section.paragraphs.map((paragraph) => <p><ProjectText text={paragraph} references={data.traceLinks} /></p>)}
