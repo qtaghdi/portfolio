@@ -22,6 +22,7 @@ traceLinks:
   - { label: "실제 백업 복원 점검 PR #20", labelEn: "Live backup restore record PR #20", href: "https://github.com/Overwatch-KR/owkr-gather-bot/pull/20" }
   - { label: "Match 공동 편집 PR #10", labelEn: "Match collaboration PR #10", href: "https://github.com/Overwatch-KR/owkr-balance/pull/10" }
   - { label: "접속자 표시 PR #17", labelEn: "Editor presence PR #17", href: "https://github.com/Overwatch-KR/owkr-balance/pull/17" }
+  - { label: "경기 종료 흐름과 피어리스 밴 PR #35", labelEn: "Match completion and fearless bans PR #35", href: "https://github.com/Overwatch-KR/owkr-balance/pull/35" }
   - { label: "시험 시간 제어 PR #4", labelEn: "Exam time controls PR #4", href: "https://github.com/Overwatch-KR/owkr-exam/pull/4" }
   - { label: "테스트 응시 분리 PR #5", labelEn: "Test attempt separation PR #5", href: "https://github.com/Overwatch-KR/owkr-exam/pull/5" }
   - { label: "관리자 시험 웹", labelEn: "Admin exam site", href: "https://owkr-exam.vercel.app/" }
@@ -67,6 +68,12 @@ OWKR 운영진은 참가 명단을 확인하고 팀을 편성하는 한편, 운�
 [PR #20](https://github.com/Overwatch-KR/owkr-gather-bot/pull/20)의 2026년 10월 29일 점검 기록에서는 VM 백업 13개와 Mac 백업 5개를 임시 DB로 복사해 초기화와 무결성을 확인했습니다. 운영 이미지를 격리한 삭제·복원 시나리오 3개도 통과했습니다. 실제 삭제 요청은 없어 요청 접수부터 모든 복사본 삭제와 회신까지의 전체 절차를 검증한 것은 아닙니다.
 
 </details>
+
+## 경기 종료와 다음 경기 준비
+
+밴픽 확정 뒤 경기 종료를 확인하면 다음 경기 준비 또는 최종 방 종료까지 이어지도록 단계를 줄였습니다. 대기실에서 일반, 소프트 피어리스, 하드 피어리스 규칙을 선택할 수 있습니다. 소프트는 우리 팀이 앞선 경기에서 밴한 영웅을, 하드는 양 팀이 밴한 영웅을 다시 고를 수 없게 합니다.
+
+재선택이 제한된 영웅은 투표 화면에 표시하고, 서버는 투표를 받을 때와 집계할 때 같은 규칙을 적용합니다. 밴 이력에는 실제로 진행한 경기만 반영합니다.
 
 ## 답안 저장부터 제출과 채점까지
 

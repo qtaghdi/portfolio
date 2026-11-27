@@ -4,7 +4,13 @@
 
 [포트폴리오](https://park-sangmin.vercel.app/) · [English](https://park-sangmin.vercel.app/en/) · [GitHub](https://github.com/qtaghdi)
 
-[![GitHub 프로필과 주요 작업을 담은 현재 포트폴리오 화면](docs/images/portfolio-preview.png)](https://park-sangmin.vercel.app/)
+[![GitHub 프로필, 대표 프로젝트와 Juliya를 담은 포트폴리오 화면](docs/images/portfolio-preview.png)](https://park-sangmin.vercel.app/)
+
+## 포트폴리오 구성
+
+- **대표 프로젝트**에는 Bigtablet Design System, Notiiv, Foloom, OWKR Community Tools에서 맡은 역할과 설계 과정을 담았습니다.
+- **다른 작업**에는 Kowrap에서 시작해 네 언어의 줄바꿈을 지원하는 [Juliya](https://park-sangmin.vercel.app/projects/juliya/)와 TypeScript 도메인 경계를 검사하는 [Boundra](https://park-sangmin.vercel.app/projects/boundra/) 등이 있습니다. Echo와 Chorus는 ‘이전 작업 더 보기’에서 열 수 있습니다.
+- **글과 커뮤니티**에서는 직접 조작해 볼 수 있는 예제를 담은 기술 블로그 [여백](https://qtaghdi.github.io/yeobaek/)과 Velog 글을 소개합니다.
 
 ## 개발
 
@@ -14,6 +20,8 @@ pnpm dev
 ```
 
 Astro, TypeScript와 SCSS로 구성한 정적 사이트입니다. GitHub 공개 프로필은 빌드 시 한 번 조회하며, 연결 실패 시 기본 프로필을 사용합니다.
+
+한국어 홈과 프로젝트 본문의 줄바꿈에는 `@oddmash/juliya` v0.4.3을 사용합니다.
 
 ## 이미지 갱신
 

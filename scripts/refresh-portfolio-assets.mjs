@@ -118,12 +118,18 @@ try {
   await page.goto(origin + '/');
   await page.evaluate(() => document.fonts.ready);
   await page.locator('.profile-avatar').evaluate((image) => image.decode());
-  const height = await page.locator('.featured-list').evaluate((node) => Math.ceil(node.getBoundingClientRect().bottom + 48));
+  const firstWorkRows = page.locator('#more-work ol').first().locator('li');
+  const previewEnd = firstWorkRows.nth(Math.min(await firstWorkRows.count(), 3) - 1);
+  const height = await previewEnd.evaluate((node) => Math.ceil(node.getBoundingClientRect().bottom + 24));
   await page.setViewportSize({ width: 1440, height });
-  await page.locator('.featured-list img').evaluateAll((images) => Promise.all(images.map((image) => image.decode())));
+  await page.evaluate(() => window.scrollTo({ top: 0, behavior: 'instant' }));
+  await page.locator('#projects img').evaluateAll((images) => {
+    const inPreview = images.filter((image) => !image.closest('details:not([open])') && image.getBoundingClientRect().bottom <= window.innerHeight);
+    return Promise.all(inPreview.map((image) => image.decode()));
+  });
   const readmeImage = join(root, 'docs/images/portfolio-preview.png');
   await mkdir(dirname(readmeImage), { recursive: true });
-  await page.screenshot({ path: readmeImage });
+  await page.screenshot({ path: readmeImage, clip: { x: 0, y: 0, width: 1440, height } });
   console.log(`Generated ${count} social cards (1200 x 630) and the current README preview.`);
 } finally {
   await browser?.close();

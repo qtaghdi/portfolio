@@ -10,9 +10,16 @@ const dictionary = copy[locale].selected;
 const groupLabels = ko ? { company: '회사 프로젝트', team: '협업 프로젝트', personal: '개인 프로젝트' } : { company: 'Company project', team: 'Team project', personal: 'Personal project' };
 const projects = (await getCollection('projects')).sort((a, b) => a.data.order - b.data.order);
 const localized = (project: CollectionEntry<'projects'>) => locale === 'ko' ? project.data : { ...project.data, ...projectEn[projectKey(project.slug)] };
+const archivedKeys = new Set(['echo', 'chorus']);
+const otherProjects = projects.filter((project) => !project.data.featured);
+const workLists = [
+  { container: 'div', projects: otherProjects.filter((project) => !archivedKeys.has(projectKey(project.slug))) },
+  { container: 'details', projects: otherProjects.filter((project) => archivedKeys.has(projectKey(project.slug))) },
+] as const;
 const moreNotes: Record<string, string> = ko ? {
   intranet: '메일, 메신저와 업무 메뉴를 연결한 사내 모바일 앱',
   boundra: 'NPM으로 배포한 도메인 경계 검사 Rust CLI',
+  juliya: '한국어 등 네 언어의 줄바꿈을 다듬는 웹 라이브러리',
   owkr: '명단 공동 편집과 시험·모집을 연결한 커뮤니티 도구',
   jeomjuro: '점주 커뮤니티의 알림·글쓰기·관리자 도구',
   marker: '감정과 장소를 기록하는 지도 서비스',
@@ -25,6 +32,7 @@ const moreNotes: Record<string, string> = ko ? {
 } : {
   intranet: 'An internal mobile app for mail, messaging, and work',
   boundra: 'A domain-boundary Rust CLI distributed through NPM',
+  juliya: 'A web typography library for line breaking in four languages',
   owkr: 'Community tools for shared rosters, exams, and recruitment',
   jeomjuro: 'Notifications, writing, and moderation for a store-owner community',
   marker: 'A map for recording emotions and places',
@@ -87,20 +95,25 @@ const notes: Record<string, { summary: string; meta: string; role: string }> = {
     </div>
     <section id="more-work" class="more-work" aria-labelledby="more-work-title">
       <h2 id="more-work-title">{dictionary.moreTitle}</h2>
-      <ol>{projects.filter((project) => !project.data.featured).map((project) => {
-        const data = localized(project);
-        const key = projectKey(project.slug);
-        const icon = projectIcons[key];
-        return (
-          <li>
-            <a href={projectPath(locale, project.slug)}>
-              <strong>{icon && <img class="project-icon" src={icon} width="24" height="24" alt="" decoding="async" loading="lazy" />}<span>{data.title}</span></strong>
-              <span class="more-summary"><small class="work-type">{groupLabels[project.data.group]}</small><span class="more-description" data-kowrap={ko ? '' : undefined}>{moreNotes[key] ?? data.summary}</span></span>
-              <svg aria-hidden="true" viewBox="0 0 20 20"><path d="M4 10h12m-5-5 5 5-5 5" /></svg>
-            </a>
-          </li>
-        );
-      })}</ol>
+      {workLists.map(({ container: ListContainer, projects: list }) => (
+        <ListContainer>
+          {ListContainer === 'details' && <summary>{ko ? '이전 작업 더 보기' : 'Show earlier work'}</summary>}
+          <ol>{list.map((project) => {
+            const data = localized(project);
+            const key = projectKey(project.slug);
+            const icon = projectIcons[key];
+            return (
+              <li>
+                <a href={projectPath(locale, project.slug)}>
+                  <strong>{icon && <img class="project-icon" src={icon} width="24" height="24" alt="" decoding="async" loading="lazy" />}<span>{data.title}</span></strong>
+                  <span class="more-summary"><small class="work-type">{groupLabels[project.data.group]}</small><span class="more-description" data-kowrap={ko ? '' : undefined}>{moreNotes[key] ?? data.summary}</span></span>
+                  <svg aria-hidden="true" viewBox="0 0 20 20"><path d="M4 10h12m-5-5 5 5-5 5" /></svg>
+                </a>
+              </li>
+            );
+          })}</ol>
+        </ListContainer>
+      ))}
     </section>
   </div>
 </section>
@@ -137,6 +150,9 @@ const notes: Record<string, { summary: string; meta: string; role: string }> = {
   .more-description { display: block; }
   .more-summary { color: $silver; font-size: 14px; line-height: 1.7; }
   .more-work li a:hover strong, .more-work li a:hover svg { color: $accent; }
+  .more-work summary { min-height: 52px; padding: 14px 0; color: $accent; font-size: 15px; cursor: pointer; }
+  .more-work summary:hover { text-decoration: underline; text-underline-offset: 4px; }
+  .more-work summary:focus-visible { outline: 2px solid $accent; outline-offset: 4px; }
   @media (max-width: 680px) {
     .projects-section { padding-bottom: 64px; }
     h2 { font-size: 26px; }.section-description { font-size: 16px; }.years { font-size: 12px; }

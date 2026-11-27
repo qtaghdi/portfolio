@@ -24,6 +24,37 @@ export interface ProjectTranslation {
 export const projectKey = (slug: string) => slug.replace(/^\d+-/, '');
 
 export const projectEn: Record<string, ProjectTranslation> = {
+  juliya: {
+    category: 'Open Source · Web Typography',
+    role: 'Development and maintenance',
+    thesis: 'Choose line breaks that fit the language and available width',
+    responsibility: 'Line-breaking engine, language rules, DOM and framework integrations, and releases',
+    focus: ['Line breaking', 'Internationalization', 'Web typography'],
+    summary: 'A web typography library that grew from Kowrap and supports line breaking in Korean, English, Japanese, and Simplified Chinese.',
+    sections: [
+      {
+        id: 'portfolio-typography',
+        title: 'Line breaks in the portfolio',
+        paragraphs: [
+          'A sentence reads differently as the viewport changes. I checked where Korean words and phrases broke in the portfolio and adopted Kowrap to measure the available width and choose line breaks. The Korean home and project pages now use its successor, Juliya v0.4.3.',
+        ],
+      },
+      {
+        id: 'language-profiles',
+        title: 'Four language profiles and compatibility with Kowrap',
+        paragraphs: [
+          'Juliya added separate line-breaking rules for Korean, English, Japanese, and Simplified Chinese. The core, DOM, and framework APIs accept a locale. The existing exports and default Korean behavior remain available to Kowrap users.',
+        ],
+      },
+      {
+        id: 'viewport-changes',
+        title: 'Recalculate when CSS changes',
+        paragraphs: [
+          'A viewport resize can change inline styles through a media query while leaving the text container at the same width. Juliya v0.4.3 rechecks those styles after a viewport resize so earlier line breaks can be recalculated.',
+        ],
+      },
+    ],
+  },
   'interaction-inspector': {
     category: 'Open Source · Chrome Extension',
     role: 'Project planning and development',
@@ -579,7 +610,9 @@ export const projectEn: Record<string, ProjectTranslation> = {
         "id": "outcome",
         "title": "An installable developer tool",
         "paragraphs": [
-          "Boundra brings declared architecture rules, static analysis, runtime contracts, and Vite feedback into one NPM tool. Developers can locate boundary violations while working and follow actionable diagnostics."
+          "Boundra brings declared architecture rules, static analysis, runtime contracts, and Vite feedback into one npm tool. Developers can locate boundary violations while working and follow actionable diagnostics.",
+          "The website starts with a code example that takes readers from installation to a first check. It makes the repository documentation browsable and adds examples for framework integration and CI setup.",
+          "Version 0.8.1 centralized the diagnostics overlay’s colors, typography, and spacing. The release checks compared the existing visual styles and dismissal behavior in Chromium, Firefox, and WebKit."
         ],
         "notes": {
           "title": "Benchmark conditions and recorded results",
@@ -652,6 +685,14 @@ export const projectEn: Record<string, ProjectTranslation> = {
             "PR #10 tests revision increments and stale-write rejection with a Redis test double; this is separate from live Redis concurrency testing. PR #17 adds editor presence."
           ]
         }
+      },
+      {
+        "id": "match-draft",
+        "title": "Finishing a game and preparing the next one",
+        "paragraphs": [
+          "After the draft is locked, confirming the result prepares the next game or closes the room at the end of the series. Operators can choose standard, soft fearless, or hard fearless rules in the lobby. Soft fearless blocks a team from repeating its own earlier bans, while hard fearless counts both teams’ bans.",
+          "The voting screen shows which heroes are unavailable. The server applies the same rules when accepting and tallying votes. Ban history only includes games that were played."
+        ]
       },
       {
         "id": "exam",

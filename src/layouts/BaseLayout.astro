@@ -62,7 +62,7 @@ const imageAlt = Astro.props.imageAlt ?? title;
     <a class="skip-link" href="#main-content">{dictionary.skip}</a>
     <slot />
     <script>
-      import { enhanceKoreanText } from '../lib/kowrap';
+      import { enhanceKoreanText } from '../lib/juliya';
       enhanceKoreanText();
     </script>
 

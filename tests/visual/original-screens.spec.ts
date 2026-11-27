@@ -93,8 +93,8 @@ test('supplemental captures preserve source bytes and open at original size in b
 
 test('home shows small project icons in both work lists', async ({ page }) => {
   await page.goto('/');
-  const icons = page.locator('#projects .project-icon');
-  await expect(icons).toHaveCount(14);
+  const icons = page.locator('#projects .project-icon:visible');
+  await expect(icons).toHaveCount(13);
   await expect(icons.nth(0)).toHaveAttribute('src', '/projects/design-system/favicon.png');
   await expect(icons.nth(1)).toHaveAttribute('src', '/projects/notiiv/favicon.svg');
   for (const icon of await icons.all()) {
@@ -109,7 +109,7 @@ test('home shows small project icons in both work lists', async ({ page }) => {
   const profile = page.locator('#hero .hero-heading .profile-avatar');
   await expect(profile).toHaveAttribute('alt', /프로필 사진$/);
   await expect(page.locator('#hero a[href="https://github.com/qtaghdi"]')).toHaveCount(1);
-  await expect(page.locator('#more-work .project-icon')).toHaveCount(10);
+  await expect(page.locator('#more-work .project-icon:visible')).toHaveCount(9);
   await expect(page.locator('.featured-list .project-icon').nth(2)).toHaveAttribute('src', '/projects/document-workspace/favicon.svg');
   const overflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
   expect(overflow).toBeLessThanOrEqual(1);
@@ -125,6 +125,34 @@ test('home uses project branding and Foloom uses its favicon beside the title in
     const favicon = foloom.locator('.project-title .project-icon');
     await expect(foloom.locator('img')).toHaveCount(1);
     await favicon.evaluate((image: HTMLImageElement) => image.decode());
+
+    await expect(page.locator('.featured-project')).toHaveCount(4);
+    const juliya = page.locator(`#more-work a[href="${prefix}/projects/juliya"]`);
+    const juliyaIcon = juliya.locator('strong > img.project-icon');
+    await expect(juliya.locator('img')).toHaveCount(1);
+    await expect(juliyaIcon).toHaveAttribute('src', '/projects/juliya/favicon.svg');
+    await juliyaIcon.scrollIntoViewIfNeeded();
+    await juliyaIcon.evaluate((image: HTMLImageElement) => image.decode());
+    await expect(page.locator('#writing').getByRole('link', { name: prefix ? 'Yeobaek ↗' : '여백 ↗' })).toHaveAttribute('href', 'https://qtaghdi.github.io/yeobaek/');
+
+    const archive = page.locator('#more-work details');
+    const disclosure = archive.locator('summary');
+    const echo = archive.getByRole('link', { name: /Echo/, includeHidden: true });
+    const chorus = archive.getByRole('link', { name: /Chorus/, includeHidden: true });
+    await expect(echo).toBeHidden();
+    await expect(chorus).toBeHidden();
+    await disclosure.focus();
+    await disclosure.press('Enter');
+    await expect(echo).toBeVisible();
+    await expect(chorus).toBeVisible();
+    await expect(echo).toHaveAttribute('href', `${prefix}/projects/echo`);
+    await expect(chorus).toHaveAttribute('href', `${prefix}/projects/chorus`);
+
+    await juliya.click();
+    await expect(page.getByRole('heading', { level: 1 })).toHaveText('Juliya');
+    await expect(page.locator('.project-hero img')).toHaveCount(1);
+    await expect(page.locator('.project-hero .case-logo')).toHaveAttribute('src', '/projects/juliya/favicon.svg');
+    await expect(page.locator('#trace a[href$="/v0.4.3"]')).toBeVisible();
   }
 });
 
@@ -190,7 +218,7 @@ test('text contents follow the article and highlight the current section', async
 test('every project detail has a working product capture or logo in Korean and English', async ({ page }) => {
   await page.goto('/');
   const routes = await page.locator('#projects a[href*="/projects/"]').evaluateAll((links) => [...new Set(links.map((link) => new URL((link as HTMLAnchorElement).href).pathname))]);
-  expect(routes).toHaveLength(15);
+  expect(routes).toHaveLength(16);
   for (const prefix of ['', '/en']) {
     for (const route of routes) {
       const response = await page.goto(`${prefix}${route}`);

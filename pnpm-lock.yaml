@@ -11,9 +11,9 @@ importers:
       '@astrojs/mdx':
         specifier: ^3.1.9
         version: 3.1.9(astro@4.16.19(rollup@4.59.0)(sass@1.98.0)(typescript@5.9.3))
-      '@oddmash/kowrap':
-        specifier: 0.3.2
-        version: 0.3.2
+      '@oddmash/juliya':
+        specifier: 0.4.3
+        version: 0.4.3
       astro:
         specifier: ^4.16.18
         version: 4.16.19(rollup@4.59.0)(sass@1.98.0)(typescript@5.9.3)
@@ -29,15 +29,6 @@ importers:
         version: 1.64.0
 
 packages:
-
-  '@oddmash/kowrap@0.3.2':
-    resolution: {integrity: sha512-pmrFuI6Q3u0CfZ55tWiN1kpYFW2VVJWW4bjWMQzbRFZMQe1fDV6JI4zZuIFsZlltmObTKTXOQ5FLtqw3ibO7Dg==}
-    engines: {node: '>=20'}
-    peerDependencies:
-      react: ^18.2.0 || ^19.0.0
-    peerDependenciesMeta:
-      react:
-        optional: true
 
   '@astrojs/compiler@2.13.1':
     resolution: {integrity: sha512-f3FN83d2G/v32ipNClRKgYv30onQlMZX1vCeZMjPsMMPl1mDpmbl0+N5BYo4S/ofzqJyS5hvwacEo0CCVDn/Qg==}
@@ -437,6 +428,15 @@ packages:
   '@nodelib/fs.walk@1.2.8':
     resolution: {integrity: sha512-oGB+UxlgWcgQkgwo8GcEGwemoTFt3FIO9ababBmaGwXIoBKZ+GTy0pP185beGg7Llih/NSHSV2XAs1lnznocSg==}
     engines: {node: '>= 8'}
+
+  '@oddmash/juliya@0.4.3':
+    resolution: {integrity: sha512-3O/z67BoX+ACYECJV89Dj/fhzuaEiW7Kk8BLus2ELOyQjTK164aSmbMitLCv27mq7U8dwcyutZn5x1dFG0B90g==}
+    engines: {node: '>=20'}
+    peerDependencies:
+      react: ^18.2.0 || ^19.0.0
+    peerDependenciesMeta:
+      react:
+        optional: true
 
   '@oslojs/encoding@1.1.0':
     resolution: {integrity: sha512-70wQhgYmndg4GCPxPPxPGevRKqTIJ2Nh4OkiMWmDAVYsTQ+Ta7Sq+rPevXyXGdzr30/qZBnyOalCszoMxlyldQ==}
@@ -1910,8 +1910,6 @@ packages:
 
 snapshots:
 
-  '@oddmash/kowrap@0.3.2': {}
-
   '@astrojs/compiler@2.13.1': {}
 
   '@astrojs/internal-helpers@0.4.1': {}
@@ -2306,6 +2304,8 @@ snapshots:
     dependencies:
       '@nodelib/fs.scandir': 2.1.5
       fastq: 1.20.1
+
+  '@oddmash/juliya@0.4.3': {}
 
   '@oslojs/encoding@1.1.0': {}
 
