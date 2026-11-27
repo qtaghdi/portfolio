@@ -9,6 +9,7 @@ import ProjectText from './ProjectText.astro';
 import SectionRail from './SectionRail.astro';
 import ProjectScreenshot from './ProjectScreenshot.astro';
 import ProjectFlow from './ProjectFlow.astro';
+import CaseComparison from './CaseComparison.astro';
 import { englishScreens, primaryScreens } from '../data/project-screens';
 import { projectIcons } from '../data/project-brand';
 interface Props { locale: Locale; project: CollectionEntry<'projects'>; }
@@ -46,6 +47,7 @@ const chapters = locale === 'ko'
     <div class="case-layout shell">
       <SectionRail chapters={[...chapters, { id: "trace", title: dictionary.trace }]} label={dictionary.index} />
       <article class="case-content">
+        <CaseComparison projectKey={key} locale={locale} />
         {locale === 'ko' ? <div class="mdx-content" data-kowrap-prose><Content /></div> : translation.sections.map((section) => (
           <section id={section.id} class="content-section">
             <h2>{section.title}</h2>
