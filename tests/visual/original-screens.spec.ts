@@ -263,3 +263,17 @@ test('intranet shows the localized approval capture after notification routing',
     expect(sectionHeading).toMatch(heading);
   }
 });
+
+test('each featured project has one link covering the card', async ({ page }) => {
+  for (const prefix of ['', '/en']) {
+    await page.goto(`${prefix}/`);
+    const card = page.locator('.featured-project').first();
+    const link = card.getByRole('link');
+    await expect(link).toHaveCount(1);
+    await link.focus();
+    await expect(link).toBeFocused();
+    await expect(link).toHaveCSS('outline-style', 'solid');
+    await link.click({ position: { x: 6, y: 6 } });
+    await expect(page).toHaveURL(new RegExp(`${prefix}/projects/design-system/?$`));
+  }
+});

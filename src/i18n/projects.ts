@@ -289,10 +289,6 @@ export const projectEn: Record<string, ProjectTranslation> = {
       {
         "val": "Product UI",
         "label": "Shared components and styles used by the four Notiiv apps"
-      },
-      {
-        "val": "Storybook",
-        "label": "Browse component states, design tokens, and usage examples"
       }
     ],
     "sections": [

@@ -22,15 +22,6 @@ export const originalScreens = [
     source: 'bigtablet-notiiv-monorepo-web support screen',
   },
   {
-    key: 'design-system',
-    route: '/projects/design-system',
-    asset: '/projects/design-system/storybook-overview.png',
-    width: 1440,
-    height: 900,
-    sha256: '4cb867fa9a2099e8712b6e98f26ba4dd0ce8206f6e154f9fac0aceb614340c21',
-    source: 'bigtablet-design-system Storybook introduction',
-  },
-  {
     key: 'intranet',
     route: '/projects/intranet',
     asset: '/projects/intranet/home.png',
@@ -51,7 +42,6 @@ export const originalScreens = [
 ] as const;
 
 export const supplementalReferences = [
-  { key: 'design-system', asset: '/projects/design-system/tokens-components.png', width: 1600, height: 1000, sha256: '19d25b5d187c3f14169736c607179def0f45f5d576c58fdf10ed02d51a56b10d' },
   { key: 'design-system', asset: '/projects/design-system/button-light-reference.png', width: 672, height: 128, sha256: '59c2a8b3beea78ff0baf0c0d4ac822707782e2051127acdf592bb7a80f89d4ef' },
   { key: 'design-system', asset: '/projects/design-system/button-dark-reference.png', width: 672, height: 128, sha256: '4df67fdbdcb3768b39e3aa56af0b95e3f50eddcf3c4eb4007738306301188744' },
   { key: 'owkr', asset: '/projects/owkr/operations-guide.png', width: 1600, height: 1000, sha256: '0ff875ed0451ff8b5a2eb2f6693920c4e1c0b2a50ab03e1602db42c5ec0aba46' },

@@ -81,14 +81,16 @@ const notes: Record<string, { summary: string; meta: string; role: string }> = {
         const href = projectPath(locale, project.slug);
         return (
           <article class="featured-project" data-project-group={project.data.group}>
-            <div class="project-copy">
-              <p class="project-context">{project.data.group === 'personal' ? (ko ? '개인 프로젝트 · 독립 개발' : 'Personal project · Independent work') : groupLabels[project.data.group]}</p>
-              <h3><a class="project-title" href={href}>{icon && <img class="project-icon" src={icon} width="24" height="24" alt="" aria-hidden="true" decoding="async" />}{data.title}</a></h3>
-              <p class="project-summary" data-kowrap={ko ? '' : undefined}>{note?.summary ?? data.summary}</p>
-              <p class="project-meta">{note?.meta ?? data.category}</p>
-              <p class="project-role" data-kowrap={ko ? '' : undefined}>{ko ? '담당' : 'Scope'}: {note?.role ?? data.role}</p>
-            </div>
-            <a class="case-link" href={href} aria-label={`${data.title} ${dictionary.detail}`}>{dictionary.detail}<svg aria-hidden="true" viewBox="0 0 20 20"><path d="M4 10h12m-5-5 5 5-5 5" /></svg></a>
+            <a class="featured-link" href={href} aria-label={`${data.title} ${dictionary.detail}`}>
+              <div class="project-copy">
+                <p class="project-context">{project.data.group === 'personal' ? (ko ? '개인 프로젝트 · 독립 개발' : 'Personal project · Independent work') : groupLabels[project.data.group]}</p>
+                <h3 class="project-title">{icon && <img class="project-icon" src={icon} width="24" height="24" alt="" decoding="async" />}{data.title}</h3>
+                <p class="project-summary" data-kowrap={ko ? '' : undefined}>{note?.summary ?? data.summary}</p>
+                <p class="project-meta">{note?.meta ?? data.category}</p>
+                <p class="project-role" data-kowrap={ko ? '' : undefined}>{ko ? '담당' : 'Scope'}: {note?.role ?? data.role}</p>
+              </div>
+              <span class="case-link">{dictionary.detail}<svg aria-hidden="true" viewBox="0 0 20 20"><path d="M4 10h12m-5-5 5 5-5 5" /></svg></span>
+            </a>
           </article>
         );
       })}
@@ -125,14 +127,16 @@ const notes: Record<string, { summary: string; meta: string; role: string }> = {
   .years { align-self: center; color: $silver; font-size: 14px; }
   .section-description { grid-column: 1 / -1; color: $silver; font-size: 17px; }
   .featured-list { border-top: 1px solid $line; }
-  .featured-project { display: grid; grid-template-columns: minmax(0,1fr) auto; gap: 24px; padding: 36px 0; border-bottom: 1px solid $line; }
+  .featured-project { border-bottom: 1px solid $line; }
+  .featured-link { display: grid; grid-template-columns: minmax(0,1fr) auto; gap: 24px; padding: 36px 16px; }
   .project-copy { max-width: 680px; padding-left: 20px; border-left: 2px solid $line; transition: border-color $fast; }
-  .featured-project:hover .project-copy, .featured-project:focus-within .project-copy { border-color: $accent; }
+  .featured-link:focus-visible, .more-work li a:focus-visible { outline-offset: -2px; }
+  .featured-link:is(:focus-visible, :active), .more-work li a:is(:focus-visible, :active) { background: $black-soft; }
+  .featured-link:focus-visible .project-copy { border-color: $accent; }
   .project-context { margin-bottom: 8px; color: $gunmetal; font-size: 13px; line-height: 1.6; }
   .featured-project[data-project-group="personal"] .project-context { color: $accent; font-weight: 500; }
   h3 { font-size: 26px; font-weight: 600; line-height: 1.5; letter-spacing: -.025em; }
   .project-title { display: flex; align-items: center; gap: 12px; width: fit-content; }
-  .project-title:hover { color: $accent; }
   .project-icon { width: 24px; height: 24px; object-fit: contain; flex: 0 0 24px; }
   .project-summary { margin-top: 8px; color: $silver; font-size: 17px; line-height: 1.75; word-break: keep-all; }
   .project-meta { margin-top: 10px; color: $gunmetal; font-size: 14px; }
@@ -143,26 +147,31 @@ const notes: Record<string, { summary: string; meta: string; role: string }> = {
   .more-work h2 { margin-bottom: 24px; font-size: 26px; }
   .more-work ol { list-style: none; border-top: 1px solid $line; }
   .more-work li { border-bottom: 1px solid $line; }
-  .more-work li a { display: grid; grid-template-columns: 230px minmax(0,1fr) 20px; gap: 24px; min-height: 80px; align-items: center; padding: 18px 0; }
+  .more-work li a { display: grid; grid-template-columns: 230px minmax(0,1fr) 20px; gap: 24px; min-height: 80px; align-items: center; padding: 18px 16px; }
   .more-work strong { display: flex; align-items: center; gap: 12px; min-width: 0; font-size: 16px; font-weight: 600; }
   .more-work strong span { min-width: 0; overflow-wrap: anywhere; }
   .work-type { display: block; margin-bottom: 2px; color: $gunmetal; font-size: 12px; }
   .more-description { display: block; }
   .more-summary { color: $silver; font-size: 14px; line-height: 1.7; }
-  .more-work li a:hover strong, .more-work li a:hover svg { color: $accent; }
+  @media (hover: hover) and (pointer: fine) {
+    .featured-link, .more-work li a { transition: background-color $fast; }
+    .featured-link:hover, .more-work li a:hover { background: $black-soft; }
+    .featured-link:hover .project-copy { border-color: $accent; }
+    .more-work li a:hover strong, .more-work li a:hover svg { color: $accent; }
+  }
   .more-work summary { min-height: 52px; padding: 14px 0; color: $accent; font-size: 15px; cursor: pointer; }
   .more-work summary:hover { text-decoration: underline; text-underline-offset: 4px; }
   .more-work summary:focus-visible { outline: 2px solid $accent; outline-offset: 4px; }
   @media (max-width: 680px) {
     .projects-section { padding-bottom: 64px; }
     h2 { font-size: 26px; }.section-description { font-size: 16px; }.years { font-size: 12px; }
-    .featured-project { grid-template-columns: minmax(0,1fr); gap: 12px; padding: 28px 0; }
+    .featured-link { grid-template-columns: minmax(0,1fr); gap: 12px; padding: 28px 8px; }
     h3 { font-size: 20px; overflow-wrap: anywhere; }.project-title { align-items: flex-start; gap: 10px; }.project-icon { margin-top: 3px; }
     .project-copy { padding-left: 12px; }
     .project-summary { font-size: 16px; }.project-meta { font-size: 13px; }.project-role { font-size: 14px; }
     .case-link { justify-self: start; margin-left: 14px; font-size: 14px; }
     .more-work { padding-top: 52px; }.more-work h2 { font-size: 23px; }
-    .more-work li a { grid-template-columns: minmax(0,1fr) 20px; gap: 8px 16px; }
+    .more-work li a { grid-template-columns: minmax(0,1fr) 20px; gap: 8px 16px; padding-inline: 8px; }
     .more-summary { grid-column: 1; grid-row: 2; padding-left: 36px; }.more-work li svg { grid-column: 2; grid-row: 1 / 3; }
   }
 </style>
