@@ -38,7 +38,7 @@ test('Korean wrapping preserves text, fits the viewport, and responds to resizin
   const errors: string[] = [];
   page.on('pageerror', (error) => errors.push(error.message));
   page.on('console', (message) => {
-    if (message.text().includes('Kowrap enhancement unavailable')) errors.push(message.text());
+    if (message.text().includes('Juliya enhancement unavailable')) errors.push(message.text());
   });
 
   const comparisons: { route: string; width: number; css: number[]; kowrap: number[]; insertedBreaks: number; cssPhraseSplits: number; kowrapPhraseSplits: number }[] = [];
@@ -85,7 +85,7 @@ test('Korean wrapping preserves text, fits the viewport, and responds to resizin
   }
 });
 
-test('English pages do not mount Kowrap', async ({ page }) => {
+test('English pages do not mount Juliya', async ({ page }) => {
   for (const route of routes) {
     await page.goto(`/en${route}`);
     await expect(page.locator(targets)).toHaveCount(0);
