@@ -21,8 +21,7 @@ evidence:
   - {"val": "제품 운영", "label": "어드민·오너 대시보드·서비스 상태·고객지원 화면을 하나의 제품으로 연결"}
   - {"val": "공통 기반", "label": "여러 앱에서 인증·API 요청·공유 흐름을 일관되게 처리"}
 traceLinks:
-  - { label: "네 앱의 공통 스타일 전환", labelEn: "Shared style migration across four apps", href: "https://github.com/Bigtablet/bigtablet-notiiv-monorepo-web/commit/8b7ab9d442af503d0228e29fb016bc78c76332c7" }
-  - { label: "디자인 시스템 API 마이그레이션", labelEn: "Design system API migration", href: "https://github.com/Bigtablet/bigtablet-notiiv-monorepo-web/commit/e07251fd09560cf4e74317b31dda08364abfa0af" }
+  - { label: "공개 디자인 시스템 마이그레이션 가이드", labelEn: "Public design system migration guide", href: "https://github.com/Bigtablet/bigtablet-design-system/blob/develop/docs/MIGRATION.md" }
 metrics: []
 callouts:
   - icon: "🔐"
@@ -44,7 +43,7 @@ import ProjectScreenshot from '../../components/ProjectScreenshot.astro';
 ### 같은 인증 흐름을 여러 앱에서 따로 고쳐야 하는 상황
 
 Notiiv는 어드민, 오너 대시보드, 서비스 상태와 고객지원 네 앱을 13개 공통 패키지와 함께 운영하는 회사 제품입니다.<br />
-저는 공통 BFF·Query 기반의 유지보수와 운영 화면, 인증·공유·웹뷰의 경계 조건 개선을 담당했습니다.
+저는 화면과 백엔드 API 사이의 공통 프록시(BFF)와 TanStack Query 기반을 유지보수했습니다. 운영 화면을 개선하고 인증, 공유, 웹뷰에서 발생하는 예외도 다뤘습니다.
 
 앱마다 BFF 프록시가 별도로 있으면 경로 검증, 인증 쿠키 주입, 토큰 재발급, 오류 변환을 비슷하게 구현하게 됩니다. 한 앱에서 실패 처리를 고쳐도 다른 앱은 이전 동작을 유지할 수 있습니다. 반대로 모든 앱을 하나의 고정 처리에 맞추면 로그인 응답이나 파일 업로드처럼 앱마다 다른 정책이 공통 코드 안에 뒤섞입니다.
 

@@ -16,7 +16,7 @@ focus:
   - "Static analysis"
   - "Runtime contracts"
   - "Developer experience"
-summary: "TypeScript 모노레포에서 client·server·shared·public API 경계를 BR-001부터 BR-006까지 검사하는 Rust CLI와 Zod 런타임 계약을 만들었습니다."
+summary: "TypeScript에서 허용되지 않은 import를 찾아 수정할 위치를 알려 주는 CLI를 만들었습니다. 요청과 응답은 Zod로 실행 중에 검증합니다."
 evidence:
   - {"val": "경계 검사", "label": "TypeScript 프로젝트의 도메인과 실행 환경 사이의 import 규칙을 검사"}
   - {"val": "개발 흐름", "label": "CLI와 Vite 피드백으로 위반 위치와 수정 방향을 확인"}
@@ -24,6 +24,7 @@ traceLinks:
   - { label: "중첩 도메인 탐색 구현", labelEn: "Nested-domain discovery implementation", href: "https://github.com/qtaghdi/boundra/commit/59940b3b17c216fe02c216be6d2d747c60bc848b" }
   - { label: "웹 문서 개편", labelEn: "Web documentation redesign", href: "https://github.com/Oddmash/boundra/pull/52" }
   - { label: "v0.8.1 릴리스", labelEn: "v0.8.1 release", href: "https://github.com/Oddmash/boundra/releases/tag/v0.8.1" }
+  - { label: "경계 규칙과 진단 예시", labelEn: "Boundary rules and diagnostics", href: "https://github.com/Oddmash/boundra/blob/main/docs/boundary-rules.md#5-example-violations" }
   - { label: "npm 패키지", labelEn: "npm package", href: "https://www.npmjs.com/package/boundra" }
 metrics: []
 callouts:
@@ -44,6 +45,8 @@ link: "https://oddmash.github.io/boundra/"
 github: "https://github.com/Oddmash/boundra"
 ---
 
+import ProjectFlow from '../../components/ProjectFlow.astro';
+
 ## 규칙 문서만으로 지키기 어려운 경계
 
 도메인 구조와 import 규칙은 프로젝트 초기에 문서로 합의하기 쉽지만, 기능과 팀이 늘어나면 가장 먼저 흐려집니다. client 코드가 server 구현을 가져오고, shared 계층이 UI와 데이터베이스에 의존하고, 다른 도메인의 내부 파일을 직접 참조해도 빌드가 성공하면 문제는 늦게 드러납니다.
@@ -52,9 +55,11 @@ github: "https://github.com/Oddmash/boundra"
 
 ## 정적 검사와 런타임 검증 설계
 
-### 1. Static Architecture Rules
+### 1. 경계를 넘는 import 찾기
 
-Boundra는 도메인 manifest를 기준으로 BR-001부터 BR-006까지의 경계를 검사합니다. client/server 침범, shared 계층 오염, 도메인 내부 직접 참조, composition root 우회와 선언하지 않은 도메인 의존성을 각각 독립적인 규칙으로 만들고 오류 코드가 릴리즈 사이에서 바뀌지 않게 했습니다.
+Boundra는 각 도메인의 설정 파일에서 코드의 경계와 공개 진입점을 읽습니다. 오류 코드로 어떤 규칙을 어겼는지, 파일과 줄 번호로 어디를 고쳐야 하는지 확인할 수 있게 만들었습니다. 예를 들어 브라우저 코드가 서버 구현을 직접 가져오면 BR-001을 표시합니다.
+
+<ProjectFlow id="boundra-import" />
 
 ### 2. 요청과 응답을 실제 실행에서도 검증
 

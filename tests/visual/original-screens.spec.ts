@@ -130,9 +130,8 @@ test('home uses project branding and Foloom uses its favicon beside the title in
     const oddmash = page.locator('#oddmash');
     await expect(oddmash.getByRole('heading', { name: 'Oddmash', exact: true })).toBeVisible();
     const agents = oddmash.getByRole('link', { name: /Oddmash Agents/ });
-    await expect(agents).toHaveAttribute('href', 'https://github.com/Oddmash/oddmash-agents/blob/main/docs/public-onboarding.md');
+    await expect(agents).toHaveAttribute('href', `${prefix}/projects/oddmash-agents`);
     await expect(agents.locator('img')).toHaveAttribute('src', '/projects/oddmash/lead.svg');
-    await expect(agents.locator('.usage')).toContainText(prefix ? 'enrolled Oddmash repository' : '리뷰가 설정된 Oddmash 저장소');
     const skills = oddmash.getByRole('link', { name: /Oddmash Skills/ });
     await expect(skills).toHaveAttribute('href', 'https://github.com/Oddmash/oddmash-skills');
     await expect(skills.locator('img')).toHaveAttribute('src', '/projects/oddmash/mark.png');
@@ -189,12 +188,27 @@ test('work, contents and language links retain navigation', async ({ page }, tes
 
 test('layouts stay within narrow and desktop viewports', async ({ page }, testInfo) => {
   const widths = testInfo.project.name === 'mobile' ? [320, 375, 390] : [1440, 1505];
+  const flowIds: Record<string, string[]> = {
+    'oddmash-agents': ['agents-review', 'agents-ci'],
+    'document-workspace': ['foloom-revision'],
+    boundra: ['boundra-import'],
+  };
+  const cases = Object.keys(flowIds).flatMap((slug) => ['/projects/', '/en/projects/'].map((prefix) => prefix + slug + '/'));
   for (const width of widths) {
     await page.setViewportSize({ width, height: 1045 });
-    for (const route of ['/', '/en/', '/projects/design-system/', '/en/projects/document-workspace/']) {
+    for (const route of ['/', '/en/', '/projects/design-system/', ...cases]) {
       await page.goto(route);
       const overflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
       expect(overflow, `${route} at ${width}px`).toBeLessThanOrEqual(1);
+      const ids = flowIds[route.split('/').at(-2) ?? ''] ?? [];
+      const flows = page.locator('article [data-case-flow]');
+      await expect(flows).toHaveCount(ids.length);
+      for (const [index, id] of ids.entries()) {
+        const figure = flows.nth(index);
+        await expect(figure).toHaveAttribute('data-case-flow', id);
+        await expect(figure.locator('figcaption')).not.toBeEmpty();
+        await expect(figure.getByRole('listitem')).toHaveCount(3);
+      }
     }
   }
 });
@@ -231,7 +245,7 @@ test('text contents follow the article and highlight the current section', async
 test('every project detail has a working product capture or logo in Korean and English', async ({ page }) => {
   await page.goto('/');
   const routes = await page.locator('#projects a[href*="/projects/"]').evaluateAll((links) => [...new Set(links.map((link) => new URL((link as HTMLAnchorElement).href).pathname))]);
-  expect(routes).toHaveLength(16);
+  expect(routes).toHaveLength(17);
   for (const prefix of ['', '/en']) {
     for (const route of routes) {
       const response = await page.goto(`${prefix}${route}`);
@@ -251,7 +265,7 @@ test('every project detail has a working product capture or logo in Korean and E
 
 test('intranet shows the localized approval capture after notification routing', async ({ page }) => {
   for (const { prefix, asset, dimensions, heading } of [
-    { prefix: '', asset: 'approval.png', dimensions: [1320, 2868], heading: /Notification Routing/ },
+    { prefix: '', asset: 'approval.png', dimensions: [1320, 2868], heading: /알림에서 처리할 결재 문서로 바로 이동/ },
     { prefix: '/en', asset: 'approval-en.png', dimensions: [2752, 2064], heading: /Route notifications/ },
   ]) {
     await page.goto(`${prefix}/projects/intranet/`);

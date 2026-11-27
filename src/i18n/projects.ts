@@ -1,10 +1,13 @@
+import type { ProjectFlowId } from '../data/project-flows';
+
 export interface ProjectSection {
   id: string;
   title: string;
   paragraphs: string[];
+  flow?: ProjectFlowId;
   links?: { label: string; href: string }[];
   notes?: { title: string; paragraphs: string[] };
-  subsections?: { title: string; paragraphs: string[]; items?: string[] }[];
+  subsections?: { title: string; paragraphs: string[]; items?: string[]; flow?: ProjectFlowId }[];
 }
 
 export interface ProjectTranslation {
@@ -24,6 +27,49 @@ export interface ProjectTranslation {
 export const projectKey = (slug: string) => slug.replace(/^\d+-/, '');
 
 export const projectEn: Record<string, ProjectTranslation> = {
+  'oddmash-agents': {
+    category: 'Open Source · GitHub Automation',
+    role: 'Design and development',
+    thesis: 'Review the current change and leave evidence contributors can act on in GitHub.',
+    responsibility: 'GitHub App and review workflow, CI decisions, review threads, and Oddmash Skills integration',
+    summary: 'I built a GitHub App that reviews Oddmash pull requests after required checks pass and leaves findings on the affected lines.',
+    focus: ['GitHub reviews', 'CI evidence', 'Review threads', 'Shared guidance'],
+    sections: [
+      {
+        id: 'contributor-workflow',
+        title: 'What contributors see in a pull request',
+        paragraphs: [
+          'Oddmash repositories have different tests and working agreements. CI tells contributors whether checks passed. I built Oddmash Agents to show where a change could break existing behavior and leave that evidence beside the affected code in GitHub.',
+          'Lead submits the formal review after required CI passes. Specialists such as QA, Docs, and Architect offer advice where their expertise is relevant. When a new commit arrives, the previous review can no longer support approval of that commit. A maintainer can request a fresh review with /review.',
+        ],
+        flow: 'agents-review',
+      },
+      {
+        id: 'ci-evidence',
+        title: 'When CI results disagree on the same commit',
+        paragraphs: [
+          'In Oddmash UI pull request #51, a canceled run and its successful replacement both appeared on the same commit, leaving review stuck waiting. Matching by check name alone could mix results from different workflows. I matched runs against the workflow, pull request, and commit before excluding superseded results.',
+          'I replayed the real check data to verify that the replacement unblocked the review. Review cannot proceed when the current run fails or the workflow history is ambiguous.',
+        ],
+        flow: 'agents-ci',
+      },
+      {
+        id: 'review-threads',
+        title: 'Verify fixes in the original thread',
+        paragraphs: [
+          'GitHub rejected a standalone inline reply while the app had a pending review. I used GraphQL to attach the reply to that pending review and submit it as a comment, keeping the finding and the verified fix in the same thread.',
+          'On a public Oddmash Skills test pull request, I queried GitHub for the thread’s resolved state and confirmed Lead as the resolver. This behavior was verified in a repository explicitly enabled for Lead.',
+        ],
+      },
+      {
+        id: 'shared-guidance',
+        title: 'Apply each repository’s working agreements',
+        paragraphs: [
+          'The review reads repository guidance from the pull request’s base revision and uses role-specific Oddmash Skills guidance bundled from an approved catalog commit. Docs checks whether instructions match the code. QA looks for gaps in verification. Review and merge follow separate policies, and contributors can see the results in enrolled Oddmash repositories.',
+        ],
+      },
+    ],
+  },
   juliya: {
     category: 'Open Source · Web Typography',
     role: 'Development and maintenance',
@@ -205,7 +251,7 @@ export const projectEn: Record<string, ProjectTranslation> = {
             "id": "problem",
             "title": "The same authentication boundary was maintained in several apps",
             "paragraphs": [
-                "Notiiv includes an admin console, owner dashboard, status app, and support site. I maintained shared BFF and Query infrastructure and improved operational interfaces and browser boundaries.",
+                "Notiiv includes an admin console, owner dashboard, status app, and support site. I maintained the shared proxy between the frontend and backend APIs and the TanStack Query infrastructure. I also improved operator screens and fixed webview-specific behavior.",
                 "Separate proxies duplicated path checks, cookie injection, refresh, and error handling. Fixing one app could leave another behind. A single rigid proxy would introduce a different problem: app-specific login responses and uploads would become entangled with shared infrastructure.",
                 "Operators also encountered mismatched FAQ previews, spreadsheet-dependent customer entry, webview download restrictions, and PDF page navigation during zoom."
             ]
@@ -482,14 +528,15 @@ export const projectEn: Record<string, ProjectTranslation> = {
           {
             "title": "Choose a UI engine behind a replaceable boundary",
             "paragraphs": [
-              "The recorded ADR compares Univer, ONLYOFFICE, and a custom engine. A custom grid would require selection, keyboard, clipboard, and formula UI work. ONLYOFFICE offers broad editing but introduces frame and deployment considerations for an embedded MCP App.",
+              "I compared Univer, ONLYOFFICE, and building a grid from scratch in a design decision record. A custom grid would require selection, keyboard, clipboard, and formula UI work. ONLYOFFICE offers broad editing but introduces frame and deployment considerations for an embedded MCP App.",
               "I chose Univer OSS behind SpreadsheetEngine for direct range control and embedding, while the Go adapter owns validated operations, revisions, conflicts, and persistence. This preserves a path to replace the UI engine, at the cost of maintaining compatibility mapping and verification."
             ]
           },
           {
-            "title": "Reject stale writes rather than guessing a merge",
+            "title": "Return a conflict when an edit uses an older revision",
+            "flow": "foloom-revision",
             "paragraphs": [
-              "Browser and AI writes carry an actor, base revision, and operations through one commit path. Of two requests based on revision 12, the first saves revision 13 and the second receives a conflict. A whole batch is validated before candidate mutation.",
+              "Browser and AI edits go through the same save path. Each request carries the version it read and the changes it intends to make. The server validates the whole batch before changing a working copy.",
               "Structural edits such as row insertion and merges make blind replay unsafe. This coarse boundary may reject simultaneous edits to different cells, but keeps the source state explicit. Finer automatic merging requires additional semantic rules."
             ]
           },
@@ -551,7 +598,7 @@ export const projectEn: Record<string, ProjectTranslation> = {
       "Vite overlay",
       "Benchmarking"
     ],
-    "summary": "A published Rust CLI and TypeScript runtime connecting BR-001 through BR-006 architecture checks with Zod contracts, scaffolding, and Vite feedback.",
+    "summary": "A CLI that finds disallowed imports in TypeScript and points developers to the affected line. Zod contracts validate requests and responses at runtime.",
     "evidence": [
       {
         "val": "Boundary checks",
@@ -576,9 +623,10 @@ export const projectEn: Record<string, ProjectTranslation> = {
         "paragraphs": [],
         "subsections": [
           {
-            "title": "Stable architecture rule codes",
+            "title": "Find imports that cross an architecture boundary",
+            "flow": "boundra-import",
             "paragraphs": [
-              "The Rust analyzer uses domain manifests and BR-001 through BR-006 for client and server boundaries, shared-layer dependencies, private domain access, composition roots, and undeclared dependencies. Diagnostics retain stable codes and actionable paths."
+              "The Rust analyzer reads each domain manifest to identify the project’s boundaries and public entry points. Stable rule codes help developers find the relevant documentation, and diagnostics point to the affected file and line. For example, BR-001 flags an import from browser code into a server implementation."
             ]
           },
           {
