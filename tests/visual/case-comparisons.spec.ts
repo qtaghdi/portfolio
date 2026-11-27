@@ -30,6 +30,7 @@ for (const key of Object.keys(caseVisuals)) {
         await expect(figure).toHaveAttribute('data-mechanism', id);
         await expect(figure).toHaveAttribute('data-fidelity', 'explanation');
         await expect(figure.locator('figcaption')).not.toBeEmpty();
+        await expect(figure.locator('h1,h2,h3,h4,h5,h6')).toHaveCount(0);
         await figure.scrollIntoViewIfNeeded();
         await expect(figure).toBeVisible();
         await figure.screenshot({ path: testInfo.outputPath(`${id}-${locale}.png`) });
@@ -56,14 +57,25 @@ for (const prefix of ['', '/en']) {
     await expect(slider).toBeVisible();
     await expect(demo).toHaveAttribute('data-result', /equal|different/);
     await expect(demo.locator('[data-enhanced] span').first()).toBeVisible();
+    await expect(demo.locator('[data-enhanced] span').first()).toHaveCSS('display', 'block');
     await example.selectOption('short');
     await expect(demo).toHaveAttribute('data-result', 'equal');
     await slider.focus();
     await expect(slider).toBeFocused();
+    await slider.press('Home');
+    const initial = Number(await slider.inputValue());
     await slider.press('ArrowRight');
-    await expect(demo.locator('[data-width-label]')).toHaveText(/px/);
+    const next = Number(await slider.inputValue());
+    expect(next).toBeGreaterThan(initial);
+    await expect(demo.locator('[data-width-label]')).toHaveText(next + 'px');
+    for (const sample of await demo.locator('.wrap-sample').all()) {
+      await expect(sample).toHaveCSS('width', next + 'px');
+    }
     await example.selectOption('long');
-    await expect(demo.locator('[data-enhanced] span').first()).toBeVisible();
+    const longText = (await demo.getAttribute('data-long'))!;
+    await expect(demo.locator('[data-native]')).toHaveText(longText);
+    await expect.poll(async () => (await demo.locator('[data-enhanced]').textContent())?.replace(/\s+/g, ' ').trim()).toBe(longText);
+    for (const line of await demo.locator('[data-enhanced] span').all()) await expect(line).toHaveCSS('display', 'block');
     await page.setViewportSize({ width: 320, height: 800 });
     await expect(demo.locator('[data-native]')).toBeVisible();
     expect(await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth)).toBeLessThanOrEqual(1);

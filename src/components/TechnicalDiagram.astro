@@ -41,13 +41,13 @@ const cap = captions[id];
   <figcaption id={`mechanism-${id}`}>{cap}</figcaption>
   {id === 'design-system' && <div class="architecture-compare">
     <section class="diagram-panel">
-      <h4>{t('기존: 전체 스타일 import', 'Before: global stylesheet')}</h4>
+      <div class="panel-title">{t('기존: 전체 스타일 import', 'Before: global stylesheet')}</div>
       <div class="graph-pair"><span class="node code">Button</span><span class="node code">DatePicker</span></div>
       <div class="merge-connector" aria-hidden="true"><i></i><i></i></div>
       <div class="node global-css"><strong>style.css</strong><small>{t('전체 컴포넌트 스타일', 'All component styles')}</small><div class="chips"><span>Button</span><span>DatePicker</span><span>Popover</span><span>Modal</span></div></div>
     </section>
     <section class="diagram-panel changed">
-      <h4>{t('변경: 의존성별 CSS', 'After: dependency-owned CSS')}</h4>
+      <div class="panel-title">{t('변경: 의존성별 CSS', 'After: dependency-owned CSS')}</div>
       <div class="graph-pair two-paths">
         <div class="graph-path"><span class="node code">Button</span><span class="down" aria-hidden="true">↓</span><span class="node success code">Button CSS</span></div>
         <div class="graph-path"><span class="node code">DatePicker</span><div class="branch-connector" aria-hidden="true"><i></i><i></i></div><div class="branch-pair"><span class="node success code">DatePicker<br />CSS</span><div class="graph-path"><span class="node code">Popover</span><span class="down" aria-hidden="true">↓</span><span class="node success code">Popover<br />CSS</span></div></div></div>
@@ -56,8 +56,8 @@ const cap = captions[id];
     </section>
   </div>}
   {id === 'notiiv' && <div class="architecture-compare">
-    <section class="diagram-panel"><h4>{t('기존: 앱마다 별도 처리', 'Before: per-app handling')}</h4><div class="graph-pair">{['Admin','Owner','Status','Support'].map(app => <div class="graph-path"><span class="node code">{app}</span><span class="down" aria-hidden="true">↓</span><span class="node">{t('요청 · 인증', 'Request · auth')}</span></div>)}</div></section>
-    <section class="diagram-panel changed"><h4>{t('공통 처리와 앱 정책', 'Shared processing and app policy')}</h4><div class="chips app-chips">{['Admin','Owner','Status','Support'].map(app => <span>{app}</span>)}</div><div class="down" aria-hidden="true">↓</div><div class="node success"><strong>{t('공통 BFF', 'Shared BFF')}</strong><small>{t('경로 검증 · 인증 · 재발급', 'Validation · auth · refresh')}</small></div><div class="down" aria-hidden="true">↓</div><div class="node"><strong>{t('앱별 응답 훅', 'App response hooks')}</strong><small>{t('로그인 · 가입 응답', 'Login · signup responses')}</small></div><small class="graph-note">{t('파일 업로드와 공개 경로는 처리 옵션으로 구분', 'Separate upload and public-route options')}</small></section>
+    <section class="diagram-panel"><div class="panel-title">{t('기존: 앱마다 별도 처리', 'Before: per-app handling')}</div><div class="graph-pair">{['Admin','Owner','Status','Support'].map(app => <div class="graph-path"><span class="node code">{app}</span><span class="down" aria-hidden="true">↓</span><span class="node">{t('요청 · 인증', 'Request · auth')}</span></div>)}</div></section>
+    <section class="diagram-panel changed"><div class="panel-title">{t('공통 처리와 앱 정책', 'Shared processing and app policy')}</div><div class="chips app-chips">{['Admin','Owner','Status','Support'].map(app => <span>{app}</span>)}</div><div class="down" aria-hidden="true">↓</div><div class="node success"><strong>{t('공통 BFF', 'Shared BFF')}</strong><small>{t('경로 검증 · 인증 · 재발급', 'Validation · auth · refresh')}</small></div><div class="down" aria-hidden="true">↓</div><div class="node"><strong>{t('앱별 응답 훅', 'App response hooks')}</strong><small>{t('로그인 · 가입 응답', 'Login · signup responses')}</small></div><small class="graph-note">{t('파일 업로드와 공개 경로는 처리 옵션으로 구분', 'Separate upload and public-route options')}</small></section>
   </div>}
   {id === 'agents-review' && <div class="review-graph">
     <div class="node"><small>{t('기여자 · GitHub', 'Contributor · GitHub')}</small><strong>{t('현재 커밋으로 PR 열기', 'Open PR at current commit')}</strong></div>
@@ -88,7 +88,7 @@ const cap = captions[id];
   {id === 'kivra' && <div class="fan-in"><div class="three-nodes">{['Terminal','VS Code','JetBrains'].map(name => <span class="node code">{name}</span>)}</div><div class="merge-connector three" aria-hidden="true"><i></i><i></i></div><div class="node formal"><strong>{t('공통 실행 기록 계약', 'Shared capture contract')}</strong><small>{t('시작 · 이벤트 · 완료', 'Start · event · completion')}</small></div><div class="down" aria-hidden="true">↓</div><div class="node"><strong>Rust ingestion</strong><small>{t('프로젝트별 Runs 목록', 'Project-level Runs list')}</small></div></div>}
   {id === 'jeomjuro' && <table class="decision-table"><thead><tr><th>{t('사용자 행동', 'Action')}</th><th>{t('입력 상태', 'Draft state')}</th><th>{t('목록 상태', 'Result state')}</th></tr></thead><tbody><tr><th scope="row">{t('검색어 입력', 'Type query')}</th><td>{t('초안 갱신', 'Update draft')}</td><td>{t('이전 결과 유지', 'Keep prior results')}</td></tr><tr><th scope="row">{t('검색 적용', 'Apply search')}</th><td>{t('검색어 확정', 'Apply query')}</td><td>{t('검색 결과 갱신', 'Refresh results')}</td></tr><tr><th scope="row">{t('필터 변경', 'Change filter')}</th><td>{t('필터 갱신', 'Update filter')}</td><td class="ok">{t('페이지 초기화', 'Reset pagination')}</td></tr><tr><th scope="row">{t('삭제 / 복원', 'Delete / restore')}</th><td>{t('검색 유지', 'Keep query')}</td><td>{t('관련 목록 갱신', 'Refresh related lists')}</td></tr></tbody></table>}
   {id === 'homepage' && <table class="decision-table"><thead><tr><th scope="col">{t('트리거', 'Trigger')}</th><th scope="col">{t('기존 문제', 'Previous issue')}</th><th scope="col">{t('변경한 처리', 'Changed handling')}</th></tr></thead><tbody><tr><th scope="row">{t('언어 변경', 'Change locale')}</th><td>{t('오류 화면에 이전 언어', 'Previous language in errors')}</td><td class="ok">{t('공통 오류에도 locale 적용', 'Apply locale to shared errors')}</td></tr><tr><th scope="row">{t('연도 변경', 'Change year')}</th><td>{t('이전 표시 내용 또는 모션 잔존', 'Old content or motion remains')}</td><td class="ok">{t('연도별 콘텐츠와 모션 정리', 'Align content and stop prior motion')}</td></tr></tbody></table>}
-  {id === 'echo' && <div class="architecture-compare"><section class="diagram-panel"><h4>{t('독립 상태', 'Independent states')}</h4><div class="graph-path"><span class="node">{t('마이크 권한', 'Microphone permission')}</span><span class="node">{t('서버 연결', 'Server connection')}</span><span class="node">{t('녹음 상태', 'Recording state')}</span></div></section><section class="diagram-panel changed"><h4>{t('화면이 보여주는 상태', 'What the interface reflects')}</h4><div class="node formal"><strong>{t('연결 · 녹음 상태', 'Connection · recording')}</strong><small>{t('시작 / 중지 순서와 오류 구분', 'Order start/stop and distinguish failures')}</small></div><div class="down" aria-hidden="true">↓</div><div class="node"><strong>{t('서버 검출 결과', 'Server detection feedback')}</strong><small>{t('텍스트 · 신뢰도 · 에너지', 'Text · confidence · energy')}</small></div></section></div>}
+  {id === 'echo' && <div class="architecture-compare"><section class="diagram-panel"><div class="panel-title">{t('독립 상태', 'Independent states')}</div><div class="graph-path"><span class="node">{t('마이크 권한', 'Microphone permission')}</span><span class="node">{t('서버 연결', 'Server connection')}</span><span class="node">{t('녹음 상태', 'Recording state')}</span></div></section><section class="diagram-panel changed"><div class="panel-title">{t('화면이 보여주는 상태', 'What the interface reflects')}</div><div class="node formal"><strong>{t('연결 · 녹음 상태', 'Connection · recording')}</strong><small>{t('시작 / 중지 순서와 오류 구분', 'Order start/stop and distinguish failures')}</small></div><div class="down" aria-hidden="true">↓</div><div class="node"><strong>{t('서버 검출 결과', 'Server detection feedback')}</strong><small>{t('텍스트 · 신뢰도 · 에너지', 'Text · confidence · energy')}</small></div></section></div>}
   <p class="diagram-note">{notes[id]}</p>
 </figure>}
 <style lang="scss">
@@ -99,7 +99,7 @@ const cap = captions[id];
   .architecture-compare { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 12px; align-items: start; }
   .diagram-panel { padding: 14px; border: 1px solid $line; border-radius: 8px; min-width: 0; background: $black-soft; }
   .diagram-panel.changed { background: $black; border-color: $line-bright; }
-  h4 { font-size: 14px; font-weight: 600; margin: 0 0 16px; color: $silver-bright; }
+  .panel-title { font-size: 14px; font-weight: 600; margin: 0 0 16px; color: $silver-bright; }
   .graph-pair, .gate-branches, .branch-pair, .three-nodes { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 8px; align-items: start; }
   .three-nodes, .review-branches { grid-template-columns: repeat(3,minmax(0,1fr)); }
   .graph-path { min-width: 0; display: grid; align-content: start; }

@@ -15,8 +15,8 @@ const shortText = t('자연스럽게 읽어요', 'Read naturally');
     <select id="wrap-example"><option value="long">{t('긴 문장', 'Long sentence')}</option><option value="short">{t('짧은 문장', 'Short sentence')}</option></select>
   </div>
   <div class="demo-panels">
-    <section class="demo-panel"><h4>{t('브라우저 기본 CSS', 'Native browser CSS')}</h4><div class="sample-frame"><p class="wrap-sample" data-native>{longText}</p></div><small data-native-count></small></section>
-    <section class="demo-panel enhanced"><h4>{t('Juliya Core', 'Juliya Core')}</h4><div class="sample-frame"><p class="wrap-sample" data-enhanced>{longText}</p></div><small data-enhanced-count>{t('실행 전', 'Not yet evaluated')}</small></section>
+    <section class="demo-panel"><div class="panel-title">{t('브라우저 기본 CSS', 'Native browser CSS')}</div><div class="sample-frame"><p class="wrap-sample" data-native>{longText}</p></div><small data-native-count></small></section>
+    <section class="demo-panel enhanced"><div class="panel-title">{t('Juliya Core', 'Juliya Core')}</div><div class="sample-frame"><p class="wrap-sample" data-enhanced>{longText}</p></div><small data-enhanced-count>{t('실행 전', 'Not yet evaluated')}</small></section>
   </div>
   <p data-wrap-result aria-live="polite" class="wrap-result">{t('JavaScript가 실행되면 실제 엔진 결과를 비교할 수 있습니다.', 'Enable JavaScript to compare actual engine output.')}</p>
   <small class="demo-note">{t('동일한 글꼴과 가용 너비에서 CSS 기본 줄바꿈과 설치된 Juliya Core v0.4.3 결과를 비교합니다. 결과가 같을 수도 있습니다.', 'Compares native CSS wrapping and installed Juliya Core v0.4.3 with the same font and available width. Results can be identical.')}</small>
@@ -80,7 +80,7 @@ const shortText = t('자연스럽게 읽어요', 'Read naturally');
       const engine = wrap(sample, { locale, width, measure: text => ctx.measureText(text).width });
       enhanced.replaceChildren(...engine.map(line => {
         const span = document.createElement('span');
-        span.textContent = line.text.trim();
+        span.textContent = line.text;
         return span;
       }));
       const nativeLines = readNative(native);
@@ -116,10 +116,10 @@ const shortText = t('자연스럽게 읽어요', 'Read naturally');
   .demo-panels { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 12px; }
   .demo-panel { border: 1px solid $line; border-radius: 8px; min-width: 0; padding: 12px; background: $black-soft; }
   .demo-panel.enhanced { border-color: $accent; background: $black; }
-  h4 { margin: 0 0 12px; font-size: 13px; font-weight: 600; color: $silver-bright; }
+  .panel-title { margin: 0 0 12px; font-size: 13px; font-weight: 600; color: $silver-bright; }
   .sample-frame { min-width: 0; }
   .wrap-sample { display: block; box-sizing: content-box; width: var(--sample-width); max-width: 100%; min-height: 108px; border-right: 1px dashed $line-bright; margin: 0; font: 400 20px/1.6 $font-body; color: $silver-bright; letter-spacing: 0; word-break: keep-all; overflow-wrap: anywhere; }
-  [data-enhanced] span { display: block; white-space: pre-wrap; overflow-wrap: anywhere; }
+  [data-enhanced] :global(span) { display: block; white-space: pre-wrap; overflow-wrap: anywhere; }
   small { display: block; font-size: 12px; color: $silver; line-height: 1.6; overflow-wrap: anywhere; }
   .demo-panel small { margin-top: 8px; }
   .wrap-result { color: $silver-bright; font-size: 14px; line-height: 1.7; margin: 12px 0 8px; }
