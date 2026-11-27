@@ -542,6 +542,7 @@ export const projectEn: Record<string, ProjectTranslation> = {
           },
           {
             "title": "Separate persistence failure from an uncertain response",
+            "flow": "foloom-save",
             "paragraphs": [
               "A candidate workbook is written to a temporary file in the same directory and atomically replaces the original. Failure during preparation, writing, sync, close, or replacement preserves the previous authoritative state. If the workbook commits but the history manifest cannot finalize, pending history is reconciled before another write.",
               "On an uncertain write response or event resync, the browser pauses its queue, checks the server snapshot, and presents draft and recovery state instead of replaying writes. SSE replay gaps and session mismatch also require resynchronization.",
