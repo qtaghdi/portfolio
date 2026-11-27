@@ -109,7 +109,7 @@ test('home shows small project icons in both work lists', async ({ page }) => {
   const profile = page.locator('#hero .hero-heading .profile-avatar');
   await expect(profile).toHaveAttribute('alt', /프로필 사진$/);
   await expect(page.locator('#hero a[href="https://github.com/qtaghdi"]')).toHaveCount(1);
-  await expect(page.locator('#more-work .project-icon:visible')).toHaveCount(9);
+  await expect(page.locator('#more-work .project-icon:visible')).toHaveCount(7);
   await expect(page.locator('.featured-list .project-icon').nth(2)).toHaveAttribute('src', '/projects/document-workspace/favicon.svg');
   const overflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
   expect(overflow).toBeLessThanOrEqual(1);
@@ -127,7 +127,14 @@ test('home uses project branding and Foloom uses its favicon beside the title in
     await favicon.evaluate((image: HTMLImageElement) => image.decode());
 
     await expect(page.locator('.featured-project')).toHaveCount(4);
-    const juliya = page.locator(`#more-work a[href="${prefix}/projects/juliya"]`);
+    const oddmash = page.locator('#oddmash');
+    await expect(oddmash.getByRole('heading', { name: 'Oddmash', exact: true })).toBeVisible();
+    await expect(oddmash.getByRole('link', { name: /Oddmash Agents/ })).toHaveAttribute('href', 'https://github.com/Oddmash/oddmash-agents/blob/main/docs/public-onboarding.md');
+    await expect(oddmash.getByRole('link', { name: /Oddmash Skills/ })).toHaveAttribute('href', 'https://github.com/Oddmash/oddmash-skills');
+    const boundra = oddmash.locator(`a[href="${prefix}/projects/boundra"]`);
+    await expect(boundra.locator('img')).toHaveAttribute('src', '/projects/boundra/icon.svg');
+    await expect(page.locator('#more-work a[href$="/projects/boundra"], #more-work a[href$="/projects/juliya"], #more-work a[href$="/projects/interaction-inspector"]')).toHaveCount(0);
+    const juliya = oddmash.locator(`a[href="${prefix}/projects/juliya"]`);
     const juliyaIcon = juliya.locator('strong > img.project-icon');
     await expect(juliya.locator('img')).toHaveCount(1);
     await expect(juliyaIcon).toHaveAttribute('src', '/projects/juliya/favicon.svg');

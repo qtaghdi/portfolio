@@ -11,15 +11,13 @@ const groupLabels = ko ? { company: '회사 프로젝트', team: '협업 프로�
 const projects = (await getCollection('projects')).sort((a, b) => a.data.order - b.data.order);
 const localized = (project: CollectionEntry<'projects'>) => locale === 'ko' ? project.data : { ...project.data, ...projectEn[projectKey(project.slug)] };
 const archivedKeys = new Set(['echo', 'chorus']);
-const otherProjects = projects.filter((project) => !project.data.featured);
-const workLists = [
-  { container: 'div', projects: otherProjects.filter((project) => !archivedKeys.has(projectKey(project.slug))) },
-  { container: 'details', projects: otherProjects.filter((project) => archivedKeys.has(projectKey(project.slug))) },
-] as const;
+const oddmashKeys = new Set(['boundra', 'juliya', 'interaction-inspector']);
+const otherProjects = projects.filter((project) => !project.data.featured && !oddmashKeys.has(projectKey(project.slug)));
 const moreNotes: Record<string, string> = ko ? {
   intranet: '메일, 메신저와 업무 메뉴를 연결한 사내 모바일 앱',
-  boundra: 'NPM으로 배포한 도메인 경계 검사 Rust CLI',
+  boundra: 'TypeScript 프로젝트의 도메인 의존성을 검사하는 CLI',
   juliya: '한국어 등 네 언어의 줄바꿈을 다듬는 웹 라이브러리',
+  'interaction-inspector': 'Chrome에서 키보드 포커스와 DOM 이벤트를 확인하는 확장 프로그램',
   owkr: '명단 공동 편집과 시험·모집을 연결한 커뮤니티 도구',
   jeomjuro: '점주 커뮤니티의 알림·글쓰기·관리자 도구',
   marker: '감정과 장소를 기록하는 지도 서비스',
@@ -31,8 +29,9 @@ const moreNotes: Record<string, string> = ko ? {
   'apple-music-discord-presence': 'Apple Music·Discord 연결과 복구를 다루는 설치형 도구',
 } : {
   intranet: 'An internal mobile app for mail, messaging, and work',
-  boundra: 'A domain-boundary Rust CLI distributed through NPM',
+  boundra: 'A CLI that checks domain dependencies in TypeScript projects',
   juliya: 'A web typography library for line breaking in four languages',
+  'interaction-inspector': 'A Chrome extension for inspecting keyboard focus and DOM events',
   owkr: 'Community tools for shared rosters, exams, and recruitment',
   jeomjuro: 'Notifications, writing, and moderation for a store-owner community',
   marker: 'A map for recording emotions and places',
@@ -43,6 +42,42 @@ const moreNotes: Record<string, string> = ko ? {
   chorus: 'A web app turning music and messages into 3D vinyl cards',
   'apple-music-discord-presence': 'An installable Apple Music to Discord tool with connection recovery',
 };
+const caseRow = (project: CollectionEntry<'projects'>) => {
+  const data = localized(project);
+  const key = projectKey(project.slug);
+  return {
+    title: data.title,
+    href: projectPath(locale, project.slug),
+    icon: projectIcons[key],
+    summary: moreNotes[key] ?? data.summary,
+    type: oddmashKeys.has(key) ? (ko ? '작업 기록' : 'Case study') : groupLabels[project.data.group],
+  };
+};
+const oddmashResources = [
+  { title: 'Oddmash Agents', href: 'https://github.com/Oddmash/oddmash-agents/blob/main/docs/public-onboarding.md', summary: ko ? 'PR 리뷰 에이전트의 역할과 공개 사용 안내' : 'Public onboarding and roles in pull request reviews' },
+  { title: 'Oddmash Skills', href: 'https://github.com/Oddmash/oddmash-skills', summary: ko ? '설계, 개발, QA에 쓰는 재사용 스킬과 설치 안내' : 'Reusable skills for design, development, and QA' },
+  { title: 'Oddmash UI', href: 'https://oddmash.github.io/oddmash-ui/', summary: ko ? 'React 컴포넌트, 디자인 토큰과 예제' : 'React components, design tokens, and examples' },
+  { title: 'Oddmash Mobile', href: 'https://oddmash.github.io/oddmash-mobile/guide/', summary: ko ? '모바일 웹 제스처와 인터랙션의 사용 가이드' : 'A guide to mobile web gestures and interactions' },
+  { title: 'Oddmash Website', href: 'https://oddmash.github.io/oddmash-website/', summary: ko ? 'Oddmash 프로젝트와 개발 방식 소개' : 'Oddmash projects and how they are built' },
+].map((resource) => ({ ...resource, icon: undefined, type: ko ? '공개 자료' : 'Public resource' }));
+const workSections = [
+  {
+    id: 'oddmash',
+    title: 'Oddmash',
+    lists: [{
+      container: 'div',
+      rows: [...oddmashResources, ...projects.filter((project) => oddmashKeys.has(projectKey(project.slug))).map(caseRow)],
+    }],
+  },
+  {
+    id: 'more-work',
+    title: dictionary.moreTitle,
+    lists: [
+      { container: 'div', rows: otherProjects.filter((project) => !archivedKeys.has(projectKey(project.slug))).map(caseRow) },
+      { container: 'details', rows: otherProjects.filter((project) => archivedKeys.has(projectKey(project.slug))).map(caseRow) },
+    ],
+  },
+] as const;
 const notes: Record<string, { summary: string; meta: string; role: string }> = {
   owkr: {
     summary: ko ? '여러 운영자가 명단을 함께 고치고, 팀 편성과 시험·모집을 이어갈 수 있도록 개선했습니다.' : 'Improved shared roster editing, team setup, exams, and recruitment for community operators.',
@@ -95,28 +130,25 @@ const notes: Record<string, { summary: string; meta: string; role: string }> = {
         );
       })}
     </div>
-    <section id="more-work" class="more-work" aria-labelledby="more-work-title">
-      <h2 id="more-work-title">{dictionary.moreTitle}</h2>
-      {workLists.map(({ container: ListContainer, projects: list }) => (
-        <ListContainer>
-          {ListContainer === 'details' && <summary>{ko ? '이전 작업 더 보기' : 'Show earlier work'}</summary>}
-          <ol>{list.map((project) => {
-            const data = localized(project);
-            const key = projectKey(project.slug);
-            const icon = projectIcons[key];
-            return (
+    {workSections.map((section) => (
+      <section id={section.id} class="more-work" aria-labelledby={`${section.id}-title`}>
+        <h2 id={`${section.id}-title`}>{section.title}</h2>
+        {section.lists.map(({ container: ListContainer, rows }) => (
+          <ListContainer>
+            {ListContainer === 'details' && <summary>{ko ? '이전 작업 더 보기' : 'Show earlier work'}</summary>}
+            <ol>{rows.map((row) => (
               <li>
-                <a href={projectPath(locale, project.slug)}>
-                  <strong>{icon && <img class="project-icon" src={icon} width="24" height="24" alt="" decoding="async" loading="lazy" />}<span>{data.title}</span></strong>
-                  <span class="more-summary"><small class="work-type">{groupLabels[project.data.group]}</small><span class="more-description" data-kowrap={ko ? '' : undefined}>{moreNotes[key] ?? data.summary}</span></span>
+                <a href={row.href}>
+                  <strong>{row.icon && <img class="project-icon" src={row.icon} width="24" height="24" alt="" decoding="async" loading="lazy" />}<span>{row.title}</span></strong>
+                  <span class="more-summary"><small class="work-type">{row.type}</small><span class="more-description" data-kowrap={ko ? '' : undefined}>{row.summary}</span></span>
                   <svg aria-hidden="true" viewBox="0 0 20 20"><path d="M4 10h12m-5-5 5 5-5 5" /></svg>
                 </a>
               </li>
-            );
-          })}</ol>
-        </ListContainer>
-      ))}
-    </section>
+            ))}</ol>
+          </ListContainer>
+        ))}
+      </section>
+    ))}
   </div>
 </section>
 <style lang="scss">
@@ -172,6 +204,7 @@ const notes: Record<string, { summary: string; meta: string; role: string }> = {
     .case-link { justify-self: start; margin-left: 14px; font-size: 14px; }
     .more-work { padding-top: 52px; }.more-work h2 { font-size: 23px; }
     .more-work li a { grid-template-columns: minmax(0,1fr) 20px; gap: 8px 16px; padding-inline: 8px; }
-    .more-summary { grid-column: 1; grid-row: 2; padding-left: 36px; }.more-work li svg { grid-column: 2; grid-row: 1 / 3; }
+    .more-summary { grid-column: 1; grid-row: 2; }
+    .more-work li a:has(.project-icon) .more-summary { padding-left: 36px; }.more-work li svg { grid-column: 2; grid-row: 1 / 3; }
   }
 </style>

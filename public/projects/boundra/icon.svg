@@ -1,5 +1,6 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="none">
-  <path d="M12 4H5v7M20 4h7v7M5 21v7h7M27 21v7h-7" stroke="#315c45" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
-  <path d="m16 9 7 7-7 7-7-7 7-7Z" fill="#dcebe1" stroke="#315c45" stroke-width="2" stroke-linejoin="round"/>
-  <path d="M16 13v6m-3-3h6" stroke="#315c45" stroke-width="1.8" stroke-linecap="round"/>
+<svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 256 256" role="img" aria-labelledby="title">
+  <title id="title">Boundra</title>
+  <path fill="#FFFFFF" d="M0 0h256v256H0z"/>
+  <path fill="#EA580C" fill-rule="evenodd" d="M44 35h120l47 47-38 43 41 44-51 52H44V35Zm50 45h55v20l-55 38V80Zm9 59h43l19 22-18 19h-44v-41Z"/>
+  <path fill="#FFFFFF" d="M44 163 149 87v13L44 176Z"/>
 </svg>
