@@ -1,0 +1,127 @@
+---
+import type { Locale } from '../i18n';
+interface Props { locale: Locale; }
+const { locale } = Astro.props;
+const t = (ko: string, en: string) => locale === 'ko' ? ko : en;
+const longText = t('팀의 모든 문서를 한곳에서 관리하세요', 'Keep all your team documents together in one place');
+const shortText = t('자연스럽게 읽어요', 'Read naturally');
+---
+<figure data-juliya-demo class="wrapping-demo" data-locale={locale} data-long={longText} data-short={shortText}>
+  <figcaption>{t('같은 문장과 너비에서 실제 줄바꿈 비교', 'Actual line breaks at the same width')}</figcaption>
+  <div class="demo-controls" hidden>
+    <label for="wrap-width">{t('텍스트 너비', 'Text width')} <output for="wrap-width" data-width-label></output></label>
+    <input id="wrap-width" type="range" min="140" max="300" value="240" step="5" />
+    <label for="wrap-example">{t('문장 예시', 'Example')}</label>
+    <select id="wrap-example"><option value="long">{t('긴 문장', 'Long sentence')}</option><option value="short">{t('짧은 문장', 'Short sentence')}</option></select>
+  </div>
+  <div class="demo-panels">
+    <section class="demo-panel"><div class="panel-title">{t('브라우저 기본 CSS', 'Native browser CSS')}</div><div class="sample-frame"><p class="wrap-sample" data-native>{longText}</p></div><small data-native-count></small></section>
+    <section class="demo-panel enhanced"><div class="panel-title">{t('Juliya Core', 'Juliya Core')}</div><div class="sample-frame"><p class="wrap-sample" data-enhanced>{longText}</p></div><small data-enhanced-count>{t('실행 전', 'Not yet evaluated')}</small></section>
+  </div>
+  <p data-wrap-result aria-live="polite" class="wrap-result">{t('JavaScript가 실행되면 실제 엔진 결과를 비교할 수 있습니다.', 'Enable JavaScript to compare actual engine output.')}</p>
+  <small class="demo-note">{t('동일한 글꼴과 가용 너비에서 CSS 기본 줄바꿈과 설치된 Juliya Core v0.4.3 결과를 비교합니다. 결과가 같을 수도 있습니다.', 'Compares native CSS wrapping and installed Juliya Core v0.4.3 with the same font and available width. Results can be identical.')}</small>
+</figure>
+<script>
+  import { wrap } from '@oddmash/juliya';
+
+  const readNative = (element: HTMLElement): string[] => {
+    const text = element.firstChild;
+    if (!text || text.nodeType !== Node.TEXT_NODE) return [];
+    const value = text.textContent ?? '';
+    const range = document.createRange();
+    const lines: string[] = [];
+    let previousTop: number | undefined;
+    let offset = 0;
+    for (const character of value) {
+      range.setStart(text, offset);
+      offset += character.length;
+      range.setEnd(text, offset);
+      const rect = range.getBoundingClientRect();
+      if (previousTop === undefined || Math.abs(rect.top - previousTop) > 1) lines.push(character);
+      else lines[lines.length - 1] += character;
+      previousTop = rect.top;
+    }
+    return lines.map(line => line.trim()).filter(Boolean);
+  };
+
+  for (const root of document.querySelectorAll<HTMLElement>('[data-juliya-demo]')) {
+    const native = root.querySelector<HTMLElement>('[data-native]')!;
+    const enhanced = root.querySelector<HTMLElement>('[data-enhanced]')!;
+    const slider = root.querySelector<HTMLInputElement>('#wrap-width')!;
+    const select = root.querySelector<HTMLSelectElement>('#wrap-example')!;
+    const controls = root.querySelector<HTMLElement>('.demo-controls')!;
+    const widthLabel = root.querySelector<HTMLOutputElement>('[data-width-label]')!;
+    const nativeCount = root.querySelector<HTMLElement>('[data-native-count]')!;
+    const enhancedCount = root.querySelector<HTMLElement>('[data-enhanced-count]')!;
+    const result = root.querySelector<HTMLElement>('[data-wrap-result]')!;
+    const locale = root.dataset.locale === 'en' ? 'en' : 'ko';
+    const label = (ko: string, en: string) => locale === 'ko' ? ko : en;
+    const ctx = document.createElement('canvas').getContext('2d');
+    if (!ctx) continue;
+
+    let previousWidth = 0;
+    let previousText = '';
+    const render = () => {
+      const frameWidth = Math.min(...Array.from(root.querySelectorAll<HTMLElement>('.sample-frame')).map(frame => frame.clientWidth));
+      if (frameWidth < 141) return;
+      const max = Math.min(360, Math.floor((frameWidth - 1) / 5) * 5);
+      slider.max = String(max);
+      if (Number(slider.value) > max) slider.value = String(max);
+      const width = Number(slider.value);
+      const sample = select.value === 'short' ? root.dataset.short! : root.dataset.long!;
+      if (width === previousWidth && sample === previousText) return;
+      previousWidth = width;
+      previousText = sample;
+      root.style.setProperty('--sample-width', width + 'px');
+      widthLabel.value = width + 'px';
+      native.textContent = sample;
+      const font = getComputedStyle(native);
+      ctx.font = [font.fontStyle, font.fontWeight, font.fontSize, font.fontFamily].join(' ');
+      const engine = wrap(sample, { locale, width, measure: text => ctx.measureText(text).width });
+      enhanced.replaceChildren(...engine.map(line => {
+        const span = document.createElement('span');
+        span.textContent = line.text;
+        return span;
+      }));
+      const nativeLines = readNative(native);
+      const engineLines = engine.map(line => line.text.trim()).filter(Boolean);
+      const equal = JSON.stringify(nativeLines) === JSON.stringify(engineLines);
+      nativeCount.textContent = nativeLines.length + label('줄', ' lines');
+      enhancedCount.textContent = engineLines.length + label('줄', ' lines');
+      root.dataset.result = equal ? 'equal' : 'different';
+      result.textContent = equal
+        ? label('이 너비에서는 두 결과의 줄 경계가 같습니다.', 'Both results choose the same line breaks at this width.')
+        : label('동일한 입력과 너비에서 두 결과가 다른 줄 경계를 선택했습니다.', 'The same text and width produced different line breaks.');
+      controls.hidden = false;
+    };
+    slider.addEventListener('input', render);
+    select.addEventListener('change', render);
+    const observer = new ResizeObserver(render);
+    observer.observe(root);
+    document.fonts.ready.then(() => { previousWidth = 0; render(); });
+    render();
+  }
+</script>
+<style lang="scss">
+  @use '../styles/tokens' as *;
+  .wrapping-demo { margin: 0 0 40px; min-width: 0; container-type: inline-size; --sample-width: 240px; }
+  figcaption { font-size: 16px; font-weight: 600; color: $silver-bright; margin-bottom: 14px; }
+  .demo-controls { display: grid; grid-template-columns: minmax(0,1fr) auto; gap: 6px 12px; align-items: center; margin-bottom: 16px; font-size: 13px; }
+  .demo-controls[hidden] { display: none; }
+  label { color: $silver; line-height: 1.5; }
+  label output { color: $accent; font-family: $font-mono; margin-left: 6px; }
+  input[type=range] { grid-column: 1/-1; width: 100%; min-width: 0; height: 44px; accent-color: $accent; }
+  select { font: inherit; border: 1px solid $line-bright; border-radius: 5px; background: $black; color: $silver-bright; padding: 8px; min-height: 44px; }
+  input:focus-visible, select:focus-visible { outline: 2px solid $accent; outline-offset: 3px; }
+  .demo-panels { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 12px; }
+  .demo-panel { border: 1px solid $line; border-radius: 8px; min-width: 0; padding: 12px; background: $black-soft; }
+  .demo-panel.enhanced { border-color: $accent; background: $black; }
+  .panel-title { margin: 0 0 12px; font-size: 13px; font-weight: 600; color: $silver-bright; }
+  .sample-frame { min-width: 0; }
+  .wrap-sample { display: block; box-sizing: content-box; width: var(--sample-width); max-width: 100%; min-height: 108px; border-right: 1px dashed $line-bright; margin: 0; font: 400 20px/1.6 $font-body; color: $silver-bright; letter-spacing: 0; word-break: keep-all; overflow-wrap: anywhere; }
+  [data-enhanced] :global(span) { display: block; white-space: pre-wrap; overflow-wrap: anywhere; }
+  small { display: block; font-size: 12px; color: $silver; line-height: 1.6; overflow-wrap: anywhere; }
+  .demo-panel small { margin-top: 8px; }
+  .wrap-result { color: $silver-bright; font-size: 14px; line-height: 1.7; margin: 12px 0 8px; }
+  @container (max-width: 580px) { .demo-panels { grid-template-columns: minmax(0,1fr); } }
+</style>

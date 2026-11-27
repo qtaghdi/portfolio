@@ -76,4 +76,4 @@ export const projectFlows = {
   },
 } satisfies Record<string, Record<'ko' | 'en', Flow>>;
 
-export type ProjectFlowId = keyof typeof projectFlows;
+export type ProjectFlowId = keyof typeof projectFlows | 'foloom-save';

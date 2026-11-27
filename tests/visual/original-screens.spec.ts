@@ -190,7 +190,7 @@ test('layouts stay within narrow and desktop viewports', async ({ page }, testIn
   const widths = testInfo.project.name === 'mobile' ? [320, 375, 390] : [1440, 1505];
   const flowIds: Record<string, string[]> = {
     'oddmash-agents': ['agents-review', 'agents-ci'],
-    'document-workspace': ['foloom-revision'],
+    'document-workspace': ['foloom-revision', 'foloom-save'],
     boundra: ['boundra-import'],
   };
   const cases = Object.keys(flowIds).flatMap((slug) => ['/projects/', '/en/projects/'].map((prefix) => prefix + slug + '/'));
@@ -207,7 +207,8 @@ test('layouts stay within narrow and desktop viewports', async ({ page }, testIn
         const figure = flows.nth(index);
         await expect(figure).toHaveAttribute('data-case-flow', id);
         await expect(figure.locator('figcaption')).not.toBeEmpty();
-        await expect(figure.getByRole('listitem')).toHaveCount(3);
+        await expect(figure).toHaveAttribute('data-mechanism', id);
+        expect(await figure.evaluate((node) => node.scrollWidth - node.clientWidth)).toBeLessThanOrEqual(1);
       }
     }
   }
