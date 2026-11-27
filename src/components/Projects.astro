@@ -11,7 +11,7 @@ const groupLabels = ko ? { company: '회사 프로젝트', team: '협업 프로�
 const projects = (await getCollection('projects')).sort((a, b) => a.data.order - b.data.order);
 const localized = (project: CollectionEntry<'projects'>) => locale === 'ko' ? project.data : { ...project.data, ...projectEn[projectKey(project.slug)] };
 const archivedKeys = new Set(['echo', 'chorus']);
-const oddmashKeys = new Set(['boundra', 'juliya', 'interaction-inspector']);
+const oddmashKeys = new Set(['oddmash-agents', 'boundra', 'juliya', 'interaction-inspector']);
 const otherProjects = projects.filter((project) => !project.data.featured && !oddmashKeys.has(projectKey(project.slug)));
 const moreNotes: Record<string, string> = ko ? {
   intranet: '메일, 메신저와 업무 메뉴를 연결한 사내 모바일 앱',
@@ -65,13 +65,6 @@ const caseRow = (project: CollectionEntry<'projects'>): WorkRow => {
 const oddmashMark = '/projects/oddmash/mark.png';
 const oddmashResources: WorkRow[] = [
   {
-    title: 'Oddmash Agents',
-    href: 'https://github.com/Oddmash/oddmash-agents/blob/main/docs/public-onboarding.md',
-    icon: '/projects/oddmash/lead.svg',
-    summary: ko ? 'CI를 통과한 PR을 검토하고 코드 줄에 의견을 남기는 GitHub 앱을 만들었습니다.' : 'I built a GitHub App that reviews changes after CI passes and leaves comments on the affected lines.',
-    usage: ko ? '리뷰가 설정된 Oddmash 저장소에 PR을 열면 GitHub에서 Lead의 리뷰를 볼 수 있습니다.' : 'Open a PR in an enrolled Oddmash repository to see Lead’s review in GitHub.',
-  },
-  {
     title: 'Oddmash Skills',
     href: 'https://github.com/Oddmash/oddmash-skills',
     icon: oddmashMark,
@@ -88,7 +81,7 @@ const workSections = [
     title: 'Oddmash',
     lists: [{
       container: 'div',
-      rows: [...oddmashResources, ...projects.filter((project) => oddmashKeys.has(projectKey(project.slug))).map(caseRow)],
+      rows: [...projects.filter((project) => oddmashKeys.has(projectKey(project.slug))).map(caseRow), ...oddmashResources],
     }],
   },
   {

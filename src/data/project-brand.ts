@@ -3,6 +3,7 @@ export const projectIcons: Record<string, string> = {
   notiiv: '/projects/notiiv/favicon.svg',
   'document-workspace': '/projects/document-workspace/favicon.svg',
   intranet: '/projects/intranet/icon.png',
+  'oddmash-agents': '/projects/oddmash/lead.svg',
   boundra: '/projects/boundra/icon.svg',
   juliya: '/projects/juliya/favicon.svg',
   'interaction-inspector': '/projects/interaction-inspector/icon.png',

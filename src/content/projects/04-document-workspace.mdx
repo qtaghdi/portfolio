@@ -10,7 +10,7 @@ year: "2026"
 role: "Creator"
 accentColor: sky
 thesis: "사람과 AI가 같은 XLSX를 편집할 때 먼저 저장한 변경을 지킵니다."
-responsibility: "제품 설계, Go XLSX·DOCX 어댑터, MCP transport, 웹 편집기, revision·history·persistence 모델과 검증"
+responsibility: "제품 설계, Go XLSX·DOCX 처리, MCP 연결과 웹 편집기, 문서 버전·저장·복구 설계 및 검증"
 focus:
   - "Human-AI collaboration"
   - "Revision conflicts"
@@ -38,6 +38,7 @@ tech: ["Go", "TypeScript", "Excelize", "Univer", "Vite", "MCP", "SSE"]
 ---
 
 import ProjectScreenshot from '../../components/ProjectScreenshot.astro';
+import ProjectFlow from '../../components/ProjectFlow.astro';
 
 ## AI와 사용자가 함께 문서를 편집하려면
 
@@ -60,9 +61,11 @@ XLSX 저장에는 별도의 보존 문제가 있습니다. 셀 값 하나를 바
 
 대신 Univer를 XLSX 원본의 저장 주체로 두지 않았습니다. `SpreadsheetEngine` 경계 뒤에서 렌더링과 입력을 담당하게 하고, Go adapter가 검증된 작업, revision, 충돌과 저장을 소유합니다. 편집기 엔진을 바꿔도 문서 저장 규칙을 다시 작성하지 않도록 한 경계입니다. 고급 기능의 표시와 원본 보존을 직접 연결하고 검증해야 한다는 비용은 남습니다.
 
-### 2. 동시 쓰기는 병합을 추측하지 않고 충돌로 반환
+### 2. 이전 문서 버전의 변경 요청에는 충돌을 반환
 
-브라우저와 AI의 변경은 actor, base revision과 작업 목록을 포함해 같은 commit 경로로 들어옵니다. 예를 들어 두 요청이 revision 12에서 시작하면 먼저 저장한 요청만 13으로 진행하고, 뒤 요청은 최신 revision을 포함한 conflict로 반환합니다. 한 batch 안의 일부 작업만 먼저 반영하지 않도록 전체 검증 후 candidate 문서에 적용합니다.
+브라우저와 AI의 변경은 같은 저장 경로를 거칩니다. 각 요청에 편집을 시작한 문서 버전과 작업 목록을 담고, 서버는 작업 목록 전체를 검증한 뒤 임시 문서에 적용합니다.
+
+<ProjectFlow id="foloom-revision" />
 
 셀 값뿐 아니라 행·열 삽입과 병합 같은 구조 변경이 있으므로, stale 작업을 자동으로 최신 문서에 다시 적용하지 않았습니다. 현재 구조는 서로 다른 위치의 동시 수정도 충돌할 수 있다는 비용을 감수하는 대신, 어떤 상태를 기준으로 변경했는지 명확하게 유지합니다. 세밀한 자동 병합은 별도의 의미 규칙이 필요한 후속 과제입니다.
 

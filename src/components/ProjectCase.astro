@@ -8,6 +8,7 @@ import { projectEn, projectKey } from '../i18n/projects';
 import ProjectText from './ProjectText.astro';
 import SectionRail from './SectionRail.astro';
 import ProjectScreenshot from './ProjectScreenshot.astro';
+import ProjectFlow from './ProjectFlow.astro';
 import { englishScreens, primaryScreens } from '../data/project-screens';
 import { projectIcons } from '../data/project-brand';
 interface Props { locale: Locale; project: CollectionEntry<'projects'>; }
@@ -49,10 +50,12 @@ const chapters = locale === 'ko'
           <section id={section.id} class="content-section">
             <h2>{section.title}</h2>
             {section.paragraphs.map((paragraph) => <p><ProjectText text={paragraph} references={data.traceLinks} /></p>)}
+            {section.flow && <ProjectFlow id={section.flow} locale={locale} />}
             {englishScreens(key, section.id).map((screen) => <ProjectScreenshot projectKey={key} screen={screen} locale={locale} />)}
             {section.subsections?.map((subsection, subsectionIndex) => <div class="case-subsection">
               <h3>{subsection.title}</h3>
               {subsection.paragraphs.map((paragraph) => <p><ProjectText text={paragraph} references={data.traceLinks} /></p>)}
+              {subsection.flow && <ProjectFlow id={subsection.flow} locale={locale} />}
               {englishScreens(key, section.id, subsectionIndex).map((screen) => <ProjectScreenshot projectKey={key} screen={screen} locale={locale} />)}
               {subsection.items && <ul>{subsection.items.map((item) => <li><ProjectText text={item} references={data.traceLinks} /></li>)}</ul>}
             </div>)}
@@ -66,11 +69,11 @@ const chapters = locale === 'ko'
         <section id="trace" class="trace-section">
           <h2>{dictionary.trace}</h2>
           {data.evidence.length > 0 && <dl class="resource-usage">{data.evidence.map((item) => <div><dt>{item.val}</dt><dd><ProjectText text={item.label} references={data.traceLinks} />{item.detail && <small><ProjectText text={item.detail} references={data.traceLinks} /></small>}</dd></div>)}</dl>}
-          <div class="project-links">
+          {(data.link || data.github || data.traceLinks.length > 0) && <div class="project-links">
             {data.link && <a href={data.link} target="_blank" rel="noopener noreferrer">{dictionary.live}</a>}
             {data.github && <a href={data.github} target="_blank" rel="noopener noreferrer">{dictionary.github}</a>}
             {data.traceLinks.map((link) => <a href={link.href} target="_blank" rel="noopener noreferrer">{locale === 'ko' ? link.label : link.labelEn}</a>)}
-          </div>
+          </div>}
         </section>
       </article>
     </div>
@@ -102,7 +105,7 @@ const chapters = locale === 'ko'
   .case-content :global(.mdx-content > h4) { margin: 24px 0 12px; font-size: 18px; }
   .content-section p, .case-subsection ul, .case-content :global(.mdx-content > p), .case-content :global(.mdx-content > ul), .case-content :global(.mdx-content > ol), .case-content :global(.mdx-content > blockquote) { margin-bottom: 20px; color: $silver; font-size: 17px; line-height: 1.9; word-break: keep-all; overflow-wrap: anywhere; }
   .case-subsection ul, .case-content :global(.mdx-content > ul), .case-content :global(.mdx-content > ol) { padding-left: 24px; }
-  .case-subsection li + li, .case-content :global(.mdx-content li + li) { margin-top: 10px; }
+  .case-subsection > ul li + li, .case-content :global(.mdx-content > :is(ul, ol, details) li + li) { margin-top: 10px; }
   .case-content :global(.mdx-content strong) { color: $silver-bright; font-weight: 600; }
   .case-content :global(.mdx-content a), .project-links a { color: $accent; text-decoration: underline; text-underline-offset: 4px; }
   .case-content :global(.mdx-content code) { padding: 2px 5px; background: $black-soft; font: .88em/1.5 $font-mono; overflow-wrap: anywhere; }

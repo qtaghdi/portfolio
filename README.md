@@ -9,6 +9,7 @@
 ## 포트폴리오 구성
 
 - **대표 프로젝트**에는 Bigtablet Design System, Notiiv, Foloom, OWKR Community Tools에서 맡은 역할과 설계 과정을 담았습니다.
+- **Oddmash**에는 [Oddmash Agents 사례](https://park-sangmin.vercel.app/projects/oddmash-agents/)와 Skills, UI 등 공개 자료를 모았습니다.
 - **다른 작업**에는 Kowrap에서 시작해 네 언어의 줄바꿈을 지원하는 [Juliya](https://park-sangmin.vercel.app/projects/juliya/)와 TypeScript 도메인 경계를 검사하는 [Boundra](https://park-sangmin.vercel.app/projects/boundra/) 등이 있습니다. Echo와 Chorus는 ‘이전 작업 더 보기’에서 열 수 있습니다.
 - **글과 커뮤니티**에서는 직접 조작해 볼 수 있는 예제를 담은 기술 블로그 [여백](https://qtaghdi.github.io/yeobaek/)과 Velog 글을 소개합니다.
 
