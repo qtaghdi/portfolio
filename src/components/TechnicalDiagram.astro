@@ -1,0 +1,169 @@
+---
+import type { Locale } from '../i18n';
+interface Props { id: string; locale?: Locale; inline?: boolean; }
+const { id, locale = 'ko', inline = false } = Astro.props;
+const t = (ko: string, en: string) => locale === 'ko' ? ko : en;
+const captions: Record<string, string> = {
+  'design-system': t('컴포넌트와 CSS의 의존 관계', 'Component and CSS dependencies'),
+  notiiv: t('공통 프록시와 제품별 정책의 경계', 'Shared proxy and app-owned policies'),
+  'agents-review': t('필수 검사 결과에 따른 리뷰 진행 조건', 'Review eligibility and participant roles'),
+  'agents-ci': t('예시: Oddmash UI PR #51의 후속 CI 실행', 'Example: replacement CI run in Oddmash UI PR #51'),
+  'foloom-revision': t('같은 revision에서 시작한 두 편집', 'Two edits starting on the same revision'),
+  'foloom-save': t('원본 교체와 복구의 저장 계약', 'Persistence and recovery contract'),
+  'boundra-import': t('예시: BR-001이 발견하는 import 경계 위반', 'Example: import crossing the BR-001 boundary'),
+  owkr: t('예시: 공동 편집 시 최신 목록을 보존하는 계약', 'Example: preserve the current roster during concurrent edits'),
+  intranet: t('메일 화면의 캐시 우선 조회', 'Cache-first mail loading'),
+  'apple-music-discord-presence': t('곡 변경과 이미지 응답의 수명', 'Track changes and artwork response lifetime'),
+  kivra: t('실행 기록을 공통 계약으로 통합', 'Execution records through one shared contract'),
+  homepage: t('언어 전환과 연도 전환의 상태 경계', 'State boundaries for locale and year changes'),
+  echo: t('녹음과 연결의 독립 상태', 'Independent recording and connection states'),
+  jeomjuro: t('검색 상태와 관리 작업의 분리', 'Separate search state and moderation actions'),
+};
+const notes: Record<string, string> = {
+  'design-system': t('개념도. 기존 전체 스타일 진입점은 호환을 위해 유지됩니다.', 'Schematic. The legacy full stylesheet remains available for compatibility.'),
+  notiiv: t('공통화한 처리 순서와 앱별 정책을 나타낸 개념도입니다.', 'Schematic of shared processing and app-specific policy.'),
+  'agents-review': t('새 커밋은 이전 리뷰의 승인 근거를 그대로 이어받지 않습니다.', 'A new commit cannot inherit approval evidence from a previous review.'),
+  'agents-ci': t('공개 PR의 문서화된 사례를 설명하며 실제 로그 캡처는 아닙니다.', 'Illustration of a documented public PR, not a log capture.'),
+  'foloom-revision': t('다른 셀에 대한 동시 수정도 충돌할 수 있으며 자동 병합하지 않습니다.', 'Simultaneous edits to different cells may also conflict; no automatic merge.'),
+  'foloom-save': t('응답 유실은 저장 실패와 다릅니다. revision만으로 저장 성공을 추정하지 않으며 모든 외부 writer를 제어한다는 보장은 없습니다.', 'A lost response is not a failed write. Revision alone is not proof of success, and external writers are not universally controlled.'),
+  'boundra-import': t('파일명은 문서의 예시이며 실제 제품 로그 캡처가 아닙니다.', 'Illustrative filenames from the case study, not a captured product log.'),
+  owkr: t('충돌 시 최신 목록을 확인하고 미전송 수정을 다시 적용할 수 있습니다.', 'After a conflict, inspect the current roster and reapply pending edits.'),
+  intranet: t('시간 수치는 측정하지 않았으며 데이터 표시 순서를 설명합니다.', 'Illustrates display order, not measured timing.'),
+  'apple-music-discord-presence': t('이전 곡 이미지의 늦은 응답은 현재 활동을 수정하지 않습니다.', 'A late artwork response for an earlier track cannot update current activity.'),
+  kivra: t('각 연동은 같은 실행 기록 형식을 사용합니다.', 'Each integration uses the same execution record format.'),
+  homepage: t('화면 상태가 바뀔 때 이전 콘텐츠와 모션을 남기지 않도록 정리했습니다.', 'Changes keep old content and motion from surviving a screen-state change.'),
+  echo: t('녹음과 네트워크 상태가 독립적으로 변할 수 있음을 보여주는 개념도입니다.', 'Schematic showing independently changing recording and connection states.'),
+  jeomjuro: t('검색 버튼을 누르기 전 입력과 실제 목록 상태를 분리합니다.', 'Draft input remains separate from the applied list query.'),
+};
+const cap = captions[id];
+---
+{cap && <figure class="mechanism-scene" data-mechanism={id} data-case-flow={inline ? id : undefined} data-fidelity="explanation" aria-labelledby={`mechanism-${id}`}>
+  <figcaption id={`mechanism-${id}`}>{cap}</figcaption>
+  {id === 'design-system' && <div class="architecture-compare">
+    <section class="diagram-panel">
+      <h4>{t('기존: 전체 스타일 import', 'Before: global stylesheet')}</h4>
+      <div class="graph-pair"><span class="node code">Button</span><span class="node code">DatePicker</span></div>
+      <div class="merge-connector" aria-hidden="true"><i></i><i></i></div>
+      <div class="node global-css"><strong>style.css</strong><small>{t('전체 컴포넌트 스타일', 'All component styles')}</small><div class="chips"><span>Button</span><span>DatePicker</span><span>Popover</span><span>Modal</span></div></div>
+    </section>
+    <section class="diagram-panel changed">
+      <h4>{t('변경: 의존성별 CSS', 'After: dependency-owned CSS')}</h4>
+      <div class="graph-pair two-paths">
+        <div class="graph-path"><span class="node code">Button</span><span class="down" aria-hidden="true">↓</span><span class="node success code">Button CSS</span></div>
+        <div class="graph-path"><span class="node code">DatePicker</span><div class="branch-connector" aria-hidden="true"><i></i><i></i></div><div class="branch-pair"><span class="node success code">DatePicker<br />CSS</span><div class="graph-path"><span class="node code">Popover</span><span class="down" aria-hidden="true">↓</span><span class="node success code">Popover<br />CSS</span></div></div></div>
+      </div>
+      <small class="graph-note">{t('배럴에는 재수출만 유지', 'Barrel retains re-exports only')}</small>
+    </section>
+  </div>}
+  {id === 'notiiv' && <div class="architecture-compare">
+    <section class="diagram-panel"><h4>{t('기존: 앱마다 별도 처리', 'Before: per-app handling')}</h4><div class="graph-pair">{['Admin','Owner','Status','Support'].map(app => <div class="graph-path"><span class="node code">{app}</span><span class="down" aria-hidden="true">↓</span><span class="node">{t('요청 · 인증', 'Request · auth')}</span></div>)}</div></section>
+    <section class="diagram-panel changed"><h4>{t('공통 처리와 앱 정책', 'Shared processing and app policy')}</h4><div class="chips app-chips">{['Admin','Owner','Status','Support'].map(app => <span>{app}</span>)}</div><div class="down" aria-hidden="true">↓</div><div class="node success"><strong>{t('공통 BFF', 'Shared BFF')}</strong><small>{t('경로 검증 · 인증 · 재발급', 'Validation · auth · refresh')}</small></div><div class="down" aria-hidden="true">↓</div><div class="node"><strong>{t('앱별 응답 훅', 'App response hooks')}</strong><small>{t('로그인 · 가입 응답', 'Login · signup responses')}</small></div><small class="graph-note">{t('파일 업로드와 공개 경로는 처리 옵션으로 구분', 'Separate upload and public-route options')}</small></section>
+  </div>}
+  {id === 'agents-review' && <div class="review-graph">
+    <div class="node"><small>{t('기여자 · GitHub', 'Contributor · GitHub')}</small><strong>{t('현재 커밋으로 PR 열기', 'Open PR at current commit')}</strong></div>
+    <div class="down" aria-hidden="true">↓</div>
+    <div class="gate"><strong>{t('Lead: 현재 커밋의 필수 CI', 'Lead: required CI for current commit')}</strong><div class="gate-branches review-branches"><div class="node success"><strong>✓ {t('통과', 'Passed')}</strong><small>{t('리뷰 가능', 'Eligible for review')}</small></div><div class="node warning"><strong>‖ {t('대기 / 판정 불가', 'Pending / uncertain')}</strong><small>{t('리뷰 대기', 'Wait for review')}</small></div><div class="node error"><strong>× {t('실패', 'Failed')}</strong><small>{t('리뷰 시작 안 함', 'Do not start review')}</small></div></div></div>
+    <div class="down pass-edge" aria-hidden="true">↓ <span>{t('통과한 경우만', 'Passed only')}</span></div>
+    <div class="review-lanes"><div class="node formal"><small>Lead</small><strong>{t('GitHub 코드 줄에 정식 리뷰', 'Formal review on GitHub code lines')}</strong></div><aside class="advice"><small>{t('전문 역할의 조언', 'Specialist advice')}</small><strong>QA · Docs · Architect</strong><span>{t('Lead 지원', 'Supports Lead')}</span></aside></div>
+    <div class="down" aria-hidden="true">↓</div><div class="node"><small>{t('유지보수자', 'Maintainer')}</small><strong>{t('수정과 병합 여부 판단', 'Decide response and merge separately')}</strong></div>
+  </div>}
+  {id === 'agents-ci' && <div class="ci-graph">
+    <div class="run-comparison"><div class="node cancelled"><small>{t('이전 실행', 'Earlier run')}</small><strong>× {t('취소', 'Canceled')}</strong></div><span class="replace-arrow" aria-label={t('대체', 'Replaced by')}>→</span><div class="node success"><small>{t('후속 실행', 'Replacement run')}</small><strong>✓ {t('성공', 'Passed')}</strong></div></div>
+    <div class="predicate">{t('동일 워크플로 + 동일 PR + 동일 커밋', 'Same workflow + PR + commit')}</div><div class="down" aria-hidden="true">↓</div>
+    <table class="decision-table"><thead><tr><th scope="col">{t('현재 검사 판정', 'Current CI evidence')}</th><th scope="col">{t('리뷰 결과', 'Review decision')}</th></tr></thead><tbody><tr><td>{t('대체 관계 확인 + 현재 통과', 'Verified replacement + current pass')}</td><td class="ok">✓ {t('이전 실행 제외, 리뷰 가능', 'Exclude old run; eligible')}</td></tr><tr><td>{t('현재 실행 실패', 'Current run failed')}</td><td class="bad">× {t('리뷰 안 함', 'No review')}</td></tr><tr><td>{t('기준 실행 확인 불가', 'Cannot establish current run')}</td><td class="wait">‖ {t('리뷰 대기', 'Wait')}</td></tr></tbody></table>
+  </div>}
+  {(id === 'foloom-revision' || id === 'owkr') && <table class="sequence-table">
+    <thead><tr><th scope="col">{id === 'owkr' ? t('운영자 A', 'Operator A') : t('브라우저', 'Browser')}</th><th scope="col">{id === 'owkr' ? 'Redis' : t('서버 원본', 'Server source')}</th><th scope="col">{id === 'owkr' ? t('운영자 B', 'Operator B') : t('AI 도구', 'AI tool')}</th></tr></thead>
+    <tbody><tr><td><span class="revision">r12</span></td><td><span class="revision current">r12</span></td><td><span class="revision">r12</span></td></tr><tr><td class="message right">{t('A · 기준 r12', 'A · base r12')} <span aria-hidden="true">→</span></td><td><span class="revision success">r13</span><small>{t('A 반영', 'A committed')}</small></td><td></td></tr><tr><td></td><td><span class="revision current">r13</span><small>{t('유지', 'Retained')}</small></td><td class="message left"><span aria-hidden="true">←</span> {t('B · 기준 r12', 'B · base r12')}</td></tr><tr><td class="ok">✓ {t('저장', 'Saved')}</td><td><span class="revision current">r13</span></td><td class="bad">× {t('이전 버전 거절', 'Stale edit rejected')}</td></tr></tbody>
+  </table>}
+  {id === 'foloom-save' && <div class="save-graph">
+    <div class="node"><strong>{t('원본 workbook · r12', 'Original workbook · r12')}</strong><small>{t('디스크 + 기준 메모리', 'Disk + baseline memory')}</small></div><div class="down" aria-hidden="true">↓</div><div class="node"><strong>{t('후보 workbook', 'Candidate workbook')}</strong><small>{t('전체 batch 검증 및 적용', 'Validate and apply whole batch')}</small></div><div class="down" aria-hidden="true">↓</div><div class="node"><strong>{t('같은 디렉터리의 임시 파일', 'Temporary file in same directory')}</strong><small>write / sync / close</small></div><div class="down" aria-hidden="true">↓</div><div class="gate"><strong>{t('원자적 교체 성공?', 'Atomic replacement succeeded?')}</strong><div class="branch-connector" aria-hidden="true"><i></i><i></i></div><div class="gate-branches"><div class="node error"><strong>× {t('실패: r12 보존', 'Failure: retain r12')}</strong><small>{t('원본·메모리 유지', 'Keep disk and memory')}</small></div><div class="graph-path"><div class="node success"><strong>✓ {t('성공: r13 commit', 'Success: commit r13')}</strong></div><div class="down" aria-hidden="true">↓</div><div class="node warning"><strong>{t('이력 확정 실패 시', 'If history finalization fails')}</strong><small>{t('pending, 다음 쓰기 전 조정', 'Pending; reconcile before next write')}</small></div></div></div></div>
+    <div class="recovery-note"><strong>{t('응답 유실', 'Response lost')}</strong><span>{t('queue 중지 → snapshot 확인 → 초안 및 복구 표시', 'Pause queue → check snapshot → show draft and recovery')}</span></div>
+  </div>}
+  {id === 'boundra-import' && <div class="boundary-graph">
+    <div class="boundary-box"><small>{t('브라우저 경계', 'Browser boundary')}</small><code>client/list.ts</code></div><div class="blocked-edge"><span aria-hidden="true">→ ×</span><small>{t('허용되지 않은 import', 'Disallowed import')}</small></div><div class="boundary-box"><small>{t('서버 경계', 'Server boundary')}</small><code>server/repository.ts</code></div><div class="diagnostic"><strong>BR-001</strong><span>{t('CLI 진단: 가져온 파일과 줄을 표시', 'CLI diagnostic: identify import file and line')}</span></div>
+  </div>}
+  {id === 'intranet' && <table class="decision-table"><thead><tr><th>{t('화면 시점', 'Screen stage')}</th><th>{t('네트워크만 조회', 'Network only')}</th><th>{t('캐시 우선 조회', 'Cache first')}</th></tr></thead><tbody><tr><th scope="row">{t('열기', 'Open')}</th><td>{t('응답 대기', 'Waiting')}</td><td class="ok">{t('SQLite 메일 표시', 'Show SQLite mail')}</td></tr><tr><th scope="row">{t('응답 전', 'Before response')}</th><td>{t('최신 결과 없음', 'No live result')}</td><td>{t('이전 메일 읽기', 'Read cached mail')}</td></tr><tr><th scope="row">{t('응답 후', 'After response')}</th><td>{t('결과 표시', 'Show results')}</td><td class="ok">{t('최신 결과로 갱신', 'Refresh with live results')}</td></tr></tbody></table>}
+  {id === 'apple-music-discord-presence' && <table class="sequence-table"><thead><tr><th>{t('재생 상태', 'Playback')}</th><th>{t('비동기 이미지 요청', 'Artwork request')}</th><th>{t('Discord 활동', 'Discord activity')}</th></tr></thead><tbody><tr><td>{t('곡 A', 'Track A')}</td><td>{t('A 요청 시작', 'Request A')}</td><td>{t('A 텍스트', 'A text')}</td></tr><tr><td>{t('곡 B로 전환', 'Switch to B')}</td><td>{t('B 요청 시작', 'Request B')}</td><td class="ok">{t('B 텍스트 먼저 게시', 'Publish B text first')}</td></tr><tr><td>{t('곡 B 유지', 'Keep B')}</td><td class="bad">{t('A의 늦은 응답', 'Late A response')}</td><td class="ok">{t('A 응답 무시', 'Ignore A response')}</td></tr></tbody></table>}
+  {id === 'kivra' && <div class="fan-in"><div class="three-nodes">{['Terminal','VS Code','JetBrains'].map(name => <span class="node code">{name}</span>)}</div><div class="merge-connector three" aria-hidden="true"><i></i><i></i></div><div class="node formal"><strong>{t('공통 실행 기록 계약', 'Shared capture contract')}</strong><small>{t('시작 · 이벤트 · 완료', 'Start · event · completion')}</small></div><div class="down" aria-hidden="true">↓</div><div class="node"><strong>Rust ingestion</strong><small>{t('프로젝트별 Runs 목록', 'Project-level Runs list')}</small></div></div>}
+  {id === 'jeomjuro' && <table class="decision-table"><thead><tr><th>{t('사용자 행동', 'Action')}</th><th>{t('입력 상태', 'Draft state')}</th><th>{t('목록 상태', 'Result state')}</th></tr></thead><tbody><tr><th scope="row">{t('검색어 입력', 'Type query')}</th><td>{t('초안 갱신', 'Update draft')}</td><td>{t('이전 결과 유지', 'Keep prior results')}</td></tr><tr><th scope="row">{t('검색 적용', 'Apply search')}</th><td>{t('검색어 확정', 'Apply query')}</td><td>{t('검색 결과 갱신', 'Refresh results')}</td></tr><tr><th scope="row">{t('필터 변경', 'Change filter')}</th><td>{t('필터 갱신', 'Update filter')}</td><td class="ok">{t('페이지 초기화', 'Reset pagination')}</td></tr><tr><th scope="row">{t('삭제 / 복원', 'Delete / restore')}</th><td>{t('검색 유지', 'Keep query')}</td><td>{t('관련 목록 갱신', 'Refresh related lists')}</td></tr></tbody></table>}
+  {id === 'homepage' && <table class="decision-table"><thead><tr><th scope="col">{t('트리거', 'Trigger')}</th><th scope="col">{t('기존 문제', 'Previous issue')}</th><th scope="col">{t('변경한 처리', 'Changed handling')}</th></tr></thead><tbody><tr><th scope="row">{t('언어 변경', 'Change locale')}</th><td>{t('오류 화면에 이전 언어', 'Previous language in errors')}</td><td class="ok">{t('공통 오류에도 locale 적용', 'Apply locale to shared errors')}</td></tr><tr><th scope="row">{t('연도 변경', 'Change year')}</th><td>{t('이전 표시 내용 또는 모션 잔존', 'Old content or motion remains')}</td><td class="ok">{t('연도별 콘텐츠와 모션 정리', 'Align content and stop prior motion')}</td></tr></tbody></table>}
+  {id === 'echo' && <div class="architecture-compare"><section class="diagram-panel"><h4>{t('독립 상태', 'Independent states')}</h4><div class="graph-path"><span class="node">{t('마이크 권한', 'Microphone permission')}</span><span class="node">{t('서버 연결', 'Server connection')}</span><span class="node">{t('녹음 상태', 'Recording state')}</span></div></section><section class="diagram-panel changed"><h4>{t('화면이 보여주는 상태', 'What the interface reflects')}</h4><div class="node formal"><strong>{t('연결 · 녹음 상태', 'Connection · recording')}</strong><small>{t('시작 / 중지 순서와 오류 구분', 'Order start/stop and distinguish failures')}</small></div><div class="down" aria-hidden="true">↓</div><div class="node"><strong>{t('서버 검출 결과', 'Server detection feedback')}</strong><small>{t('텍스트 · 신뢰도 · 에너지', 'Text · confidence · energy')}</small></div></section></div>}
+  <p class="diagram-note">{notes[id]}</p>
+</figure>}
+<style lang="scss">
+  @use '../styles/tokens' as *;
+  .mechanism-scene { margin: 28px 0 36px; min-width: 0; container-type: inline-size; }
+  .mechanism-scene:first-child { margin-top: 0; }
+  figcaption { margin: 0 0 14px; color: $silver-bright; font-size: 16px; font-weight: 600; line-height: 1.5; overflow-wrap: anywhere; }
+  .architecture-compare { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 12px; align-items: start; }
+  .diagram-panel { padding: 14px; border: 1px solid $line; border-radius: 8px; min-width: 0; background: $black-soft; }
+  .diagram-panel.changed { background: $black; border-color: $line-bright; }
+  h4 { font-size: 14px; font-weight: 600; margin: 0 0 16px; color: $silver-bright; }
+  .graph-pair, .gate-branches, .branch-pair, .three-nodes { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 8px; align-items: start; }
+  .three-nodes, .review-branches { grid-template-columns: repeat(3,minmax(0,1fr)); }
+  .graph-path { min-width: 0; display: grid; align-content: start; }
+  .graph-path > .node + .node { margin-top: 6px; }
+  .node { min-width: 0; display: grid; gap: 4px; border: 1px solid $line-bright; background: $black; border-radius: 5px; padding: 10px 12px; color: $silver-bright; font-size: 14px; line-height: 1.5; overflow-wrap: anywhere; }
+  .graph-pair .node, .three-nodes .node, .global-css { text-align: center; }
+  .code { font-family: $font-mono; font-size: 12px; }
+  .branch-pair .node { padding: 8px 4px; font-size: 11px; }
+  .two-paths { grid-template-columns: minmax(0, .75fr) minmax(0, 1.25fr); }
+  .down { color: $gunmetal; text-align: center; line-height: 24px; font-size: 18px; }
+  .merge-connector, .branch-connector { position: relative; height: 28px; display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); }
+  .merge-connector i, .branch-connector i { position: relative; width: 50%; justify-self: end; border-left: 1px solid $gunmetal; border-bottom: 1px solid $gunmetal; height: 14px; }
+  .merge-connector i:last-child, .branch-connector i:last-child { justify-self: start; border-left: 0; border-right: 1px solid $gunmetal; }
+  .merge-connector::after { content: '↓'; position: absolute; top: 10px; left: 50%; transform: translateX(-50%); font-size: 17px; color: $gunmetal; }
+  .branch-connector { transform: rotate(180deg); }
+  .branch-connector::before { content: ''; position: absolute; width: 1px; height: 14px; left: 50%; top: 14px; background: $gunmetal; }
+  .merge-connector.three::before { content: ''; position: absolute; width: 1px; height: 14px; left: 50%; background: $gunmetal; }
+  .chips { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 6px; }
+  .chips span { font-family: $font-mono; font-size: 11px; padding: 5px; border-radius: 3px; border: 1px solid $line; background: $black-soft; overflow-wrap: anywhere; text-align: center; }
+  .app-chips { grid-template-columns: repeat(2,minmax(0,1fr)); }
+  .graph-note, .diagram-note { color: $silver; display: block; font-size: 12px; line-height: 1.65; margin: 10px 0 0; overflow-wrap: anywhere; }
+  .node small, .sequence-table small, .advice small { color: $silver; font-size: 12px; display: block; line-height: 1.5; }
+  .node.success, .revision.success { background: #edf6f0; border-color: #83aa91; color: #205a39; }
+  .node.warning { background: #fbf7ec; border-color: #c8b991; color: #73531a; }
+  .node.error { background: #fff2f1; border-color: #d5a19c; color: #9b3628; }
+  .node.formal, .gate, .revision.current { background: #f0f3f8; border-color: #a0aec4; color: $accent; }
+  .review-graph, .save-graph, .fan-in { max-width: 680px; margin-inline: auto; }
+  .gate { border: 1px solid #a0aec4; border-radius: 6px; padding: 12px; line-height: 1.5; }
+  .gate > strong { display: block; margin-bottom: 10px; font-size: 14px; }
+  .pass-edge { text-align: left; padding-left: 24%; color: #205a39; }
+  .pass-edge span { font-size: 12px; }
+  .review-lanes { display: grid; grid-template-columns: minmax(0,1.4fr) minmax(0,.8fr); gap: 28px; align-items: center; }
+  .advice { position: relative; background: $black-soft; border: 1px solid $line; padding: 10px; border-radius: 5px; display: grid; gap: 3px; font-size: 13px; overflow-wrap: anywhere; min-width: 0; }
+  .advice::before { content: '←'; position: absolute; left: -23px; top: 50%; transform: translateY(-50%); color: $gunmetal; }
+  .run-comparison { display: grid; grid-template-columns: minmax(0,1fr) auto minmax(0,1fr); align-items: center; gap: 10px; }
+  .cancelled { border-style: dashed; color: $silver; }
+  .replace-arrow { color: $gunmetal; font-size: 18px; }
+  .predicate { padding: 12px 0 0; color: $accent; font-size: 13px; font-weight: 600; text-align: center; }
+  .decision-table, .sequence-table { border-collapse: collapse; table-layout: fixed; width: 100%; font-size: 13px; line-height: 1.55; }
+  th, td { border: 1px solid $line; text-align: left; padding: 10px; overflow-wrap: anywhere; vertical-align: top; }
+  th { background: $black-soft; color: $silver-bright; font-weight: 600; }
+  .sequence-table th, .sequence-table td { text-align: center; }
+  .sequence-table td { vertical-align: middle; }
+  .revision { display: inline-block; border: 1px solid $line-bright; border-radius: 4px; padding: 4px 9px; font-family: $font-mono; font-weight: 600; }
+  .message { font-size: 12px; color: $silver; }
+  .ok { color: #205a39; font-weight: 600; }.bad { color: #9b3628; font-weight: 600; }.wait { color: #73531a; font-weight: 600; }
+  .save-graph > .node { max-width: 440px; margin-inline: auto; text-align: center; }
+  .save-graph .gate { text-align: center; }.save-graph .graph-path { align-content: start; }
+  .recovery-note { display: grid; gap: 5px; margin-top: 12px; padding: 10px; border-left: 2px solid $accent; background: $black-soft; font-size: 13px; }
+  .boundary-graph { display: grid; grid-template-columns: minmax(0,1fr) minmax(0,.75fr) minmax(0,1fr); gap: 10px; align-items: center; }
+  .boundary-box { min-width: 0; border: 1px dashed $line-bright; padding: 12px; display: grid; gap: 10px; color: $silver; background: $black-soft; }
+  .boundary-box code { font-family: $font-mono; font-size: 12px; color: $silver-bright; overflow-wrap: anywhere; }
+  .blocked-edge { color: #9b3628; text-align: center; display: grid; gap: 3px; font-size: 13px; font-weight: 600; }
+  .blocked-edge span { font-size: 22px; line-height: 1; }
+  .diagnostic { grid-column: 1/-1; padding: 12px; border-left: 2px solid #9b3628; background: #fff2f1; color: #9b3628; display: flex; flex-wrap: wrap; gap: 8px; font-size: 13px; }
+  @container (max-width: 620px) {
+    .architecture-compare { grid-template-columns: minmax(0,1fr); }
+  }
+  @container (max-width: 420px) {
+    .diagram-panel { padding: 10px; }.node { padding: 8px; font-size: 13px; }
+    .review-lanes { grid-template-columns: minmax(0,1fr); gap: 6px; }.advice { margin-left: 16px; border-color: #a0aec4; }.advice::before { content: '↑'; left: -14px; }
+    .gate { padding: 9px; }.gate-branches { gap: 6px; }.review-branches { grid-template-columns: minmax(0,1fr); }
+    .boundary-graph { grid-template-columns: minmax(0,1fr); }.diagnostic { grid-column: auto; }
+    th,td { padding: 7px 5px; font-size: 12px; }.sequence-table small { font-size: 11px; }
+    .three-nodes { gap: 4px; }.three-nodes .node { font-size: 11px; padding: 8px 4px; }
+  }
+</style>
