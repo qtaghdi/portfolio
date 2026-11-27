@@ -42,7 +42,16 @@ const moreNotes: Record<string, string> = ko ? {
   chorus: 'A web app turning music and messages into 3D vinyl cards',
   'apple-music-discord-presence': 'An installable Apple Music to Discord tool with connection recovery',
 };
-const caseRow = (project: CollectionEntry<'projects'>) => {
+interface WorkRow {
+  title: string;
+  href: string;
+  summary: string;
+  type: string;
+  icon?: string;
+  usage?: string;
+}
+
+const caseRow = (project: CollectionEntry<'projects'>): WorkRow => {
   const data = localized(project);
   const key = projectKey(project.slug);
   return {
@@ -53,13 +62,26 @@ const caseRow = (project: CollectionEntry<'projects'>) => {
     type: oddmashKeys.has(key) ? (ko ? '작업 기록' : 'Case study') : groupLabels[project.data.group],
   };
 };
-const oddmashResources = [
-  { title: 'Oddmash Agents', href: 'https://github.com/Oddmash/oddmash-agents/blob/main/docs/public-onboarding.md', summary: ko ? 'PR 리뷰 에이전트의 역할과 공개 사용 안내' : 'Public onboarding and roles in pull request reviews' },
-  { title: 'Oddmash Skills', href: 'https://github.com/Oddmash/oddmash-skills', summary: ko ? '설계, 개발, QA에 쓰는 재사용 스킬과 설치 안내' : 'Reusable skills for design, development, and QA' },
-  { title: 'Oddmash UI', href: 'https://oddmash.github.io/oddmash-ui/', summary: ko ? 'React 컴포넌트, 디자인 토큰과 예제' : 'React components, design tokens, and examples' },
-  { title: 'Oddmash Mobile', href: 'https://oddmash.github.io/oddmash-mobile/guide/', summary: ko ? '모바일 웹 제스처와 인터랙션의 사용 가이드' : 'A guide to mobile web gestures and interactions' },
-  { title: 'Oddmash Website', href: 'https://oddmash.github.io/oddmash-website/', summary: ko ? 'Oddmash 프로젝트와 개발 방식 소개' : 'Oddmash projects and how they are built' },
-].map((resource) => ({ ...resource, icon: undefined, type: ko ? '공개 자료' : 'Public resource' }));
+const oddmashMark = '/projects/oddmash/mark.png';
+const oddmashResources: WorkRow[] = [
+  {
+    title: 'Oddmash Agents',
+    href: 'https://github.com/Oddmash/oddmash-agents/blob/main/docs/public-onboarding.md',
+    icon: '/projects/oddmash/lead.svg',
+    summary: ko ? 'CI를 통과한 PR을 검토하고 코드 줄에 의견을 남기는 GitHub 앱을 만들었습니다.' : 'I built a GitHub App that reviews changes after CI passes and leaves comments on the affected lines.',
+    usage: ko ? '리뷰가 설정된 Oddmash 저장소에 PR을 열면 GitHub에서 Lead의 리뷰를 볼 수 있습니다.' : 'Open a PR in an enrolled Oddmash repository to see Lead’s review in GitHub.',
+  },
+  {
+    title: 'Oddmash Skills',
+    href: 'https://github.com/Oddmash/oddmash-skills',
+    icon: oddmashMark,
+    summary: ko ? '설계·개발·QA에 쓰는 스킬과 설치 스크립트를 만들었습니다.' : 'I wrote reusable skills for design, development, and QA, and built their installer.',
+    usage: ko ? '문서에 예제를 넣을 때는 시각 자료 스킬로 실제 화면과 모바일 가독성을 확인합니다.' : 'For example, I invoke the visual media skill when adding an example to documentation and check the real result at narrow widths.',
+  },
+  { title: 'Oddmash UI', href: 'https://oddmash.github.io/oddmash-ui/', icon: oddmashMark, summary: ko ? 'React 컴포넌트, 디자인 토큰과 예제' : 'React components, design tokens, and examples' },
+  { title: 'Oddmash Mobile', href: 'https://oddmash.github.io/oddmash-mobile/guide/', icon: oddmashMark, summary: ko ? '모바일 웹 제스처와 인터랙션의 사용 가이드' : 'A guide to mobile web gestures and interactions' },
+  { title: 'Oddmash Website', href: 'https://oddmash.github.io/oddmash-website/', icon: oddmashMark, summary: ko ? 'Oddmash 프로젝트와 개발 방식 소개' : 'Oddmash projects and how they are built' },
+].map((resource) => ({ ...resource, type: ko ? '공개 자료' : 'Public resource' }));
 const workSections = [
   {
     id: 'oddmash',
@@ -140,7 +162,11 @@ const notes: Record<string, { summary: string; meta: string; role: string }> = {
               <li>
                 <a href={row.href}>
                   <strong>{row.icon && <img class="project-icon" src={row.icon} width="24" height="24" alt="" decoding="async" loading="lazy" />}<span>{row.title}</span></strong>
-                  <span class="more-summary"><small class="work-type">{row.type}</small><span class="more-description" data-kowrap={ko ? '' : undefined}>{row.summary}</span></span>
+                  <span class="more-summary">
+                    <small class="work-type">{row.type}</small>
+                    <span class="more-description" data-kowrap={ko ? '' : undefined}>{row.summary}</span>
+                    {row.usage && <span class="more-description usage" data-kowrap={ko ? '' : undefined}>{row.usage}</span>}
+                  </span>
                   <svg aria-hidden="true" viewBox="0 0 20 20"><path d="M4 10h12m-5-5 5 5-5 5" /></svg>
                 </a>
               </li>
@@ -184,6 +210,7 @@ const notes: Record<string, { summary: string; meta: string; role: string }> = {
   .more-work strong span { min-width: 0; overflow-wrap: anywhere; }
   .work-type { display: block; margin-bottom: 2px; color: $gunmetal; font-size: 12px; }
   .more-description { display: block; }
+  .usage { margin-top: 4px; }
   .more-summary { color: $silver; font-size: 14px; line-height: 1.7; }
   @media (hover: hover) and (pointer: fine) {
     .featured-link, .more-work li a { transition: background-color $fast; }

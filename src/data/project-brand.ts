@@ -5,6 +5,7 @@ export const projectIcons: Record<string, string> = {
   intranet: '/projects/intranet/icon.png',
   boundra: '/projects/boundra/icon.svg',
   juliya: '/projects/juliya/favicon.svg',
+  'interaction-inspector': '/projects/interaction-inspector/icon.png',
   owkr: '/projects/owkr/favicon.webp',
   jeomjuro: '/projects/jeomjuro/non-favicon.svg',
   marker: '/projects/marker/icon.png',
