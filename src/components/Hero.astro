@@ -9,7 +9,7 @@ const profile = await getGitHubProfile();
 <section id="hero" class="hero">
   <div class="shell">
     <div class="hero-heading">
-      <img class="profile-avatar" src={profile.avatarUrl} alt={locale === 'ko' ? `${profile.name} 프로필 사진` : `${profile.name}'s profile photo`} width="112" height="112" decoding="async" />
+      <img class="profile-avatar" src={profile.avatarUrl} alt={locale === 'ko' ? `${profile.name} 프로필 사진` : `${profile.name}'s profile photo`} width="88" height="88" decoding="async" />
       <h1>{dictionary.lines.map((line) => <span>{line}</span>)}</h1>
     </div>
     <p class="hero-description">{dictionary.description.split(/(?<=\.)\s+/).map((sentence) => <span data-kowrap={locale === 'ko' ? '' : undefined}>{sentence}</span>)}</p>
@@ -21,21 +21,21 @@ const profile = await getGitHubProfile();
 </section>
 <style lang="scss">
   @use '../styles/tokens' as *;
-  .hero { padding: 180px 0 64px; }
-  .hero-heading { display: flex; align-items: center; gap: 40px; }
-  .profile-avatar { width: 112px; height: 112px; flex: 0 0 auto; object-fit: cover; border-radius: 50%; background: $black-soft; }
+  .hero { padding: 128px 0 46px; }
+  .hero-heading { display: flex; align-items: center; gap: 26px; }
+  .profile-avatar { width: 88px; height: 88px; flex: 0 0 auto; object-fit: cover; border-radius: 50%; background: $black-soft; }
   h1 { font-size: 56px; font-weight: 600; line-height: 1.35; letter-spacing: -.045em; }
   h1 span, .hero-description span { display: block; }
-  .hero-description { margin-top: 40px; color: $silver; font-size: 18px; line-height: 1.85; word-break: keep-all; }
-  .hero-actions { display: flex; flex-wrap: wrap; gap: 30px; margin-top: 28px; }
+  .hero-description { margin-top: 24px; color: $silver; font-size: 18px; line-height: 1.85; word-break: keep-all; }
+  .hero-actions { display: flex; flex-wrap: wrap; gap: 30px; margin-top: 18px; }
   .hero-actions a { display: inline-flex; align-items: center; min-height: 44px; color: $accent; font-size: 16px; text-decoration: underline; text-underline-offset: 5px; }
   .hero-actions a:hover { color: $accent-dark; }
   @media (max-width: 680px) {
-    .hero { padding: 132px 0 44px; }
+    .hero { padding: 102px 0 32px; }
     .hero-heading { gap: 16px; }
     .profile-avatar { width: clamp(48px, 14vw, 72px); height: clamp(48px, 14vw, 72px); }
     h1 { font-size: clamp(24px, 6.1vw, 36px); line-height: 1.4; }
-    .hero-description { margin-top: 28px; font-size: 16px; line-height: 1.85; }
+    .hero-description { margin-top: 18px; font-size: 16px; line-height: 1.85; }
     .hero-actions { margin-top: 20px; gap: 28px; }
   }
 </style>

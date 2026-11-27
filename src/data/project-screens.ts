@@ -10,11 +10,6 @@ export interface SupplementalScreen {
 export const supplementalScreens: Record<string, SupplementalScreen[]> = {
   'design-system': [
     {
-      src: '/projects/design-system/tokens-components.png', width: 1600, height: 1000,
-      ko: '공개 Storybook의 시맨틱 색상 토큰과 적용 예시 · 2026-10-29 촬영',
-      en: 'Semantic color tokens and usage in the public Storybook · captured 2026-10-29',
-    },
-    {
       src: '/projects/design-system/button-light-reference.png', width: 672, height: 128,
       ko: 'Button 라이트 테마 · 2026-10-27 CI 시각 회귀 기준 이미지',
       en: 'Button, light theme · CI visual regression baseline from 2026-10-27',
@@ -59,7 +54,6 @@ export const primaryScreens: Record<string, SupplementalScreen> = {
     en: 'Interaction Inspector showing button focus and DOM events in the Chromium demo',
   },
   notiiv: { src: '/projects/notiiv/img.png', width: 1905, height: 956, ko: 'Notiiv 고객지원 실제 화면', en: 'Actual Notiiv customer support screen' },
-  'design-system': { src: '/projects/design-system/storybook-overview.png', width: 1440, height: 900, ko: 'Bigtablet Design System의 Storybook 실제 화면', en: 'Actual Bigtablet Design System Storybook screen' },
   intranet: { src: '/projects/intranet/home.png', width: 390, height: 788, ko: '데모 데이터로 실행한 Bigtablet 인트라넷 모바일 홈', en: 'Bigtablet intranet mobile home running with fixture data' },
   'document-workspace': { src: '/projects/document-workspace/editor.png', width: 1440, height: 900, ko: '호환성 검증용 XLSX를 연 Foloom(이전 이름 document-workspace) 실제 편집기', en: 'Actual Foloom editor (formerly document-workspace) with a compatibility XLSX fixture' },
   'apple-music-discord-presence': { src: '/projects/apple-music-discord-presence/discord-presence.png', width: 828, height: 340, ko: 'macOS Discord에 표시된 Apple Music 활동', en: 'Apple Music activity displayed in Discord on macOS' },
@@ -77,7 +71,7 @@ export function caseScreen(project: string, screen: string = 'primary'): Supplem
 const englishPlacements: Record<string, [section: string, subsection: number | null, screen: string][]> = {
   'interaction-inspector': [['problem', null, 'primary']],
   notiiv: [['decisions', 2, 'primary']],
-  'design-system': [['problem', null, 'primary'], ['decisions', 2, 'tokens-components'], ['outcome', 0, 'button-light-reference'], ['outcome', 0, 'button-dark-reference']],
+  'design-system': [['outcome', 0, 'button-light-reference'], ['outcome', 0, 'button-dark-reference']],
   intranet: [['problem', null, 'primary'], ['decisions', 1, 'approval']],
   'document-workspace': [['problem', null, 'primary']],
   'apple-music-discord-presence': [['problem', null, 'primary']],
