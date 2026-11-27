@@ -94,7 +94,7 @@ test('supplemental captures preserve source bytes and open at original size in b
 test('home shows small project icons in both work lists', async ({ page }) => {
   await page.goto('/');
   const icons = page.locator('#projects .project-icon:visible');
-  await expect(icons).toHaveCount(13);
+  await expect(icons).toHaveCount(19);
   await expect(icons.nth(0)).toHaveAttribute('src', '/projects/design-system/favicon.png');
   await expect(icons.nth(1)).toHaveAttribute('src', '/projects/notiiv/favicon.svg');
   for (const icon of await icons.all()) {
@@ -129,8 +129,14 @@ test('home uses project branding and Foloom uses its favicon beside the title in
     await expect(page.locator('.featured-project')).toHaveCount(4);
     const oddmash = page.locator('#oddmash');
     await expect(oddmash.getByRole('heading', { name: 'Oddmash', exact: true })).toBeVisible();
-    await expect(oddmash.getByRole('link', { name: /Oddmash Agents/ })).toHaveAttribute('href', 'https://github.com/Oddmash/oddmash-agents/blob/main/docs/public-onboarding.md');
-    await expect(oddmash.getByRole('link', { name: /Oddmash Skills/ })).toHaveAttribute('href', 'https://github.com/Oddmash/oddmash-skills');
+    const agents = oddmash.getByRole('link', { name: /Oddmash Agents/ });
+    await expect(agents).toHaveAttribute('href', 'https://github.com/Oddmash/oddmash-agents/blob/main/docs/public-onboarding.md');
+    await expect(agents.locator('img')).toHaveAttribute('src', '/projects/oddmash/lead.svg');
+    await expect(agents.locator('.usage')).toContainText(prefix ? 'enrolled Oddmash repository' : '리뷰가 설정된 Oddmash 저장소');
+    const skills = oddmash.getByRole('link', { name: /Oddmash Skills/ });
+    await expect(skills).toHaveAttribute('href', 'https://github.com/Oddmash/oddmash-skills');
+    await expect(skills.locator('img')).toHaveAttribute('src', '/projects/oddmash/mark.png');
+    await expect(skills.locator('.usage')).toContainText(prefix ? 'visual media skill' : '시각 자료 스킬');
     const boundra = oddmash.locator(`a[href="${prefix}/projects/boundra"]`);
     await expect(boundra.locator('img')).toHaveAttribute('src', '/projects/boundra/icon.svg');
     await expect(page.locator('#more-work a[href$="/projects/boundra"], #more-work a[href$="/projects/juliya"], #more-work a[href$="/projects/interaction-inspector"]')).toHaveCount(0);
